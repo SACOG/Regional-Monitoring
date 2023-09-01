@@ -1,21 +1,4 @@
-import requests
-import pandas as pd
-import json
-import time
-from tqdm import tqdm
-import concurrent.futures
-import warnings
-import re
 import os
-import inspect
-warnings.filterwarnings('ignore')
-import numpy as np
-import matplotlib.pyplot as plt
-from arcgis.gis import GIS
-from arcgis.mapping import WebMap
-
-
-
 
 ## API KEY EXTRACTION
 
@@ -34,7 +17,7 @@ def extract_api_key(resource_dir = None, resource_file = None):
 
 ### PW extraction
 
-def extract_password(resource_dir = None, resource_file = None):
+def extract_agol_password(resource_dir = None, resource_file = None):
     
     """
     This function will extract the AGOL password from a text file in the 'resource' folder if present. 
