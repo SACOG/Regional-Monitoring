@@ -86,13 +86,16 @@ def get_census_data(df, api_key, data_url, state, fetch_data_chunk_function):
 	return df_final
 
 def get_census_mappings(df):
+
+	df['Year'] = df['Year'].astype(str)
+
 	return {
 		'ACS1': ('https://api.census.gov/data/{}/acs/acs1', df[df['Census Product'] == 'ACS1']),
 		'ACS5': ('https://api.census.gov/data/{}/acs/acs5', df[df['Census Product'] == 'ACS5']),
 		'DEC':  ({
-			2000: 'https://api.census.gov/data/{}/dec/sf1',
-			2010: 'https://api.census.gov/data/{}/dec/sf1',
-			2020: 'https://api.census.gov/data/{}/dec/dp'
+			'2000': 'https://api.census.gov/data/{}/dec/sf1',
+			'2010': 'https://api.census.gov/data/{}/dec/sf1',
+			'2020': 'https://api.census.gov/data/{}/dec/dp'
 		}, df[df['Census Product'] == 'DEC'])
 	}
 

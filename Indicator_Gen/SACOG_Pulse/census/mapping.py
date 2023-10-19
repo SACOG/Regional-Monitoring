@@ -40,15 +40,15 @@ def map_race_group(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
 	
 	def map_race(x):
 		if WHITE_PATTERN.search(x):
-			return 'White (Not Hispanic or Latino)'
+			return 'White (Not Hispanic or NH)'
 		elif BLACK_PATTERN.search(x):
-			return 'Black or African American'
+			return 'Black or African American (NH)'
 		elif ASIAN_PATTERN.search(x):
-			return 'Asian'
+			return 'Asian (NH)'
 		elif HISPANIC_PATTERN.search(x):
 			return 'Hispanic or Latino'
 		elif OTHER_PATTERN.search(x):
-			return 'Other'
+			return 'Other (NH)'
 		return x  # default return value if no match
 	
 	df['Race Group'] = race_series.apply(map_race)
