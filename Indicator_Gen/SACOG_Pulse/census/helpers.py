@@ -108,25 +108,26 @@ def generate_groups(report_config):
     # Process each data_group in the report_config
     for data_group, details in report_config.items():
 
+        # All possible dimensions including the data_group itself
+        all_dims = [data_group] + details['dims']
+
         # Create permutations of demographic groups, and iterate over them
-        for L in range(1, len(details['dims']) + 1):
-            for subset in itertools.permutations(details['dims'], L):
+        for L in range(1, len(all_dims) + 1):
+            for subset in itertools.permutations(all_dims, L):
                 subset_key = "_".join(subset).upper()
 
                 # Create the combinations with geography
                 for geog in details['geos']:
-                    key = f"{geog}_{data_group}".upper() + (f"_{subset_key}" if subset else "")
+                    key = f"{geog}_".upper() + subset_key
                     if key not in agg_by:
                         # Calculate the values for this combination
                         geog_group = GEOG_GROUPS[geog.upper()]
                         
                         # Add the base demographic group values
-                        demo_values_base = DEMO_GROUPS[data_group.upper()]
-                        
-                        demo_values = demo_values_base + [item for sublist in [DEMO_GROUPS[x.upper()] for x in subset if x.upper() != data_group.upper()] for item in sublist]
+                        demo_values = [item for sublist in [DEMO_GROUPS[x.upper()] for x in subset if x.upper() in DEMO_GROUPS] for item in sublist]
                         
                         agg_by[key] = BASE_GROUP + geog_group + demo_values
-                    
+
         # Also, add the base geographies without any demographic details
         for geog in details['geos']:
             key = f"{geog}_{data_group}".upper()
@@ -136,13 +137,12 @@ def generate_groups(report_config):
                 agg_by[key] = BASE_GROUP + geog_group + demo_group
 
     # Additional block to add just the base + geography groups
-    for geog in GEOG_GROUPS.keys():
-        key = f"{geog}"
+    for geog, group in GEOG_GROUPS.items():
+        key = f"{geog}".upper()
         if key not in agg_by:
-            agg_by[key] = BASE_GROUP + GEOG_GROUPS[geog]
+            agg_by[key] = BASE_GROUP + group
 
     return agg_by
-
 AGG_BY = generate_groups(report_config)
 
 
@@ -223,3 +223,32 @@ def format_agg_ind(agg_ind, geog):
     if len(components) > 1:
         components.insert(-1, "by")
     return "".join(components)
+
+### SAVE REPORTS ###
+
+def save_reports(dict):
+    
+    # Iterate over dictionary items
+    for dict_key, df in dict.items():
+        
+        # Create an Excel filename using the dict_key
+        excel_filename = f"{dict_key}.xlsx"
+        
+        # Create a writer object to write to Excel file
+        with pd.ExcelWriter(excel_filename, engine='xlsxwriter') as writer:
+            
+            # Get unique Census Products from the dataframe
+            census_products = df['Census Product'].unique()
+            
+            for product in census_products:
+                # Filter dataframe for the current Census Product
+                product_df = df[df['Census Product'] == product]
+                
+                # Write filtered dataframe to a sheet in Excel file named after the Census Product
+                product_df.to_excel(writer, sheet_name=product, index=False)
+                
+                # Save the filtered dataframe to a CSV file named after the dict key and Census Product
+                csv_filename = f"{dict_key}_{product}.csv"
+                product_df.to_csv(csv_filename, index=False)
+            
+            print(f"Data saved to {excel_filename} and corresponding CSV files.")

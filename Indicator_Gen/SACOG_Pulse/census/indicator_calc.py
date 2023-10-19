@@ -89,7 +89,7 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
         report_config = {}
     
     filter_results = {}
-    fetch_results = {}
+    fetched_results = {}
     calculate_results = {}
     geo_cache = {}  # Initialize the geo_cache outside the loop
     
@@ -118,24 +118,25 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
                 print(f'Fetching census data for {data_group} at the {geog} level...')
                 census_data = main_fetching_process(filtered_vars, state, api_key, geog_key)
                 geo_cache[cache_key] = census_data
-
+            fetched_results[cache_key] = census_data
             all_dims = [()] + [tuple(info['dims'][:i+1]) for i in range(len(info['dims']))]
             for dims in all_dims:
                 key_calc = f"{geog}_{data_group}" + ("_" + "_".join(dims) if dims else "")
                 print(f'Calculating results for {key_calc}...')
                 try:
                     if data_group == 'median income':
-                        calculate_results[key_calc] = calculate_median_income(census_data, filtered_vars, data_group, geog, *dims)
+                        calculate_results[key_calc] = calculate_median_income(census_data, filtered_vars, data_group, state, geog, api_key, *dims)
                     else:
                         calculate_results[key_calc] = calculate_indicator_percentage(census_data, filtered_vars, data_group, geog, *dims)
                 except Exception as e:
                     print(f"Error processing {key_calc}: {e}")
                     calculate_results[key_calc] = None
 
-    return filter_results, fetch_results, calculate_results
+    return filter_results, fetched_results, calculate_results
 
 
 def race_for_median_income(resulting_data, data_group='race', geog=None, state=None, api_key=None, *dims):
+
     print (f'Calculating {data_group} variable years...')
     resulting_data = input_processing(resulting_data)
     census_products, start_year, end_year = census_data_aggs(resulting_data)
