@@ -6,12 +6,50 @@ from .var_parse import *
 from .configs import CENSUS_CONFIG
 
 def save_to_csv(df, df_name, path, folder):
+
+    """
+    This function allows a user to save a dataframe to a location while specifying its name, path, and folder if needed. 
+    
+    example usage:
+    df = 'a data frame'
+    df_name = 'the desired name for the df'
+    path = 'the path in which you would like the df to be saved'
+    folder = 'the folder or subfolder you would like the df to be saved in'
+    
+    save_to_csv(df, df_name, path, folder)    
+    """    
     directory_path = os.path.join(path, folder)
     if not os.path.exists(directory_path):
         os.makedirs(directory_path)
     df.to_csv(os.path.join(directory_path, df_name + ".csv"))
 
 def fetch_data(product, start_year=None, end_year=None, should_save_csv=False, path=None):
+
+    """
+    This helper function allows a user to define:
+    1. A census product (like acs1, acs5, or dec)
+    2. A start year
+    3. An an end year
+    4. Whether or not to save the results to a csv. (defaults to no)
+    5. Where to save the csv. 
+
+    If no product or start year is provided, the dictionary 'census config' within the configs file will be used as a default reference. 
+    If no end year is provided, the current year will be used as the end year. 
+
+    When this function is run, if a census product is not available for a particular year, a statement will be printed informing you of the product, year, and url for which data was unavailable.
+
+    example usage: 
+
+    product  = 'acs1'
+    start_year = 2015
+    end_year = 2019
+    
+    data = fetch_data(product, start_year, end_year)
+
+    expected output: A dataframe containing all the data for the specified product whithin the range of start_year and end_year.
+
+    """
+
     config = CENSUS_CONFIG[product]
     base_urls = config.get('base_urls', [config.get('base_url')])
     folder = config['folder']
@@ -51,6 +89,32 @@ def fetch_data(product, start_year=None, end_year=None, should_save_csv=False, p
     return pd.concat(dataframes_dict.values(), ignore_index=True)
 
 def raw_vars(census_products=None, start_year=None, end_year=None, should_save_csv=False, path=None):
+
+    """
+    This function will pull the raw varuables using the 'fetch_data' function. The main difference between the two is that this function allows users to define a list of census products rather than fetching them one by one (eg. [acs1, acs5])
+    
+    example usage: 
+
+    census_products  = ['acs1', acs5]
+    start_year = 2015
+    end_year = 2019
+    
+    all_raw_vars = raw_vars(census_products, start_year, end_year)
+
+    expected output: a dictionary of dataframes named as: start_year_end_year_census_product
+
+    For the above example usage, the dictionary will contain two dataframes:
+
+    2015_2019_acs1 and 2015_2019_acs5
+
+    all_raw_vars -> {
+    2015_2019_acs1: dataframe,
+    2015_2019_acs5: dataframe    
+    }
+
+    """
+
+
     dfs_dict = {}
 
     if census_products is None:

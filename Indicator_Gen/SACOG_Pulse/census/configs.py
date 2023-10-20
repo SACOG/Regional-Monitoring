@@ -1,6 +1,13 @@
 import pandas as pd
 import re
 
+"""
+This configuration file defines parameters for different operations for the 'census' module for the SACOG_Pulse package. 
+
+The Variables Lists section contain the variables mapped to each census product for each indicator. For example, acs1_race_vars contains all the Variable Names being pulled in for the acs1 census product.
+
+"""
+
 
 ### RAW VARS CONFIGURATION ###
 CENSUS_CONFIG = {
@@ -39,47 +46,49 @@ def geog_normalization(geog):
 		exit()  
 	return geog_normalized, geog_agg_col
 
+
+
 ### DATA GROUP CONFIGURATION ###
 
 report_config = {
 	'age': {
-		'geos': ['county', 'mpo', 'tract'],
+		'geos': ['county', 'mpo', 'tract', 'msa'],
 		'dims': []
 	}
 	
 	,
 	'race': {
-		'geos': ['county', 'mpo', 'tract'],
+		'geos': ['county', 'mpo', 'tract', 'msa'],
 		'dims': []
 	}
 	
 	,
 	'education': {
-		'geos': ['county', 'mpo', 'tract'],
+		'geos': ['county', 'mpo', 'tract', 'msa'],
 		'dims': ['race']
 	}
 	
 	,
 	'employment': {
-		'geos': ['county','mpo','tract'],
+		'geos': ['county','mpo','tract','msa'],
 		'dims': ['race', 'age']
 	}
 	,
 	'commute': {
-		'geos': ['msa'],
+		'geos': ['county','mpo','tract','msa'],
 		'dims': []
 	}
 	,
 	'household income': {
-		'geos': ['county','mpo','tract'],
+		'geos': ['county','mpo','tract','msa'],
 		'dims': ['race']
 	},
 	'poverty': {
-		'geos': ['county','mpo','tract'],
+		'geos': ['county','mpo','tract','msa'],
 		'dims': ['race', 'gender', 'age']
 	},
 	'median income': {
-		'geos': ['county','mpo','tract'],
+		'geos': ['county','mpo','tract','msa'],
 		'dims': []
 	},
 
@@ -278,6 +287,12 @@ BACHELORS_AND_ABOVE_PATTERN = re.compile(r'graduate degree|bachelor\'s degree|gr
 SOME_COLLEGE_PATTERN = re.compile(r'some college, no degree|associate\'s degree|some college or associate\'s degree', re.IGNORECASE)
 HIGH_SCHOOL_OR_GED_PATTERN = re.compile(r'high school graduate|regular high school diploma|ged or alternative credential|high school graduate, ged, or alternative', re.IGNORECASE)
 LESS_THAN_HIGH_SCHOOL_PATTERN = re.compile(r'less than 9th grade|9th to 12th grade, no diploma|less than high school diploma', re.IGNORECASE)
+
+
+ABOVE_POVERTY_STATUS_PATTERN = re.compile(r'above poverty level', re.IGNORECASE)
+BELOW_POVERTY_STATUS_PATTERN = re.compile(r'below poverty level', re.IGNORECASE)
+
+
 
 INCOME_PATTERN = re.compile(r'(\d{1,3},?\d{0,3})')
 

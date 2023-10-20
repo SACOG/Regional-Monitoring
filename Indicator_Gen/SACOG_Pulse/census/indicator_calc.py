@@ -1,6 +1,7 @@
 import pandas as pd
 import copy
 import numpy as np
+from itertools import permutations 
 from .helpers import *
 from .mapping import *
 from .data_group_processing import *
@@ -10,6 +11,54 @@ from .get_raw_vars import raw_vars
 from .get_data import main_fetching_process
 
 def agg_by_comp(geog, data_group, *dims):
+    """
+    Constructs aggregation indices based on geography, data group, and additional dimensions.
+    
+    This function constructs two main indices: `agg_ind` and `agg_groupby`. The `agg_ind` is the full 
+    index made up of the geography (`geog`), the data group (`data_group`), and any additional dimensions 
+    (`dims`). The `agg_groupby` index is derived from `agg_ind` but may exclude the last dimension based on 
+    the number of provided dimensions.
+
+    Parameters:
+    -----------
+    geog : str
+        The geography specifier, e.g., 'state', 'county'. Will be transformed to uppercase in the index.
+
+    data_group : str
+        The primary data group specifier, e.g., 'race', 'age'. Will be transformed to uppercase in the index.
+
+    *dims : str(s)
+        Additional dimensions for constructing the indices. All dimensions will be transformed to uppercase 
+        in the index. The last dimension might be excluded from `agg_groupby` depending on its count.
+
+    Returns:
+    --------
+    tuple (agg_by_agg_ind, agg_by_agg_groupby, agg_ind, agg_groupby) or (None, None, None, None)
+        - agg_by_agg_ind: The aggregation configuration for the `agg_ind` index (from the `AGG_BY` constant).
+        - agg_by_agg_groupby: The aggregation configuration for the `agg_groupby` index (from the `AGG_BY` constant).
+        - agg_ind: The full constructed index string.
+        - agg_groupby: The constructed index string for groupby, which may exclude the last dimension.
+        If either `agg_ind` or `agg_groupby` are not valid keys in `AGG_BY`, the function returns four Nones.
+
+    Notes:
+    ------
+    This function relies on the `AGG_BY` constant, which should be defined elsewhere in the code and contain 
+    aggregation configurations for various index combinations.
+
+    Examples:
+    ---------
+    Assuming AGG_BY contains keys 'STATE_RACE_AGE' and 'STATE_RACE':
+    >>> agg_by_comp('state', 'race', 'age')
+    # Expected output: (AGG_BY['STATE_RACE_AGE'], AGG_BY['STATE_RACE'], 'STATE_RACE_AGE', 'STATE_RACE')
+
+    >>> agg_by_comp('state', 'race')
+    # Expected output: (AGG_BY['STATE_RACE'], AGG_BY['STATE'], 'STATE_RACE', 'STATE')
+
+    If invalid indices are provided:
+    >>> agg_by_comp('invalid', 'entries')
+    # Prints: "Invalid Aggregation: [INVALID_ENTRIES]"
+    # Returns: (None, None, None, None)
+    """
 
     # Base aggregation groupby
     agg_groupby_base = geog.upper() + "_" + data_group.upper()
@@ -41,14 +90,59 @@ def agg_by_comp(geog, data_group, *dims):
             agg_groupby)
 
 def calculate_indicator_percentage(resulting_data, filtered_vars, data_group, geog, *dims):
+    """
+    Calculates the percentage representation of an indicator across the specified geography and data group.
+    
+    This function calculates the percentage of an indicator (derived from `data_group` and other dimensions)
+    across a specific geography (`geog`). The indicator percentage is calculated based on the formula:
+    (indicator total / total) * 100.
+    
+    Parameters:
+    -----------
+    resulting_data : DataFrame
+        The main dataset containing raw data for calculations.
+
+    filtered_vars : DataFrame
+        Dataset containing filtered variables relevant to the calculations.
+
+    data_group : str
+        The primary data group specifier, e.g., 'race', 'age'.
+
+    geog : str
+        The geography specifier, e.g., 'state', 'county'.
+
+    *dims : str(s)
+        Additional dimensions for constructing the indices. All dimensions will be transformed to uppercase 
+        in the index.
+
+    Returns:
+    --------
+    DataFrame
+        The DataFrame with the calculated indicator percentages and relevant columns.
+
+    Notes:
+    ------
+    This function relies on several helper functions:
+        - `agg_by_comp`: Determines aggregation indices based on geography, data group, and additional dimensions.
+        - `format_agg_ind`: Formats the aggregation indicator by capitalizing components and removing geog.
+        - `map_county_names`: Maps county names (assumed to be another function in the codebase).
+        - `process_data_group`: Processes the data group (assumed to be another function in the codebase).
+        - `census_merge`: Merges census data (assumed to be another function in the codebase).
+        - `group_and_sum`: Groups and sums the data based on the provided columns.
+
+    The function also depends on the `AGG_BY` constant, which should be defined elsewhere in the code and contain 
+    aggregation configurations for various index combinations.
+
+    Examples:
+    ---------
+    # Assuming you have data in 'result_data' and 'filtered_vars':
+    >>> df = calculate_indicator_percentage(result_data, filtered_vars, 'race', 'county', 'age')
+    # This will return a DataFrame with columns like 'County Age Race %' and other related data.
+    """
+
     num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group, *dims)
     ind_total_key = " ".join([geog.capitalize(), format_agg_ind(agg_ind, geog), "Totals"]).replace("  ", " ")
     total_key = " ".join([geog.capitalize(), format_agg_ind(agg_groupby, geog), "Totals"]).replace("  ", " ")
-
-
-    # Remove double spaces from num_cols and div_cols
-    #num_cols = [col.replace("  ", " ") for col in num_cols]
-    #div_cols = [col.replace("  ", " ") for col in div_cols]
 
 
     if not num_cols or not div_cols:
@@ -83,17 +177,73 @@ def calculate_indicator_percentage(resulting_data, filtered_vars, data_group, ge
     return df
 
 def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_config=None):
+    """
+    Aggregate and generate a reports based on raw variables, specified geography, and configuration.
+
+    This function processes, fetches, and calculates results for given raw variables and configurations. 
+    It operates at various geographical levels (like 'county' or 'mpo') and can be used for different 
+    data groups (like 'race' or 'age'). It fetches data from a presumed external source using the provided 
+    API key, filters necessary variables, and then calculates aggregated results based on permutations 
+    of possible dimensions.
+
+    Parameters:
+    -----------
+    raw_variables_df : DataFrame
+        Raw dataset containing the variables needed for calculations.
+
+    state : str
+        The state for which the data should be fetched and processed.
+
+    api_key : str
+        The API key required to fetch external data.
+
+    data_group_name : str, optional (default=None)
+        The name of the data group to process. If not provided, all data groups in the report_config 
+        will be processed.
+
+    report_config : dict, optional (default=None)
+        Configuration for processing the data groups. If not provided, an empty dictionary is used. 
+        The config should be structured with data groups as keys, and values should be dictionaries 
+        containing 'geos' and 'dims' for that data group.
+
+    Returns:
+    --------
+    tuple
+        - filter_results : dict
+            Dictionary containing filtered variables for each data group.
+
+        - fetched_results : dict
+            Dictionary containing fetched census data for each geographical level and data group.
+
+        - calculate_results : dict
+            Dictionary containing calculated results for various dimensions at each geographical level.
+
+    Notes:
+    ------
+    The function relies on several helper functions:
+        - `filter_vars`: Filters necessary variables based on the raw variables dataset.
+        - `main_fetching_process`: Fetches data from an external source.
+        - `final_report_agg`: Aggregates the final report based on the fetched data, filtered variables, and dimensions.
+
+    A caching mechanism (`geo_cache`) is used to avoid fetching the same data multiple times.
+
+    Examples:
+    ---------
+    # Given a raw variables dataset 'raw_data', state 'CA', and an API key 'my_api_key':
+    >>> filter_results, fetched_results, calculate_results = report_agg(raw_data, 'CA', 'my_api_key', data_group_name='race')
+    # This will return dictionaries with processed data based on the provided configuration.
+    """
     
     # Set report_config to a default dict if not provided
+
     if not report_config:
         report_config = {}
-    
+
     filter_results = {}
     fetched_results = {}
     calculate_results = {}
     geo_cache = {}  # Initialize the geo_cache outside the loop
-    
-    # If data_group_name is None, process all data groups. Otherwise, process only the specified data group.
+
     data_groups = [data_group_name] if data_group_name else list(report_config.keys())
 
     for data_group in data_groups:
@@ -110,7 +260,6 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
             geog_key = 'county' if geog.lower() == 'mpo' else geog
             cache_key = f"{data_group}_{geog_key}"  # Combined cache key
 
-            # Check if the geographical data for this specific data_group and geog has been fetched
             if cache_key in geo_cache:
                 print(f"Using cached census data for {cache_key}...")
                 census_data = geo_cache[cache_key]
@@ -119,23 +268,81 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
                 census_data = main_fetching_process(filtered_vars, state, api_key, geog_key)
                 geo_cache[cache_key] = census_data
             fetched_results[cache_key] = census_data
-            all_dims = [()] + [tuple(info['dims'][:i+1]) for i in range(len(info['dims']))]
-            for dims in all_dims:
-                key_calc = f"{geog}_{data_group}" + ("_" + "_".join(dims) if dims else "")
-                print(f'Calculating results for {key_calc}...')
+
+            # Special case: if dims is empty, generate only the geog_data_group key
+            if not info['dims']:
+                key_calc = f"{geog}_{data_group}"
                 try:
-                    if data_group == 'median income':
-                        calculate_results[key_calc] = calculate_median_income(census_data, filtered_vars, data_group, state, geog, api_key, *dims)
-                    else:
-                        calculate_results[key_calc] = calculate_indicator_percentage(census_data, filtered_vars, data_group, geog, *dims)
+                    calculate_results[key_calc] = final_report_agg(census_data, filtered_vars, data_group, geog)
                 except Exception as e:
                     print(f"Error processing {key_calc}: {e}")
                     calculate_results[key_calc] = None
+            else:
+                # Get all possible permutations of dimensions
+                for length in range(1, len(info['dims']) + 2):  # +2 to include the empty and single dimension cases
+                    for dims_tuple in permutations(info['dims'], length):
+                        key_calc = f"{geog}_{data_group}" + ("_" + "_".join(dims_tuple) if dims_tuple else "")
+                        try:
+                            calculate_results[key_calc] = final_report_agg(census_data, filtered_vars, data_group, geog, *dims_tuple)
+                        except Exception as e:
+                            print(f"Error processing {key_calc}: {e}")
+                            calculate_results[key_calc] = None
 
     return filter_results, fetched_results, calculate_results
 
 
 def race_for_median_income(resulting_data, data_group='race', geog=None, state=None, api_key=None, *dims):
+    """
+    Computes the race variables for median income and returns a dataframe for specified geographic levels.
+
+    This function processes the input data to calculate the race metrics associated with median income for 
+    a given geographical region (like county, MPO, etc.). The function identifies the relevant years for 
+    calculation from the resulting data, filters the necessary race variables, fetches external data, and 
+    then performs the aggregation.
+
+    Parameters:
+    -----------
+    resulting_data : DataFrame
+        Raw dataset containing the variables needed for calculations.
+
+    data_group : str, optional (default='race')
+        The group for which the calculation is to be made. Default is 'race'.
+
+    geog : str, optional
+        The geographical level for which the data should be processed. Can be values like 'county', 'mpo', etc.
+
+    state : str, optional
+        The state for which the data should be fetched and processed.
+
+    api_key : str, optional
+        The API key required to fetch external data.
+
+    *dims : tuple, optional
+        Additional dimensions or criteria for the aggregation. 
+
+    Returns:
+    --------
+    DataFrame
+        A DataFrame containing the aggregated race metrics for median income for the specified geographical 
+        region with appropriately named columns.
+
+    Notes:
+    ------
+    The function makes use of several helper functions:
+        - `input_processing`: Pre-processes the provided data.
+        - `census_data_aggs`: Identifies the available census products and year range.
+        - `raw_vars`: Retrieves raw variables for specified parameters.
+        - `filter_vars`: Filters necessary variables based on the raw variables dataset.
+        - `main_fetching_process`: Fetches data from an external source.
+        - `calculate_indicator_percentage`: Calculates the race metrics for median income.
+
+    Examples:
+    ---------
+    # Given a raw variables dataset 'raw_data', state 'CA', geog 'county', and an API key 'my_api_key':
+    >>> df_result = race_for_median_income(raw_data, data_group='race', geog='county', state='CA', api_key='my_api_key')
+    # This will return a DataFrame with the aggregated metrics for race related to median income for California counties.
+    """
+
 
     print (f'Calculating {data_group} variable years...')
     resulting_data = input_processing(resulting_data)
@@ -183,9 +390,61 @@ def race_for_median_income(resulting_data, data_group='race', geog=None, state=N
     
     return df
 
-def calculate_median_income(resulting_data, filtered_vars, data_group, state, geog, api_key = None, *dims):
+def calculate_median_income(resulting_data, filtered_vars, data_group, state, geog, api_key=None, *dims):
+    """
+    Computes the median income for specified data groups and geographical levels.
 
-    #race_nums = race_for_median_income(resulting_data = resulting_data, data_group='race', geog=geog, state=state, api_key=api_key)
+    This function takes in raw data and related variables, and calculates the median income based on the 
+    specified data group, state, and geographic region. The calculation is done taking race into consideration,
+    and the function returns a DataFrame containing the aggregated median income metrics.
+
+    Parameters:
+    -----------
+    resulting_data : DataFrame
+        Raw dataset containing the data required for calculations.
+
+    filtered_vars : DataFrame
+        Data containing the filtered variables relevant to the calculations.
+
+    data_group : str
+        The group for which the median income calculation is to be made.
+
+    state : str
+        The state for which the data should be processed.
+
+    geog : str
+        The geographical level for which the median income should be calculated, such as 'county', 'mpo', etc.
+
+    api_key : str, optional
+        The API key required to fetch any external data.
+
+    *dims : tuple, optional
+        Additional dimensions or criteria for the calculation. 
+
+    Returns:
+    --------
+    DataFrame
+        A DataFrame containing the aggregated median income metrics for the specified geographical region,
+        with columns related to the race group, median income by race, median income by geographical level,
+        and the income ratio.
+
+    Notes:
+    ------
+    The function makes use of several helper functions:
+        - `input_processing`: Pre-processes the provided data.
+        - `race_for_median_income`: Calculates race-related data for median income.
+        - `map_county_names`, `process_data_group`, `census_merge`: Mapping and processing functions.
+        - `calculate_weighted_incomes`: Computes weighted incomes based on given parameters.
+        - `income_group_data`: Groups the data based on income ranges.
+        - `final_df_compile`: Compiles the final DataFrame.
+
+    Examples:
+    ---------
+    # Given a raw dataset 'raw_data', filtered variables 'filtered_data', a data group 'income',
+    # state 'CA', geog 'county', and an API key 'my_api_key':
+    >>> df_result = calculate_median_income(raw_data, filtered_data, 'income', 'CA', 'county', api_key='my_api_key')
+    # This will return a DataFrame with median income metrics for California counties.
+    """
     num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group='race')
 
     resulting_data = input_processing(resulting_data)

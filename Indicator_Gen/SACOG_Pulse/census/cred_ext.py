@@ -6,6 +6,13 @@ def extract_api_key(resource_dir = None, resource_file = None):
     
     """
     This function will extract the API key from a text file in the 'resource' folder if present. 
+	
+	example usage: 
+
+	resource_file = 'file_name'
+	resource_dir = path_to_dir
+	api_key = extract_api_key(resource_dir, resource_file)
+
     """
     resource_file = f"{resource_file}.txt"
     file = os.path.join(resource_dir, resource_file)
@@ -21,6 +28,12 @@ def extract_agol_password(resource_dir = None, resource_file = None):
     
     """
     This function will extract the AGOL password from a text file in the 'resource' folder if present. 
+
+    example usage: 
+
+	resource_file = 'file_name'
+	resource_dir = path_to_dir
+	agol_pw = extract_agol_password(resource_dir, resource_file)
     """
     
     resource_file = f"{resource_file}.txt"
