@@ -1,7 +1,9 @@
 import pandas as pd
 import requests
+from typing import List, Optional
 from .mapping import map_county_names
-from .helpers import input_processing
+from .helpers import input_processing, census_merge
+from .configs import FIPS_DF, COUNTY_TO_MPO
 
 def display_progress_bar(current_step, total_steps, bar_length=50):
     """
@@ -100,7 +102,7 @@ def fetch_data_chunk_for_county(variables_chunk, api_key, data_url, state):
                         value_name='Total')
     return df_melted
 
-def fetch_data_chunk_for_tract(variables_chunk, api_key, data_url, state):
+def fetch_data_chunk_for_tract(variables_chunk: List[str], api_key: str, data_url: str, state: str, mpo: Optional[str] = None) -> pd.DataFrame:
     """
     Fetches a chunk of data for census tracts based on the provided variables.
 
@@ -118,25 +120,46 @@ def fetch_data_chunk_for_tract(variables_chunk, api_key, data_url, state):
     - If the response is successful, it transforms the response into a melted DataFrame for easier analysis.
     - In case of an API error, the error is printed and the function returns None.
     """
-    params = {
-        'get': ','.join(variables_chunk),
-        'for': 'tract:*',
-        'in': f'state:{state}',
-        'key': api_key,
-    }
-
-    response = requests.get(data_url, params=params)    
-    if response.status_code != 200:
-        print(f"API call failed with status code {response.status_code}. Message: {response.text}")
-        return None
+    if not mpo:
+        mpo = 'SACOG'
     
-    header, *data = response.json()
-    df = pd.DataFrame(data, columns=header)
-    df_melted = df.melt(id_vars=['state', 'county', 'tract'], 
-                        value_vars=variables_chunk, 
-                        var_name='Variable Name', 
-                        value_name='Total')
-    return df_melted
+    if not state:
+        state = '06'
+        
+        
+    # Create a copy of the filtered DataFrame to avoid the warning
+    county_df = FIPS_DF[FIPS_DF['state'] == state].copy()
+    county_df['county_name'] = county_df['county_name'].str.replace(" County$", "", regex=True)  
+    county_df['MPO'] = county_df['county_name'].map(COUNTY_TO_MPO).fillna('None')
+    county_df = county_df[county_df['MPO'] == mpo].reset_index() 
+    counties_to_fetch = county_df['county'].to_list()
+    
+    all_data = []  # Collect all data from each API call here
+    for c in counties_to_fetch:
+        params = {
+            'get': ','.join(variables_chunk),
+            'for': f'tract:*',
+            'in': f'state:{state} county:{c}',  # Specify the county in the params
+            'key': api_key,
+        }
+    
+        response = requests.get(data_url, params=params)    
+        if response.status_code != 200:
+            print(f"API call failed with status code {response.status_code}. Message: {response.text}")
+            continue
+        
+        header, *data = response.json()
+        df = pd.DataFrame(data, columns=header)
+        df_melted = df.melt(id_vars=['state', 'county', 'tract'], 
+                            value_vars=variables_chunk, 
+                            var_name='Variable Name', 
+                            value_name='Total')
+        
+        all_data.append(df_melted)  # Append the melted data to all_data list
+    
+    # Combine all data into one DataFrame
+    result_df = pd.concat(all_data, ignore_index=True)
+    return result_df
 
 def get_census_data(df, api_key, data_url, state, fetch_data_chunk_function):
     """
@@ -292,11 +315,13 @@ def main_fetching_process(data_input, state, api_key, geography:str):
     - state (str): The state code.
     - api_key (str): The API key for making requests.
     - geography (str): The specified geography (e.g., 'county', 'tract', 'msa').
+    
 
     Returns:
     - dict: A dictionary with keys in format "Year_Product_Census_Data" and values as corresponding data DataFrames.
-    """    
+    """
     data_input = input_processing(data_input)
+    
 
     geo = geography.lower()
     fetch_funcs = {
@@ -305,7 +330,6 @@ def main_fetching_process(data_input, state, api_key, geography:str):
         'tract': fetch_data_chunk_for_tract,
         'msa': fetch_data_chunk_for_metro
     }
-    
 
     if geo == 'tract':
         data_input = data_input[data_input['Census Product'] != 'ACS1']
@@ -316,8 +340,14 @@ def main_fetching_process(data_input, state, api_key, geography:str):
     if fetch_func is None:
         raise ValueError("Invalid geography specified.")
 
-    return fetch_census_data_for_all_products(data_input, state, api_key, fetch_func, geography)
+    resulting_data = fetch_census_data_for_all_products(data_input, state, api_key, fetch_func, geography)
 
+    # Passing the fetched dataframes through census_merge
+    for key, df in resulting_data.items():
+        if df is not None:  # Ensure that the dataframe isn't None
+            resulting_data[key] = census_merge(df,data_input)
+
+    return resulting_data
 
 executed_geos = set()
 

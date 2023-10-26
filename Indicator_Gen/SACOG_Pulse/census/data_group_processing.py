@@ -35,10 +35,10 @@ def get_default_columns(data_group: str) -> List[str]:
         'age': ['label'],
         'gender': ['label'],
         'employment': ['concept', 'label'],
-        'household_income': ['concept', 'label'],
+        'household income': ['concept', 'label'],
         'education': ['concept', 'label'],
         'poverty': ['concept', 'label'],
-        'median_income': ['concept', 'label'],
+        'median income': ['concept', 'label'],
         'broadband': ['concept', 'label'],
         'commute': ['label'],
     }
@@ -268,10 +268,12 @@ def process_commute_data(df: pd.DataFrame, *column_names: str) -> pd.DataFrame:
     Returns:
     - pd.DataFrame: DataFrame with processed commute data.
     """
-    column_names = set_column_defaults(list(column_names), 'commute')
     df = (df
-                .pipe(map_commute_group, column_name=column_names[0])
-                .query("`Commute Group` != 'Total'"))
+          .assign(Commute=lambda x: x[column_names[0]].apply(lambda y: extract_content_between_excl(y, -1) if pd.notnull(y) else None))
+          .pipe(map_commute_group, column_name='Commute')
+          .query("`Commute Group` != 'Total Commute Trips'")
+         )
+    
     return df
 
 
