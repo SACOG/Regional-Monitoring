@@ -118,7 +118,7 @@ def raw_vars(census_products=None, start_year=None, end_year=None, should_save_c
     dfs_dict = {}
 
     if census_products is None:
-        census_products = ['acs1', 'acs5', 'dec']
+        census_products = ['acs1', 'acs5', 'dec', 'pums1', 'pums5']
 
     for product in census_products:
         if product in CENSUS_CONFIG:

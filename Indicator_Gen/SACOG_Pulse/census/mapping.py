@@ -123,9 +123,20 @@ def map_race_group(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
     4                             Other (NH)
     Name: Race Group, dtype: object
     """
-    df = input_processing(df)
-    race_series = df[column_name]
+
     
+    
+    # Preprocess input using the helper function if it's available
+    try:
+        df = input_processing(df)
+    except NameError:
+        # If the function isn't available, just continue without preprocessing
+        pass
+
+    # Check if column_name exists
+    if column_name not in df.columns:
+        raise ValueError(f"Column '{column_name}' does not exist in the DataFrame.")
+
     def map_race(x):
         if WHITE_PATTERN.search(x):
             return 'White (Not Hispanic or NH)'
@@ -137,9 +148,9 @@ def map_race_group(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
             return 'Hispanic or Latino'
         elif OTHER_PATTERN.search(x):
             return 'Other (NH)'
-        return x  # default return value if no match
-    
-    df['Race Group'] = race_series.apply(map_race)
+        return 'UNMATCHED'
+
+    df['Race Group'] = df[column_name].apply(map_race)
     return df
 
 
@@ -375,43 +386,46 @@ def map_education_level(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
 
 ### COMMUTE GROUP MAPPING ###
 
-def map_commute_group(df: pd.DataFrame, column_name: str, commute_map: Optional[Dict[str, str]] = None) -> pd.DataFrame:
+def map_commute_group(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
     """
-    Maps the commute descriptions in a given DataFrame column to standard commute groups.
+    Map commute values in the given column of the DataFrame to standardized commute group names.
 
     Parameters:
     -----------
     df : DataFrame
-        Input dataset containing commute description data in the specified column.
-        
+        Input dataset containing commute data in the specified column.
+
     column_name : str
-        Name of the column in the input DataFrame containing the commute descriptions to be mapped.
-        
-    commute_map : Optional[Dict[str, str]]
-        Dictionary containing mappings from commute descriptions to standard commute groups. 
-        If not provided, the default COMMUTE_MAP is used.
+        Name of the column in the input DataFrame containing the commute values to be mapped.
 
     Returns:
     --------
     DataFrame
-        A DataFrame with an additional 'Commute Group' column containing the mapped commute groups.
-
-    Examples:
-    ---------
-    >>> df = pd.DataFrame({
-    ...     'Commute Description': ['Walk', 'Bike', 'Car - Driver', 'Car - Passenger']
-    ... })
-    >>> mapped_df = map_commute_group(df, 'Commute Description')
-    >>> print(mapped_df['Commute Group'])
-    0       Walking
-    1       Cycling
-    2       Driving
-    3    Carpooling
-    Name: Commute Group, dtype: object
+        A DataFrame with an additional 'Commute Group' column containing the standardized commute group names.
     """
+    df = input_processing(df)
+    commute_series = df[column_name]
     
-    commute_map = commute_map if commute_map else COMMUTE_MAP
-    df['Commute Group'] = df[column_name].apply(lambda x: extract_content_between_excl(x, -1)).map(commute_map).fillna('Unknown')
+    def map_commute(x):
+        if DRIVE_ALONE_PATTERN.search(x):
+            return 'Drive Alone'
+        elif CARPOOL_PATTERN.search(x):
+            return 'Carpool'
+        elif TRANSIT_PATTERN.search(x):
+            return 'Transit'
+        elif WORK_HOME_PATTERN.search(x):
+            return 'Work at Home'
+        elif WALKED_PATTERN.search(x):
+            return 'Walked'
+        elif BICYCLE_PATTERN.search(x):
+            return 'Bicycle'
+        elif OTHER_MEANS_PATTERN.search(x):
+            return 'Other'
+        elif TOTAL_PATTERN.search(x):
+            return 'Total Commute Trips'
+        return 'UNMATCHED'  # default return value if no match
+    
+    df['Commute Group'] = commute_series.apply(map_commute)
     return df
 
 ### MAP PEER MSA ###

@@ -5,7 +5,7 @@ import numpy as np
 from typing import Optional, Tuple, Union
 import itertools
 import logging
-from .configs import report_config
+from .configs import report_config, acs1_commute_vars, acs5_commute_vars, acs1_2005_commute_vars
 
 
 """
@@ -87,7 +87,7 @@ def input_processing(data_input):
         df = pd.concat(data_input.values(), ignore_index=True)
     else:
         logging.error("Invalid input type. Must be a dictionary or a dataframe.")
-
+    df['Year'] = df['Year'].astype(int)
     return fill_missing_values(df)
 
 
@@ -189,7 +189,8 @@ GEOG_GROUPS = {
     'COUNTY': ['County Name'],
     'TRACT': ['MPO', 'County Name', 'tract'],
     'MSA': ['MSA'],
-    'METRO': ['MSA']
+    'METRO': ['MSA'],
+    'PUMA': ['PUMA Name']
 }
 
 # Demographics Groups
@@ -559,7 +560,7 @@ def format_agg_ind(agg_ind, geog):
     components = [comp for comp in components if comp.lower() != geog.lower()]
     components = [comp.capitalize() for comp in components]
     if len(components) > 1:
-        components.insert(-1, "by")
+        components.insert(-1, " by ")
     return "".join(components)
 
 
@@ -567,36 +568,30 @@ def format_agg_ind(agg_ind, geog):
 
 def save_reports(d, directory_name=None):
     """
-    Save dataframes from a dictionary to Excel and CSV files, organized by Census Product.
+    Save dataframes from a dictionary of dictionaries to Excel and CSV files, organized by Census Product.
     
-    The function saves dataframes stored in a dictionary to Excel and CSV files. Each key in the dictionary
-    will create a new Excel file, and sheets within that Excel file are organized by unique 'Census Product'
-    values found in the dataframe. Additionally, CSV files are generated for each 'Census Product' and saved
-    in the defined directory. The 
-
     Parameters:
     -----------
     d : dict
-        Dictionary where keys are names for files and values are dataframes to be saved.
-
+        Dictionary where the outer key is the directory name, and the values are dictionaries. The inner dictionaries 
+        should have keys as names for files and values as dataframes to be saved.
     directory_name : str, optional
-        Name of the directory where the files will be saved. Defaults to "Final_Data".
-
+        Base directory name where the reports will be saved. Defaults to "Census Indicators".
     Returns:
     --------
     None
-
     Side Effects:
     -------------
-    Creates and saves Excel and CSV files in the specified directory within a folder named after the indicator.
-
+    Creates and saves Excel and CSV files in the specified directory within folders named after the main keys and subfolder
     Examples:
     ---------
     >>> data = {
-        'county_race_acs1': pd.DataFrame({
-            'Census Product': ['ProductA', 'ProductB'],
-            'Data': [10, 20]
-        })
+        'race': {
+            'county_race_acs1': pd.DataFrame({
+                'Census Product': ['ProductA', 'ProductB'],
+                'Data': [10, 20]
+            })
+        }
     }
     >>> save_reports(data, 'Reports_Directory')
     Data saved to Reports_Directory\race\county_race_acs1.xlsx and corresponding CSV files.
@@ -606,26 +601,90 @@ def save_reports(d, directory_name=None):
     
     if not os.path.exists(directory_name):
         os.makedirs(directory_name)
-
-    for dict_key, df in d.items():
-        # Extract subfolder name from the dict key
-        subfolder_name = dict_key.split('_')[1]
-        subfolder_path = os.path.join(directory_name, subfolder_name)
-
-        # Check if subfolder exists, if not, create it
-        if not os.path.exists(subfolder_path):
-            os.makedirs(subfolder_path)
-
-        excel_filename = os.path.join(subfolder_path, f"{dict_key}.xlsx")
-        
-        with pd.ExcelWriter(excel_filename, engine='xlsxwriter') as writer:
-            census_products = df['Census Product'].unique()
-            for product in census_products:
-                product_df = df[df['Census Product'] == product]
-                product_df.to_excel(writer, sheet_name=product, index=False)
-                
-                csv_filename = os.path.join(subfolder_path, f"{dict_key}_{product}.csv")
-                product_df.to_csv(csv_filename, index=False)
+    for main_key, nested_dict in d.items():
+        main_dir = os.path.join(directory_name, main_key)
+        # Check if main directory exists, if not, create it
+        if not os.path.exists(main_dir):
+            os.makedirs(main_dir)
+        for dict_key, df in nested_dict.items():
+            # Extract subfolder name from the dict key
+            key_parts = dict_key.split('_')
+            if len(key_parts) < 2:
+                print(f"Warning: Key '{dict_key}' does not have an underscore or has only one segment. Skipping...")
+                continue
+            subfolder_name = key_parts[1]
+            subfolder_path = os.path.join(main_dir, subfolder_name)
+            # Check if subfolder exists, if not, create it
+            if not os.path.exists(subfolder_path):
+                os.makedirs(subfolder_path)
+            excel_filename = os.path.join(subfolder_path, f"{dict_key}.xlsx")
             
-            print(f"Data saved to {excel_filename} and corresponding CSV files.")
+            with pd.ExcelWriter(excel_filename, engine='xlsxwriter') as writer:
+                census_products = df['Census Product'].unique()
+                for product in census_products:
+                    product_df = df[df['Census Product'] == product]
+                    product_df.to_excel(writer, sheet_name=product, index=False)
+                    
+                    csv_filename = os.path.join(subfolder_path, f"{dict_key}_{product}.csv")
+                    product_df.to_csv(csv_filename, index=False)
+                
+                print(f"Data saved to {excel_filename} and corresponding CSV files.")
+
+
+
+def explode_dict(row, valid_variable_names):
+    if (row['Variable Name'] in valid_variable_names and 
+        isinstance(row['values'], dict) and 
+        'item' in row['values'] and 
+        isinstance(row['values']['item'], dict)):
+        
+        return [{'Variable Name': row['Variable Name'],
+                 'Values Key': k, 
+                 'Values Desc': v, 
+                 **row} for k, v in row['values']['item'].items()]
+    
+    return [row]
+
+def df_explode_dicts(data, var_list):
+    df = input_processing(data)
+    expanded_data = df.apply(lambda x: explode_dict(x, var_list), axis=1).explode().reset_index(drop=True)
+    return pd.DataFrame(expanded_data.tolist())
+
+def append_filtered_dfs(data_dict, column, filter_value):
+    """
+    Filters dataframes within the nested dictionaries of data_dict on the specified column if it exists,
+    appends the filtered dataframe to the main dictionary with the filter_value prefixed to the key.
+    
+    Args:
+    - data_dict (dict): The main dictionary containing nested dictionaries of dataframes.
+    - column (str): The column name to filter on.
+    - filter_value (str or int): The value to filter the column on.
+
+    Returns:
+    - dict: The updated main dictionary with added filtered dataframes nested within the main keys.
+    """
+    
+    # Iterate through main dictionary
+    for main_key, nested_dict in data_dict.items():
+        temp_dict = {}  # Temporary dictionary to store the new entries
+        
+        for df_key, df in nested_dict.items():
+            # If the specified column exists in the dataframe
+            if column in df.columns:
+                # Filter the dataframe
+                filtered_df = df[df[column] == filter_value]
+                # Construct new key
+                new_key = f"{filter_value}_{df_key}"
+                # Add the filtered dataframe to the temporary dictionary
+                temp_dict[new_key] = filtered_df
+        
+        # Update the nested dictionary with the new entries from the temporary dictionary
+        nested_dict.update(temp_dict)
+        
+        # Update the nested dictionary within the main dictionary
+        data_dict[main_key] = nested_dict
+
+    return data_dict
+
+
 
