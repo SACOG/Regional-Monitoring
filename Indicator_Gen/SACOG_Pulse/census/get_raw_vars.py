@@ -91,11 +91,11 @@ def fetch_data(product, start_year=None, end_year=None, should_save_csv=False, p
 def raw_vars(census_products=None, start_year=None, end_year=None, should_save_csv=False, path=None):
 
     """
-    This function will pull the raw varuables using the 'fetch_data' function. The main difference between the two is that this function allows users to define a list of census products rather than fetching them one by one (eg. [acs1, acs5])
+    This function will pull the raw variables using the 'fetch_data' function. The main difference between the two is that this function allows users to define a list of census products rather than fetching them one by one (e.g. ['acs1', 'acs5']).
     
     example usage: 
 
-    census_products  = ['acs1', acs5]
+    census_products  = ['acs1', 'acs5']
     start_year = 2015
     end_year = 2019
     
@@ -111,9 +111,7 @@ def raw_vars(census_products=None, start_year=None, end_year=None, should_save_c
     2015_2019_acs1: dataframe,
     2015_2019_acs5: dataframe    
     }
-
     """
-
 
     dfs_dict = {}
 
@@ -121,21 +119,22 @@ def raw_vars(census_products=None, start_year=None, end_year=None, should_save_c
         census_products = ['acs1', 'acs5', 'dec', 'pums1', 'pums5']
 
     for product in census_products:
-        if product in CENSUS_CONFIG:
-            config = CENSUS_CONFIG[product]
-            base_urls = config.get('base_urls', [config.get('base_url')])
-            folder = config['folder']
-            
-            if start_year is None:
-                start_year = config['start_year']
-            if end_year is None:
-                end_year = pd.Timestamp.now().year
-            if path is None:
-                path = os.path.join("..", "Data", "Raw Data", "ACS", "All JSON Variables")
-
-            df = fetch_data(product, start_year, end_year, should_save_csv, path)
-            dfs_dict[f'{product}_{start_year} - {end_year}'] = df
-        else:
+        config = CENSUS_CONFIG.get(product)
+        if not config:
             print(f'Invalid census_product: {product}. Available options are: {list(CENSUS_CONFIG.keys())}.')
+            continue
+
+        base_urls = config.get('base_urls', [config.get('base_url')])
+        folder = config['folder']
+
+        # Determine start_year and end_year for the current product
+        curr_start_year = start_year if start_year is not None else config['start_year']
+        curr_end_year = end_year if end_year is not None else pd.Timestamp.now().year
+
+        if path is None:
+            path = os.path.join("..", "Data", "Raw Data", "ACS", "All JSON Variables")
+
+        df = fetch_data(product, curr_start_year, curr_end_year, should_save_csv, path)
+        dfs_dict[f'{product}_{curr_start_year}_{curr_end_year}'] = df
 
     return dfs_dict

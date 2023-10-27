@@ -291,11 +291,12 @@ FIPS_DF.set_index('county', inplace=True)
 
 
 # Compile the regex patterns for race
-WHITE_PATTERN = re.compile(r'white|white alone, not hispanic or latino|white', re.IGNORECASE)
+WHITE_PATTERN = re.compile(r'white|white alone, not hispanic or latino', re.IGNORECASE)
 BLACK_PATTERN = re.compile(r'black or african american alone|black|african american', re.IGNORECASE)
 ASIAN_PATTERN = re.compile(r'asian alone|asian', re.IGNORECASE)
 HISPANIC_PATTERN = re.compile(r'hispanic|latino', re.IGNORECASE)
-OTHER_PATTERN = re.compile(r'some other race alone|two or more races|american indian and alaska native alone|native hawaiian and other pacific islander alone', re.IGNORECASE)
+TWO_PATTERN = re.compile(r'two or more', re.IGNORECASE)
+OTHER_PATTERN = re.compile(r'some other race alone|american indian and alaska native alone|native hawaiian and other pacific islander alone', re.IGNORECASE)
 
 single_year_pattern = re.compile(r'(\d+) years?')
 range_years_pattern = re.compile(r'(\d+)[\s\wtoand]+(\d+)')
@@ -338,17 +339,28 @@ acs5_race_vars = [
 	'B03002_012E'
 ]
 
+dec00_race_vars = [
+	"P008003"
+	,"P008004"
+	,"P008005"
+	,"P008006"
+	,"P008007"
+	,"P008008"
+	,"P008009"
+	,"P008010"
+]
 
-
-dec10_race_vars = [	
-	"P009009"
-	,"P009002"
-	,"P009007"
-	,"P009008"
+dec10_race_vars = [
+	"P009002"
 	,"P009005"
 	,"P009006"
+	,"P009007"
+	,"P009008"
+	,"P009009"
 	,"P009010"
-	,"P009011"]
+	,"P009011"
+]
+
 
 dec20_race_vars = [
 	"DP1_0107C",
@@ -359,16 +371,6 @@ dec20_race_vars = [
 	"DP1_0096C",
 	"DP1_0109C",
 	"DP1_0108C"]
-
-dec00_race_vars = [
-	"P008009"
-	,"P008008"
-	,"P008003"
-	,"P008005"
-	,"P008004"
-	,"P008007"
-	,"P008006"
-	,"P008010"]
 
 
 ## AGE ##
@@ -495,35 +497,7 @@ acs5_income_vars = ['B19001B_014E', 'B19001B_013E', 'B19001B_012E', 'B19001B_011
 
 ## EDUCATION ##
 
-acs1_education_vars = ['B15002F_017E', 'B15002F_013E', 'B15002F_014E', 'B15002F_015E',
-	'B15002F_016E', 'B15002F_011E', 'B15002F_012E', 'B15002F_009E',
-	'B15002F_005E', 'B15002F_006E', 'B15002F_007E', 'B15002F_008E',
-	'B15002F_003E', 'B15002F_004E', 'B15002B_004E', 'B15002B_003E',
-	'B15002B_009E', 'B15002B_006E', 'B15002B_005E', 'B15002B_008E',
-	'B15002B_007E', 'B15002B_014E', 'B15002B_013E', 'B15002B_016E',
-	'B15002B_015E', 'B15002B_012E', 'B15002B_011E', 'B15002B_017E',
-	'B15002G_006E', 'B15002G_007E', 'B15002G_004E', 'B15002G_005E',
-	'B15002G_008E', 'B15002G_009E', 'B15002G_003E', 'B15002G_016E',
-	'B15002G_017E', 'B15002G_011E', 'B15002G_014E', 'B15002G_015E',
-	'B15002G_012E', 'B15002G_013E', 'B15002C_011E', 'B15002C_003E',
-	'B15002C_007E', 'B15002C_006E', 'B15002C_005E', 'B15002C_004E',
-	'B15002C_009E', 'B15002C_008E', 'B15002C_015E', 'B15002C_014E',
-	'B15002C_013E', 'B15002C_012E', 'B15002C_017E', 'B15002C_016E',
-	'B15002H_006E', 'B15002H_005E', 'B15002H_004E', 'B15002H_003E',
-	'B15002H_017E', 'B15002H_016E', 'B15002H_015E', 'B15002H_014E',
-	'B15002H_013E', 'B15002H_012E', 'B15002H_011E', 'B15002H_009E',
-	'B15002H_008E', 'B15002H_007E', 'B15002D_012E', 'B15002D_011E',
-	'B15002D_014E', 'B15002D_013E', 'B15002D_016E', 'B15002D_015E',
-	'B15002D_017E', 'B15002D_004E', 'B15002D_003E', 'B15002D_006E',
-	'B15002D_005E', 'B15002D_008E', 'B15002D_007E', 'B15002D_009E',
-	'B15002I_015E', 'B15002I_014E', 'B15002I_017E', 'B15002I_016E',
-	'B15002I_007E', 'B15002I_006E', 'B15002I_009E', 'B15002I_008E',
-	'B15002I_003E', 'B15002I_005E', 'B15002I_004E', 'B15002I_011E',
-	'B15002I_013E', 'B15002I_012E', 'B15002E_016E', 'B15002E_017E',
-	'B15002E_014E', 'B15002E_015E', 'B15002E_012E', 'B15002E_013E',
-	'B15002E_011E', 'B15002E_004E', 'B15002E_005E', 'B15002E_003E',
-	'B15002E_008E', 'B15002E_009E', 'B15002E_006E', 'B15002E_007E',
-	'C15002D_010E', 'C15002D_011E', 'C15002D_008E', 'C15002D_009E',
+acs1_education_vars = ['C15002D_010E', 'C15002D_011E', 'C15002D_008E', 'C15002D_009E',
 	'C15002D_006E', 'C15002D_004E', 'C15002D_005E', 'C15002D_003E',
 	'C15002I_010E', 'C15002I_011E', 'C15002I_006E', 'C15002I_005E',
 	'C15002I_004E', 'C15002I_003E', 'C15002I_009E', 'C15002I_008E',

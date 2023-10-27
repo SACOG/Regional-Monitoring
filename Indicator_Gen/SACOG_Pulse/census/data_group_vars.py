@@ -62,28 +62,6 @@ VAR_MAPPING = {
 }
 
 
-def extract_lists_from_dict(d):
-    """Recursively extracts lists from dictionary and its nested dictionaries."""
-    result = []
-    for value in d.values():
-        if isinstance(value, list):
-            result.extend(value)
-        elif isinstance(value, dict):
-            result.extend(extract_lists_from_dict(value))
-    return result
-
-def master_raw_vars(d, v=None):
-    var_map = v if v else VAR_MAPPING
-    f = extract_lists_from_dict(var_map)
-    df = input_processing(d)
-    return df[df['Variable Name'].isin(f)]
-
-
-with open('all_raw_vars.pkl', 'rb') as file:
-    all_raw_vars = pickle.load(file)
-    
-
-master_vars = master_raw_vars(all_raw_vars)
 
 def acs1_05(data, data_group):
     df = input_processing(data)
@@ -163,10 +141,17 @@ def filter_vars(raw_vars, data_group=None):
                         # Convert year to integer
                         int_year = int(year)
 
+                        # Get the variable list for the given year
                         variables_for_year = vars_list.get(int_year, [])
+
                         if variables_for_year:  # Only process if there are variables for the year
-                            key_name = f"{product}{int_year}_{dg}_filtered_vars"  # Key format
-                            filtered_results[key_name] = group[group['Variable Name'].isin(variables_for_year)]
+                            # Only retain rows that have 'Variable Name' matching the variables_for_year
+                            filtered_group = group[group['Variable Name'].isin(variables_for_year)]
+                            
+                            if not filtered_group.empty:  # Only store if the filtered group is not empty
+                                key_name = f"{product}{int_year}_{dg}_filtered_vars"  # Key format
+                                filtered_results[key_name] = filtered_group
+
                 else:
                     key_name = f"{product}_{dg}_filtered_vars"  # Key format
                     filtered_results[key_name] = df_product[df_product['Variable Name'].isin(vars_list)]
@@ -178,3 +163,12 @@ def get_filtered_vars(data_group):
     return lambda data_input: filter_vars(raw_vars, data_group)
 
 
+
+
+with open('all_raw_vars.pkl', 'rb') as file:
+    all_raw_vars = pickle.load(file)
+
+
+
+with open('master_vars.pkl', 'rb') as file:
+    master_vars = pickle.load(file)

@@ -144,6 +144,8 @@ def map_race_group(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
             return 'Black or African American (NH)'
         elif ASIAN_PATTERN.search(x):
             return 'Asian (NH)'
+        elif TWO_PATTERN.search(x):
+        	return 'Two + Races (NH)'
         elif HISPANIC_PATTERN.search(x):
             return 'Hispanic or Latino'
         elif OTHER_PATTERN.search(x):
