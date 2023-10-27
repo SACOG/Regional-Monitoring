@@ -14,8 +14,7 @@ from .get_data import main_fetching_process
 
 
 def agg_by_comp(geog, data_group, *dims):
-
-	"""
+    """
     Constructs aggregation indices based on geography, data group, and additional dimensions.
     
     This function constructs two main indices: `agg_ind` and `agg_groupby`. The `agg_ind` is the full 
@@ -63,10 +62,6 @@ def agg_by_comp(geog, data_group, *dims):
     # Prints: "Invalid Aggregation: [INVALID_ENTRIES]"
     # Returns: (None, None, None, None)
     """
-
-    
-
-    # Base aggregation groupby
     agg_groupby_base = geog.upper() + "_" + data_group.upper()
 
     # Construct agg_ind using all provided dimensions
@@ -95,9 +90,32 @@ def agg_by_comp(geog, data_group, *dims):
             agg_ind, 
             agg_groupby)
 
+
+def generate_agg_data(geog, data_group, *dims):
+    combinations = []
+    
+    # Adding the combination with just the data_group and geog
+    combinations.append((geog, data_group))
+
+    for dim in dims:
+        # Check to ensure data_group and dim are not the same before appending
+        if data_group != dim:
+            combinations.append((geog, data_group, dim))
+            combinations.append((geog, dim, data_group))
+
+    if len(dims) > 1:
+        # Ensure that there are no repeated dimensions
+        unique_dims = set(dims)
+        if len(unique_dims) == len(dims): 
+            combined_dims = "_".join(dims)
+            combinations.append((geog, data_group, combined_dims))
+            combinations.append((geog, combined_dims, data_group))
+    return combinations
+
+
 def calculate_indicator_percentage(resulting_data, data_group, geog, state: Optional[str] = None, api_key = None, *dims):
 
-	    """
+    """
     Calculates the percentage representation of an indicator across the specified geography and data group.
     
     This function calculates the percentage of an indicator (derived from `data_group` and other dimensions)
@@ -146,61 +164,71 @@ def calculate_indicator_percentage(resulting_data, data_group, geog, state: Opti
     >>> df = calculate_indicator_percentage(result_data, filtered_vars, 'race', 'county', 'age')
     # This will return a DataFrame with columns like 'County Age Race %' and other related data.
     """
+
+
+    final_dfs_dict = {}
+    resulting_data = input_processing(resulting_data)
     
 
-    num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group, *dims)
-    ind_total_key = " ".join([geog.capitalize(), format_agg_ind(agg_ind, geog), "Totals"])
-    total_key = " ".join([geog.capitalize(), format_agg_ind(agg_groupby, geog), "Totals"])
+    df_merged = map_county_names(resulting_data)
+    df_merged = process_data_group(resulting_data,data_group)
+    
+    # Iterate over each combination of geog, data_group, and dims
+    for combo in generate_agg_data(geog, data_group, *dims):
+        num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(*combo)
+        ind_total_key = " ".join([geog.capitalize(), format_agg_ind(agg_ind, geog), "Totals"])
+        total_key = " ".join([geog.capitalize(), format_agg_ind(agg_groupby, geog), "Totals"])
 
 
-    if not num_cols or not div_cols:
-        # Either num_cols or div_cols wasn't found
-        return
+        if not num_cols or not div_cols:
+            # Either num_cols or div_cols wasn't found
+            return
 
-    config = {
-        'total_key': total_key,
-        'ind_total_key': ind_total_key
-    }
-
-    df_merged = map_county_names(
-       process_data_group(
-        resulting_data,
-        data_group)
-    )
-
-    df = group_and_sum(df_merged, num_cols).reset_index()
-
-    # Creating the column first before checking
-    df[config['total_key']] = df.groupby(div_cols)['Total'].transform('sum')
-    df = df.rename(columns={'Total': config['ind_total_key']})
-    df[f"{AGG_BY[agg_ind][-2]} by {AGG_BY[agg_ind][-1]} Percentage for {geog.capitalize()}" ]= ((df[config['ind_total_key']] / df[config['total_key']]) * 100).round(2)
-
-    # Ensure columns exist in df after creation
-    if not set(num_cols).issubset(df.columns):
-        raise ValueError(f"The following columns are missing from the DataFrame: {set(num_cols) - set(df.columns)}")
-
-    if not set(div_cols).issubset(df.columns):
-        raise ValueError(f"The following columns are missing from the DataFrame: {set(div_cols) - set(df.columns)}")
+        config = {
+            'total_key': total_key,
+            'ind_total_key': ind_total_key
+        }        
         
-    if 'County Name' in df.columns:
-        state = state if state else '06'
-        fallback_mpo = f"Rest of {FIPS_TO_STATE.get(state, 'Unknown')}"
-        df['MPO'] = df['County Name'].map(COUNTY_TO_MPO).fillna(fallback_mpo)
 
-        # Get the index of the 'County Name' column
-        idx = df.columns.get_loc('County Name')
+        df = group_and_sum(df_merged, num_cols).reset_index()
 
-        # Use insert to place 'MPO' right after 'County Name'
-        mpo_series = df.pop('MPO')  # Remove 'MPO' from its current location
-        df.insert(idx + 1, 'MPO', mpo_series)  # Insert it right after 'County Name'
-        return df
-    else:
-        return df
+        # Creating the column first before checking
+        df[config['total_key']] = df.groupby(div_cols)['Total'].transform('sum')
+        df = df.rename(columns={'Total': config['ind_total_key']})
+        df[f"{AGG_BY[agg_ind][-2]} by {AGG_BY[agg_ind][-1]} Percentage for {geog.capitalize()}" ]= ((df[config['ind_total_key']] / df[config['total_key']]) * 100).round(2)
+
+        # Ensure columns exist in df after creation
+        if not set(num_cols).issubset(df.columns):
+            raise ValueError(f"The following columns are missing from the DataFrame: {set(num_cols) - set(df.columns)}")
+
+        if not set(div_cols).issubset(df.columns):
+            raise ValueError(f"The following columns are missing from the DataFrame: {set(div_cols) - set(df.columns)}")  
+        if 'County Name' in df.columns:
+            state = state if state else '06'
+            fallback_mpo = f"Rest of {FIPS_TO_STATE.get(state, 'Unknown')}"
+            df['MPO'] = df['County Name'].map(COUNTY_TO_MPO).fillna(fallback_mpo)
+
+            # Get the index of the 'County Name' column
+            idx = df.columns.get_loc('County Name')
+
+            # Use insert to place 'MPO' right after 'County Name'
+            mpo_series = df.pop('MPO')  # Remove 'MPO' from its current location
+            df.insert(idx + 1, 'MPO', mpo_series)  # Insert it right after 'County Name'
+
+            final_dfs_dict[agg_ind] = df
+        else:
+
+            final_dfs_dict[agg_ind] = df
+        
+        if 'MSA' in df.columns:
+            df = map_peer_msa(df, 'MSA')
+            final_dfs_dict[agg_ind] = df
+  
+    return final_dfs_dict
+    
 
 def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_config=None):
-
-
-	    """
+    """
     Aggregate and generate a reports based on raw variables, specified geography, and configuration.
 
     This function processes, fetches, and calculates results for given raw variables and configurations. 
@@ -255,21 +283,7 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
     # Given a raw variables dataset 'raw_data', state 'CA', and an API key 'my_api_key':
     >>> filter_results, fetched_results, calculate_results = report_agg(raw_data, 'CA', 'my_api_key', data_group_name='race')
     # This will return dictionaries with processed data based on the provided configuration.
-    """
-    
-    
-    def generate_keys(geos, data_group, dims):
-        keys = []
-        
-        # Generate keys
-        for geo in geos:
-            keys.append(f"{geo}_{data_group}")  # 1. geo_data_group
-            
-            for dim in dims:
-                keys.append(f"{geo}_{data_group}_{dim}")  # 2. geo_data_group_dim
-                keys.append(f"{geo}_{dim}_{data_group}")  # 3. geo_dim_data_group
-                
-        return keys
+    """   
 
     # Set report_config to a default dict if not provided
     if not report_config:
@@ -306,41 +320,43 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
                 geo_cache[cache_key] = census_data
 
             fetched_results[cache_key] = census_data
-            
-            key_combinations = generate_keys([geog], data_group, info['dims'])
-            
-            for key_calc in key_combinations:
-                print(f'\nCalculating {key_calc} indicator numbers.')
-                split_keys = key_calc.split('_')
-                dim_keys = [key for key in split_keys if key not in [geog, data_group]]
                 
-                try:
-                    calculated_df = final_report_agg(census_data, data_group, geog, state, api_key, *dim_keys)
-                    
-                    # Update the calculate_results dictionary
-                    if data_group not in calculate_results:
-                        calculate_results[data_group] = {}
-                    calculate_results[data_group][key_calc] = calculated_df
-                except Exception as e:
-                    tb = traceback.extract_tb(e.__traceback__)
-                    last_traceback = tb[-1]
-                    file_name, line_number, func_name, text = last_traceback
+            try:
+                dims = info.get('dims', [])
+                if len(dims) > 1:
+                    dims_str = ', '.join(dims[:-1]) + ' and ' + dims[-1]
+                else:
+                    dims_str = dims[0] if dims else ''
 
-                    print(f"Error processing {key_calc}:\n")
-                    print(f"Exception type: {type(e).__name__}")
-                    print(f"Exception message: {e}")
-                    print(f"In file: {file_name}, line {line_number}, in function: {func_name}")
-                    print(f"Code at error line: {text}")
+                print(f'\nCalculating {data_group} numbers for {geog} and by {dims_str}')
+                calculated_df = final_report_agg(census_data, data_group, geog, state, api_key, *dims)
+                key_for_calculated_df = list(calculated_df.keys())[0]
+
+                for key_for_calculated_df in calculated_df.keys():
+                        # Update the calculate_results dictionary
                     if data_group not in calculate_results:
                         calculate_results[data_group] = {}
-                    calculate_results[data_group][key_calc] = None
+                    calculate_results[data_group][key_for_calculated_df] = calculated_df[key_for_calculated_df]
+
+            except Exception as e:
+                tb = traceback.extract_tb(e.__traceback__)
+                last_traceback = tb[-1]
+                file_name, line_number, func_name, text = last_traceback
+                print(f"Error processing {data_group}:\n")
+                print(f"Exception type: {type(e).__name__}")
+                print(f"Exception message: {e}")
+                print(f"In file: {file_name}, line {line_number}, in function: {func_name}")
+                print(f"Code at error line: {text}")
+                if data_group not in calculate_results:
+                    calculate_results[data_group] = {}
+                calculate_results[data_group] = None
 
     return filter_results, fetched_results, calculate_results
 
 def race_for_median_income(resulting_data, data_group, geog, state=None, api_key=None, *dims):
 
 
-	 """
+    """
     Computes the race variables for median income and returns a dataframe for specified geographic levels.
 
     This function processes the input data to calculate the race metrics associated with median income for 
@@ -391,7 +407,6 @@ def race_for_median_income(resulting_data, data_group, geog, state=None, api_key
     # This will return a DataFrame with the aggregated metrics for race related to median income for California counties.
     """
 
-   
     print (f'Calculating {data_group} variable years...')
     resulting_data = input_processing(resulting_data)
     census_products, start_year, end_year = census_data_aggs(resulting_data)
@@ -441,7 +456,7 @@ def race_for_median_income(resulting_data, data_group, geog, state=None, api_key
 
 def calculate_median_income(resulting_data, data_group, geog, state, api_key=None, *dims):
 
-	"""
+    """
     Computes the median income for specified data groups and geographical levels.
 
     This function takes in raw data and related variables, and calculates the median income based on the 
@@ -495,7 +510,6 @@ def calculate_median_income(resulting_data, data_group, geog, state, api_key=Non
     >>> df_result = calculate_median_income(raw_data, filtered_data, 'income', 'CA', 'county', api_key='my_api_key')
     # This will return a DataFrame with median income metrics for California counties.
     """
-    
     num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group='race')
 
     resulting_data = input_processing(resulting_data)
