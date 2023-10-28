@@ -353,15 +353,15 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
 
     return filter_results, fetched_results, calculate_results
 
-def race_for_median_income(resulting_data, data_group, geog, state=None, api_key=None, *dims):
+def dims_for_median_income(resulting_data, data_group, geog, state=None, api_key=None):
 
 
     """
-    Computes the race variables for median income and returns a dataframe for specified geographic levels.
+    Computes the data group variables for median income and returns a dataframe for specified geographic levels.
 
-    This function processes the input data to calculate the race metrics associated with median income for 
+    This function processes the input data to calculate the data group metrics associated with median income for 
     a given geographical region (like county, MPO, etc.). The function identifies the relevant years for 
-    calculation from the resulting data, filters the necessary race variables, fetches external data, and 
+    calculation from the resulting data, filters the necessary data group variables, fetches external data, and 
     then performs the aggregation.
 
     Parameters:
@@ -387,7 +387,7 @@ def race_for_median_income(resulting_data, data_group, geog, state=None, api_key
     Returns:
     --------
     DataFrame
-        A DataFrame containing the aggregated race metrics for median income for the specified geographical 
+        A DataFrame containing the aggregated data group metrics to be used when calculating median income for the specified geographical 
         region with appropriately named columns.
 
     Notes:
@@ -403,8 +403,8 @@ def race_for_median_income(resulting_data, data_group, geog, state=None, api_key
     Examples:
     ---------
     # Given a raw variables dataset 'raw_data', state 'CA', geog 'county', and an API key 'my_api_key':
-    >>> df_result = race_for_median_income(raw_data, data_group='race', geog='county', state='CA', api_key='my_api_key')
-    # This will return a DataFrame with the aggregated metrics for race related to median income for California counties.
+    >>> df_result = dims_for_median_income(raw_data, data_group='race', geog='county', state='CA', api_key='my_api_key')
+    # This will return a DataFrame with the aggregated metrics of race for California counties.
     """
 
     print (f'Calculating {data_group} variable years...')
@@ -412,23 +412,27 @@ def race_for_median_income(resulting_data, data_group, geog, state=None, api_key
     census_products, start_year, end_year = census_data_aggs(resulting_data)
     
     # Extract unique values from the DataFrame for 'Census Product' and 'Year'
+    
+    data_group = data_group if data_group else 'race'
 
     print(f'Filtering {data_group} variables for {start_year} - {end_year}...')
     
     
 
     # Call filter_vars function with the dynamically populated arguments
-    race_filtered_vars = filter_vars(master_vars, data_group='race')    
-    race_census_data = main_fetching_process(race_filtered_vars, state, api_key, geog)
+    dim_filtered_vars = filter_vars(master_vars, data_group=data_group)    
+    dim_census_data = main_fetching_process(dim_filtered_vars, state, api_key, geog)
     
-    print(f'Generating {data_group} numbers for {geog}...')
+    print(f'\nGenerating {data_group} numbers for {geog}...')
     
-    race_for_median_income = calculate_indicator_percentage(race_census_data, data_group, geog, *dims)    
+    dim_for_median_income = calculate_indicator_percentage(dim_census_data, data_group, geog)
+    dim_for_median_income = input_processing(dim_for_median_income)
+
     
-    dynamic_column_name = [race_for_median_income.columns[-3], race_for_median_income.columns[-2]]
+    dynamic_column_name = [dim_for_median_income.columns[-3], dim_for_median_income.columns[-2]]
     columns_to_return = AGG_BY[f'{geog.upper()}_{data_group.upper()}'] + dynamic_column_name
     
-    df = race_for_median_income[columns_to_return]
+    df = dim_for_median_income[columns_to_return]
 
     geog_mapping = {
     'mpo': 'MPO',
@@ -446,13 +450,14 @@ def race_for_median_income(resulting_data, data_group, geog, state=None, api_key
     
     #rename = [f'Race Group Total by {geog.capitalize()}', f'{geog.capitalize()} Total Population']
     
-    rename = [f'Race Group Total by {geog_agg_col}', f'{geog_agg_col} Total Population']
+    rename = [f'{data_group.capitalize()} Group Total by {geog_agg_col}', f'{geog_agg_col} Total Population']
 
 
     rename_dict = dict(zip(current_names, rename))
     df = df.rename(columns=rename_dict)
     
     return df
+
 
 def calculate_median_income(resulting_data, data_group, geog, state, api_key=None, *dims):
 
@@ -510,13 +515,18 @@ def calculate_median_income(resulting_data, data_group, geog, state, api_key=Non
     >>> df_result = calculate_median_income(raw_data, filtered_data, 'income', 'CA', 'county', api_key='my_api_key')
     # This will return a DataFrame with median income metrics for California counties.
     """
-    num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group='race')
+
+    final_dfs_dict = {}
+
+    dim = dims[0] if dims else 'race'
+
+    num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group=dim)
 
     resulting_data = input_processing(resulting_data)
-    r = race_for_median_income(resulting_data = resulting_data, data_group='race', geog=geog, state=state, api_key=api_key, *dims)
+    r = dims_for_median_income(resulting_data = resulting_data, data_group=dim, geog=geog, state=state, api_key=api_key)
 
     resulting_data['Total'] = resulting_data['Total'].fillna(0).astype(int)
-    resulting_data = resulting_data[resulting_data['Total'] >= 0]
+    resulting_data = resulting_data[resulting_data['Total'] > 0]
     resulting_data = resulting_data.rename(columns = {'Total': 'Median Income'})
     resulting_data['Median Income'] = resulting_data['Median Income'].fillna(0).astype(np.int64)
 
@@ -537,7 +547,7 @@ def calculate_median_income(resulting_data, data_group, geog, state, api_key=Non
     # Normalize the geog
     geog_normalized = geog.lower()
     geog_agg_col = geog_mapping.get(geog_normalized)
-    race_group_total_col = f'Race Group Total by {geog_agg_col}'
+    dim_group_total_col = f'{dim.capitalize()} Group Total by {geog_agg_col}'
     
     # Check for invalid geog
     if geog_agg_col is None:
@@ -545,25 +555,29 @@ def calculate_median_income(resulting_data, data_group, geog, state, api_key=Non
         exit()  # Exit the script if invalid geog
     
     # Get some values
-    merge_cols = AGG_BY[f'{geog.upper()}_RACE']
-    race_median_income = pd.merge(r, m, on=merge_cols)
-    
-    # Define some columns
+    merge_cols = AGG_BY[f'{geog.upper()}_{dim.upper()}']
+    r = r.drop_duplicates(subset=merge_cols)
+    m = m.drop_duplicates(subset=merge_cols)
+    #
     median_income_col = 'Median Income'
+    merged_df = pd.merge(r, m[merge_cols+ [median_income_col]], 
+                     on=merge_cols, 
+                     how='left').dropna()
+
+    median_income_col = (f'Median Income for {dim.capitalize()} Group')
+    merged_df = merged_df.rename(columns={'Median Income': median_income_col})
+
+    geog_income_col = (f'{geog.capitalize()} Median Income')
     geog_total_population_col = f'{geog_agg_col} Total Population'
 
-    print(f'Calculating weighted incomes by race and {geog_agg_col}...')
-    race_median_income = calculate_weighted_incomes(race_median_income, median_income_col, race_group_total_col, geog_agg_col,geog_total_population_col)
-
-    print(f'Calculating median incomes by race and {geog_agg_col}...')
-
-    grouped_by_race, grouped_by_geog = income_group_data(race_median_income, div_cols, geog_agg_col ,race_group_total_col)
-
-    print(f'Generating final median incomes by race for {geog_agg_col}...')
-
-    final_df = final_df_compile(grouped_by_race, grouped_by_geog, div_cols, geog_agg_col)
-    
-    df = final_df[div_cols+['Race Group','Median Income by Race',f'Median Income by {geog_agg_col}',f'Income Ratio Race Group by {geog_agg_col}']]
+    df = merged_df[
+        (merged_df[median_income_col]>0)
+        &(merged_df[geog_total_population_col]!=0)
+    ]
+    df[f'{geog_income_col}_t'] = df[dim_group_total_col]*df[median_income_col]
+    df[f'{geog_income_col}'] = (df.groupby(AGG_BY[geog.upper()])[f'{geog_income_col}_t'].transform('sum'))/df[geog_total_population_col]
+    df = df.drop(columns = [f'{geog_income_col}_t'])
+    df[f'{dim.capitalize()} Group Median Income as Portion of {geog.capitalize()}'] = df[median_income_col]/df[geog_income_col]*100
     
     if 'County Name' in df.columns:
         state = state if state else '06'
@@ -576,11 +590,17 @@ def calculate_median_income(resulting_data, data_group, geog, state, api_key=Non
         # Use insert to place 'MPO' right after 'County Name'
         mpo_series = df.pop('MPO')  # Remove 'MPO' from its current location
         df.insert(idx + 1, 'MPO', mpo_series)  # Insert it right after 'County Name'
-        return final_df
-    else:
-        return df
 
-    return final_df
+        final_dfs_dict[f'{geog}_{data_group}'] = df
+    else:
+
+        final_dfs_dict[f'{geog}_{data_group}'] = df
+        
+    if 'MSA' in df.columns:
+        df = map_peer_msa(df, 'MSA')
+        final_dfs_dict[f'{geog}_{data_group}'] = df
+  
+    return final_dfs_dict
 
 def final_report_agg(resulting_data, data_group, geog, state, api_key=None, *dims):
 
