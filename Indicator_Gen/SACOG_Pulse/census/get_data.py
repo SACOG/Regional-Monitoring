@@ -215,7 +215,9 @@ def get_census_mappings(df):
             '2000': 'https://api.census.gov/data/{}/dec/sf1',
             '2010': 'https://api.census.gov/data/{}/dec/sf1',
             '2020': 'https://api.census.gov/data/{}/dec/dp'
-        }, df[df['Census Product'] == 'DEC'])
+        }, df[df['Census Product'] == 'DEC']),
+        'PUMS1': ('https://api.census.gov/data/{}/acs/acs1/pums/', df[df['Census Product'] == 'PUMS1']),
+    	'PUMS5': ('https://api.census.gov/data/{}/acs/acs5/pums/', df[df['Census Product'] == 'PUMS5'])
     }
 
 def process_each_product(product, url_map, product_df, state, api_key, total_years, current_year_number, fetch_data_chunk_function):

@@ -58,12 +58,19 @@ VAR_MAPPING = {
     'broadband':{
     'ACS1': acs1_broadband_vars,
     'ACS5': acs1_broadband_vars
+    },
+
+    'gender':{
+    'ACS1': acs1_gender_vars
     }
 }
 
 
 
 def acs1_05(data, data_group):
+
+    ##ADD DOCUMENTATION HERE##
+
     df = input_processing(data)
     if data_group == 'commute':
         
@@ -81,7 +88,7 @@ def acs1_05(data, data_group):
         
     return final
 
-def filter_vars(raw_vars, data_group=None):
+def filter_vars(raw_vars, data_group=None, start_year=None, end_year=None, census_product=None):
     """
     Filter a dataframe of raw variables based on predefined variable mapping.
     
@@ -118,18 +125,22 @@ def filter_vars(raw_vars, data_group=None):
     # Expected output will depend on the `VAR_MAPPING` constant and the variable lists like 
     # `acs1_race_vars` and so on.
     """
-    df = input_processing(raw_vars)
+    df = raw_vars.copy()
+
+    # Filter by specified census product
+    if census_product:
+        df = df[df['Census Product'] == census_product]
+
+    # Filter by specified years (if provided)
+    if start_year is not None:
+        df = df[df['Year'].astype(int) >= start_year]
+    if end_year is not None:
+        df = df[df['Year'].astype(int) <= end_year]
+
     filtered_results = {}
-    
-    # If data_group is 'commute', process it uniquely and return
-    if data_group == 'commute':
-        df_commute = acs1_05(df, 'commute')
-        key_name = "ACS1_commute_filtered_vars"
-        filtered_results[key_name] = df_commute
-        return filtered_results
 
     # Determine which data groups need to be processed
-    data_groups_to_process = [data_group] if data_group else list(set(VAR_MAPPING.keys()) - {'commute'})
+    data_groups_to_process = [data_group] if data_group else list(VAR_MAPPING.keys())
 
     for dg in data_groups_to_process:
         for product, vars_list in VAR_MAPPING[dg].items():
@@ -138,23 +149,20 @@ def filter_vars(raw_vars, data_group=None):
 
                 if product == 'DEC':
                     for year, group in df_product.groupby('Year'):
-                        # Convert year to integer
                         int_year = int(year)
-
-                        # Get the variable list for the given year
                         variables_for_year = vars_list.get(int_year, [])
 
-                        if variables_for_year:  # Only process if there are variables for the year
-                            # Only retain rows that have 'Variable Name' matching the variables_for_year
+                        if variables_for_year:
                             filtered_group = group[group['Variable Name'].isin(variables_for_year)]
                             
-                            if not filtered_group.empty:  # Only store if the filtered group is not empty
+                            if not filtered_group.empty:
                                 key_name = f"{product}{int_year}_{dg}_filtered_vars"  # Key format
                                 filtered_results[key_name] = filtered_group
 
                 else:
                     key_name = f"{product}_{dg}_filtered_vars"  # Key format
                     filtered_results[key_name] = df_product[df_product['Variable Name'].isin(vars_list)]
+
     return filtered_results
 
 
@@ -162,7 +170,13 @@ def filter_vars(raw_vars, data_group=None):
 def get_filtered_vars(data_group):
     return lambda data_input: filter_vars(raw_vars, data_group)
 
+def master_var_gen(a, vs):
+    a = input_processing(a)
+    master_vars = {}
 
+    for v in vs.keys():
+        master_vars.update(filter_vars(a,v))
+    return input_processing(master_vars)
 
 
 with open('all_raw_vars.pkl', 'rb') as file:
