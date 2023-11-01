@@ -353,7 +353,7 @@ def report_agg(raw_variables_df, state, api_key, data_group_name=None, report_co
 
     return filter_results, fetched_results, calculate_results
 
-def dims_for_median_income(resulting_data, data_group, geog, state=None, api_key=None):
+def dims_for_median_income(resulting_data, data_group, geog, s_geog = None, state=None, api_key=None):
 
 
     """
@@ -407,6 +407,11 @@ def dims_for_median_income(resulting_data, data_group, geog, state=None, api_key
     # This will return a DataFrame with the aggregated metrics of race for California counties.
     """
 
+    s_geog if s_geog else 'mpo'
+
+
+
+    
     print (f'Calculating {data_group} variable years...')
     resulting_data = input_processing(resulting_data)
     census_products, start_year, end_year = census_data_aggs(resulting_data)
@@ -429,6 +434,9 @@ def dims_for_median_income(resulting_data, data_group, geog, state=None, api_key
     dim_for_median_income = input_processing(dim_for_median_income)
 
     
+
+    cols_to_drop = [col for col in dim_for_median_income.columns if 'percentage' in col.lower()]
+    dim_for_median_income = dim_for_median_income.drop(columns=cols_to_drop)
     dynamic_column_name = [dim_for_median_income.columns[-3], dim_for_median_income.columns[-2]]
     columns_to_return = AGG_BY[f'{geog.upper()}_{data_group.upper()}'] + dynamic_column_name
     
@@ -445,6 +453,8 @@ def dims_for_median_income(resulting_data, data_group, geog, state=None, api_key
     # Normalize the geog
     geog_normalized = geog.lower()
     geog_agg_col = geog_mapping.get(geog_normalized)
+    s_geog_normalized = s_geog.lower()
+    s_geog_agg_col = geog_mapping.get(s_geog_normalized)
     
     current_names = df.columns[-2:].tolist()
     
@@ -456,10 +466,40 @@ def dims_for_median_income(resulting_data, data_group, geog, state=None, api_key
     rename_dict = dict(zip(current_names, rename))
     df = df.rename(columns=rename_dict)
     
+    
+    sacog_msa = [
+    'Sacramento--Arden-Arcade--Roseville, CA Metro Area',
+    'Sacramento--Roseville--Arden-Arcade, CA Metro Area',
+    'Sacramento-Roseville-Folsom, CA Metro Area',
+    'Yuba City, CA Metro Area'   
+    ]
+    
+    df = df[df['MSA'].isin(sacog_msa)]
+    df['MPO'] = 'SACOG'
+    
+    
+    geog_mapping = {
+        'mpo': 'MPO',
+        'county': 'County Name',
+        'msa': 'MSA',
+        'metro': 'MSA',
+        'tract': 'tract'
+        }
+    
+        # Normalize the geog
+    geog_normalized = geog.lower()
+    geog_agg_col = geog_mapping.get(geog_normalized)
+        
+    sums = df.groupby(AGG_BY[s_geog.upper()])[f'{data_group.capitalize()} Group Total by {geog_agg_col}'].sum().reset_index()
+    sums = sums.rename(columns={f'{data_group.capitalize()} Group Total by {geog_agg_col}': f'{s_geog_agg_col} Total Population'})
+    
+    df = pd.merge(df, sums, on=AGG_BY[s_geog.upper()], how='left')
+        
     return df
 
 
-def calculate_median_income(resulting_data, data_group, geog, state, api_key=None, *dims):
+
+def calculate_median_income(resulting_data, data_group, geog, s_geog = None, state = None, api_key=None, *dims):
 
     """
     Computes the median income for specified data groups and geographical levels.
@@ -523,7 +563,7 @@ def calculate_median_income(resulting_data, data_group, geog, state, api_key=Non
     num_cols, div_cols, agg_ind, agg_groupby = agg_by_comp(geog, data_group=dim)
 
     resulting_data = input_processing(resulting_data)
-    r = dims_for_median_income(resulting_data = resulting_data, data_group=dim, geog=geog, state=state, api_key=api_key)
+    r = dims_for_median_income(resulting_data = resulting_data, data_group=dim, geog=geog, s_geog = s_geog, state=state, api_key=api_key)
 
     resulting_data['Total'] = resulting_data['Total'].fillna(0).astype(int)
     resulting_data = resulting_data[resulting_data['Total'] > 0]

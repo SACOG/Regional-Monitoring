@@ -470,7 +470,12 @@ def map_peer_msa(df, column_name: str, peer_msa: Optional[List[str]] = None, sac
     
 
     if sacog_msa is None:
-        sacog_msa = ['Sacramento--Arden-Arcade--Roseville, CA Metro Area']
+        sacog_msa = [
+    'Sacramento--Arden-Arcade--Roseville, CA Metro Area',
+    'Sacramento--Roseville--Arden-Arcade, CA Metro Area',
+    'Sacramento-Roseville-Folsom, CA Metro Area',
+    'Yuba City, CA Metro Area'   
+    ]
     
     combined_msa = peer_msa + sacog_msa
 
@@ -519,7 +524,12 @@ def filter_peer_msa(df, column_name: str = None, peer_msa: list = None, sacog_ms
     , 'Columbus, OH Metro Area']
 
     if sacog_msa is None:
-       sacog_msa = ['Sacramento--Arden-Arcade--Roseville, CA Metro Area']
+       sacog_msa =  [
+    'Sacramento--Arden-Arcade--Roseville, CA Metro Area',
+    'Sacramento--Roseville--Arden-Arcade, CA Metro Area',
+    'Sacramento-Roseville-Folsom, CA Metro Area',
+    'Yuba City, CA Metro Area'   
+    ]
     
     combined_msa = peer_msa + sacog_msa
 
