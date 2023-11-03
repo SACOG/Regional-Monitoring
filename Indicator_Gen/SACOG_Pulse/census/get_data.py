@@ -353,32 +353,6 @@ def main_fetching_process(data_input, state, api_key, geography:str):
 
 executed_geos = set()
 
-def fetch_and_concatenate_data(data_input, state, api_key, geos_list):
-    """
-    Fetches and concatenates data for the specified list of geographies.
-    
-    Parameters:
-    - data_input (pd.DataFrame): Input DataFrame with variable names, products, and years.
-    - state (str): The state code.
-    - api_key (str): The API key for making requests.
-    - geos_list (list): A list of specified geographies (e.g., ['county', 'tract', 'msa']).
-
-    Returns:
-    - dict: A dictionary with keys as geographies and values as data fetched for those geographies.
-    """    
-    data_input = input_processing(data_input)
-    if geo in executed_geos:
-        return  # Already fetched for this geography, no need to refetch
-    
-    data = main_fetching_process(data_input, state, api_key, geo)
-    
-    if geo in ['county', 'mpo']:
-        executed_geos.add('county')
-        executed_geos.add('mpo')
-    else:
-        executed_geos.add(geo)
-
-    return data
 
 def fetch_and_concatenate_data(data_input, state, api_key, geos_list):
     """

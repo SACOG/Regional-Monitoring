@@ -5,6 +5,9 @@ from datetime import datetime, timedelta
 from .get_raw_vars import raw_vars
 from .data_group_vars import all_raw_vars, VAR_MAPPING, master_var_gen, master_vars
 
+# Get the current directory of the script
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def check_and_update_pickle(pickle_file_name, data_func, *func_args):
     """
     Check if a pickle file needs to be updated based on the output of a provided function 
@@ -28,17 +31,19 @@ def check_and_update_pickle(pickle_file_name, data_func, *func_args):
         """Compute MD5 hash of given content."""
         return hashlib.md5(file_content).hexdigest()
 
-    print(f'Checking if {pickle_file_name} needs to be updated')
+    full_path = os.path.join(CURRENT_DIR, pickle_file_name)
 
-    if not os.path.exists(pickle_file_name):
-        print(f'{pickle_file_name} not detected. Creating it now.')
-        with open(pickle_file_name, 'wb') as f:
+    print(f'Checking if {full_path} needs to be updated')
+
+    if not os.path.exists(full_path):
+        print(f'{full_path} not detected. Creating it now.')
+        with open(full_path, 'wb') as f:
             pickle.dump(data_func(*func_args), f)
         return True
 
     one_week_ago = datetime.now() - timedelta(days=28)
     one_day_ago = datetime.now() - timedelta(days=1)
-    pickle_file_timestamp = datetime.fromtimestamp(os.path.getmtime(pickle_file_name))
+    pickle_file_timestamp = datetime.fromtimestamp(os.path.getmtime(full_path))
 
     # Determine the appropriate timestamp for comparison based on the pickle file name
     if pickle_file_name == "master_vars.pkl":
@@ -47,16 +52,16 @@ def check_and_update_pickle(pickle_file_name, data_func, *func_args):
         comparison_timestamp = one_week_ago
 
     if pickle_file_timestamp < comparison_timestamp:
-        print(f'{pickle_file_name} may need to be updated.')
+        print(f'{full_path} may need to be updated.')
 
         new_data = data_func(*func_args)
         new_data_hash = compute_md5(pickle.dumps(new_data))
 
-        with open(pickle_file_name, 'rb') as f:
+        with open(full_path, 'rb') as f:
             current_pickle_hash = compute_md5(f.read())
 
         if current_pickle_hash != new_data_hash:
-            with open(pickle_file_name, 'wb') as f:
+            with open(full_path, 'wb') as f:
                 pickle.dump(new_data, f)
             return True
 
