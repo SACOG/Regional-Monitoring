@@ -18,8 +18,8 @@ def extract_api_key(resource_dir = None, resource_file = None):
     file = os.path.join(resource_dir, resource_file)
     with open(file, 'r') as f:
         for line in f:
-            if 'ACS:' in line:
-                return line.split('ACS:')[1].strip()
+            if 'Census:' in line:
+                return line.split('Census:')[1].strip()
     return 'WARNING: API KEY NOT FOUND'
 
 ### PW extraction
