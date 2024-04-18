@@ -1,0 +1,13 @@
+open conda powershell app from anaconda
+navigate to folder where you want to create then use the following commands
+
+conda create -n forest
+conda activate forest
+pip install -r requirements.txt
+jupyter notebook
+
+
+if you need to restart/delete conda environment use the following
+
+deactivate
+conda remove --name forest--all
