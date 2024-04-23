@@ -1,3 +1,72 @@
+
+
+def query_acs(api_Key, estimate, geography, variables, year
+              , state=None, county=None, msa=None
+              , record_type=None):
+        
+    '''
+    User defined function to import Data from ACS
+    Fixed inputs: [host_, dataset_, g_] to construct URL
+    User inputs: [api_key_, variables_, year_, location_] to tell ACS that we have access with the API key and
+                    to tell ACS which variables we want to import, what year, and which state and record type (persons or households)
+    '''
+
+    assert estimate in ['ACS5', 'ACS1', 'DEC'], 'Unacceptable estimate input'
+    assert geography in ['Tract', 'County', 'MSA', 'PUMA'], 'Unacceptable geography input'
+
+
+    # Fixed inputs
+    host_ = 'https://api.census.gov/data'
+    dataset_ = f'/acs/{estimate.lower()}'
+
+    if estimate == 'DEC':
+        if year.isin([2000, 2010]):
+            g_ = '/sf?get='
+        if year.isin([2020]):
+            g_ = '/dp?get='
+    elif geography == 'PUMA':
+        g_ = '/pums?get='
+    else:
+        g_ = '?get='
+    
+    # User inputs
+    api_key_ = f"&key={api_Key}"
+    variables_ = variables
+    year_ = '/' + str(year)
+
+
+    if geography == 'PUMA':
+        location_ = '&for=state:' + state + '&RT=' + record_type
+    if geography == 'County':
+        location_ = '&for=county:' + county + '&in=state:' + state
+    if geography == 'Tract':
+        location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
+    if geography == 'MSA':
+        location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
+
+    
+    # create url query
+    query = f"{host_}{year_}{dataset_}{g_}{variables_}{location_}{api_key_}"
+    
+    # use requests package to call out to the API
+    response = requests.get(query).text
+    response = response.replace('null', '"null"')
+    response = ast.literal_eval(response)
+    
+    # convert parsed response text to pandas df
+    df_acs = pd.DataFrame(response[1:], columns = response[0])
+    
+    # apply year tag
+    df_acs['Year'] = year
+    
+    return df_acs
+
+
+
+
+
+
+
 def acs1_state_county(api_Key, variables, year, state, county):
     
     '''
@@ -265,38 +334,29 @@ def acs5_pums(api_Key, variables, year, state, record_type):
     
     return df_acs
 
-
-
-
-def query_acs(api_Key, estimate, geography, variables, year, state=None, record_type=None, msa=None):
-        
+def dec_state_county(api_Key, variables, year, state, county):
+    
     '''
-    User defined function to import PUMS5 year estimates
+    User defined function to import Decennial estimates at the tract level
     Fixed inputs: [host_, dataset_, g_] to construct URL
     User inputs: [api_key_, variables_, year_, location_] to tell ACS that we have access with the API key and
-                    to tell ACS which variables we want to import, what year, and which state and record type (persons or households)
+                    to tell ACS which variables we want to import, what year, and which state and counties
     '''
     
     # Fixed inputs
     host_ = 'https://api.census.gov/data'
-    dataset_ = f'/acs/{estimate}'
-    g_ = '/pums?get='
+    dataset_ = '/acs/dec'
+
+    if year.isin([2000, 2010]):
+        g_ = 'sf?get='
+    if year == 2020:
+        g_ = 'dp?get='
     
     # User inputs
     api_key_ = f"&key={api_Key}"
     variables_ = variables
     year_ = '/' + str(year)
-
-
-    if geography == 'PUMA':
-        location_ = '&for=state:' + state + '&RT=' + record_type
-    if geography == 'county':
-        location_ = '&for=county:' + county + '&in=state:' + state
-    if geography == 'tract':
-        location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
-    if geography == 'MSA':
-        location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
-
+    location_ = '&in=state:' + state + '&in=county:' + county
     
     # create url query
     query = f"{host_}{year_}{dataset_}{g_}{variables_}{location_}{api_key_}"
@@ -313,3 +373,88 @@ def query_acs(api_Key, estimate, geography, variables, year, state=None, record_
     df_acs['Year'] = year
     
     return df_acs
+
+
+
+def dec_state_county_tract(api_Key, variables, year, state, county):
+    
+    '''
+    User defined function to import Decennial estimates at the tract level
+    Fixed inputs: [host_, dataset_, g_] to construct URL
+    User inputs: [api_key_, variables_, year_, location_] to tell ACS that we have access with the API key and
+                    to tell ACS which variables we want to import, what year, and which state and counties
+    '''
+    
+    # Fixed inputs
+    host_ = 'https://api.census.gov/data'
+    dataset_ = '/acs/dec'
+
+    if year.isin([2000, 2010]):
+        g_ = 'sf?get='
+    if year == 2020:
+        g_ = 'dp?get='
+    
+    # User inputs
+    api_key_ = f"&key={api_Key}"
+    variables_ = variables
+    year_ = '/' + str(year)
+    location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
+    
+    # create url query
+    query = f"{host_}{year_}{dataset_}{g_}{variables_}{location_}{api_key_}"
+    
+    # use requests package to call out to the API
+    response = requests.get(query).text
+    response = response.replace('null', '"null"')
+    response = ast.literal_eval(response)
+    
+    # convert parsed response text to pandas df
+    df_acs = pd.DataFrame(response[1:], columns = response[0])
+    
+    # apply year tag
+    df_acs['Year'] = year
+    
+    return df_acs
+
+
+def dec_msa(api_Key, variables, year, state, msa):
+    
+    '''
+    User defined function to import Decennial estimates at the tract level
+    Fixed inputs: [host_, dataset_, g_] to construct URL
+    User inputs: [api_key_, variables_, year_, location_] to tell ACS that we have access with the API key and
+                    to tell ACS which variables we want to import, what year, and which state and counties
+    '''
+    
+    # Fixed inputs
+    host_ = 'https://api.census.gov/data'
+    dataset_ = '/acs/dec'
+
+    if year.isin([2000, 2010]):
+        g_ = 'sf?get='
+    if year == 2020:
+        g_ = 'dp?get='
+    
+    # User inputs
+    api_key_ = f"&key={api_Key}"
+    variables_ = variables
+    year_ = '/' + str(year)
+    location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
+    
+    # create url query
+    query = f"{host_}{year_}{dataset_}{g_}{variables_}{location_}{api_key_}"
+    
+    # use requests package to call out to the API
+    response = requests.get(query).text
+    response = response.replace('null', '"null"')
+    response = ast.literal_eval(response)
+    
+    # convert parsed response text to pandas df
+    df_acs = pd.DataFrame(response[1:], columns = response[0])
+    
+    # apply year tag
+    df_acs['Year'] = year
+    
+    return df_acs
+
+
