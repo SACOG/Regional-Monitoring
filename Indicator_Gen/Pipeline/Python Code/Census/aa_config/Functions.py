@@ -6,19 +6,25 @@ def query_acs(api_Key, estimate, geography, variables, year
         
     '''
     User defined function to import Data from ACS
-    Fixed inputs: [host_, dataset_, g_] to construct URL
-    User inputs: [api_key_, variables_, year_, location_] to tell ACS that we have access with the API key and
-                    to tell ACS which variables we want to import, what year, and which state and record type (persons or households)
+    User inputs: [api_key, estimate, geography variables, year] to tell ACS that we have access with the API key and
+                    what type of sample data to pull, which variables we want to import, what year, 
+                    and which state and record type (persons or households)
+                    - record type is for PUMS data only
+                    - only pulls 1 year at a time (geography IDs, like census tracts, change at the start of each decade)
     '''
 
+    # Assert that inputs for estimate and geography are appropriate
     assert estimate in ['ACS5', 'ACS1', 'DEC'], 'Unacceptable estimate input'
     assert geography in ['Tract', 'County', 'MSA', 'PUMA'], 'Unacceptable geography input'
 
 
-    # Fixed inputs
+    ## Construct URL
+
+    # Create rootpath and specify dataset type
     host_ = 'https://api.census.gov/data'
     dataset_ = f'/acs/{estimate.lower()}'
 
+    # Special conditions for "get" statement, depending on type of estimate or geography we are pulling
     if estimate == 'DEC':
         if year.isin([2000, 2010]):
             g_ = '/sf?get='
@@ -29,12 +35,12 @@ def query_acs(api_Key, estimate, geography, variables, year
     else:
         g_ = '?get='
     
-    # User inputs
+    # User inputs for user API key, desired variables and years to import
     api_key_ = f"&key={api_Key}"
     variables_ = variables
     year_ = '/' + str(year)
 
-
+    # Specify which geography to import
     if geography == 'PUMA':
         location_ = '&for=state:' + state + '&RT=' + record_type
     if geography == 'County':
@@ -45,10 +51,13 @@ def query_acs(api_Key, estimate, geography, variables, year
         location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
 
     
-    # create url query
+    ## Concatenate constructed URL
     query = f"{host_}{year_}{dataset_}{g_}{variables_}{location_}{api_key_}"
     
-    # use requests package to call out to the API
+
+    ## Call data using URL
+
+    # Use requests package to call out to the API
     response = requests.get(query).text
     response = response.replace('null', '"null"')
     response = ast.literal_eval(response)
@@ -59,6 +68,8 @@ def query_acs(api_Key, estimate, geography, variables, year
     # apply year tag
     df_acs['Year'] = year
     
+
+    ## Return
     return df_acs
 
 
