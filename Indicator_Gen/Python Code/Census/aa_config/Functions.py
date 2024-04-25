@@ -1,8 +1,8 @@
 
 
 def query_acs(api_Key, estimate, geography, variables, year
-              , state=None, county=None, msa=None
-              , record_type=None):
+              , state=None, county=None, msa=None, puma=None#, record_type=None
+              ):
         
     '''
     User defined function to import Data from ACS
@@ -42,7 +42,7 @@ def query_acs(api_Key, estimate, geography, variables, year
 
     # Specify which geography to import
     if geography == 'PUMA':
-        location_ = '&for=state:' + state + '&RT=' + record_type
+        location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     if geography == 'County':
         location_ = '&for=county:' + county + '&in=state:' + state
     if geography == 'Tract':
@@ -469,3 +469,15 @@ def dec_msa(api_Key, variables, year, state, msa):
     return df_acs
 
 
+# function to get unique values
+def unique(list1):
+ 
+    # initialize a null list
+    unique_list = []
+ 
+    # traverse for all elements
+    for x in list1:
+        # check if exists in unique_list or not
+        if x not in unique_list:
+            unique_list.append(x)
+    return unique_list
