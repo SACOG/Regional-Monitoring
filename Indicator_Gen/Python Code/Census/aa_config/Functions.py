@@ -1,7 +1,7 @@
 
 
 def query_acs(api_Key, estimate, geography, variables, year
-              , state=None, county=None, msa=None, puma=None#, record_type=None
+              , state=None, county=None, msa=None, puma=None, special=None
               ):
         
     '''
@@ -14,8 +14,8 @@ def query_acs(api_Key, estimate, geography, variables, year
     '''
 
     # Assert that inputs for estimate and geography are appropriate
-    assert estimate in ['ACS5', 'ACS1', 'DEC'], 'Unacceptable estimate input'
-    assert geography in ['Tract', 'County', 'MSA', 'PUMA'], 'Unacceptable geography input'
+    assert estimate  in ['ACS5', 'ACS1', 'DEC'], "Unacceptable estimate input, requires 'ACS5', 'ACS1', or 'DEC' "
+    assert geography in ['Tract', 'County', 'MSA', 'PUMA'], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
@@ -31,8 +31,12 @@ def query_acs(api_Key, estimate, geography, variables, year
     if estimate == 'DEC':
         if year in [2000, 2010]:
             g_ = '/sf1?get='
-        if year in [2020]:
-            g_ = '/dp?get='
+        if year == 2020:
+            if special == 'DHC':
+                g_ = '/dhc?get='
+            else:
+                g_ = '/dp?get='
+        
     elif geography == 'PUMA':
         g_ = '/pums?get='
     else:
