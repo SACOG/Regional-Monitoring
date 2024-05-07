@@ -1,7 +1,7 @@
 
 
-def query_acs(api_Key, estimate, geography, variables, year
-              , state=None, county=None, msa=None, puma=None, special=None
+def query_acs(api_Key, estimate, sample, geography, variables, year
+              , state=None, county=None, msa=None, puma=None
               ):
         
     '''
@@ -15,6 +15,7 @@ def query_acs(api_Key, estimate, geography, variables, year
 
     # Assert that inputs for estimate and geography are appropriate
     assert estimate  in ['ACS5', 'ACS1', 'DEC'], "Unacceptable estimate input, requires 'ACS5', 'ACS1', or 'DEC' "
+    assert sample    in ['ACS', 'DEC', 'DHC', 'PUMS'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', or 'PUMS'"
     assert geography in ['Tract', 'County', 'MSA', 'PUMA'], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
 
 
@@ -32,7 +33,7 @@ def query_acs(api_Key, estimate, geography, variables, year
         if year in [2000, 2010]:
             g_ = '/sf1?get='
         if year == 2020:
-            if special == 'DHC':
+            if sample == 'DHC':
                 g_ = '/dhc?get='
             else:
                 g_ = '/dp?get='
