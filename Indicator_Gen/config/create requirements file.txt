@@ -1,3 +1,0 @@
-in conda or powershell terminal, use the following command
-
-pip list --format=freeze > requirements.txt
