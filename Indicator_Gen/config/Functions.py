@@ -42,8 +42,9 @@ def unique(list1):
     return unique_list
 
 
-def sequence(r1, r2):
-    return [item for item in range(r1, r2+1)]
+# Function to create list of values inbetween range
+def sequence(r1, r2, step):
+    return [item for item in range(r1, r2+1, step)]
 
 
 
