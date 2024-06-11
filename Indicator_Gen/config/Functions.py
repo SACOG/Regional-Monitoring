@@ -27,6 +27,11 @@ import plotly.io as pio
 ### GENERAL FUNCTIONS ----------------------------------------------------------------------------------------------------------------- 
 
 
+# Aggregations
+wm         = lambda x: np.average(x, weights = df_acs.loc[x.index, "WEIGHTS"]) # weighted average
+sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                   # Square root of the sum of squares (to roll up SE's when +/- random variables)
+
+
 
 # function to get unique values
 def unique(list1):
