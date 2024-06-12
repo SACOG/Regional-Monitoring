@@ -32,7 +32,6 @@ wm         = lambda x: np.average(x, weights = df_acs.loc[x.index, "WEIGHTS"]) #
 sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                   # Square root of the sum of squares (to roll up SE's when +/- random variables)
 
 
-
 # function to get unique values
 def unique(list1):
  
@@ -149,6 +148,45 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
     ## Return
     return df_acs
 
+
+
+
+
+# Line plot for data visualization
+def plot_lines(
+    df
+     , by_vars, by_race, race_ethnicity, variable
+     , x, y
+     , color, line_dash, markers
+     , plot_title, plot_name
+     , export
+):
+    
+    if by_race == True:
+        df = df[df[race_ethnicity] != 'All']
+    else:
+        df = df[df[race_ethnicity] == 'All'].drop(race_ethnicity, axis = 1)
+
+    if by_vars == True:
+        vars = unique(df[variable].values)
+        for var in vars:
+            df2 = df[df[variable] == var]
+            fig = px.line(df2, x = x, y = y, color = color, line_dash = line_dash, markers = markers)
+            fig.update_layout(title = plot_title + ' - ' + str(var))
+            if export == True:
+                fig.write_html(os.path.join(path_plots, ''.join([indicator_name + '_', plot_name + '_', var + '_', 'line.html'])))
+                
+            fig.update_layout(autosize=False, width=1050, height=450)
+            
+    else:
+        fig = px.line(df, x = x, y = y, color = color, line_dash = line_dash, markers = markers)
+        fig.update_layout(title = plot_title)
+        if export == True:
+            fig.write_html(os.path.join(path_plots, ''.join([indicator_name + '_', plot_name + '_', 'line.html'])))
+
+        fig.update_layout(autosize=False, width=1050, height=450)
+
+    return fig.show()
 
 
 
@@ -291,6 +329,7 @@ def full_bls(sector_list, df, dates, key, pre, data_type):
     print('Pulling data for each industry ID by decade')
     print('')
     for sector_dict in sector_chamber:
+        print('')
         print(sector_dict)
         df_chamber.append(bls_query_update(sector_dict, dates, api_key = key))
 
