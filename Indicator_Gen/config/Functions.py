@@ -79,9 +79,9 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
     '''
 
     # Assert that inputs for estimate and geography are appropriate
-    assert estimate  in ['ACS5' , 'ACS1'  , 'DEC'                    ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', or 'DEC' "
-    assert sample    in ['ACS'  , 'DEC'   , 'DHC', 'PUMS_h', 'PUMS_p'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', or 'PUMS_p'"
-    assert geography in ['Tract', 'County', 'MSA', 'PUMA'            ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
+    assert estimate  in ['ACS5' , 'ACS1'  , 'DEC' , 'CPS'                       ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', or 'DEC' "
+    assert sample    in ['ACS'  , 'DEC'   , 'DHC', 'PUMS_h', 'PUMS_p', 'FOODSEC'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', or 'PUMS_p'"
+    assert geography in ['Tract', 'County', 'MSA', 'PUMA'                       ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
@@ -92,6 +92,9 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
 
     if estimate == 'DEC':
         dataset_ = f'/{estimate.lower()}'
+    if estimate == 'CPS':
+        dataset_ = f'/{estimate.lower()}'
+
 
     # Special conditions for "get" statement, depending on type of estimate or geography we are pulling
     if estimate == 'DEC':
@@ -102,23 +105,34 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
                 g_ = '/dhc?get='
             else:
                 g_ = '/dp?get='
+
+    elif estimate == 'CPS':
+        if sample == 'FOODSEC':
+            if year in [1995, 1997, 1999]:
+                g_ = f'{sample.lower()}/apr?get='
+            if year in [1998]:
+                g_ = f'{sample.lower()}/aug?get='
+            if year in [2000]:
+                g_ = f'{sample.lower()}/sep?get='
+            if year in sequence(2001, 2022, 1):
+                g_ = f'{sample.lower()}/dec?get='
         
     elif geography == 'PUMA':
         g_ = '/pums?get='
+
     else:
         g_ = '?get='
     
+
     # User inputs for user API key, desired variables and years to import
     api_key_ = f"&key={api_Key}"
     variables_ = variables
     year_ = '/' + str(year)
 
+
     # Specify which geography to import
     if geography == 'PUMA':
-        if sample == 'PUMS_h':
-            location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state# + '&RT=H'
-        if sample == 'PUMS_p':
-            location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state# + '&RT=P'
+        location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     if geography == 'County':
         location_ = '&for=county:' + county + '&in=state:' + state
     if geography == 'Tract':
@@ -155,7 +169,7 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
 # Line plot for data visualization
 def plot_lines(
     df
-     , by_vars, by_race, race_ethnicity, variable
+     , loop_vars, by_race, race_ethnicity, variable
      , x, y
      , color, line_dash, markers
      , plot_title, plot_name
@@ -167,7 +181,7 @@ def plot_lines(
     else:
         df = df[df[race_ethnicity] == 'All'].drop(race_ethnicity, axis = 1)
 
-    if by_vars == True:
+    if loop_vars == True:
         vars = unique(df[variable].values)
         for var in vars:
             df2 = df[df[variable] == var]
