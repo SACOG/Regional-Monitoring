@@ -28,7 +28,7 @@ import plotly.io as pio
 
 
 # Aggregations
-wm         = lambda x: np.average(x, weights = df_acs.loc[x.index, "WEIGHTS"]) # weighted average
+wm         = lambda x: np.average(x, weights = df_acs.loc[x.index, "Population"]) # weighted average
 sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                   # Square root of the sum of squares (to roll up SE's when +/- random variables)
 
 
@@ -290,8 +290,17 @@ def bls_query_update(series_dict, dates, api_key):
             })
         response = requests.post('{}{}'.format(url, key), headers=headers, data=data).json()
 
+
+        # Adding a function here to alert and halt when we have exceeded daily limit
+
+        if 'status' in response and response['status'] == 'REQUEST_LIMIT_EXCEEDED':
+            print("Daily API Query Limit Reached")
+            break
+
+
         # Extract data from the response and append it to the dataframe
         if 'Results' in response and 'series' in response['Results']:
+            print(response['status'])
             for series_data in tqdm(response['Results']['series']):
                 series_id = series_data['seriesID']
                 if series_id in series_dict:
