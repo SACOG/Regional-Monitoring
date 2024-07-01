@@ -29,7 +29,9 @@ import plotly.io as pio
 
 # Aggregations
 wm         = lambda x: np.average(x, weights = df_acs.loc[x.index, "Population"]) # weighted average
-sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                   # Square root of the sum of squares (to roll up SE's when +/- random variables)
+sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                      # Square root of the sum of squares (to roll up SE's when +/- random variables)
+# sqrtsumsq  = lambda x: np.sqrt(np.sum((x/1.645)**2))                            # check that these work out the same way        
+# Doing the square root of the sum of squared ME's is equivalent to doing it on the SE's, I proved it once, did not take notes, sorry, just trust me
 
 
 # function to get unique values
@@ -61,13 +63,14 @@ def re_remove_post(x, exp = '.'):
 
 
 
-### ACS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
+### CENSUS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
 
 
 # Main function used to query data
-def query_acs(api_Key, estimate, sample, geography, variables, year
-              , state=None, county=None, msa=None, puma=None
-              ):
+def query_census(
+        api_key, estimate, sample, geography, variables, year
+        , state=None, county=None, msa=None, puma=None
+            ):
         
     '''
     User defined function to import Data from ACS
@@ -79,9 +82,9 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
     '''
 
     # Assert that inputs for estimate and geography are appropriate
-    assert estimate  in ['ACS5' , 'ACS1'  , 'DEC' , 'CPS'                       ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', or 'DEC' "
-    assert sample    in ['ACS'  , 'DEC'   , 'DHC', 'PUMS_h', 'PUMS_p', 'FOODSEC'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', or 'PUMS_p'"
-    assert geography in ['Tract', 'County', 'MSA', 'PUMA'                       ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
+    assert estimate  in ['ACS5' , 'ACS1'  , 'DEC' , 'CPS'           ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
+    assert sample    in ['ACS'  , 'DEC'   , 'DHC', 'PUMS', 'FOODSEC'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', or 'FOODSEC'"
+    assert geography in ['Tract', 'County', 'MSA', 'PUMA'           ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
@@ -109,13 +112,13 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
     elif estimate == 'CPS':
         if sample == 'FOODSEC':
             if year in [1995, 1997, 1999]:
-                g_ = f'{sample.lower()}/apr?get='
+                g_ = f'/{sample.lower()}/apr?get='
             if year in [1998]:
-                g_ = f'{sample.lower()}/aug?get='
+                g_ = f'/{sample.lower()}/aug?get='
             if year in [2000]:
-                g_ = f'{sample.lower()}/sep?get='
+                g_ = f'/{sample.lower()}/sep?get='
             if year in sequence(2001, 2022, 1):
-                g_ = f'{sample.lower()}/dec?get='
+                g_ = f'/{sample.lower()}/dec?get='
         
     elif geography == 'PUMA':
         g_ = '/pums?get='
@@ -125,7 +128,7 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
     
 
     # User inputs for user API key, desired variables and years to import
-    api_key_ = f"&key={api_Key}"
+    api_key_ = f"&key={api_key}"
     variables_ = variables
     year_ = '/' + str(year)
 
@@ -153,14 +156,14 @@ def query_acs(api_Key, estimate, sample, geography, variables, year
     response = ast.literal_eval(response)
     
     # convert parsed response text to pandas df
-    df_acs = pd.DataFrame(response[1:], columns = response[0])
+    df_census = pd.DataFrame(response[1:], columns = response[0])
     
     # apply year tag
-    df_acs['Year'] = year
+    df_census['Year'] = year
     
 
     ## Return
-    return df_acs
+    return df_census
 
 
 
@@ -206,12 +209,16 @@ def plot_lines(
 
 
 
+
+
+
+
 ### BLS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
 
 
 # Create a function to make all of these counties into a dictionary
 
-def dict_maker(df, sector, pre, data_type):
+def dict_maker(df, geography, sector, survey, data_type):
     """
     Given the file: BLS Configuration File.xlsx under the BLS_MSA sheet, we can create a dictionary of 
     all of the MSA counties we want to test. Provide the sector (industry) that you want to pull, and the function will
@@ -222,26 +229,37 @@ def dict_maker(df, sector, pre, data_type):
 
     # Making set of keys and vals for future dict
     keys = []
-
-    # Now empty list for values in the future dict
     vals = []
 
-    for i in range(len(df)):
 
-        # Getting each code
-        area_code = str(df.iloc[i, 0])
-        state     = str(df.iloc[i, 2])
+    if geography == 'MSA':
 
-        # Making each SeriesID
-        series_id = str(pre) + str(state) + str(area_code) + str(sector) + str(data_type)
+        for i in range(len(df)):
 
-        # Adding to the keylist for future dictionary
+            # Loop through each MSA code
+            # Construct the Series ID
+            # Add Series ID and MSA label to lists
+
+            area_code = str(df.iloc[i, 0])
+            state     = str(df.iloc[i, 2])
+            series_id = str(survey) + str(state) + str(area_code) + str(sector) + str(data_type)
+            keys.append(series_id)
+            val = str(df.iloc[i, 1])
+            vals.append(val)
+        
+    if geography == 'National':
+
+        # Pull National level area code
+        # Construct the Series ID
+        # Add Series ID and National label to lists
+
+        series_id = str(survey) + str(sector) + str(data_type)
         keys.append(series_id)
-
-        val = str(df.iloc[i, 1])
-
+        val = str(df.iloc[0, 1])
         vals.append(val)
 
+
+    # Convert list of keys and values to dictionary
     result = {k: v for k, v in zip(keys, vals)}
 
     return result
@@ -324,7 +342,7 @@ def bls_query_update(series_dict, dates, api_key):
 
 
 # Now let's run the final function
-def full_bls(sector_list, df, dates, key, pre, data_type):
+def full_bls(key, df, geography, sector_list, dates, survey, data_type):
 
     """
     This function combines the dict_maker() and bls_query_update() to make a set of Series IDs for multiple MSAs, sectors, and year range, all
@@ -343,7 +361,7 @@ def full_bls(sector_list, df, dates, key, pre, data_type):
     print('Creating python dictionary of industry IDs')
     print('')
     for i in tqdm(sector_list):
-        sector_chamber.append(dict_maker(df, i, pre, data_type))
+        sector_chamber.append(dict_maker(df, geography, i, survey, data_type))
 
     # Now with the sector_holders list containing each set of series we want, we can run our query function iteratively
     
