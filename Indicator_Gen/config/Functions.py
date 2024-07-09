@@ -28,7 +28,7 @@ import plotly.io as pio
 
 
 # Aggregations
-wm         = lambda x: np.average(x, weights = df_acs.loc[x.index, "Population"]) # weighted average
+wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
 sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                      # Square root of the sum of squares (to roll up SE's when +/- random variables)
 # sqrtsumsq  = lambda x: np.sqrt(np.sum((x/1.645)**2))                            # check that these work out the same way        
 # Doing the square root of the sum of squared ME's is equivalent to doing it on the SE's, I proved it once, did not take notes, sorry, just trust me
@@ -63,14 +63,21 @@ def re_remove_post(x, exp = '.'):
 
 
 
+
 ### CENSUS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
+
+
+# Split attributes string
+def ME_split(text):
+    return ",".join(text.split(',')[0:3:2])
 
 
 # Main function used to query data
 def query_census(
-        api_key, estimate, sample, geography, variables, year
+        df_urls
+        , api_key, estimate, sample, geography, variables, year
         , state=None, county=None, msa=None, puma=None
-            ):
+    ):
         
     '''
     User defined function to import Data from ACS
@@ -82,72 +89,41 @@ def query_census(
     '''
 
     # Assert that inputs for estimate and geography are appropriate
-    assert estimate  in ['ACS5' , 'ACS1'  , 'DEC' , 'CPS'           ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
-    assert sample    in ['ACS'  , 'DEC'   , 'DHC', 'PUMS', 'FOODSEC'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', or 'FOODSEC'"
-    assert geography in ['Tract', 'County', 'MSA', 'PUMA'           ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
+    assert estimate  in ['ACS5'  , 'ACS1'    , 'DEC', 'CPS'                       ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
+    assert sample    in ['ACS'   , 'DEC'     , 'DHC', 'PUMS', 'FOODSEC', 'SUBJECT'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', 'FOODSEC', or 'SUBJECT'"
+    assert geography in ['Tracts', 'Counties', 'MSA', 'PUMA'                      ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
+    df_url = df_urls[
+          (df_urls['Sample'   ] == sample  )
+        & (df_urls['Estimate' ] == estimate)
+        & (df_urls['c_vintage'] == year    )
+        ]
 
     # Create rootpath and specify dataset type
-    host_ = 'https://api.census.gov/data'
-    dataset_ = f'/acs/{estimate.lower()}'
-
-    if estimate == 'DEC':
-        dataset_ = f'/{estimate.lower()}'
-    if estimate == 'CPS':
-        dataset_ = f'/{estimate.lower()}'
-
-
-    # Special conditions for "get" statement, depending on type of estimate or geography we are pulling
-    if estimate == 'DEC':
-        if year in [2000, 2010]:
-            g_ = '/sf1?get='
-        if year == 2020:
-            if sample == 'DHC':
-                g_ = '/dhc?get='
-            else:
-                g_ = '/dp?get='
-
-    elif estimate == 'CPS':
-        if sample == 'FOODSEC':
-            if year in [1995, 1997, 1999]:
-                g_ = f'/{sample.lower()}/apr?get='
-            if year in [1998]:
-                g_ = f'/{sample.lower()}/aug?get='
-            if year in [2000]:
-                g_ = f'/{sample.lower()}/sep?get='
-            if year in sequence(2001, 2022, 1):
-                g_ = f'/{sample.lower()}/dec?get='
-        
-    elif geography == 'PUMA':
-        g_ = '/pums?get='
-
-    else:
-        g_ = '?get='
-    
+    df_url
+    root_ = df_url['c_url'].values[0]
+    g_ = '?get='
 
     # User inputs for user API key, desired variables and years to import
     api_key_ = f"&key={api_key}"
     variables_ = variables
-    year_ = '/' + str(year)
-
 
     # Specify which geography to import
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
-    if geography == 'County':
+    if geography == 'Counties':
         location_ = '&for=county:' + county + '&in=state:' + state
-    if geography == 'Tract':
+    if geography == 'Tracts':
         location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
     if geography == 'MSA':
         location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
-
+    
     
     ## Concatenate constructed URL
-    query = f"{host_}{year_}{dataset_}{g_}{variables_}{location_}{api_key_}"
+    query = f"{root_}{g_}{variables_}{location_}{api_key_}"
     
-
     ## Call data using URL
 
     # Use requests package to call out to the API
@@ -178,7 +154,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography):
     Adjusts dollars for inflation as needed
     '''
 
-    if geography == 'Tract':
+    if geography == 'Tracts':
         df_census = df_census.replace('-666666666', np.nan)
         df_census = df_census.replace('null', np.nan)
         df_census = df_census.dropna(axis = 1, how = 'all')
@@ -211,9 +187,9 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography):
 
         # Some indicators require the roll up to be weighted by population
         # The following step aligns the Race/Ethnicity mappings with the population counts workbook
-        if indicator_name == 'Income_3':
+        if indicator_name in ['Income_3', 'Labor_2']:
             df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community'
-                                            , 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Tract ACS5.xlsx'), sheet_name = 'Tracts')
+                                            , 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Tracts ACS5.xlsx'), sheet_name = 'Tracts')
             df_pop = df_pop[['NAME', 'Year','Race_Ethnicity', 'Population']]
             conditions = [
                             (df_pop["Race_Ethnicity"] == 'All'                                            ),
@@ -233,7 +209,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography):
             # df_census = df_census.fillna(0)
             # df_census = df_census.dropna()
 
-    if geography == 'County':
+    if geography == 'Counties':
         df_census = df_census.replace('null', np.nan)
         df_census = df_census.replace('-666666666', np.nan)
         df_census = df_census.dropna(axis = 1, how = 'all')
@@ -265,9 +241,9 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography):
 
         # Some indicators require the roll up to be weighted by population
         # The following step aligns the Race/Ethnicity mappings with the population counts workbook
-        if indicator_name == 'Income_3':
+        if indicator_name in ['Income_3', 'Labor_2']:
             df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community'
-                                            , 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 County ACS5.xlsx'), sheet_name = 'Counties')
+                                            , 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Counties ACS5.xlsx'), sheet_name = 'Counties')
             df_pop = df_pop[['County Name', 'Year','Race_Ethnicity', 'Population']]
             conditions = [
                             (df_pop["Race_Ethnicity"] == 'All'                                            ),
@@ -316,7 +292,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography):
 
         # Some indicators require the roll up to be weighted by population
         # The following step aligns the Race/Ethnicity mappings with the population counts workbook
-        if indicator_name == 'Income_3':
+        if indicator_name in ['Income_3', 'Labor_2']:
             df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community'
                                             , 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 MSA ACS5.xlsx'), sheet_name = 'MSA')
             df_pop = df_pop[['MSA', 'Year','Race_Ethnicity', 'Population']]
@@ -349,7 +325,7 @@ def acs_processing_2(df_census, margin_of_error):
     if margin_of_error == 'Yes':
         df_census_me = df_census.copy()
         
-        if geography == 'Tract':
+        if geography == 'Tracts':
             df_me = df_census_me[df_census_me['Variable'].isna()]
             df_census_me = df_census_me.dropna()
             df_me = df_me[['Table ID', 'Tract ID', 'County Name', 'Year', 'Total']].rename(columns = {'Total':'ME'})
@@ -358,7 +334,7 @@ def acs_processing_2(df_census, margin_of_error):
             df_census_me['Year'] = df_census_me['Year'].astype(str)
             df_census = df_census_me.copy()
         
-        if geography == 'County':
+        if geography == 'Counties':
             df_me = df_census_me[df_census_me['Variable'].isna()]
             df_census_me = df_census_me.dropna()
             df_me = df_me[['Table ID', 'County Name', 'Year', 'Total']].rename(columns = {'Total':'ME'})
@@ -393,9 +369,9 @@ def acs_processing_2(df_census, margin_of_error):
                                                                 , 'Two or more races'
                                                                 , 'Two or more races (NH)'
                                                                         ])
-    if geography == 'Tract':
+    if geography == 'Tracts':
         df_census = df_census.sort_values(by = ['NAME'       , 'Year', 'Race_Ethnicity_sort', 'Sort'], ascending = [True, False, True, True])
-    if geography == 'County':
+    if geography == 'Counties':
         df_census = df_census.sort_values(by = ['County Name', 'Year', 'Race_Ethnicity_sort', 'Sort'], ascending = [True, False, True, True])
     if geography == 'MSA':
         df_census = df_census.sort_values(by = ['MSA'        , 'Year', 'Race_Ethnicity_sort', 'Sort'], ascending = [True, False, True, True])
@@ -404,7 +380,7 @@ def acs_processing_2(df_census, margin_of_error):
     return df_census
 
 
-def acs_processing_3(df_census, df_fips, indicator_name, geography, percentages):
+def acs_processing_3(df_census, indicator_name, geography, percentages, margin_of_error, MOE_thresh, df_fips=None):
 
     '''
     User defined function to clean/process ACS data for rolling up geography/variable mappings 
@@ -412,68 +388,122 @@ def acs_processing_3(df_census, df_fips, indicator_name, geography, percentages)
     geography/variable mappings
     '''
         
-    if geography == 'Tract':
-        # Create MPO and MSA groupings
-        # Merge groupings
+    if geography == 'Tracts':
+        # Merge MPO groupings
         # reorder columns
         # fill missing values (represent a population of 0)
+        # Roll up metrics to variable mappings and MPO
+        
         df_mpo = df_fips[['County Name', 'MPO']]
         df_census = df_census.merge(df_mpo, on = ['County Name'], how = 'left')
-        if indicator_name == 'Income_3':
-            cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'Tract ID',
-                    'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Population']
+        if margin_of_error == 'Yes':
+            if indicator_name in ['Income_3', 'Labor_2']:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'Tract ID', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total', 'ME']
+            else:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'Tract ID', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME']
         else:
-            cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'Tract ID',
-                'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME']
+            if indicator_name in ['Income_3', 'Labor_2']:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'Tract ID', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total']
+            else:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'Tract ID', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']
+                
         df_census = df_census[cols]
         df_census['Total'] = df_census['Total'].fillna(0)
         
-    
-        # Income_3 needs to be weighted by population
-        if indicator_name == 'Income_3':
-            # Fill missings with 0, then 1 to make sure nothing gets removed if population is 0
-            # create weighted average lambda function
-            # roll up to different geographies using population weighted average
-            df_census['Population'] = df_census['Population'].fillna(0)
-            df_census['Population'] = df_census['Population'].replace(0, 1)
-            df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
-                                     , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
+        # Fill missings with 0, then 1 to make sure nothing gets removed if population is 0
+        # create weighted average lambda function
+        # roll up to different geographies using population weighted average
+
+        if margin_of_error == 'Yes':
+            if indicator_name in ['Income_3', 'Labor_2']:
+                # Income_3 and Labor_2 need to be a weighted average by population
+                df_census['Population'] = df_census['Population'].fillna(0)
+                df_census['Population'] = df_census['Population'].replace(0, 1)
+                wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
+                df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
+
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))
+                df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
+                conditions = [
+                    (df_census1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
+                    , df_census1['ME_ratio'] <= MOE_thresh
+                    , df_census1['ME_ratio']  > MOE_thresh
+                ]
+                choices = ['Yes', 'Yes', 'No']
+                df_census1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+
+            else:
+                # All other indicators
+                df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
+                conditions = [
+                    (df_census1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
+                    , df_census1['ME_ratio'] <= MOE_thresh
+                    , df_census1['ME_ratio']  > MOE_thresh
+                ]
+                choices = ['Yes', 'Yes', 'No']
+                df_census1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+
+
+        if margin_of_error == 'No':
+            if indicator_name in ['Income_3', 'Labor_2']:
+                # Income_3 and Labor_2 need to be a weighted average by population
+                df_census['Population'] = df_census['Population'].fillna(0)
+                df_census['Population'] = df_census['Population'].replace(0, 1)
+                wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
+                df_census1 = df_census1.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
+            
+            else:
+                # All other indicators
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Total = ('Total', 'sum'))
+
+
             df_census1 = df_census1.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
+
     
-        # For all other indicators
-        else:
-            df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
-                                     , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
-            df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
-            df_census1 = df_census1.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
-    
-        
         # Reshape data to wide format
-        df_census2 = df_census1.pivot_table(index = ['State FIPS', 'MPO', 'County FIPS', 'Tract ID', 'County Name', 'NAME', 'Year', 'Race_Ethnicity']
-                                           , columns = 'Variable'
-                                           , values = 'Total').reset_index()
-        df_census2 = df_census2.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
+        df_census2 = df_census1.pivot_table(index = ['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity']
+                                            , columns = 'Variable'
+                                            , values = 'Total').reset_index()
+        df_census2 = df_census2.sort_values(['MPO', 'County FIPS', 'Year'], ascending = [True, True, False])
     
         # Replace infinite values with NaN
-        # missing values represent a population of 0
         df_census1 = df_census1.replace([np.inf, -np.inf, 0], np.nan)
+        
+        # missing values represent a population of 0
         df_census2 = df_census2.fillna(0)
     
+        
         ## Check if we want to calculate proportions
         if percentages == 'Yes':
+    
             if num_vars == 1:
                 df_census1['Percentage'] = 100*df_census1['Total'] / df_census1[df_census1['Race_Ethnicity'] != 'All'].groupby(['NAME', 'Year'])['Total'].transform('sum')
             if num_vars > 1:
                 df_census1['Percentage'] = 100*df_census1['Total'] / df_census1.groupby(['NAME', 'Year', 'Race_Ethnicity'])['Total'].transform('sum')
     
             # Reshape data to wide format
-            df_census2_pct = df_census1.pivot_table(index = ['State FIPS', 'MPO', 'County FIPS', 'Tract ID', 'County Name', 'NAME', 'Year', 'Race_Ethnicity']
-                                               , columns = 'Variable'
-                                               , values = 'Percentage').reset_index()
-            df_census2_pct = df_census2_pct.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
+            df_census2_pct = df_census1.copy()
+            df_census2_pct['Variable'] = df_census2_pct['Variable'].astype(str) + '_pct'
+            df_census2_pct = df_census2_pct.pivot_table(index = ['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity']
+                                                        , columns = 'Variable'
+                                                        , values = 'Percentage').reset_index()
+            df_census2_pct = df_census2_pct.sort_values(['MPO', 'County FIPS', 'Year'], ascending = [True, True, False])
             
             # missing values represent a population of 0
             df_census2_pct = df_census2_pct.fillna(0)
+
+            # merge percentages back onto wide formatted data
+            df_census2 = df_census2.merge(df_census2_pct
+                                          , on = ['State FIPS', 'MPO', 'County FIPS',  'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity']
+                                          , how = 'left')
+            
 
         # # Calculate Five-Number Summaries
         # df_census1_summaries = df_census1[df_census1['Race_Ethnicity'] == 'All'].groupby(['County Name', 'Variable', 'Year'], as_index = False)['Total']\
@@ -487,63 +517,122 @@ def acs_processing_3(df_census, df_fips, indicator_name, geography, percentages)
         # path_out_xlsx = os.path.join(path_main, report_theme, sp_folder_out, indicator_name + ' ' + folder)
         # # df_census1_summaries.to_excel(os.path.join(path_out_xlsx, name_output_summaries_xlsx), index = False)
 
-    if geography == 'County':
-        # Create MPO and MSA groupings
-        # Merge groupings
+
+    if geography == 'Counties':
+        # Merge MPO groupings
         # reorder columns
         # fill missing values (represent a population of 0)
+        # Roll up metrics to variable mappings and MPO
         
         df_mpo = df_fips[['County Name', 'MPO']]
         df_census = df_census.merge(df_mpo, on = ['County Name'], how = 'left')
-        if indicator_name == 'Income_3':
-            cols = ['Table ID', 'State FIPS', 'MPO', 'County Name',
-                    'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total', 'ME']
+        if margin_of_error == 'Yes':
+            if indicator_name in ['Income_3', 'Labor_2']:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total', 'ME']
+            else:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME']
         else:
-            cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 
-                'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME']
+            if indicator_name in ['Income_3', 'Labor_2']:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total']
+            else:
+                cols = ['Table ID', 'State FIPS', 'MPO', 'County Name', 'County FIPS', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']
+                
         df_census = df_census[cols]
         df_census['Total'] = df_census['Total'].fillna(0)
-    
         
-        # Income_3 needs to be weighted by population
-        if indicator_name == 'Income_3':
-            # Fill missings with 0, then 1 to make sure nothing gets removed if population is 0
-            # create weighted average lambda function
-            # roll up to different geographies using population weighted average
-            df_census['Population'] = df_census['Population'].fillna(0)
-            df_census['Population'] = df_census['Population'].replace(0, 1)
-            df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
-            df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
-                                     , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))  
-            df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
+        # Fill missings with 0, then 1 to make sure nothing gets removed if population is 0
+        # create weighted average lambda function
+        # roll up to different geographies using population weighted average
+
+        if margin_of_error == 'Yes':
+            if indicator_name in ['Income_3', 'Labor_2']:
+                # Income_3 and Labor_2 need to be a weighted average by population
+                df_census['Population'] = df_census['Population'].fillna(0)
+                df_census['Population'] = df_census['Population'].replace(0, 1)
+                wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
+                df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
+
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))
+                df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
+                conditions = [
+                    (df_census1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
+                    , df_census1['ME_ratio'] <= MOE_thresh
+                    , df_census1['ME_ratio']  > MOE_thresh
+                ]
+                choices = ['Yes', 'Yes', 'No']
+                df_census1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+
+                df_mpo1    = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))
+                df_mpo1['ME_ratio'] = df_mpo1['ME']/df_mpo1['Total']*100
+                conditions = [
+                    (df_mpo1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
+                    , df_mpo1['ME_ratio'] <= MOE_thresh
+                    , df_mpo1['ME_ratio']  > MOE_thresh
+                ]
+                choices = ['Yes', 'Yes', 'No']
+                df_mpo1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+
+            else:
+                # All other indicators
+                df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
+                conditions = [
+                    (df_census1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
+                    , df_census1['ME_ratio'] <= MOE_thresh
+                    , df_census1['ME_ratio']  > MOE_thresh
+                ]
+                choices = ['Yes', 'Yes', 'No']
+                df_census1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+
+                df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable']
+                                             , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                df_mpo1['ME_ratio'] = df_mpo1['ME']/df_mpo1['Total']*100
+                conditions = [
+                    (df_mpo1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
+                    , df_mpo1['ME_ratio'] <= MOE_thresh
+                    , df_mpo1['ME_ratio']  > MOE_thresh
+                ]
+                choices = ['Yes', 'Yes', 'No']
+                df_mpo1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+
+        if margin_of_error == 'No':
+            if indicator_name in ['Income_3', 'Labor_2']:
+                # Income_3 and Labor_2 need to be a weighted average by population
+                df_census['Population'] = df_census['Population'].fillna(0)
+                df_census['Population'] = df_census['Population'].replace(0, 1)
+                wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
+                df_mpo1    = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
+                df_census1 = df_census1.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
+                df_mpo1    = df_mpo1   .sort_values(['MPO',         'Year'], ascending = [True,       False])
+            
+            else:
+                # All other indicators
+                df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Total = ('Total', 'sum'))
+                df_mpo1    = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable']
+                                                , as_index = False, sort = False).agg(Total = ('Total', 'sum'))
+
+
             df_census1 = df_census1.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
-            df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable']
-                                     , as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))  
-            df_mpo1['ME_ratio'] = df_mpo1['ME']/df_mpo1['Total']*100
-            df_mpo1 = df_mpo1.sort_values(['MPO', 'Year'], ascending = [True, False])
-    
-        # For all other indicators
-        else:
-            df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
-            df_census1 = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable']
-                                     , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
-            df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
-            df_census1 = df_census1.sort_values(['MPO', 'NAME', 'Year'], ascending = [True, True, False])
-            df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable']
-                                     , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
-            df_mpo1['ME_ratio'] = df_mpo1['ME']/df_mpo1['Total']*100
-            df_mpo1 = df_mpo1.sort_values(['MPO', 'Year'], ascending = [True, False])
-    
+            df_mpo1    = df_mpo1   .sort_values(['MPO',         'Year'], ascending = [True,       False])
+
     
         # Reshape data to wide format
         df_census2 = df_census1.pivot_table(index = ['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity']
-                                           , columns = 'Variable'
-                                           , values = 'Total').reset_index()
+                                            , columns = 'Variable'
+                                            , values = 'Total').reset_index()
+        df_mpo2    = df_mpo1   .pivot_table(index = ['State FIPS', 'MPO', 'Year', 'Race_Ethnicity']
+                                            , columns = 'Variable'
+                                            , values = 'Total').reset_index()
         df_census2 = df_census2.sort_values(['MPO', 'County FIPS', 'Year'], ascending = [True, True, False])
-        df_mpo2 = df_mpo1.pivot_table(index = ['State FIPS', 'MPO', 'Year', 'Race_Ethnicity']
-                                           , columns = 'Variable'
-                                           , values = 'Total').reset_index()
-        df_mpo2 = df_mpo2.sort_values(['MPO', 'Year'], ascending = [True, False])
+        df_mpo2    = df_mpo2   .sort_values(['MPO',                'Year'], ascending = [True,       False])
     
         # Replace infinite values with NaN
         df_census1 = df_census1.replace([np.inf, -np.inf, 0], np.nan)
@@ -568,15 +657,15 @@ def acs_processing_3(df_census, df_fips, indicator_name, geography, percentages)
             df_census2_pct = df_census1.copy()
             df_census2_pct['Variable'] = df_census2_pct['Variable'].astype(str) + '_pct'
             df_census2_pct = df_census2_pct.pivot_table(index = ['State FIPS', 'MPO', 'County FIPS',  'County Name', 'NAME', 'Year', 'Race_Ethnicity']
-                                                     , columns = 'Variable'
-                                                     , values = 'Percentage').reset_index()
+                                                        , columns = 'Variable'
+                                                        , values = 'Percentage').reset_index()
             df_census2_pct = df_census2_pct.sort_values(['MPO', 'County FIPS', 'Year'], ascending = [True, True, False])
             
             df_mpo2_pct = df_mpo1.copy()
             df_mpo2_pct['Variable'] = df_mpo2_pct['Variable'].astype(str) + '_pct'
             df_mpo2_pct = df_mpo2_pct.pivot_table(index = ['State FIPS', 'MPO', 'Year', 'Race_Ethnicity']
-                                               , columns = 'Variable'
-                                               , values = 'Percentage').reset_index()
+                                                  , columns = 'Variable'
+                                                  , values = 'Percentage').reset_index()
             df_mpo2_pct = df_mpo2_pct.sort_values(['MPO', 'Year'], ascending = [True, False])
             
             # missing values represent a population of 0
@@ -595,16 +684,26 @@ def acs_processing_3(df_census, df_fips, indicator_name, geography, percentages)
     if geography == 'MSA':
         
         # Groupings roll up
-        df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
-        df_census1 = df_census.groupby(['MSA', 'Year', 'Race_Ethnicity', 'Variable']
-                                 , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
-        df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
-        df_census1 = df_census1.sort_values(['MSA', 'Year'], ascending = [True, False])
+        if margin_of_error == 'Yes':
+            df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
+            df_census1 = df_census.groupby(['MSA', 'Year', 'Race_Ethnicity', 'Variable']
+                                            , as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+            df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
+            conditions = [
+                (df_census1['ME_ratio']  > MOE_thresh) | (df_census1['ME_ratio'] == '') | (df_census1['ME_ratio'].isna())
+                , df_census1['ME_ratio'] <= MOE_thresh
+            ]
+            choices = ['No', 'Yes']
+            df_census1['Use for Reporting'] = np.select(conditions, choices)
+        if margin_of_error == 'No':
+            df_census1 = df_census.groupby(['MSA', 'Year', 'Race_Ethnicity', 'Variable']
+                                            , as_index = False, sort = False).agg(Total = ('Total', 'sum'))        
+            df_census1 = df_census1.sort_values(['MSA', 'Year'], ascending = [True, False])
     
         # Reshape data to wide format
         df_census2 = df_census1.pivot_table(index = ['MSA', 'Year', 'Race_Ethnicity']
-                                           , columns = 'Variable'
-                                           , values = 'Total').reset_index()
+                                            , columns = 'Variable'
+                                            , values = 'Total').reset_index()
         df_census2 = df_census2.sort_values(['MSA', 'Year'], ascending = [True, False])
     
         # Replace infinite values with NaN
@@ -623,36 +722,156 @@ def acs_processing_3(df_census, df_fips, indicator_name, geography, percentages)
                 df_census1['Percentage'] = 100*df_census1['Total'] / df_census1.groupby(['MSA', 'Year', 'Race_Ethnicity'])['Total'].transform('sum')
                 
             # Reshape data to wide format
-            df_census2_pct = df_census1.pivot_table(index = ['MSA', 'Year', 'Race_Ethnicity']
-                                               , columns = 'Variable'
-                                               , values = 'Percentage').reset_index()
+            df_census2_pct = df_census1.copy()
+            df_census2_pct['Variable'] = df_census2_pct['Variable'].astype(str) + '_pct'
+            df_census2_pct = df_census2_pct.pivot_table(index = ['MSA', 'Year', 'Race_Ethnicity']
+                                                        , columns = 'Variable'
+                                                        , values = 'Percentage').reset_index()
             df_census2_pct = df_census2_pct.sort_values(['MSA', 'Year'], ascending = [True, False])
 
+            # missing values represent a population of 0
+            df_census2_pct = df_census2_pct.fillna(0)
 
-    # if geography == 'Tract':
-    #     if percentages == 'Yes':
-    #         return df_census1, df_census2, df_census2_pct
-    #     else:
-    #         return df_census1, df_census2
+            # merge percentages back onto wide formatted data
+            df_census2 = df_census2.merge(df_census2_pct
+                                          , on = ['MSA', 'Year', 'Race_Ethnicity']
+                                          , how = 'left')
 
-    # if geography == 'County':
-    #     if percentages == 'Yes':
-    #         return df_census1, df_census2, df_census2_pct, df_mpo1, df_mpo2, df_mpo2_pct
-    #     else:
-    #         return df_census1, df_census2, df_mpo1, df_mpo2
-
-    # if geography == 'MSA':
-    #     if percentages == 'Yes':
-    #         return df_census1, df_census2, df_census2_pct
-    #     else:
-    #         return df_census1, df_census2
-
-    if geography == 'County':
+    if geography == 'Counties':
         return df_census1, df_census2, df_mpo1, df_mpo2
     else:
         return df_census1, df_census2
+    
 
 
+def rename_census(
+        indicator_name, geography, margin_of_error,
+        df_tracts1=None, df_counties1=None, df_mpo1=None, df_msa1=None, df_puma=None, df_counties=None, df_mpo=None
+        ):
+    if margin_of_error == 'Yes':
+        if geography == 'Tracts':
+            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable'
+                                        , 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+            else:
+                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable'
+                                        , 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            df_tracts1 = df_tracts1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+        if geography == 'Counties':
+            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable'
+                                            , 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'
+                                            , 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+            else:
+                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable'
+                                            , 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'
+                                        , 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            df_counties1 = df_counties1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+            df_mpo1      = df_mpo1     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+        if geography == 'MSA':
+            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable'
+                                    , 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+            else:
+                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable'
+                                    , 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            df_msa1 = df_msa1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+        if geography == 'PUMA':
+            df_puma     = df_puma    .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+            df_counties = df_counties.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+            df_mpo      = df_mpo     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+
+    if margin_of_error == 'No':
+        if geography == 'Tracts':
+            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+            else:
+                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+        if geography == 'Counties':
+            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+            else:
+                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                
+        if geography == 'MSA':
+            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+            else:
+                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+
+    if geography == 'PUMA':
+        if table_type == 'P':
+            df_puma     = df_puma    .rename(columns = {'Total':'Population'})
+            df_counties = df_counties.rename(columns = {'Total':'Population'})
+            df_mpo      = df_mpo     .rename(columns = {'Total':'Population'})
+        if table_type == 'H':
+            df_puma     = df_puma    .rename(columns = {'Total':'Households'})
+            df_counties = df_counties.rename(columns = {'Total':'Households'})
+            df_mpo      = df_mpo     .rename(columns = {'Total':'Households'})
+
+
+    ## Renaming specifically by indicators
+    if indicator_name in ['Income_3']:
+        if geography == 'Counties':
+            df_mpo_wm = df_mpo1[df_mpo1['Race_Ethnicity'] == 'All'].reset_index(drop = True)
+        
+            df_counties1 = df_counties1.merge(df_mpo_wm[['Year', 'Total']].rename(columns = {'Total':'Regional Median Household Income'}), on = ['Year'], how = 'left')
+            df_mpo1      = df_mpo1     .merge(df_mpo_wm[['Year', 'Total']].rename(columns = {'Total':'Regional Median Household Income'}), on = ['Year'], how = 'left')
+        
+            df_counties1['Percent of Regional Median Household Income'] = 100*(df_counties1['Total']/df_counties1['Regional Median Household Income'])
+            df_mpo1     ['Percent of Regional Median Household Income'] = 100*(df_mpo1     ['Total']/df_mpo1     ['Regional Median Household Income'])
+        
+            df_counties1 = df_counties1.rename(columns = {'Total':'Median Household Income'})
+            df_mpo1      = df_mpo1     .rename(columns = {'Total':'Median Household Income'})
+
+    if indicator_name == 'Income_1':
+        if geography == 'Tracts':
+            df_tracts1 = df_tracts1.rename(columns = {'Total':'Regional Median Income'})
+        if geography == 'Counties':
+            df_counties1 = df_counties1.rename(columns = {'Total':'Regional Median Income'})
+            df_mpo1    = df_mpo1   .rename(columns = {'Total':'Regional Median Income'})
+        if geography == 'MSA':
+            df_msa1 = df_msa1.rename(columns = {'Total':'Regional Median Income'})
+
+    if indicator_name in ['Cost_5', 'Income_2', 'Broadband_2']:
+        if geography == 'Tracts':
+            df_tracts1 = df_tracts1.rename(columns = {'Total':'Households'})
+        if geography == 'Counties':
+            df_counties1 = df_counties1.rename(columns = {'Total':'Households'})
+            df_mpo1      = df_mpo1     .rename(columns = {'Total':'Households'})
+        if geography == 'MSA':
+            df_msa1 = df_msa1.rename(columns = {'Total':'Households'})
+            
+    if indicator_name in ['Cost_3']:
+        if geography == 'Tracts':
+            df_tracts1 = df_tracts1.rename(columns = {'Total':'Housing Units'})
+        if geography == 'Counties':
+            df_counties1 = df_counties1.rename(columns = {'Total':'Housing Units'})
+            df_mpo1      = df_mpo1     .rename(columns = {'Total':'Housing Units'})
+        if geography == 'MSA':
+            df_msa1 = df_msa1.rename(columns = {'Total':'Housing Units'})
+
+    if indicator_name in ['Pop_3', 'Pop_4', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1']:
+        if geography == 'Tracts':
+            df_tracts1 = df_tracts1.rename(columns = {'Total':'Population'})
+        if geography == 'Counties':
+            df_counties1 = df_counties1.rename(columns = {'Total':'Population'})
+            df_mpo1      = df_mpo1     .rename(columns = {'Total':'Population'})
+        if geography == 'MSA':
+            df_msa1 = df_msa1.rename(columns = {'Total':'Population'})
+
+    if geography == 'Tracts':
+        return df_tracts1
+    if geography == 'Counties':
+        return df_counties1, df_mpo1
+    if geography == 'MSA':
+        return df_msa1
+    if geography == 'PUMA':
+        return df_puma, df_counties, df_mpo
 
 
 
