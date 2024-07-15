@@ -742,25 +742,34 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
         return df_census1, df_census2
     
 
+group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
+group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
+group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
+group_mpo      = ['State FIPS', 'MPO'                              ]
+
 
 def rename_census(
         indicator_name, geography, margin_of_error, groups=None,
         df_tracts1=None, df_counties1=None, df_mpo1=None, df_msa1=None, df_puma=None, df_counties=None, df_msa=None, df_mpo=None
         ):
+    group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
+    group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
+    group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
+    group_mpo      = ['State FIPS', 'MPO'                              ]
     if margin_of_error == 'Yes':
         if geography == 'Tracts':
             if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
             else:
-                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
             df_tracts1 = df_tracts1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
         if geography == 'Counties':
             if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
-                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
             else:
-                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_mpo1      = df_mpo1     [group_mpo      + ['Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
             df_counties1 = df_counties1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
             df_mpo1      = df_mpo1     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
         if geography == 'MSA':
@@ -772,10 +781,12 @@ def rename_census(
         if geography == 'PUMA':
             if indicator_name not in ['Cost_6', 'Accessibility_2']:
                 groups.reverse()
-            df_puma     = df_puma    [['State FIPS', 'MPO',                  'PUMA'       , 'PUMA NAME'  , 'Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-            df_counties = df_counties[['State FIPS', 'MPO',                  'County FIPS', 'County Name', 'Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-            df_msa      = df_msa     [['State FIPS',        'MSA_ID', 'MSA',                               'Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-            df_mpo      = df_mpo     [['State FIPS', 'MPO',                                                'Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            if indicator_name == 'Accessibility_4':
+                groups = ['RAC1P', 'Income Bracket', 'Travel Time']
+            df_puma     = df_puma    [group_puma     + ['Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            df_counties = df_counties[group_counties + ['Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            df_msa      = df_msa     [group_msa      + ['Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+            df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups +  ['Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
             df_puma     = df_puma    .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
             df_counties = df_counties.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
             df_msa      = df_msa     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
@@ -784,16 +795,16 @@ def rename_census(
     if margin_of_error == 'No':
         if geography == 'Tracts':
             if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
             else:
-                df_tracts1 = df_tracts1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
         if geography == 'Counties':
             if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
-                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total']]
             else:
-                df_counties1 = df_counties1[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
-                df_mpo1      = df_mpo1     [['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
                 
         if geography == 'MSA':
             if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
@@ -802,13 +813,10 @@ def rename_census(
                 df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
         if geography == 'PUMA':
             groups.reverse()
-            df_puma     = df_puma    [['State FIPS', 'MPO',                  'PUMA'       , 'PUMA NAME'  , 'Year'] + groups +  ['Total', 'Percentage']]
-            df_counties = df_counties[['State FIPS', 'MPO',                  'County FIPS', 'County Name', 'Year'] + groups +  ['Total', 'Percentage']]
-            df_msa      = df_msa     [['State FIPS',        'MSA_ID', 'MSA',                               'Year'] + groups +  ['Total', 'Percentage']]
-            df_mpo      = df_mpo     [['State FIPS', 'MPO',                                                'Year'] + groups +  ['Total', 'Percentage']]
-            
-
-
+            df_puma     = df_puma    [group_puma     + ['Year'] + groups + ['Total', 'Percentage']]
+            df_counties = df_counties[group_counties + ['Year'] + groups + ['Total', 'Percentage']]
+            df_msa      = df_msa     [group_msa      + ['Year'] + groups + ['Total', 'Percentage']]
+            df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups + ['Total', 'Percentage']]
 
     if geography == 'PUMA':
         if table_type == 'P':
@@ -821,11 +829,10 @@ def rename_census(
             df_counties = df_counties.rename(columns = {'Total':'Households'})
             df_msa      = df_msa     .rename(columns = {'Total':'Households'})
             df_mpo      = df_mpo     .rename(columns = {'Total':'Households'})
-        df_puma     = df_puma    .sort_values(['State FIPS', 'MPO',                  'PUMA'      , 'PUMA NAME'  , 'Year'] + groups, ascending = [True, True, True, True, False] + [item in groups for item in groups])
-        df_counties = df_counties.sort_values(['State FIPS', 'MPO',                 'County FIPS', 'County Name', 'Year'] + groups, ascending = [True, True, True, True, False] + [item in groups for item in groups])
-        df_msa      = df_msa     .sort_values(['State FIPS',        'MSA_ID', 'MSA'                             , 'Year'] + groups, ascending = [True, True, True,       False] + [item in groups for item in groups])
-        df_mpo      = df_mpo     .sort_values(['State FIPS', 'MPO'                                              , 'Year'] + groups, ascending = [True, True,             False] + [item in groups for item in groups])
-
+        df_puma     = df_puma    .sort_values(group_puma     + ['Year'] + groups, ascending = [True, True, True, True, False] + [item in groups for item in groups])
+        df_counties = df_counties.sort_values(group_counties + ['Year'] + groups, ascending = [True, True, True, True, False] + [item in groups for item in groups])
+        df_msa      = df_msa     .sort_values(group_msa      + ['Year'] + groups, ascending = [True, True, True,       False] + [item in groups for item in groups])
+        df_mpo      = df_mpo     .sort_values(group_mpo      + ['Year'] + groups, ascending = [True, True,             False] + [item in groups for item in groups])
 
 
     ## Renaming specifically by indicators
@@ -877,6 +884,76 @@ def rename_census(
             df_mpo1      = df_mpo1     .rename(columns = {'Total':'Population'})
         if geography == 'MSA':
             df_msa1 = df_msa1.rename(columns = {'Total':'Population'})
+
+    if indicator_name in ['Income_2', 'Accessibility_2', 'Accessibility_4']:
+        if indicator_name == 'Accessibility_4':
+            factor_race = ['All', 'American Indian or Alaska Native (NH)', 'Asian (NH)', 'Black or African American (NH)', 'Hispanic or Latino', 'Native Hawaiian or other Pacific Islander (NH)', 'White (NH)', 'Some other race (NH)', 'Two or more races (NH)']
+            df_puma    ['RAC1P_sort'] = pd.Categorical(df_puma    ['RAC1P'], factor_race)
+            df_counties['RAC1P_sort'] = pd.Categorical(df_counties['RAC1P'], factor_race)
+            df_msa     ['RAC1P_sort'] = pd.Categorical(df_msa     ['RAC1P'], factor_race)
+            df_mpo     ['RAC1P_sort'] = pd.Categorical(df_mpo     ['RAC1P'], factor_race)
+            
+            factor_incomes = ['No data available', 'Low Income', 'Moderate Income', 'High Income']
+            df_puma    ['Income_sort'] = pd.Categorical(df_puma    ['Income Bracket'], factor_incomes)
+            df_counties['Income_sort'] = pd.Categorical(df_counties['Income Bracket'], factor_incomes)
+            df_msa     ['Income_sort'] = pd.Categorical(df_msa     ['Income Bracket'], factor_incomes)
+            df_mpo     ['Income_sort'] = pd.Categorical(df_mpo     ['Income Bracket'], factor_incomes)
+
+            factor_times = ['No commute (worked from home)', '0 to 15 minutes', '15 to 30 minutes', 'More than 30 minutes']
+            df_puma    ['Travel_sort'] = pd.Categorical(df_puma    ['Travel Time'], factor_times)
+            df_counties['Travel_sort'] = pd.Categorical(df_counties['Travel Time'], factor_times)
+            df_msa     ['Travel_sort'] = pd.Categorical(df_msa     ['Travel Time'], factor_times)
+            df_mpo     ['Travel_sort'] = pd.Categorical(df_mpo     ['Travel Time'], factor_times)
+
+            df_puma     = df_puma    .sort_values(by = group_puma     + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending = [True, True, True, True, False, True, True, True])
+            df_counties = df_counties.sort_values(by = group_counties + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending = [True, True, True, True, False, True, True, True])
+            df_msa      = df_msa     .sort_values(by = group_msa      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending = [True, True, True, False, True, True, True])
+            df_mpo      = df_mpo     .sort_values(by = group_mpo      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending = [True, True, False, True, True, True])
+
+            df_puma     = df_puma    .drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis = 1)
+            df_counties = df_counties.drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis = 1)
+            df_msa      = df_msa     .drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis = 1)
+            df_mpo      = df_mpo     .drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis = 1)
+                
+        if indicator_name == 'Accessibility_2':
+            factor_incomes = ['No data available', 'Low Income', 'Moderate Income', 'High Income']
+            df_puma    ['Income_sort'] = pd.Categorical(df_puma    ['Income Bracket'], factor_incomes)
+            df_counties['Income_sort'] = pd.Categorical(df_counties['Income Bracket'], factor_incomes)
+            df_msa     ['Income_sort'] = pd.Categorical(df_msa     ['Income Bracket'], factor_incomes)
+            df_mpo     ['Income_sort'] = pd.Categorical(df_mpo     ['Income Bracket'], factor_incomes)
+
+            factor_commutes = ['Car, truck, or van', 'Public transportation (bus, subway, or rail)', 'Bicycle', 'Walked', 'Worked from home', 'Other method']
+            df_puma    ['JWTRNS_sort'] = pd.Categorical(df_puma    ['JWTRNS'], factor_commutes)
+            df_counties['JWTRNS_sort'] = pd.Categorical(df_counties['JWTRNS'], factor_commutes)
+            df_msa     ['JWTRNS_sort'] = pd.Categorical(df_msa     ['JWTRNS'], factor_commutes)
+            df_mpo     ['JWTRNS_sort'] = pd.Categorical(df_mpo     ['JWTRNS'], factor_commutes)
+
+            df_puma     = df_puma    .sort_values(by = group_puma     + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending = [True, True, True, True, False, True, True])
+            df_counties = df_counties.sort_values(by = group_counties + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending = [True, True, True, True, False, True, True])
+            df_msa      = df_msa     .sort_values(by = group_msa      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending = [True, True, True, False, True, True])
+            df_mpo      = df_mpo     .sort_values(by = group_mpo      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending = [True, True, False, True, True])
+
+            df_puma     = df_puma    .drop(['Income_sort', 'JWTRNS_sort'], axis = 1)
+            df_counties = df_counties.drop(['Income_sort', 'JWTRNS_sort'], axis = 1)
+            df_msa      = df_msa     .drop(['Income_sort', 'JWTRNS_sort'], axis = 1)
+            df_mpo      = df_mpo     .drop(['Income_sort', 'JWTRNS_sort'], axis = 1)
+            
+        if indicator_name == 'Income_2':
+            factor_incomes = ['No data available', 'Low Income', 'Moderate Income', 'High Income']
+            df_puma    ['Income_sort'] = pd.Categorical(df_puma    ['Income Bracket'], factor_incomes)
+            df_counties['Income_sort'] = pd.Categorical(df_counties['Income Bracket'], factor_incomes)
+            df_msa     ['Income_sort'] = pd.Categorical(df_msa     ['Income Bracket'], factor_incomes)
+            df_mpo     ['Income_sort'] = pd.Categorical(df_mpo     ['Income Bracket'], factor_incomes)
+            
+            df_puma     = df_puma    .sort_values(by = group_puma     + ['Year', 'Income_sort'], ascending = [True, True, True, True, False, True])
+            df_counties = df_counties.sort_values(by = group_counties + ['Year', 'Income_sort'], ascending = [True, True, True, True, False, True])
+            df_msa      = df_msa     .sort_values(by = group_msa      + ['Year', 'Income_sort'], ascending = [True, True, True, False, True])
+            df_mpo      = df_mpo     .sort_values(by = group_mpo      + ['Year', 'Income_sort'], ascending = [True, True, False, True])
+
+            df_puma     = df_puma    .drop(['Income_sort'], axis = 1)
+            df_counties = df_counties.drop(['Income_sort'], axis = 1)
+            df_msa      = df_msa     .drop(['Income_sort'], axis = 1)
+            df_mpo      = df_mpo     .drop(['Income_sort'], axis = 1)
 
     if geography == 'Tracts':
         return df_tracts1
