@@ -62,20 +62,20 @@ def re_remove_post(x, exp = '.'):
 
 
 
+# Split attributes string
+def ME_split(text):
+    return ",".join(text.split(',')[0:3:2])
+
 
 
 ### CENSUS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
+
 
 
 group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
 group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
 group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
 group_mpo      = ['State FIPS', 'MPO'                              ]
-
-
-# Split attributes string
-def ME_split(text):
-    return ",".join(text.split(',')[0:3:2])
 
 
 # Main function used to query data
@@ -160,8 +160,12 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
     Adjusts dollars for inflation as needed
     '''
 
+    print('')
+    print('Processing 1...')
+
     if geography == 'Tracts':
         df_census = df_census.replace('-666666666', np.nan)
+        df_census = df_census.replace('-555555555', np.nan)
         df_census = df_census.replace('-999999999.0', np.nan)
         df_census = df_census.replace('null', np.nan)
         df_census = df_census.dropna(axis = 1, how = 'all')
@@ -219,6 +223,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
     if geography == 'Counties':
         df_census = df_census.replace('null', np.nan)
         df_census = df_census.replace('-666666666', np.nan)
+        df_census = df_census.replace('-555555555', np.nan)
         df_census = df_census.replace('-999999999.0', np.nan)
         df_census = df_census.dropna(axis = 1, how = 'all')
         
@@ -273,6 +278,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
 
     if geography == 'MSA':
         df_census = df_census.replace('-666666666', np.nan)
+        df_census = df_census.replace('-555555555', np.nan)
         df_census = df_census.replace('-999999999.0', np.nan)
         df_census = df_census.replace('null', np.nan)
         df_census = df_census.dropna(axis = 1, how = 'all')
@@ -322,6 +328,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
             df_census = df_census.merge(df_pop, on = ['MSA', 'Year', 'Race_Ethnicity'], how = 'left')
             df_census = df_census.dropna()
 
+    print('')
 
     return df_census
 
@@ -331,6 +338,10 @@ def acs_processing_2(df_census, geography, margin_of_error):
     '''
     User defined function to clean/process ACS margin of error fields and sort the data
     '''
+
+    print('')
+    print('Processing 2...')
+
         
     if margin_of_error == 'Yes':
         df_census_me = df_census.copy()
@@ -387,6 +398,8 @@ def acs_processing_2(df_census, geography, margin_of_error):
         df_census = df_census.sort_values(by = ['MSA'        , 'Year', 'Race_Ethnicity_sort', 'Sort'], ascending = [True, False, True, True])
     df_census = df_census.drop(['Race_Ethnicity_sort', 'Sort'], axis = 1)
     
+    print('')
+    
     return df_census
 
 
@@ -397,7 +410,10 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
     for population/household counts and standard errors and calculates percentages based on
     geography/variable mappings
     '''
-        
+
+    print('')
+    print('Processing 3...')
+    
     if geography == 'Tracts':
         # Merge MPO groupings
         # reorder columns
@@ -744,20 +760,32 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
                                           , on = ['MSA', 'Year', 'Race_Ethnicity']
                                           , how = 'left')
 
+    print('')
+
     if geography == 'Counties':
         return df_census1, df_census2, df_mpo1, df_mpo2
     else:
         return df_census1, df_census2
 
 
-def pums_processing_1(df_census, df_vars, sample_type, weight):        
+def pums_processing_1(df_census, df_vars, sample_type, weight):
+
+    print('')
+    print('Processing 1...')
 
     groups  = list(df_vars[df_vars['Data Type'].str.contains('group')]['ID2'].unique())
-    groups2 = list(df_vars[df_vars['Data Type'] == 'group']['ID2'].unique())
+    groups2 = list(df_vars[df_vars['Data Type'] ==           'group' ]['ID2'].unique())
 
     if sample_type == 'PUMS':
         df_census['PUMA'] = df_census['PUMA'].astype(str).apply('{:0>5}'.format)
         df_census[weight] = df_census[weight].astype(int)
+
+    if sample_type == 'FOODSEC':
+        df_census['Household_ID'] = df_census['HRHHID'].map(str) + '-' + df_census['HRHHID2'].map(str)
+        df_census = df_census.drop(['HRHHID', 'HRHHID2'], axis = 1)
+        df_census['Householder'] = df_census.groupby(['Household_ID', 'Year'], as_index = False)['PERRP'].transform(min)
+        df_census = df_census[df_census['PERRP'] == df_census['Householder']]
+        df_census = df_census.drop_duplicates(['Household_ID', 'Year'])
 
     for group in groups2:
         df_census[group] = df_census[group].astype(str).apply('{:0>2}'.format)
@@ -767,6 +795,8 @@ def pums_processing_1(df_census, df_vars, sample_type, weight):
 
     if sample_type == 'PUMS':
         df_census[weight] = df_census[weight].astype(int)
+    if sample_type == 'FOODSEC':
+        df_census[weight] = df_census[weight].astype('float')
     df_census[groups2] = df_census[groups2].astype("string")
 
     df_vars2 = df_vars.pivot_table(index = ['Year', 'Value1']
@@ -793,30 +823,39 @@ def pums_processing_1(df_census, df_vars, sample_type, weight):
 
 
 def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0, path_git):
-    df_census = df_census.dropna()
     
-    df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
-                                    , sheet_name = 'PUMAcodes'
-                                    , dtype = {'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
-    df_fips_pums = df_fips_pums[df_fips_pums['STATEFP'].isin(list(dict_fips.keys()))]
-    df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns = {'PUMA5CE':'PUMA', 'STATEFP':'state'}).drop_duplicates()
+    print('')
+    print('Processing 2...')
 
-    df_census1 = df_census[df_census['Year'].isin(sequence(2012, 2021, 1))]
-    df_census2 = df_census[df_census['Year'].isin(sequence(2022, 2031, 1))]
+    df_census = df_census.dropna()
 
-    df_census1 = df_census1.merge(df_fips_pums[df_fips_pums['Years'] == '2012-2021'], on = ['state', 'PUMA'], how = 'left')
-    df_census2 = df_census2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on = ['state', 'PUMA'], how = 'left')
-    df_census = pd.concat([df_census1, df_census2])
-    df_census = df_census.drop('Years', axis = 1)
+    if sample_type == 'PUMS':
+        df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+                                        , sheet_name = 'PUMAcodes'
+                                        , dtype = {'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
+        df_fips_pums = df_fips_pums[df_fips_pums['STATEFP'].isin(list(dict_fips.keys()))]
+        df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns = {'PUMA5CE':'PUMA', 'STATEFP':'state'}).drop_duplicates()
 
-    df_census['COUNTYFP'] = df_census['COUNTYFP'].astype(str).apply('{:0>3}'.format)
-    df_census = df_census.merge(df_fips[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'MSA_ID', 'MSA_acs']].drop_duplicates()
-                                          , left_on = ['state', 'COUNTYFP']
-                                          , right_on = ['State FIPS', 'County FIPS'])
-    df_census.drop(['state', 'COUNTYFP'], axis = 1, inplace = True)
-    df_census = df_census.rename(columns = {'MSA_acs':'MSA'})
-    df_census = df_census.set_index(['State FIPS', 'MPO', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'Year']).reset_index()
-    df_census = df_census.sort_values(['State FIPS', 'PUMA', 'Year'] + groups, ascending = [True, True, False] + [item in groups for item in groups])
+        df_census1 = df_census[df_census['Year'].isin(sequence(2012, 2021, 1))]
+        df_census2 = df_census[df_census['Year'].isin(sequence(2022, 2031, 1))]
+
+        df_census1 = df_census1.merge(df_fips_pums[df_fips_pums['Years'] == '2012-2021'], on = ['state', 'PUMA'], how = 'left')
+        df_census2 = df_census2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on = ['state', 'PUMA'], how = 'left')
+        df_census = pd.concat([df_census1, df_census2])
+        df_census = df_census.drop('Years', axis = 1)
+
+        df_census['COUNTYFP'] = df_census['COUNTYFP'].astype(str).apply('{:0>3}'.format)
+        df_census = df_census.merge(df_fips[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'MSA_ID', 'MSA_acs']].drop_duplicates()
+                                            , left_on = ['state', 'COUNTYFP']
+                                            , right_on = ['State FIPS', 'County FIPS'])
+        df_census.drop(['state', 'COUNTYFP'], axis = 1, inplace = True)
+        df_census = df_census.rename(columns = {'MSA_acs':'MSA'})
+        df_census = df_census.set_index(['State FIPS', 'MPO', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'Year']).reset_index()
+        df_census = df_census.sort_values(['State FIPS', 'PUMA', 'Year'] + groups, ascending = [True, True, False] + [item in groups for item in groups])
+    
+    if sample_type == 'FOODSEC':
+        df_census = df_census.sort_values(['state', 'MPO', 'county', 'Year'] + groups, ascending = [True, True, True, False] + [item in groups for item in groups])
+
     
     if 'HISP' in groups:
         df_census.loc[df_census['HISP'] == 'Hispanic or Latino', 'RAC1P'] = 'Hispanic or Latino'
@@ -827,11 +866,15 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
         df_census.loc[df_census['HHLDRHISP'] == 'Hispanic or Latino', 'HHLDRRAC1P'] = 'Hispanic or Latino'
         df_census = df_census.drop('HHLDRHISP', axis = 1)
 
+    if 'PEHSPNON' in groups:
+        df_census.loc[df_census['PEHSPNON'] == 'Hispanic or Latino', 'PTDTRACE'] = 'Hispanic or Latino'
+        df_census = df_census.drop('PEHSPNON', axis = 1)       
+
     if indicator_name == 'Cost_6':
         cols = ['GRPIP', 'OCPIP']
         df_census[cols] = df_census[cols].astype(int)
         conditions = [
-                        ( (df_census['WGTP'] == 0) ),
+                        ( (df_census['WGTP' ] == 0) ),
                         ( (df_census['GRPIP'] == 0) & (df_census['OCPIP'] == 0) ),
                         ( (df_census['GRPIP'] == 0) & (df_census['OCPIP']  > 0) ),
                         ( (df_census['OCPIP'] == 0) & (df_census['GRPIP']  > 0) )
@@ -839,7 +882,7 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
         choices = ['Housing data not available', 'N/A (GQ/vacant/not owned or being bought/occupied without rent payment/no household income)', 'Owner', 'Renter']
         df_census["housing_type"] = np.select(conditions, choices)
         conditions = [
-                        (  (df_census['WGTP'] ==  0) ),
+                        (  (df_census['WGTP' ] ==  0) ),
                         (  (df_census['GRPIP'] ==  0) & (df_census['OCPIP'] == 0)),
                         ( ((df_census['GRPIP'] ==  0) & (df_census['OCPIP'] <= 30)) | ((df_census['OCPIP'] ==  0) & (df_census['GRPIP'] <= 30)) ),
                         ( ((df_census['GRPIP']  > 30) & (df_census['GRPIP'] <= 50)) | ((df_census['OCPIP']  > 30) & (df_census['OCPIP'] <= 50)) ),
@@ -899,6 +942,9 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
 
 
 def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_thresh, percentages, groups):
+
+    print('')
+    print('Processing 3...')
 
     df_puma     = df_census.drop([                            'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis = 1)
     df_counties = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA',                               'SERIALNO'], axis = 1)
