@@ -218,7 +218,8 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
             df_pop["Race_Ethnicity"] = np.select(conditions, choices)
             df_census = df_census.merge(df_pop, on = ['NAME', 'Year', 'Race_Ethnicity'], how = 'left')
             # df_census = df_census.fillna(0)
-            # df_census = df_census.dropna()
+            if indicator_name == 'Income_3':
+                df_census = df_census.dropna()
 
     if geography == 'Counties':
         df_census = df_census.replace('null', np.nan)
@@ -274,7 +275,8 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
             df_pop["Race_Ethnicity"] = np.select(conditions, choices)
             df_census = df_census.merge(df_pop, on = ['County Name', 'Year', 'Race_Ethnicity'], how = 'left')
             # df_census = df_census.fillna(0)
-            # df_census = df_census.dropna()
+            if indicator_name == 'Income_3':
+                df_census = df_census.dropna()
 
     if geography == 'MSA':
         df_census = df_census.replace('-666666666', np.nan)
@@ -282,7 +284,6 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
         df_census = df_census.replace('-999999999.0', np.nan)
         df_census = df_census.replace('null', np.nan)
         df_census = df_census.dropna(axis = 1, how = 'all')
-    
         
         df_census = df_census.rename(columns = {'metropolitan statistical area/micropolitan statistical area':'MSA_ID'})
         df_msa_map = df_census[df_census['Year'] == 2022][['NAME', 'MSA_ID']].drop_duplicates().rename(columns = {'NAME':'MSA'})
@@ -326,7 +327,8 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
                     "Native Hawaiian or other Pacific Islander", "White (NH)", "Some other race", "Two or more races"]
             df_pop["Race_Ethnicity"] = np.select(conditions, choices)
             df_census = df_census.merge(df_pop, on = ['MSA', 'Year', 'Race_Ethnicity'], how = 'left')
-            df_census = df_census.dropna()
+            if indicator_name == 'Income_3':
+                df_census = df_census.dropna()
 
     print('')
 
@@ -828,33 +830,32 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
     print('Processing 2...')
 
     df_census = df_census.dropna()
+    df_census = df_census.rename(columns = {'state':'State FIPS', 'county':'County FIPS'})
 
     if sample_type == 'PUMS':
         df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
                                         , sheet_name = 'PUMAcodes'
                                         , dtype = {'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
         df_fips_pums = df_fips_pums[df_fips_pums['STATEFP'].isin(list(dict_fips.keys()))]
-        df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns = {'PUMA5CE':'PUMA', 'STATEFP':'state'}).drop_duplicates()
+        df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns = {'PUMA5CE':'PUMA', 'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS'}).drop_duplicates()
 
         df_census1 = df_census[df_census['Year'].isin(sequence(2012, 2021, 1))]
         df_census2 = df_census[df_census['Year'].isin(sequence(2022, 2031, 1))]
 
-        df_census1 = df_census1.merge(df_fips_pums[df_fips_pums['Years'] == '2012-2021'], on = ['state', 'PUMA'], how = 'left')
-        df_census2 = df_census2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on = ['state', 'PUMA'], how = 'left')
+        df_census1 = df_census1.merge(df_fips_pums[df_fips_pums['Years'] == '2012-2021'], on = ['State FIPS', 'PUMA'], how = 'left')
+        df_census2 = df_census2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on = ['State FIPS', 'PUMA'], how = 'left')
         df_census = pd.concat([df_census1, df_census2])
         df_census = df_census.drop('Years', axis = 1)
 
-        df_census['COUNTYFP'] = df_census['COUNTYFP'].astype(str).apply('{:0>3}'.format)
+        df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
         df_census = df_census.merge(df_fips[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'MSA_ID', 'MSA_acs']].drop_duplicates()
-                                            , left_on = ['state', 'COUNTYFP']
-                                            , right_on = ['State FIPS', 'County FIPS'])
-        df_census.drop(['state', 'COUNTYFP'], axis = 1, inplace = True)
+                                            , on = ['State FIPS', 'County FIPS'])
         df_census = df_census.rename(columns = {'MSA_acs':'MSA'})
         df_census = df_census.set_index(['State FIPS', 'MPO', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'Year']).reset_index()
         df_census = df_census.sort_values(['State FIPS', 'PUMA', 'Year'] + groups, ascending = [True, True, False] + [item in groups for item in groups])
     
     if sample_type == 'FOODSEC':
-        df_census = df_census.sort_values(['state', 'MPO', 'county', 'Year'] + groups, ascending = [True, True, True, False] + [item in groups for item in groups])
+        df_census = df_census.sort_values(['State FIPS', 'MPO', 'County FIPS', 'Year'] + groups, ascending = [True, True, True, False] + [item in groups for item in groups])
 
     
     if 'HISP' in groups:
@@ -865,10 +866,12 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
     if 'HHLDRHISP' in groups:
         df_census.loc[df_census['HHLDRHISP'] == 'Hispanic or Latino', 'HHLDRRAC1P'] = 'Hispanic or Latino'
         df_census = df_census.drop('HHLDRHISP', axis = 1)
+        groups.remove('HHLDRHISP')
 
     if 'PEHSPNON' in groups:
         df_census.loc[df_census['PEHSPNON'] == 'Hispanic or Latino', 'PTDTRACE'] = 'Hispanic or Latino'
-        df_census = df_census.drop('PEHSPNON', axis = 1)       
+        df_census = df_census.drop('PEHSPNON', axis = 1)
+        groups.remove('PEHSPNON')
 
     if indicator_name == 'Cost_6':
         cols = ['GRPIP', 'OCPIP']
@@ -950,11 +953,6 @@ def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_th
     df_counties = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA',                               'SERIALNO'], axis = 1)
     df_msa      = df_census.drop(['MPO', 'PUMA', 'PUMA NAME',                  'County FIPS', 'County Name', 'SERIALNO'], axis = 1)
     df_mpo      = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis = 1)
-
-    group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
-    group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
-    group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
-    group_mpo      = ['State FIPS', 'MPO'                              ]
     
     df_puma     = df_puma    .set_index(group_puma    ).reset_index()
     df_counties = df_counties.set_index(group_counties).reset_index()
@@ -1169,34 +1167,78 @@ def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_th
     return df_puma, df_counties, df_msa, df_mpo
 
 
+def food_processing_3(df_census, weight, percentages, groups):
+
+    print('')
+    print('Processing 3...')
+
+    if 'PTDTRACE' in groups:
+        groups.remove('PTDTRACE')
+        groups_to_drop = groups.copy()
+        groups = ['PTDTRACE'] + groups
+
+    df_counties = df_census.drop([                              'Household_ID', 'Householder', 'PERRP'], axis = 1)
+    df_mpo      = df_census.drop(['County FIPS', 'County Name', 'Household_ID', 'Householder', 'PERRP'], axis = 1)
+
+    group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
+    group_mpo      = ['State FIPS', 'MPO'                              ]
+
+    df_counties = df_counties.set_index(group_counties).reset_index()
+    df_mpo      = df_mpo     .set_index(group_mpo     ).reset_index()
+
+    df_counties = df_counties.drop('Year', axis = 1)
+    df_mpo      = df_mpo     .drop('Year', axis = 1)
+
+    df_counties[weight] = 1
+    df_mpo     [weight] = 1
+
+    df_counties = df_counties.groupby(list(df_counties.drop([weight], axis = 1).columns), as_index = False, sort = False).agg(Total = (weight, 'sum'))
+    df_mpo      = df_mpo     .groupby(list(df_mpo     .drop([weight], axis = 1).columns), as_index = False, sort = False).agg(Total = (weight, 'sum'))
+
+    if percentages == 'Yes':
+        df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups_to_drop + ['Total'], axis = 1).columns))['Total'].transform('sum')
+        df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups_to_drop + ['Total'], axis = 1).columns))['Total'].transform('sum')
+
+    df_counties['Total'] = round(df_counties['Total'])
+    df_mpo     ['Total'] = round(df_mpo     ['Total'])
+
+    df_counties['Total'] = df_counties['Total'].astype(int)
+    df_mpo     ['Total'] = df_mpo     ['Total'].astype(int)
+
+    return df_counties, df_mpo, groups
+
+
+
+
 def rename_census(
-        indicator_name, geography, margin_of_error, groups=None,
+        indicator_name, geography, margin_of_error, sample_type, groups=None, table_type=None,
         df_tracts1=None, df_counties1=None, df_mpo1=None, df_msa1=None, df_puma=None, df_counties=None, df_msa=None, df_mpo=None
         ):
 
     if margin_of_error == 'Yes':
-        if geography == 'Tracts':
-            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
-            else:
-                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-            df_tracts1 = df_tracts1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
-        if geography == 'Counties':
-            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
-                df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
-            else:
-                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-                df_mpo1      = df_mpo1     [group_mpo      + ['Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-            df_counties1 = df_counties1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
-            df_mpo1      = df_mpo1     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
-        if geography == 'MSA':
-            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
-            else:
-                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
-            df_msa1 = df_msa1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
-        if geography == 'PUMA':
+        if sample_type in ['ACS', 'SUBJECT']:
+            if geography == 'Tracts':
+                if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                    df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                else:
+                    df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_tracts1 = df_tracts1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+            if geography == 'Counties':
+                if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                    df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                    df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                else:
+                    df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                    df_mpo1      = df_mpo1     [group_mpo      + ['Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_counties1 = df_counties1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+                df_mpo1      = df_mpo1     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+            if geography == 'MSA':
+                if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                    df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
+                else:
+                    df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage', 'ME', 'ME_ratio', 'Use for Reporting']]
+                df_msa1 = df_msa1.rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
+        if sample_type == 'PUMS':
             if indicator_name not in ['Cost_6', 'Accessibility_2']:
                 groups.reverse()
             if indicator_name == 'Accessibility_4':
@@ -1211,30 +1253,34 @@ def rename_census(
             df_mpo      = df_mpo     .rename(columns = {'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
 
     if margin_of_error == 'No':
-        if geography == 'Tracts':
-            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
-            else:
-                df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
-        if geography == 'Counties':
-            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
-                df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total']]
-            else:
-                df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
-                df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
-                
-        if geography == 'MSA':
-            if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
-            else:
-                df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
-        if geography == 'PUMA':
+        if sample_type  in ['ACS', 'SUBJECT']:
+            if geography == 'Tracts':
+                if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                    df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                else:
+                    df_tracts1 = df_tracts1[group_counties + ['Tract ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+            if geography == 'Counties':
+                if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                    df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                    df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                else:
+                    df_counties1 = df_counties1[group_counties + ['NAME', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                    df_mpo1      = df_mpo1     [group_mpo      + [        'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+                    
+            if geography == 'MSA':
+                if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+                    df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total']]
+                else:
+                    df_msa1 = df_msa1[['MSA', 'Year', 'Race_Ethnicity', 'Variable', 'Total', 'Percentage']]
+        if sample_type == 'PUMS':
             groups.reverse()
             df_puma     = df_puma    [group_puma     + ['Year'] + groups + ['Total', 'Percentage']]
             df_counties = df_counties[group_counties + ['Year'] + groups + ['Total', 'Percentage']]
             df_msa      = df_msa     [group_msa      + ['Year'] + groups + ['Total', 'Percentage']]
             df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups + ['Total', 'Percentage']]
+        if sample_type == 'FOODSEC':
+            df_counties = df_counties[group_counties + groups + ['Total', 'Percentage']]
+            df_mpo      = df_mpo     [group_mpo      + groups + ['Total', 'Percentage']]
 
     if geography == 'PUMA':
         if table_type == 'P':
@@ -1251,6 +1297,19 @@ def rename_census(
         df_counties = df_counties.sort_values(group_counties + ['Year'] + groups, ascending = [True, True, True, True, False] + [item in groups for item in groups])
         df_msa      = df_msa     .sort_values(group_msa      + ['Year'] + groups, ascending = [True, True, True,       False] + [item in groups for item in groups])
         df_mpo      = df_mpo     .sort_values(group_mpo      + ['Year'] + groups, ascending = [True, True,             False] + [item in groups for item in groups])
+    if sample_type == 'FOODSEC':
+        if table_type == 'P':
+            df_counties = df_counties.rename(columns = {'Total':'Population'})
+            df_mpo      = df_mpo     .rename(columns = {'Total':'Population'})
+        if table_type == 'H':
+            df_counties = df_counties.rename(columns = {'Total':'Households'})
+            df_mpo      = df_mpo     .rename(columns = {'Total':'Households'})
+        df_counties = df_counties.sort_values(group_counties + groups, ascending = [True, True, True, True] + [item in groups for item in groups])
+        df_mpo      = df_mpo     .sort_values(group_mpo      + groups, ascending = [True, True,           ] + [item in groups for item in groups])
+        if 'PTDTRACE' in groups:
+            df_counties = df_counties.set_index(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'PTDTRACE']).reset_index()
+            df_mpo      = df_mpo     .set_index(['State FIPS', 'MPO',                               'PTDTRACE']).reset_index()
+
 
 
     ## Renaming specifically by indicators
@@ -1261,8 +1320,8 @@ def rename_census(
             df_counties1 = df_counties1.merge(df_mpo_wm[['Year', 'Total']].rename(columns = {'Total':'Regional Median Household Income'}), on = ['Year'], how = 'left')
             df_mpo1      = df_mpo1     .merge(df_mpo_wm[['Year', 'Total']].rename(columns = {'Total':'Regional Median Household Income'}), on = ['Year'], how = 'left')
         
-            df_counties1['Percent of Regional Median Household Income'] = 100*(df_counties1['Total']/df_counties1['Regional Median Household Income'])
-            df_mpo1     ['Percent of Regional Median Household Income'] = 100*(df_mpo1     ['Total']/df_mpo1     ['Regional Median Household Income'])
+            df_counties1['Percent of Regional Median Household Income'] = 100*(df_counties1['Total'] / df_counties1['Regional Median Household Income'])
+            df_mpo1     ['Percent of Regional Median Household Income'] = 100*(df_mpo1     ['Total'] / df_mpo1     ['Regional Median Household Income'])
         
             df_counties1 = df_counties1.rename(columns = {'Total':'Median Household Income'})
             df_mpo1      = df_mpo1     .rename(columns = {'Total':'Median Household Income'})
@@ -1398,7 +1457,10 @@ def rename_census(
     if geography == 'Tracts':
         return df_tracts1
     if geography == 'Counties':
-        return df_counties1, df_mpo1
+        if sample_type in ['ACS', 'SUBJECT']:
+            return df_counties1, df_mpo1
+        if sample_type == 'FOODSEC':
+            return df_counties, df_mpo
     if geography == 'MSA':
         return df_msa1
     if geography == 'PUMA':
