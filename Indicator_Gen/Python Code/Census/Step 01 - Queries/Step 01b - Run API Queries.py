@@ -77,7 +77,11 @@ if sample_type == 'ACS':
                 df_years = pd.concat(list_df_years)
 
             list_df_vars.append(df_years)
-        
+
+        if geography == 'Places':
+            df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'place', 'Year'], how = 'outer'), list_df_vars)
+        if geography == 'Block Groups':
+            df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'block group', 'Year'], how = 'outer'), list_df_vars)
         if geography == 'Tracts':
             df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'Year'], how = 'outer'), list_df_vars)
         if geography == 'Counties':
@@ -92,7 +96,17 @@ if sample_type == 'ACS':
     print("")
     print("Reducing all tables together into one final table...")
     print("")
-    
+
+    if geography == 'Places':
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'place', 'Year']), list_df_census)
+        df_census_raw = df_census_raw.set_index(['NAME', 'state', 'place', 'Year']).reset_index()    
+    if geography == 'Block Groups':
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'block group', 'Year']), list_df_census)
+        df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
+                                              , left_on = ['state', 'county']
+                                              , right_on = ['State FIPS', 'County FIPS'])
+        df_census_raw.drop(['State FIPS', 'County FIPS'], axis = 1, inplace = True)
+        df_census_raw = df_census_raw.set_index(['NAME', 'state', 'county', 'County Name', 'tract', 'block group', 'Year']).reset_index()    
     if geography == 'Tracts':
         df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'Year']), list_df_census)
         df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
