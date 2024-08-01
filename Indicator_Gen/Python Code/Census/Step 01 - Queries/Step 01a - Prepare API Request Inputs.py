@@ -6,7 +6,10 @@ print("Preparing API request inputs...")
 df_inputs = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = import_tab)
 
 # Set years
-years_to_import = list(range(year_start, year_end+1))
+if year_start == 'timeseries':
+    pass
+else:
+    years_to_import = list(range(year_start, year_end+1))
 
 ## For DEC data
 if estimate == 'DEC':
@@ -227,6 +230,68 @@ if estimate == 'CPS':
     # view
     print(dict_fips)
     print(dict_vars)
+
+
+
+if estimate == 'LEHD':
+    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = estimate)
+    df_vars = df_vars[df_vars['Sample'] == sample_type]
+    df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+    df_vars = df_vars[df_vars['Include'] == 'Yes']
+    variables = df_vars['ID'].unique()
+    variables = ','.join(variables)
+    # if sample_type == 'RH':
+    #     variables = 'race,' + variables
+    # if sample_type == 'SA':
+    #     variables = 'agegrp,' + variables
+    # if sample_type == 'SE':
+    #     variables = 'sex,' + variables
+    print("")
+    print("Variables set to import:")
+    print(variables)
+    print('')
+
+    # For county level pull
+    if import_tab == 'Counties':
+        
+        # Import County FIPS mapping
+        # Convert to dictionary object for easy state-county combination importing
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+                                , sheet_name = 'CountyFIPS'
+                                , dtype = {'State FIPS': object, 'County FIPS': object})
+        df_fips = df_fips[
+                        (df_fips['State'].isin(df_inputs['states'].values))
+                        & (df_fips['County Name'].isin(df_inputs['counties'].values))
+        ]
+        dict_fips = df_fips.copy()
+        dict_fips = dict_fips[['State FIPS', 'County FIPS']]
+        dict_fips = dict_fips.groupby('State FIPS')['County FIPS'].apply(list).to_dict()
+        
+        for key in list(dict_fips.keys()):
+            dict_fips[key] = ",".join(dict_fips[key])
+    
+        # view
+        print('')
+        print('Counties set to import by state:')
+        print(dict_fips)
+        print('')
+
+        # For MSA level pull
+    if import_tab == 'MSA':
+    
+        # Set MSAs to import
+        df_inputs['msa'] = df_inputs['msa'].astype("string")
+        msa_to_import = df_inputs['msa'].values
+        msa_to_import = ",".join(msa_to_import)
+    
+        # view
+        print("")
+        print("MSA IDs set to import:")
+        print(msa_to_import)
+        print("")
+        print("List of variables to import:")
+        print(list_vars)
+
 
 # view
 print('')
