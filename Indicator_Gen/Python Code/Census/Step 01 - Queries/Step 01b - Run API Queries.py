@@ -379,6 +379,53 @@ if estimate == 'CPS':
     df_census_raw = df_census_raw.set_index(['state', 'MPO', 'county', 'County Name', 'Year']).reset_index()
 
 
+
+
+
+if estimate == 'LEHD':
+
+    print("Importing and compiling LEHD data from the Census Bureau...")
+    print("")
+    
+    if import_tab == 'Counties':
+        for state in list(dict_fips.keys()):
+            print('State: ' + state)
+            try:
+                df_census_raw = query_census(df_urls      = df_urls
+                                              , api_key   = api_key
+                                              , estimate  = estimate
+                                              , sample    = sample_type
+                                              , geography = geography
+                                              , variables = 'year,'+variables
+                                              , year      = 'timeseries'
+                                              , state     = state
+                                              , county    = dict_fips[state])
+                df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
+                                              , left_on = ['state', 'county']
+                                              , right_on = ['State FIPS', 'County FIPS'])
+                df_census_raw.drop(['state', 'county'], axis = 1, inplace = True)
+                df_census_raw = df_census_raw.set_index(['State FIPS', 'County FIPS', 'County Name', 'year', 'time']).reset_index()
+            except Exception as e: print(e)
+
+    if import_tab == 'MSA':
+        for state in list(dict_fips.keys()):
+            print('State: ' + state)
+            try:
+                df_census_raw = query_census(df_urls      = df_urls
+                                              , api_key   = api_key
+                                              , estimate  = estimate
+                                              , sample    = sample_type
+                                              , geography = geography
+                                              , variables = 'year,'+variables
+                                              , year      = 'timeseries'
+                                              , state     = state
+                                              , county    = msa_to_import)
+            except Exception as e: print(e)
+    df_census_raw = df_census_raw.rename(columns = {'year':'Year'})
+
+
+
+
 print("")
 print("Finished!!")
 print(f"Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---")
