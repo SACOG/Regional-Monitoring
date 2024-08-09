@@ -246,6 +246,10 @@ if estimate == 'LEHD':
     #     variables = 'agegrp,' + variables
     # if sample_type == 'SE':
     #     variables = 'sex,' + variables
+
+    if indicator_name == 'Jobs_4':
+        variables = variables + '&ownercode=A05'
+
     print("")
     print("Variables set to import:")
     print(variables)
@@ -280,17 +284,27 @@ if estimate == 'LEHD':
     if import_tab == 'MSA':
     
         # Set MSAs to import
-        df_inputs['msa'] = df_inputs['msa'].astype("string")
-        msa_to_import = df_inputs['msa'].values
-        msa_to_import = ",".join(msa_to_import)
+        df_inputs['msa'] = df_inputs['msa'].astype("str")
+        msa_to_import = list(df_inputs['msa'].values)
+
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+                                , sheet_name = 'MSAcodes'
+                                , dtype = {'State FIPS': object, 'MSA_ID': object})
+        df_fips = df_fips[df_fips['MSA_ID'].isin(msa_to_import)]
+
+        dict_fips = df_fips.copy()
+        dict_fips = dict_fips[['State FIPS', 'MSA_ID']]
+        dict_fips = dict_fips.groupby('State FIPS')['MSA_ID'].apply(list).to_dict()
+        
+        for key in list(dict_fips.keys()):
+            dict_fips[key] = ",".join(dict_fips[key])
     
         # view
         print("")
-        print("MSA IDs set to import:")
-        print(msa_to_import)
+        print("MSA IDs set to import by state:")
+        print(dict_fips)
         print("")
-        print("List of variables to import:")
-        print(list_vars)
+
 
 
 # view
