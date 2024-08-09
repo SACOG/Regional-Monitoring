@@ -126,14 +126,17 @@ def query_census(
         location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
     if geography == 'Counties':
         if year == 'timeseries':
-            location_ = '&for=county:' + county + '&in=state:' + state + '&time=from 2000-Q1 to 2023-Q4' + '&ownercode=A05'
+            location_ = '&for=county:' + county + '&in=state:' + state + '&time=from 2000-Q1 to 2023-Q4'
         else:
             location_ = '&for=county:' + county + '&in=state:' + state
     if geography == 'MSA':
-        if year == 'timeseries':
-            location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
+        if estimate in ['LEHD']:
+            if year == 'timeseries':
+                location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state + '&time=from 2000-Q1 to 2023-Q4'
+            else:
+                location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state
         else:
-            location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&time=from 2000-Q1 to 2023-Q4' + '&ownercode=A05'
+            location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     
@@ -153,7 +156,6 @@ def query_census(
     # apply year tag
     if estimate != 'LEHD':
         df_census['Year'] = year
-    
 
     ## Return
     return df_census
@@ -419,12 +421,19 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
                     , df_mpo1['ME_ratio']  > MOE_thresh
                 ]
                 choices = ['Yes', 'Yes', 'No']
-                df_mpo1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
+                df_mpo1['Use for Reporting'] = np.select(conditions, choices, default = 'No')         
 
         else:
-            # All other indicators
             df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
-            df_census1 = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+            if indicator_name == 'Income_4':
+                df_census1 = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                df_census2 = df_census.groupby(geo_ID + ['Year',                   'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                df_census2.loc[:, 'Race_Ethnicity'] = 'All'
+                df_census2 = df_census2[df_census2['Year'].isin(['2009', '2010', '2011', '2012'])]
+                df_census1 = pd.concat([df_census1, df_census2])
+            else:
+                df_census1 = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                
             df_census1['ME_ratio'] = df_census1['ME']/df_census1['Total']*100
             conditions = [
                 (df_census1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
@@ -434,7 +443,14 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
             choices = ['Yes', 'Yes', 'No']
             df_census1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
             if geography == 'Counties':
-                df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                if indicator_name == 'Income_4':
+                    df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                    df_mpo2 = df_census.groupby(['State FIPS', 'MPO', 'Year',                   'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
+                    df_mpo2.loc[:, 'Race_Ethnicity'] = 'All'
+                    df_mpo2 = df_mpo2[df_mpo2['Year'].isin(['2009', '2010', '2011', '2012'])]
+                    df_mpo1 = pd.concat([df_mpo1, df_mpo2])
+                else:
+                    df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
                 df_mpo1['ME_ratio'] = df_mpo1['ME']/df_mpo1['Total']*100
                 conditions = [
                     (df_mpo1['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
@@ -1062,37 +1078,61 @@ def food_processing_3(df_census, weight, percentages, groups):
     return df_counties, df_mpo, groups
 
 
-def lehd_processing(df_census, indicator_name, estimate, export_loc, folder):
+
+
+def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=None):
     if indicator_name == 'Jobs_4':
         df_census = df_census[df_census['firmage'] != 0]
         df_census.loc[ df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Less than or equal to 5 years old'
         df_census.loc[~df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Greater than 5 years old'
         df_census = df_census.drop(['Year', 'ownercode', 'firmage'], axis = 1)
+
         df_census = df_census.rename(columns = {'time':'Quarter'})
-        df_census = df_census[['State FIPS', 'County FIPS', 'County Name', 'Quarter', 'Firm Age', 'Emp']]
-        df_census['MPO'] = 'SACOG'
-        df_census['State FIPS' ] = df_census['State FIPS' ].astype(str).apply('{:0>2}'.format)
-        df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
+        df_census = df_census[df_census['Quarter'].str.contains('Q3')] # remove this if you want to show all quarters
 
-        df_counties = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
-        df_mpo      = df_census.groupby(['State FIPS', 'MPO',                               'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
-        
-        df_counties = df_counties.sort_values(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Quarter', 'Firm Age'], ascending = [True, True, True, True, False, False])
-        df_mpo      = df_mpo     .sort_values(['State FIPS', 'MPO',                               'Quarter', 'Firm Age'], ascending = [True, True, False, False])
-        
-        df_counties = df_counties.reset_index(drop = True)
-        df_mpo      = df_mpo     .reset_index(drop = True)
+        if geography == 'Counties':
 
-        path_out_xlsx = os.path.join(path_main, export_loc, indicator_name + ' ' + folder)
+            df_mpo = df_fips[['County Name', 'MPO']]
+            df_census = df_census.merge(df_mpo, on = ['County Name'], how = 'left')
+            
+            df_census = df_census[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Quarter', 'Firm Age', 'Emp']]
 
-        with pd.ExcelWriter(os.path.join(path_out_xlsx, indicator_name+' Counties '+estimate+'.xlsx'), engine='xlsxwriter') as writer:
-        # with pd.ExcelWriter(os.path.join(path_out_xlsx, indicator_name+' Counties '+estimate+'.xlsx'),mode='a',engine='openpyxl',if_sheet_exists='replace') as writer:
-            df_counties.to_excel(writer, index = False, sheet_name = 'Counties')
+            df_census['State FIPS' ] = df_census['State FIPS' ].astype(str).apply('{:0>2}'.format)
+            df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
 
-        with pd.ExcelWriter(os.path.join(path_out_xlsx, indicator_name+' MPO '+estimate+'.xlsx'), engine='xlsxwriter') as writer:
-        # with pd.ExcelWriter(os.path.join(path_out_xlsx, indicator_name+' MPO '+estimate+'.xlsx'),mode='a',engine='openpyxl',if_sheet_exists='replace') as writer:
-            df_mpo.to_excel(writer, index = False, sheet_name = 'MPO')
+            df_counties = df_census.groupby(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
+            df_mpo      = df_census.groupby(['State FIPS', 'MPO',                               'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
+            
+            df_counties = df_counties.sort_values(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Quarter', 'Firm Age'], ascending = [True, True, True, True, False, False])
+            df_mpo      = df_mpo     .sort_values(['State FIPS', 'MPO',                               'Quarter', 'Firm Age'], ascending = [True, True, False, False])
+            
+            df_counties = df_counties.reset_index(drop = True)
+            df_mpo      = df_mpo     .reset_index(drop = True)
 
+            if percentages == 'Yes':
+                df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(['State FIPS',        'County FIPS', 'Quarter'])['Total'].transform('sum')
+                df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(['State FIPS', 'MPO',                'Quarter'])['Total'].transform('sum')
+
+        if geography == 'MSA':
+            
+            df_census = df_census[['State FIPS', 'MSA_ID', 'MSA', 'Quarter', 'Firm Age', 'Emp']]
+
+            df_census['State FIPS' ] = df_census['State FIPS' ].astype(str).apply('{:0>2}'.format)
+
+            df_msa = df_census.groupby(['State FIPS', 'MSA_ID', 'MSA', 'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
+            
+            df_msa = df_msa.sort_values(['State FIPS',  'MSA', 'Quarter', 'Firm Age'], ascending = [True, True, False, False])
+            
+            df_msa = df_msa.reset_index(drop = True)
+
+            if percentages == 'Yes':
+                df_msa['Percentage'] = 100*df_msa['Total'] / df_msa.groupby(['State FIPS', 'MSA', 'Quarter'])['Total'].transform('sum')
+
+    
+    if geography == 'Counties':
+        return df_counties, df_mpo
+    if geography == 'MSA':
+        return df_msa
 
 
 

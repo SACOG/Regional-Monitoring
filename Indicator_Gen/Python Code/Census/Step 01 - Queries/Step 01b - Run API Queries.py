@@ -98,31 +98,31 @@ if sample_type == 'ACS':
     print("")
 
     if geography == 'Places':
-        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'place', 'Year']), list_df_census)
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'place', 'Year'], how = 'outer'), list_df_census)
         df_census_raw = df_census_raw.set_index(['NAME', 'state', 'place', 'Year']).reset_index()    
     if geography == 'Block Groups':
-        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'block group', 'Year']), list_df_census)
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'block group', 'Year'], how = 'outer'), list_df_census)
         df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
                                               , left_on = ['state', 'county']
                                               , right_on = ['State FIPS', 'County FIPS'])
         df_census_raw.drop(['State FIPS', 'County FIPS'], axis = 1, inplace = True)
         df_census_raw = df_census_raw.set_index(['NAME', 'state', 'county', 'County Name', 'tract', 'block group', 'Year']).reset_index()    
     if geography == 'Tracts':
-        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'Year']), list_df_census)
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'tract', 'Year'], how = 'outer'), list_df_census)
         df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
                                               , left_on = ['state', 'county']
                                               , right_on = ['State FIPS', 'County FIPS'])
         df_census_raw.drop(['State FIPS', 'County FIPS'], axis = 1, inplace = True)
         df_census_raw = df_census_raw.set_index(['NAME', 'state', 'county', 'County Name', 'tract', 'Year']).reset_index()
     if geography == 'Counties':
-        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'Year']), list_df_census)
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'Year'], how = 'outer'), list_df_census)
         df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
                                               , left_on = ['state', 'county']
                                               , right_on = ['State FIPS', 'County FIPS'])
         df_census_raw.drop(['State FIPS', 'County FIPS'], axis = 1, inplace = True)
         df_census_raw = df_census_raw.set_index(['NAME', 'state', 'county', 'County Name', 'Year']).reset_index()
     if geography == 'MSA':
-        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year']), list_df_census)
+        df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year'], how = 'outer'), list_df_census)
         df_census_raw = df_census_raw.set_index(['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year']).reset_index()
 
 
@@ -386,10 +386,12 @@ if estimate == 'LEHD':
 
     print("Importing and compiling LEHD data from the Census Bureau...")
     print("")
-    
+
+    list_df_states = []
     if import_tab == 'Counties':
-        for state in list(dict_fips.keys()):
-            print('State: ' + state)
+
+        print('Importing by state: ' + ', '.join(list(dict_fips.keys())))
+        for state in tqdm(list(dict_fips.keys())):
             try:
                 df_census_raw = query_census(df_urls      = df_urls
                                               , api_key   = api_key
@@ -403,13 +405,15 @@ if estimate == 'LEHD':
                 df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
                                               , left_on = ['state', 'county']
                                               , right_on = ['State FIPS', 'County FIPS'])
-                df_census_raw.drop(['state', 'county'], axis = 1, inplace = True)
+                df_census_raw = df_census_raw.drop(['state', 'county'], axis = 1)
                 df_census_raw = df_census_raw.set_index(['State FIPS', 'County FIPS', 'County Name', 'year', 'time']).reset_index()
+                list_df_states.append(df_census_raw)
             except Exception as e: print(e)
 
     if import_tab == 'MSA':
-        for state in list(dict_fips.keys()):
-            print('State: ' + state)
+
+        print('Importing by state: ' + ', '.join(list(dict_fips.keys())))
+        for state in tqdm(list(dict_fips.keys())):
             try:
                 df_census_raw = query_census(df_urls      = df_urls
                                               , api_key   = api_key
@@ -419,8 +423,15 @@ if estimate == 'LEHD':
                                               , variables = 'year,'+variables
                                               , year      = 'timeseries'
                                               , state     = state
-                                              , county    = msa_to_import)
+                                              , msa       = dict_fips[state])
+                df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'MSA_ID', 'MSA']]
+                                                    , left_on = ['state', 'metropolitan statistical area/micropolitan statistical area']
+                                                    , right_on = ['State FIPS', 'MSA_ID'])
+                df_census_raw = df_census_raw.drop(['state', 'metropolitan statistical area/micropolitan statistical area'], axis = 1)
+                df_census_raw = df_census_raw.set_index(['State FIPS', 'MSA_ID', 'MSA', 'time']).reset_index()
+                list_df_states.append(df_census_raw)
             except Exception as e: print(e)
+    df_census_raw = pd.concat(list_df_states)
     df_census_raw = df_census_raw.rename(columns = {'year':'Year'})
 
 
