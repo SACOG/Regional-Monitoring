@@ -71,17 +71,14 @@ def ME_split(text):
 ### CENSUS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
 
 
-<<<<<<< HEAD
 # Split attributes string
 def ME_split(text):
     return ",".join(text.split(',')[0:3:2])
-=======
 
 group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
 group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
 group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
 group_mpo      = ['State FIPS', 'MPO'                              ]
->>>>>>> efbd7c43c4da5bfe4fa985d9f60c4cb1795d09bf
 
 
 # Main function used to query data
@@ -101,15 +98,12 @@ def query_census(
     '''
 
     # Assert that inputs for estimate and geography are appropriate
-<<<<<<< HEAD
     assert estimate  in ['ACS5'  , 'ACS1'    , 'DEC', 'CPS'                       ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
     assert sample    in ['ACS'   , 'DEC'     , 'DHC', 'PUMS', 'FOODSEC', 'SUBJECT'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', 'FOODSEC', or 'SUBJECT'"
     assert geography in ['Tracts', 'Counties', 'MSA', 'PUMA'                      ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
-=======
     assert estimate  in ['ACS5'  , 'ACS1'    , 'DEC', 'CPS'                           ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
     assert sample    in ['ACS'   , 'DEC'     , 'DHC', 'PUMS', 'FOODSEC', 'SUBJECT'    ], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', 'FOODSEC', or 'SUBJECT'"
     assert geography in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA'], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
->>>>>>> efbd7c43c4da5bfe4fa985d9f60c4cb1795d09bf
 
 
     ## Construct URL
@@ -129,29 +123,23 @@ def query_census(
     variables_ = variables
 
     # Specify which geography to import
-<<<<<<< HEAD
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     if geography == 'Counties':
         location_ = '&for=county:' + county + '&in=state:' + state
-=======
     if geography == 'Places':
         location_ = '&for=place:*' + '&in=state:' + state
     if geography == 'Block Groups':
         location_ = '&for=block%20group:*' + '&in=tract:*' + '&in=state:' + state + '&in=county:' + county
->>>>>>> efbd7c43c4da5bfe4fa985d9f60c4cb1795d09bf
     if geography == 'Tracts':
         location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
     if geography == 'Counties':
         location_ = '&for=county:' + county + '&in=state:' + state
     if geography == 'MSA':
         location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
-<<<<<<< HEAD
     
-=======
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
->>>>>>> efbd7c43c4da5bfe4fa985d9f60c4cb1795d09bf
     
     ## Concatenate constructed URL
     query = f"{root_}{g_}{variables_}{location_}{api_key_}"
@@ -2122,44 +2110,58 @@ def dict_maker(df, geography, sector, survey, data_type):
     all of the MSA counties we want to test. Provide the sector (industry) that you want to pull, and the function will
     return a dictionary of all the MSA series ids formatted for API usage. We must define the first series ID manually,
     but the rest is automated (probably a better way to do it).
-    Formula for Series ID = Prefix + SA + State + Area + Industry + DType
+    Formula for SMU, CEU Series ID = Prefix + SA + State + Area + Industry + DType.
+    Formula for LAU Series ID = Prefix (LAU) + area/county code + DType
     """
 
     # Making set of keys and vals for future dict
-    keys = []
-    vals = []
+    # keys = []
+    # vals = []
 
-
-    if geography == 'MSA':
-
+    #LAU = survey
+    # area_code = CN2810700000000
+    # measure = data_type 03 for instance
+    if survey == 'LAU':
+        keys = []
+        vals = list((df.iloc[:,1]))
         for i in range(len(df)):
-
-            # Loop through each MSA code
-            # Construct the Series ID
-            # Add Series ID and MSA label to lists
-
-            area_code = str(df.iloc[i, 0])
-            state     = str(df.iloc[i, 2])
-            series_id = str(survey) + str(state) + str(area_code) + str(sector) + str(data_type)
+            # area_code = str(df.iloc[i,2])
+            series_id = str(survey) + str(sector[i]) + str(data_type)
             keys.append(series_id)
-            val = str(df.iloc[i, 1])
-            vals.append(val)
+
         
-    if geography == 'National':
 
-        # Pull National level area code
-        # Construct the Series ID
-        # Add Series ID and National label to lists
+    if survey in ('SMU', 'CEU'):
+        keys = []
+        vals = []        
+        if geography == 'MSA':
+            for i in range(len(df)):
 
-        series_id = str(survey) + str(sector) + str(data_type)
-        keys.append(series_id)
-        val = str(df.iloc[0, 1])
-        vals.append(val)
+                # Loop through each MSA code
+                # Construct the Series ID
+                # Add Series ID and MSA label to lists
+
+                area_code = str(df.iloc[i, 0])
+                state     = str(df.iloc[i, 3])
+                series_id = str(survey) + str(state) + str(area_code) + str(sector) + str(data_type)
+                keys.append(series_id)
+                val = str(df.iloc[i, 1])
+                vals.append(val)
+            
+        if geography == 'National':
+
+            # Pull National level area code
+            # Construct the Series ID
+            # Add Series ID and National label to lists
+
+            series_id = str(survey) + str(sector) + str(data_type)
+            keys.append(series_id)
+            val = str(df.iloc[0, 1])
+            vals.append(val)
 
 
     # Convert list of keys and values to dictionary
     result = {k: v for k, v in zip(keys, vals)}
-
     return result
         
 
@@ -2209,10 +2211,9 @@ def bls_query_update(series_dict, dates, api_key):
 
         # Adding a function here to alert and halt when we have exceeded daily limit
 
-        if 'status' in response and response['status'] == 'REQUEST_LIMIT_EXCEEDED':
-            print("Daily API Query Limit Reached")
+        if 'status' in response and response['status'] == 'REQUEST_NOT_PROCESSED':
+            print(response['message'][0])
             break
-
 
         # Extract data from the response and append it to the dataframe
         if 'Results' in response and 'series' in response['Results']:
@@ -2247,29 +2248,46 @@ def full_bls(key, df, geography, sector_list, dates, survey, data_type):
     defined by user. We then return the data in a set of dfs, separated by industry in the sector list. Meaning, df[0] will contain information
     only for the first sector in the sector list. 
     """
-    
-    # Initialize an empty list so we can iterate over multiple dictionaries
-    sector_chamber = []
+    if survey in ('SMU', 'CEU'):
+        # Initialize an empty list so we can iterate over multiple dictionaries
+        sector_chamber = []
 
-    # Initialize empty list for each dataframe we will end up making
-    df_chamber = []
+        # Initialize empty list for each dataframe we will end up making
+        df_chamber = []
 
-    # Loop over each sector we want to test
-    print('')
-    print('Creating python dictionary of industry IDs')
-    print('')
-    for i in tqdm(sector_list):
-        sector_chamber.append(dict_maker(df, geography, i, survey, data_type))
-
-    # Now with the sector_holders list containing each set of series we want, we can run our query function iteratively
-    
-    # Iteratively make each dataframe
-    print('')
-    print('Pulling data for each industry ID by decade')
-    print('')
-    for sector_dict in sector_chamber:
+        # Loop over each sector we want to test
         print('')
-        print(sector_dict)
-        df_chamber.append(bls_query_update(sector_dict, dates, api_key = key))
+        print('Creating python dictionary of industry IDs')
+        print('')
+        # if survey in ('SMU', 'CEU'):
+        #     for i in tqdm(sector_list):
+        #         sector_chamber.append(dict_maker(df, geography, i, survey, data_type))
 
-    return(df_chamber)
+        # if survey == 'LAU':
+        #     for i in tqdm(len(df)):
+        #         sector_chamber.append(dict_maker(df, geography, i, survey, data_type))
+
+        for i in tqdm(sector_list):
+                sector_chamber.append(dict_maker(df, geography, i, survey, data_type))
+        
+
+        # Now with the sector_holders list containing each set of series we want, we can run our query function iteratively
+    
+        # Iteratively make each dataframe
+        print('')
+        print('Pulling data for each industry ID by decade')
+        print('')
+        for sector_dict in sector_chamber:
+            print('')
+            print(sector_dict)
+            df_chamber.append(bls_query_update(sector_dict, dates, api_key = key))
+
+        return(df_chamber)
+
+    if survey == 'LAU':
+        df_chamber = []# leaving it like this in case we want to change the code so that it also gets 
+        sector = dict_maker(df, geography, sector_list, survey, data_type)
+        print(sector)
+        df_chamber.append(bls_query_update(sector, dates, api_key = key))
+        return(df_chamber)
+        #df = bls_query_update(sector, dates, api_key = key)
