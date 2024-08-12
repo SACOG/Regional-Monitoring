@@ -71,6 +71,11 @@ def ME_split(text):
 ### CENSUS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
 
 
+
+# Split attributes string
+def ME_split(text):
+    return ",".join(text.split(',')[0:3:2])
+
 # Split attributes string
 def ME_split(text):
     return ",".join(text.split(',')[0:3:2])
@@ -79,6 +84,7 @@ group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
 group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
 group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
 group_mpo      = ['State FIPS', 'MPO'                              ]
+
 
 
 # Main function used to query data
@@ -98,12 +104,17 @@ def query_census(
     '''
 
     # Assert that inputs for estimate and geography are appropriate
+
     assert estimate  in ['ACS5'  , 'ACS1'    , 'DEC', 'CPS'                       ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
     assert sample    in ['ACS'   , 'DEC'     , 'DHC', 'PUMS', 'FOODSEC', 'SUBJECT'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', 'FOODSEC', or 'SUBJECT'"
     assert geography in ['Tracts', 'Counties', 'MSA', 'PUMA'                      ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
     assert estimate  in ['ACS5'  , 'ACS1'    , 'DEC', 'CPS'                           ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
     assert sample    in ['ACS'   , 'DEC'     , 'DHC', 'PUMS', 'FOODSEC', 'SUBJECT'    ], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', 'FOODSEC', or 'SUBJECT'"
     assert geography in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA'], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
+
+    assert estimate  in ['ACS5'  , 'ACS1'    , 'DEC', 'CPS'                       ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', or 'CPS' "
+    assert sample    in ['ACS'   , 'DEC'     , 'DHC', 'PUMS', 'FOODSEC', 'SUBJECT'], "Unacceptable estimate input, requires 'ACS', 'DEC', 'DHS', 'PUMS_h', 'PUMS_p', 'FOODSEC', or 'SUBJECT'"
+    assert geography in ['Tracts', 'Counties', 'MSA', 'PUMA'                      ], "Unacceptable geography input, requires 'Tract', 'County', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
@@ -123,6 +134,7 @@ def query_census(
     variables_ = variables
 
     # Specify which geography to import
+
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     if geography == 'Counties':
@@ -137,10 +149,11 @@ def query_census(
         location_ = '&for=county:' + county + '&in=state:' + state
     if geography == 'MSA':
         location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
+
     
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
-    
+
     ## Concatenate constructed URL
     query = f"{root_}{g_}{variables_}{location_}{api_key_}"
     

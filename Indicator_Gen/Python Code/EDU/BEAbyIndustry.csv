@@ -1,0 +1,949 @@
+CAGDP2 Gross domestic product (GDP) by county and metropolitan area 1,,,,,,,,,,
+CAGDP2 Gross domestic product (GDP) by county and metropolitan area 1,,,,,,,,,,
+Metropolitan Statistical Area,,,,,,,,,,
+GeoFips,GeoName,LineCode,Level,Description,2017,2018,2019,2020,2021,2022
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",1,1,All industry total,141102903,151747891,164432513,171619050,195828575,222054436
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",2,2,  Private industries,124745562,134683231,146802709,152786094,176402729,201700555
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",31422,45787,30722,37701,37372,39393
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",978382,1114801,1296493,1328372,984445,1045704
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",10,3,    Utilities,687391,(D),(D),(D),983376,1178042
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",11,3,    Construction,8475624,8526397,9376813,9989808,9877411,10977099
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",12,3,    Manufacturing,12518108,13753886,13897304,14225470,15429731,16661514
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,10526794,11412788,11593807,12090160,13069216,13987405
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,1991314,2341098,2303497,2135310,2360515,2674110
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",34,3,    Wholesale trade,16096573,17294143,19573072,20613261,20767231,23540708
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",35,3,    Retail trade,8547357,9130907,9733608,10316028,12183773,13432102
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,2459949,2618311,3095125,2092258,3137230,4383980
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",45,3,    Information,9779697,(D),(D),(D),15539721,17192018
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",23817528,26625788,28444481,32660358,37242314,42494835
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",51,4,      Finance and insurance,7033243,7967656,8567611,9053492,11097939,11927342
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,16784285,18658131,19876869,23606866,26144375,30567493
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",59,3,    Professional and business services,22665442,(D),(D),(D),37806672,44777578
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),(D),(D),(D),31679231
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),(D),(D),(D),4497659
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,5067873,5394073,5841342,6188750,7308099,8600687
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",8915600,9410495,9922842,9828649,10990731,12466836
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",69,4,      Educational services,1100680,1201780,1311302,1259632,1391290,1619295
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",70,4,      Health care and social assistance,7814920,8208715,8611540,8569017,9599441,10847541
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",6341408,6554194,6926214,5490900,7390519,8836087
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1069022,1158445,1204696,946609,1305590,1453399
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",79,4,      Accommodation and food services,5272386,5395749,5721518,4544291,6084929,7382688
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),3431081,3682888,3943197,3653133,4032202,4674659
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",83,2,Government and government enterprises,16357341,17064660,17629804,18832956,19425846,20353881
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",87,,Natural resources and mining,1009804,1160588,1327215,1366073,1021818,1085097
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",88,,Trade,24643931,26425050,29306681,30929290,32951003,36972810
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",89,,Transportation and utilities,3147340,(D),(D),(D),4120607,5562022
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",90,,Manufacturing and information,22297805,(D),(D),(D),30969451,33853532
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,22003536,23440871,24601333,25581351,26328959,28723710
+12420,"Austin-Round Rock-Georgetown, TX (Metropolitan Statistical Area)",92,,Private services-providing industries 3,102742026,111242360,122201376,127204743,150073769,172976845
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",1,1,All industry total,168119917,175798075,185714343,190479926,209564590,228912666
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",2,2,  Private industries,153937684,160986666,170465760,174764610,193500539,211450412
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),(D),(D),(D),751587,1058695
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",290014,307194,319610,358243,(D),492212
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",10,3,    Utilities,3429374,(D),3865845,4739892,(D),5979924
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",11,3,    Construction,7728576,(D),9079754,(D),(D),10793294
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",12,3,    Manufacturing,16599745,17027506,16872292,16541163,16958315,19120651
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,8487079,8855970,9001023,8276447,8692709,9900278
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,8112666,8171536,7871269,8264716,8265605,9220373
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",34,3,    Wholesale trade,(D),(D),13015513,13158868,(D),15934333
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",35,3,    Retail trade,8494134,8992979,9671168,10450580,12435955,13300055
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,(D),(D),(D),(D),7410147,8936553
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",45,3,    Information,(D),(D),(D),(D),11415013,12103062
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",44482981,46673693,49942476,55461498,60087214,63551161
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",51,4,      Finance and insurance,25262931,25832537,28721675,34073431,35096129,36289268
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,19220050,20841157,21220801,21388067,24991085,27261893
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",59,3,    Professional and business services,25914305,(D),28814132,29171916,31839411,35499139
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",12204243,(D),(D),(D),(D),(D)
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),7658685,(D),8854046,(D),9531170
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,(D),(D),6970091,(D),(D),(D)
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",8697470,9134616,9759039,9598011,10902347,11459139
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",69,4,      Educational services,(D),1112658,1205054,1136950,(D),(D)
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",70,4,      Health care and social assistance,(D),8021958,8553985,8461061,(D),(D)
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",7713621,7925338,(D),(D),(D),8638446
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",(D),(D),(D),(D),(D),(D)
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",79,4,      Accommodation and food services,(D),(D),(D),(D),(D),(D)
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),3162284,3423478,3716318,3720720,4104006,4583748
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",83,2,Government and government enterprises,14182233,14811410,15248583,15715316,16064051,17462253
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),(D),(D),(D),(D),1550907
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",88,,Trade,(D),(D),22686681,23609449,(D),29234388
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),(D),(D),14916477
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",90,,Manufacturing and information,(D),(D),(D),(D),28373327,31223713
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),(D),(D),(D),28054931,31464851
+16740,"Charlotte-Concord-Gastonia, NC-SC (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),(D),(D),(D),165445608,179985561
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",1,1,All industry total,145242197,148905658,159451152,158437792,171723811,186141091
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",2,2,  Private industries,134069169,137285713,147456773,146286710,159140341,172943133
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),(D),(D),(D),193837,167166
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",136205,121109,132654,165218,(D),(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",10,3,    Utilities,(D),(D),1857949,(D),2203719,(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",11,3,    Construction,(D),(D),(D),6475851,6640249,(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",12,3,    Manufacturing,23129622,23485181,23367020,21684185,22932885,(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,13010437,11422980,(D),(D),(D),11180586
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,10119185,12062202,(D),(D),(D),(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",34,3,    Wholesale trade,13723914,14251930,15072287,15057185,16106123,17260195
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",35,3,    Retail trade,8179046,8160490,8399913,9390423,10612360,11523534
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,4892086,5448561,6152052,6372720,7009407,7580817
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",45,3,    Information,3561851,3442600,(D),(D),(D),3849628
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",33856632,34302832,40110592,40194361,43236037,47257404
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",51,4,      Finance and insurance,(D),(D),23174585,22994706,24238733,26614717
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,(D),(D),16936006,17199655,18997304,20642687
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",59,3,    Professional and business services,18210597,18956227,20041390,20211817,22383677,24450372
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",7837491,8382612,8713272,8659262,9634384,10617836
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,6315142,6320956,6893965,7140577,7475831,7820705
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,4057964,4252659,4434154,4411979,5273462,6011831
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",12103141,12573794,13231582,13194214,14124757,14991408
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",69,4,      Educational services,921465,929633,1037105,958619,1039854,1125501
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",70,4,      Health care and social assistance,11181676,11644161,12194477,12235595,13084903,13865907
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",5640820,5770632,6067176,4959604,6572118,7602761
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1906718,2033170,2084328,1607676,2091383,2614096
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",79,4,      Accommodation and food services,3734102,3737463,3982848,3351928,4480735,4988665
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),(D),3066451,(D),2977935,(D),(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",83,2,Government and government enterprises,11173029,11619945,11994378,12151082,12583471,13197957
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),(D),(D),(D),(D),(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",88,,Trade,21902960,22412421,23472200,24447608,26718483,28783730
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),8010001,(D),9213127,(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",90,,Manufacturing and information,26691473,26927781,(D),(D),(D),(D)
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),(D),(D),(D),(D),32698045
+17140,"Cincinnati, OH-KY-IN (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),(D),(D),(D),(D),140245088
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",1,1,All industry total,128644607,133796772,139963561,137214134,149096334,162788382
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",2,2,  Private industries,115667136,120387579,126279339,123449812,134711490,147794744
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),(D),(D),(D),194114,121824
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",162368,156157,167989,188935,(D),166460
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",10,3,    Utilities,1111382,1170504,1064744,1151487,(D),1301266
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",11,3,    Construction,4224269,4379881,4511316,4355553,4629496,4947148
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",12,3,    Manufacturing,16423256,17550299,18096987,16519957,18232562,20475557
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,10595604,10782285,11505366,10142055,10496279,11929322
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,5827652,6768013,6591621,6377902,7736283,8546235
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",34,3,    Wholesale trade,8757672,9151570,9748814,9669287,10454613,11387159
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",35,3,    Retail trade,7008889,7054939,7422085,7825261,8977856,9364109
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,(D),(D),(D),(D),(D),4472983
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",45,3,    Information,3644066,3600545,3803808,3704375,4170938,4611230
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",31397010,33138336,35156968,35645446,38535807,43328821
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",51,4,      Finance and insurance,15097349,15933340,18424604,18728635,20682133,24096773
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,16299661,17204996,16732364,16916811,17853674,19232048
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",59,3,    Professional and business services,17547176,18080607,19125889,18839439,20010934,21030148
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",8673653,9099869,9555776,9231498,10070591,10959180
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,4659973,4587595,4890476,5116535,4979411,4804099
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,4213551,4393143,4679636,4491405,4960933,5266869
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",14222041,14648368,15189777,15025480,15804148,16929722
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",69,4,      Educational services,1768592,1785541,1818298,1702950,1738030,1895607
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",70,4,      Health care and social assistance,12453449,12862827,13371479,13322530,14066118,15034116
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",5099485,5177045,5345642,4267730,5305360,6381354
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1873025,1910817,1910697,1555083,1866099,2501740
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",79,4,      Accommodation and food services,3226460,3266228,3434945,2712647,3439261,3879614
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),2759123,2862350,2924921,2763057,2989535,3276964
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",83,2,Government and government enterprises,12977471,13409194,13684222,13764322,14384845,14993638
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),(D),(D),(D),(D),288284
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",88,,Trade,15766561,16206510,17170899,17494549,19432469,20751268
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),(D),(D),5774249
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",90,,Manufacturing and information,20067322,21150843,21900795,20224331,22403500,25086786
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),(D),(D),(D),(D),25710988
+17460,"Cleveland-Elyria, OH (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),(D),(D),(D),(D),122083756
+18140,"Columbus, OH (Metropolitan Statistical Area)",1,1,All industry total,129945459,134348386,141340269,142634097,157415629,169123313
+18140,"Columbus, OH (Metropolitan Statistical Area)",2,2,  Private industries,112420313,116379269,122596032,123368979,137228264,147936610
+18140,"Columbus, OH (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),380963,(D),477240,739265,806036
+18140,"Columbus, OH (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",130602,155065,145640,103449,118186,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",10,3,    Utilities,645897,(D),(D),801421,774381,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",11,3,    Construction,5038994,5373692,5799297,6290381,6755477,7232081
+18140,"Columbus, OH (Metropolitan Statistical Area)",12,3,    Manufacturing,11610357,11452271,11223408,11453671,12387246,13479880
+18140,"Columbus, OH (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,5466790,5442266,5548649,5269827,5540162,6158735
+18140,"Columbus, OH (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,6143568,6010005,5674759,6183844,6847084,7321146
+18140,"Columbus, OH (Metropolitan Statistical Area)",34,3,    Wholesale trade,8136115,(D),(D),9060475,9879009,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",35,3,    Retail trade,8664336,8521023,8902231,9306465,10794407,11558489
+18140,"Columbus, OH (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,(D),5742391,6233706,6444541,7956493,8438976
+18140,"Columbus, OH (Metropolitan Statistical Area)",45,3,    Information,3973819,(D),4511178,4312739,4718694,4921424
+18140,"Columbus, OH (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",30584397,32412714,35038081,34911175,37865969,40756005
+18140,"Columbus, OH (Metropolitan Statistical Area)",51,4,      Finance and insurance,15937297,16902393,18562571,18271583,19082422,20067721
+18140,"Columbus, OH (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,14647101,15510321,16475510,16639592,18783547,20688284
+18140,"Columbus, OH (Metropolitan Statistical Area)",59,3,    Professional and business services,19389695,19798055,20330055,20488212,22862175,24793101
+18140,"Columbus, OH (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",8838191,9303838,9676828,9544380,10570371,11647443
+18140,"Columbus, OH (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,5663248,5750673,5855911,6102725,6598521,6753297
+18140,"Columbus, OH (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,4888256,4743544,4797316,4841107,5693283,6392361
+18140,"Columbus, OH (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",11306090,11766009,12363608,12289577,13114730,13848084
+18140,"Columbus, OH (Metropolitan Statistical Area)",69,4,      Educational services,1164579,1202922,1205321,1139661,1198704,1310952
+18140,"Columbus, OH (Metropolitan Statistical Area)",70,4,      Health care and social assistance,10141511,10563088,11158287,11149916,11916026,12537132
+18140,"Columbus, OH (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",4539751,4691781,5161856,4237788,5799591,6608847
+18140,"Columbus, OH (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1020406,1052606,1111925,885351,1100482,1271018
+18140,"Columbus, OH (Metropolitan Statistical Area)",79,4,      Accommodation and food services,3519346,3639175,4049931,3352437,4699108,5337829
+18140,"Columbus, OH (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),2833096,(D),3251486,3191847,3462641,3835701
+18140,"Columbus, OH (Metropolitan Statistical Area)",83,2,Government and government enterprises,17525146,17969117,18744236,19265117,20187365,21186703
+18140,"Columbus, OH (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+18140,"Columbus, OH (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),536028,(D),580689,857451,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",88,,Trade,16800451,(D),(D),18366940,20673416,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),7245962,8730874,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",90,,Manufacturing and information,15584177,(D),15734587,15766410,17105940,18401305
+18140,"Columbus, OH (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),17361992,(D),18324740,20000174,(D)
+18140,"Columbus, OH (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),99017277,(D),105044239,117228090,(D)
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",1,1,All industry total,256207316,265442500,270219297,262361413,283284759,305411601
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",2,2,  Private industries,236955392,245799027,249953384,241565525,261738137,282649292
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),(D),100772,168071,257875,266459
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",259420,237466,271940,323303,(D),387522
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",10,3,    Utilities,2338476,2465595,2467247,2337805,2545477,2860394
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",11,3,    Construction,8771907,9058079,9195847,9128090,9871106,10632892
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",12,3,    Manufacturing,45880488,46081491,44250329,39412057,41417445,44240237
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,39273404,38574325,36683067,32112831,34045060,36074908
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,6607084,7507166,7567262,7299227,7372385,8165330
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",34,3,    Wholesale trade,(D),(D),21466498,20653768,(D),23177408
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",35,3,    Retail trade,15322162,15962198,16334473,17042962,20139992,21672667
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,(D),(D),9760975,8402858,(D),12048899
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",45,3,    Information,6076694,6201157,6760691,6842562,7524349,8089197
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",45449170,47859170,49802835,54660174,56966958,59561853
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",51,4,      Finance and insurance,13677003,14558373,15745253,17283543,18421554,17870766
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,31772167,33300798,34057582,37376632,38545404,41691087
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",59,3,    Professional and business services,46089093,47760446,48067697,46154448,50976721,55023407
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",29000757,30012326,30084497,28733423,31518481,34172876
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,8289817,8532946,8739885,8711042,9220292,9613027
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,8798520,9215175,9243314,8709983,10237948,11237505
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",23133681,23893842,24474448,23490339,24857175,26248174
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",69,4,      Educational services,1898363,1933674,1949818,1714441,1850553,2033614
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",70,4,      Health care and social assistance,21235319,21960168,22524630,21775898,23006622,24214560
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",9891836,10579632,11035295,7510253,9442236,11827121
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",2329248,2440447,3016292,2154509,2544873,3092383
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",79,4,      Accommodation and food services,7562588,8139185,8019002,5355744,6897363,8734739
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),5640464,5868623,5964338,5438834,5893513,6613060
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",83,2,Government and government enterprises,19251924,19643474,20265913,20795889,21546622,22762309
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),(D),372712,491375,(D),653981
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",88,,Trade,(D),(D),37800971,37696730,(D),44850075
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),12228222,10740663,(D),14909292
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",90,,Manufacturing and information,51957182,52282649,51011020,46254619,48941794,52329435
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),(D),53818887,49031522,(D),55527111
+19820,"Detroit-Warren-Dearborn, MI (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),(D),196134497,192534003,(D),227122181
+20940,"El Centro, CA (Metropolitan Statistical Area)",1,1,All industry total,8039122,8099883,8523718,9018819,9550181,11064218
+20940,"El Centro, CA (Metropolitan Statistical Area)",2,2,  Private industries,6045449,6018860,6384449,6796397,7183267,8597461
+20940,"El Centro, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",1861222,1689191,1772080,1750480,1702878,2369189
+20940,"El Centro, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",124993,145836,125171,168302,192133,176834
+20940,"El Centro, CA (Metropolitan Statistical Area)",10,3,    Utilities,1059223,1067099,1129702,1315232,1433660,1804466
+20940,"El Centro, CA (Metropolitan Statistical Area)",11,3,    Construction,159896,165669,192842,224942,222312,235466
+20940,"El Centro, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,150781,143856,176706,213679,260246,282183
+20940,"El Centro, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,76723,77386,80292,77109,98057,109022
+20940,"El Centro, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,74058,66469,96414,136570,162189,173161
+20940,"El Centro, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,381457,398690,415978,420284,454646,501637
+20940,"El Centro, CA (Metropolitan Statistical Area)",35,3,    Retail trade,534867,556235,587626,593192,681545,735256
+20940,"El Centro, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,248627,263439,276311,287361,342131,386697
+20940,"El Centro, CA (Metropolitan Statistical Area)",45,3,    Information,60161,64454,68129,65625,(D),74807
+20940,"El Centro, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",634672,652385,691606,802010,753707,824428
+20940,"El Centro, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,110254,114269,120686,124414,133724,129683
+20940,"El Centro, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,524418,538116,570919,677596,619983,694745
+20940,"El Centro, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,223691,232319,240144,261997,275917,319623
+20940,"El Centro, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",91430,100598,107752,110836,112385,129234
+20940,"El Centro, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,17428,17975,13934,12197,11833,12710
+20940,"El Centro, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,114833,113745,118458,138964,151699,177680
+20940,"El Centro, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",299358,322268,363695,393882,434660,479651
+20940,"El Centro, CA (Metropolitan Statistical Area)",69,4,      Educational services,10189,11096,11573,10297,9335,13375
+20940,"El Centro, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,289169,311172,352122,383585,425325,466276
+20940,"El Centro, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",167434,172952,194479,157508,206642,235639
+20940,"El Centro, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",7514,7008,8598,4582,6116,7919
+20940,"El Centro, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,159920,165944,185882,152926,200527,227720
+20940,"El Centro, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),139067,144468,149980,141903,(D),171585
+20940,"El Centro, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,1993673,2081024,2139268,2222421,2366914,2466757
+20940,"El Centro, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+20940,"El Centro, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,1986215,1835027,1897251,1918782,1895010,2546022
+20940,"El Centro, CA (Metropolitan Statistical Area)",88,,Trade,916324,954925,1003604,1013476,1136191,1236894
+20940,"El Centro, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,1307850,1330538,1406013,1602594,1775790,2191163
+20940,"El Centro, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,210942,208309,244835,279304,(D),356991
+20940,"El Centro, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,2296891,2144551,2266800,2357403,2377568,3063672
+20940,"El Centro, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,3748557,3874309,4117650,4438994,4805699,5533790
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",1,1,All industry total,135881902,143663365,150175534,151052594,167265961,184394385
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",2,2,  Private industries,123896369,130964911,137130884,137390099,153311253,169683961
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",368790,330169,343308,418318,643768,622502
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",139161,128108,99561,127567,181486,(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",10,3,    Utilities,(D),(D),905894,(D),(D),(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",11,3,    Construction,6087610,6490136,7151083,7800064,8405360,9140269
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",12,3,    Manufacturing,25737807,26807973,26547336,26029254,28590547,32048024
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,7099217,7500803,7766571,7208364,7420845,8474215
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,18638591,19307170,18780765,18820891,21169702,23573809
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",34,3,    Wholesale trade,8454849,9105743,9385394,9592105,10638735,11769192
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",35,3,    Retail trade,7808620,7815546,7631704,8162619,9386145,10186870
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,5383210,5831732,6012894,5933365,7301001,(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",45,3,    Information,3481825,(D),(D),(D),(D),(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",28607207,31037525,34638112,34684194,38280302,(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",51,4,      Finance and insurance,11167152,11911734,13193599,11448403,(D),13437372
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,17440055,19125791,21444513,23235791,(D),(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",59,3,    Professional and business services,15963847,(D),17605544,17952589,(D),23032024
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),10046699,(D),(D),13313237
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),1714110,(D),(D),2233102
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,5186402,5538733,5844735,5868422,6841144,7485684
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",(D),13306218,14052410,14054132,15178624,16606964
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",69,4,      Educational services,(D),(D),(D),1195165,1269409,1382614
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",70,4,      Health care and social assistance,(D),(D),(D),12858968,13909215,15224350
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",5552522,5921053,(D),4992557,(D),7387575
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1947172,2064850,(D),1726582,(D),2393335
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",79,4,      Accommodation and food services,3605350,3856203,(D),3265975,(D),4994240
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),3017046,3209312,3341855,3265240,3437708,(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",83,2,Government and government enterprises,11985533,12698454,13044650,13662495,13954707,14710424
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",87,,Natural resources and mining,507951,458277,442869,545885,825255,(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",88,,Trade,16263468,16921289,17017098,17754724,20024880,21956062
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),6918789,(D),(D),(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",90,,Manufacturing and information,29219632,(D),(D),(D),(D),(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,32333368,33756386,34141288,34375204,37821161,(D)
+26900,"Indianapolis-Carmel-Anderson, IN (Metropolitan Statistical Area)",92,,Private services-providing industries 3,91563001,97208525,102989596,103014895,115490092,(D)
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",1,1,All industry total,965279922,1011441224,1064220158,1035126052,1136104564,1227469203
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",2,2,  Private industries,874422050,915996457,966047970,934830227,1032972560,1121383816
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",303680,315852,258380,298322,331265,437201
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",1224469,1074061,871938,725685,1009287,1243158
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",10,3,    Utilities,6777383,7605448,7552271,8167311,8168354,9261575
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",11,3,    Construction,34171267,35726817,37577847,36686511,37383899,39366468
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,93049255,103299085,102783479,92031166,104436725,116555507
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,58427667,62152796,62358072,61278081,64103311,69555831
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,34621588,41146288,40425408,30753085,40333414,46999675
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,68424259,71332854,77121592,74862500,80899515,87609115
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",35,3,    Retail trade,54672589,55643719,59247680,60189004,70602066,77158660
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,29023427,32111767,34676348,29862962,36795106,43066202
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",45,3,    Information,108854707,105639776,115966465,114210900,123526931,131315061
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",200294951,210455299,217023190,219502021,237145737,251746066
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,55804447,56087676,56889831,61825959,71129968,70371206
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,144490504,154367623,160133358,157676062,166015768,181374860
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,125974553,133667705,143715106,144801265,161750552,171955278
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",79465212,84505458,90821231,92406564,102115473,107967824
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,14412017,15414497,16393518,16998408,19455018,20183753
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,32097325,33747750,36500357,35396293,40180061,43803701
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",75262418,79374529,83753763,86266270,92939103,98499794
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",69,4,      Educational services,12720641,13750451,14509418,13625078,14763355,16074983
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,62541776,65624077,69244345,72641192,78175748,82424812
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",55055565,58083004,62755230,47219421,56635371,68905354
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",23866444,26075383,28688718,20886356,23044136,28968718
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,31189120,32007621,34066513,26333065,33591235,39936636
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),21333528,21666542,22744681,20006889,21348649,24264377
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,90857872,95444767,98172188,100295826,103132004,106085387
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,1528149,1389913,1130318,1024007,1340552,1680360
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",88,,Trade,123096848,126976573,136369272,135051504,151501580,164767775
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,35800810,39717215,42228620,38030273,44963461,52327776
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,201903962,208938860,218749945,206242066,227963657,247870567
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,128748671,140415814,141491644,129741684,143161176,157602334
+31080,"Los Angeles-Long Beach-Anaheim, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,745673379,775580643,824556326,805088543,889811384,963781481
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",1,1,All industry total,346955899,367322597,382826954,377067647,433623411,483754676
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",2,2,  Private industries,314139531,334505152,349713244,341235211,395706761,443667559
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",1300683,1528031,1326672,1306603,1559600,1748352
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",224833,240767,226907,311594,307787,347530
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",10,3,    Utilities,4562788,4627832,4419860,4566789,5426864,6470291
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",11,3,    Construction,16200890,18033869,18243635,17370843,17381029,19076239
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",12,3,    Manufacturing,10455551,10737886,11162810,10943459,11963405,13967305
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,6264261,6542125,6793164,6822065,7239358,8398818
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,4191290,4195761,4369646,4121394,4724047,5568486
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",34,3,    Wholesale trade,33024808,35580295,38163816,38540250,42110083,45498377
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",35,3,    Retail trade,25169201,26111239,27415173,28422544,34266739,37716949
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,14857264,17013971,18518686,14041048,19516325,25844085
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",45,3,    Information,17438831,17902733,18458696,17501156,20021499,21341913
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",85403780,92342162,94939145,97931439,110678827,120471515
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",51,4,      Finance and insurance,20953015,22653602,23659074,24566648,28897653,30542269
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,64450766,69688560,71280072,73364792,81781174,89929246
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",59,3,    Professional and business services,46465739,49272847,52097749,52737026,63436889,72991952
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",26759639,29002611,30750625,31773999,38084663,43737671
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,5673227,5475197,6272258,6323892,7277679,8032463
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,14032873,14795039,15074866,14639135,18074547,21221819
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",30351244,31534273,33405183,32442584,36240790,38975760
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",69,4,      Educational services,4623418,4709320,5006210,4456596,4798995,5282124
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",70,4,      Health care and social assistance,25727826,26824952,28398972,27985988,31441794,33693636
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",19002069,19378915,20901178,15391942,21959421,26829848
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",4171957,4237630,4443473,3715447,4414473,5350125
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",79,4,      Accommodation and food services,14830113,15141285,16457705,11676495,17544948,21479723
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),9681848,10200332,10433734,9727934,10837503,12387444
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",83,2,Government and government enterprises,32816368,32817444,33113710,35832436,37916650,40087117
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",87,,Natural resources and mining,1525516,1768798,1553579,1618197,1867387,2095882
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",88,,Trade,58194009,61691534,65578989,66962794,76376822,83215326
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",89,,Transportation and utilities,19420052,21641803,22938545,18607836,24943189,32314376
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",90,,Manufacturing and information,27894382,28640619,29621506,28444614,31984905,35309218
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,28181957,30540553,30960024,29932499,31211821,35139426
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL (Metropolitan Statistical Area)",92,,Private services-providing industries 3,285957574,303964599,318753220,311302713,364494940,408528133
+34900,"Napa, CA (Metropolitan Statistical Area)",1,1,All industry total,10996519,11212869,11445191,11148064,12648671,13165651
+34900,"Napa, CA (Metropolitan Statistical Area)",2,2,  Private industries,9815591,9963050,10182366,9862301,11340852,11863476
+34900,"Napa, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",406175,470796,342333,398331,598225,368964
+34900,"Napa, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",5702,7389,8889,9790,10550,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",10,3,    Utilities,29508,35970,36397,43330,40947,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",11,3,    Construction,636690,704251,682852,633266,684507,741764
+34900,"Napa, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,2575464,2386395,2539349,2440080,2872330,3010886
+34900,"Napa, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,207618,217054,227263,212467,271029,299338
+34900,"Napa, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,2367846,2169341,2312086,2227613,2601302,2711548
+34900,"Napa, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,485513,509939,543446,571547,601518,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",35,3,    Retail trade,561012,560113,589115,593843,669434,722881
+34900,"Napa, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,234243,235404,213114,182002,223140,255725
+34900,"Napa, CA (Metropolitan Statistical Area)",45,3,    Information,106275,118700,104820,105295,119930,127431
+34900,"Napa, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",1978750,2019644,2045026,2100010,2324488,2413420
+34900,"Napa, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,381690,375650,379868,384889,463217,460954
+34900,"Napa, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,1597060,1643993,1665158,1715121,1861271,1952466
+34900,"Napa, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,851792,904826,965286,949694,1033477,1067947
+34900,"Napa, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",418869,441018,492555,491921,556747,539294
+34900,"Napa, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,91048,100879,94101,88041,98493,117822
+34900,"Napa, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,341875,362929,378629,369733,378237,410832
+34900,"Napa, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",833180,857963,893852,897819,960119,1017814
+34900,"Napa, CA (Metropolitan Statistical Area)",69,4,      Educational services,102071,102714,108714,93721,98069,110618
+34900,"Napa, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,731109,755249,785139,804099,862050,907195
+34900,"Napa, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",872939,897577,960078,710293,963514,1158928
+34900,"Napa, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",68848,81429,82971,49965,61383,78881
+34900,"Napa, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,804091,816147,877107,660328,902131,1080047
+34900,"Napa, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),238350,254084,257808,227000,238673,269883
+34900,"Napa, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,1180928,1249818,1262825,1285762,1307819,1302175
+34900,"Napa, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+34900,"Napa, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,411877,478184,351221,408121,608775,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",88,,Trade,1046526,1070052,1132561,1165390,1270952,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,263751,271374,249511,225333,264086,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,2681738,2505095,2644170,2545375,2992260,3138317
+34900,"Napa, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,3624030,3568831,3573422,3481468,4165612,(D)
+34900,"Napa, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,6191561,6394219,6608944,6380834,7175240,(D)
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",1,1,All industry total,136223280,143898287,152659419,149100592,172184049,194472288
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",2,2,  Private industries,125030724,132593710,141384682,137019354,159407050,180867183
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",447368,409505,397913,397241,411446,492067
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",66141,51224,49148,60441,49350,50993
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",10,3,    Utilities,935274,917309,959618,1005790,1081740,1351095
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",11,3,    Construction,8426061,9315185,9964829,10154307,10674091,11576078
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",12,3,    Manufacturing,5715143,6267062,6767469,6987276,7355482,8418468
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,3911710,4513398,4969894,5250096,5398426,6161602
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,1803433,1753664,1797574,1737181,1957056,2256866
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",34,3,    Wholesale trade,8745075,9145805,9798548,10196262,12230322,12682189
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",35,3,    Retail trade,10186860,10619244,11066300,11466486,13300485,14639952
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,5258536,5526576,6054711,4142890,6381981,8528954
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",45,3,    Information,5804808,5930301,6325047,6118600,6688529,7147109
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",29116522,30975030,33536544,35429111,39526680,43550885
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",51,4,      Finance and insurance,6753431,7152119,7546293,8017782,9110263,9302270
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,22363092,23822911,25990251,27411329,30416417,34248615
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",59,3,    Professional and business services,20005461,21734055,22996829,22508887,26453546,30852330
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",10204951,11081295,11835331,12226659,14329879,16495724
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,2596294,2801562,3013244,2746726,3108493,3823261
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,7204217,7851197,8148255,7535502,9015174,10533345
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",11543468,12158138,12763009,12732766,14210016,15747266
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",69,4,      Educational services,1231072,1317060,1389510,1535127,1755461,1982700
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",70,4,      Health care and social assistance,10312396,10841078,11373499,11197639,12454555,13764566
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",15538605,16109228,17072855,12337402,17141662,21400134
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",5626785,6031330,6291534,4677798,5928442,7398407
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",79,4,      Accommodation and food services,9911820,10077898,10781321,7659605,11213221,14001727
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),3241402,3435049,3631864,3481894,3901720,4429663
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",83,2,Government and government enterprises,11192556,11304577,11274737,12081238,12777000,13605105
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",87,,Natural resources and mining,513509,460730,447061,457682,460796,543060
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",88,,Trade,18931935,19765048,20864848,21662748,25530807,27322141
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",89,,Transportation and utilities,6193810,6443885,7014329,5148680,7463720,9880048
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",90,,Manufacturing and information,11519950,12197363,13092515,13105876,14044011,15565577
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,14654712,16042976,17179358,17599265,18490369,20537606
+36740,"Orlando-Kissimmee-Sanford, FL (Metropolitan Statistical Area)",92,,Private services-providing industries 3,110376012,116550734,124205324,119420089,140916681,160329577
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",1,1,All industry total,50165884,51701976,53534661,53869917,58453063,62328544
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",2,2,  Private industries,43826302,45293927,46964960,47090369,51350564,55030883
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",1660473,1682213,1599530,1589719,1807554,1852996
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",454028,453102,415953,353935,427838,550944
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",10,3,    Utilities,341005,299968,307605,396569,343782,367510
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",11,3,    Construction,1887400,2038744,2112465,2090463,2254494,2337046
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,9213197,8114071,8078119,7996844,8323551,8936384
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,3714057,3860465,4072979,4171216,4466754,4733757
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,5499140,4253607,4005139,3825627,3856797,4202627
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,3945949,4117620,4339272,4343409,4677230,5135271
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",35,3,    Retail trade,3573988,3620509,3873115,3744481,4353644,4795340
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,498261,529963,531484,550496,715602,894780
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",45,3,    Information,1568987,1645098,1659067,1567840,1588355,1654437
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",10008215,10163773,10384396,10941024,12171698,12706527
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,2295475,2330633,2337393,2541427,2777658,2652848
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,7712740,7833139,8047003,8399597,9394039,10053679
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,4463546,6087435,6718566,6927454,7254099,7535936
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",2627952,2759076,3068785,3325054,3582581,3856651
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,336513,1741051,1941379,1984316,1909303,1904007
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,1499081,1587308,1708402,1618084,1762215,1775278
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",3436984,3604856,3796045,3848637,4124584,4330264
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",69,4,      Educational services,394720,412758,449516,423565,466158,483837
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,3042264,3192098,3346528,3425071,3658426,3846428
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",1737983,1836341,2013472,1713629,2230738,2746597
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",380671,436467,519286,459562,659030,902187
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,1357312,1399873,1494186,1254067,1571708,1844411
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),1036286,1100235,1135872,1025870,1077396,1186849
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,6339582,6408048,6569701,6779548,7102499,7297662
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,2114501,2135315,2015483,1943654,2235392,2403941
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",88,,Trade,7519938,7738129,8212387,8087890,9030874,9930611
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,839266,829932,839088,947065,1059384,1262290
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,10782184,9759169,9737186,9564684,9911905,10590821
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,13215098,12288130,12206067,12030961,12813436,13677371
+37100,"Oxnard-Thousand Oaks-Ventura, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,30611204,33005797,34758893,35059408,38537128,41353511
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",1,1,All industry total,246068032,262723388,281438971,290366220,326751865,362086516
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",2,2,  Private industries,221581088,237506052,255130325,263035047,297613146,331464429
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",820040,712183,786129,380878,417335,781354
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",1322625,1258820,1156174,1516202,2229239,2058520
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",10,3,    Utilities,4509236,4772618,5335896,6198691,6588176,6711881
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",11,3,    Construction,12371923,14089145,16026433,17842100,19370022,22776910
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",12,3,    Manufacturing,18271366,20261482,22055639,23095716,25658077,27980452
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,14708184,16514778,17864429,18736245,20618108,22339620
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,3563182,3746704,4191209,4359471,5039969,5640832
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",34,3,    Wholesale trade,16253512,16898257,17594197,18313256,20244331,22581081
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",35,3,    Retail trade,18596802,19201139,20345179,21964396,25126286,27454679
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,8211234,9016301,9927239,8605884,11597580,14808254
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",45,3,    Information,9189615,9603969,11449605,11937522,13808355,13977026
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",58869565,63924577,68323780,73238670,80607635,89606450
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",51,4,      Finance and insurance,20916726,23029356,24467755,26941145,29263688,29531651
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,37952840,40895221,43856024,46297525,51343947,60074798
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",59,3,    Professional and business services,32207165,34214102,36395953,36515966,42257020,46833705
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",15564352,17017900,18075222,(D),20677085,22815428
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,3896885,3499646,3910219,(D),5256358,6006337
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,12745928,13696556,14410511,14167016,16323577,18011939
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",24211582,25670420,27534213,27966562,30854203,33552763
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",69,4,      Educational services,3239817,3407689,3721979,3632459,3974123,4289140
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",70,4,      Health care and social assistance,20971765,22262730,23812233,24334103,26880080,29263623
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",11702374,12510297,12532500,10187869,12615121,15288163
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",3184237,3268624,3119840,2153095,2512212,3258082
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",79,4,      Accommodation and food services,8518136,9241673,9412660,8034774,10102908,12030081
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),5044050,5372742,5667390,5271334,6239767,7053193
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",83,2,Government and government enterprises,24486944,25217336,26308646,27331172,29138719,30622086
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",87,,Natural resources and mining,2142665,1971004,1942303,1897080,2646574,2839873
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",88,,Trade,34850313,36099396,37939375,40277653,45370617,50035760
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",89,,Transportation and utilities,12720470,13788920,15263135,14804575,18185756,21520135
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",90,,Manufacturing and information,27460981,29865451,33505244,35033238,39466431,41957477
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,32785955,36321631,40024374,42834895,47674673,53597235
+38060,"Phoenix-Mesa-Chandler, AZ (Metropolitan Statistical Area)",92,,Private services-providing industries 3,188795133,201184422,215105951,220200152,249938473,277867194
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",1,1,All industry total,155831974,165354607,172835078,174148303,189920665,204319374
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",2,2,  Private industries,139577361,147970074,154404359,155250694,169877331,183380028
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",691245,826610,764273,(D),892503,1083586
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",110102,116185,106212,122924,148473,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",10,3,    Utilities,(D),759674,877997,1041734,(D),1250957
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",11,3,    Construction,7118690,7966604,8724478,9087505,9672735,10637416
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",12,3,    Manufacturing,24055475,24518598,24350753,24855829,24673470,26975537
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,20264185,20539543,20471033,20834014,20430684,22564436
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,3791290,3979055,3879720,4021816,4242786,4411101
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",34,3,    Wholesale trade,10991123,11502465,12280857,12443924,13966702,15316983
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",35,3,    Retail trade,7790285,8284926,8627693,9159992,10518311,11253328
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,4932395,5232211,5629597,4973164,6253611,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",45,3,    Information,(D),(D),(D),(D),8859349,9531027
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",30516946,32920292,34091078,35031580,37123389,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",51,4,      Finance and insurance,8396055,9023237,9330215,9996391,10527821,10342395
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,22120891,23897054,24760862,25035189,26595568,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",59,3,    Professional and business services,(D),24396031,(D),26378283,29883015,31030759
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),(D),(D),14333479,15408242
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),(D),(D),9679339,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,4517778,4830629,5123471,5126008,5870196,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",13284171,13902777,14631961,14638055,(D),16752003
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",69,4,      Educational services,(D),(D),(D),(D),(D),1744572
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,(D),(D),(D),(D),(D),15007431
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",6375808,6838210,(D),5162661,6603356,8914462
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1548353,1619102,(D),(D),1513612,2042958
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,4827455,5219108,5360981,(D),5089744,6871504
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),(D),(D),(D),(D),4281390,4693634
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",83,2,Government and government enterprises,16254613,17384534,18430718,18897608,20043334,20939346
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",87,,Natural resources and mining,801347,942794,870485,(D),1040976,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",88,,Trade,18781408,19787391,20908550,21603916,24485013,26570311
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),5991885,6507594,6014898,(D),(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",90,,Manufacturing and information,(D),(D),(D),(D),33532819,36506564
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,31975511,33427996,33945716,(D),35387181,(D)
+38900,"Portland-Vancouver-Hillsboro, OR-WA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,107601849,114542078,120458643,(D),134490150,(D)
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",1,1,All industry total,171203284,181246846,193783221,196541554,218417650,237912621
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",2,2,  Private industries,142023363,150440648,161992643,164342667,185086883,202719126
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",1162764,1118692,1167084,1180364,1276342,1518861
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",280812,408639,388218,529753,668729,825935
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",10,3,    Utilities,3268956,3156131,3179149,3461415,3819051,4924577
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",11,3,    Construction,11343376,12203267,13623666,13815533,15109759,16301800
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,13273157,13719222,14221403,13772231,14706974,15874565
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,7923450,8289185,8582928,8274307,8878517,9666046
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,5349708,5430037,5638475,5497924,5828457,6208519
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,13461263,14268500,16125385,16349622,18151304,19564373
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",35,3,    Retail trade,15439298,15921243,17185284,17720656,20542250,22394214
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,9814314,10857549,12135860,14125437,17899789,20310256
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",45,3,    Information,2628128,2730673,2858981,2624178,2857235,3047525
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",31213975,33562050,35672037,35920103,39691622,42749824
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,4270646,4459326,4558197,4847372,5490582,5629872
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,26943329,29102724,31113840,31072731,34201039,37119952
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,12269270,12878436,13888163,14433333,16332823,17619426
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",5049161,5491176,5816114,6039903,6698717,7227366
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,953170,952967,1096696,1104967,1206956,1249510
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,6266939,6434292,6975354,7288463,8427149,9142550
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",15172842,16175758,17333917,18414639,19343645,20628008
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",69,4,      Educational services,1290404,1363776,1460335,1426322,1395669,1555529
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,13882438,14811982,15873582,16988317,17947976,19072479
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",7738796,8146918,8743751,6967831,9233336,10904162
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1326056,1389635,1440971,968563,1496082,1870186
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,6412741,6757282,7302780,5999267,7737255,9033976
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),4956412,5293570,5469744,5027573,5454024,6055600
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,29179921,30806198,31790578,32198888,33330766,35193494
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,1443576,1527331,1555302,1710117,1945071,2344797
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",88,,Trade,28900560,30189743,33310669,34070277,38693554,41958586
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,13083270,14013680,15315010,17586852,21718840,25234833
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,15901285,16449896,17080383,16396409,17564209,18922090
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,26060109,27449820,29400371,29297881,31761804,34521162
+40140,"Riverside-San Bernardino-Ontario, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,115963254,122990828,132592272,135044786,153325079,168197964
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",1,1,All industry total,131157393,139883784,148082274,148948757,163654015,176275525
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",2,2,  Private industries,100081185,107234493,114221806,114445698,127289304,137923673
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),(D),(D),755494,901331,968029
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",111654,123069,120133,154401,(D),85145
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",10,3,    Utilities,(D),(D),(D),1964521,2191124,2236219
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",11,3,    Construction,7666765,8547930,10210541,10391796,11467444,11643495
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,5670392,5886919,6186112,6087209,6574452,7198739
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,3591359,3580692,3848031,3825527,4000399,4390520
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,2079034,2306228,2338081,2261682,2574053,2808219
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,(D),(D),(D),(D),8453617,9298111
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",35,3,    Retail trade,8641707,8949070,9579697,9871577,11262379,12165458
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,2993992,3321533,3689934,(D),(D),5279758
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",45,3,    Information,3416598,3673610,3663238,(D),4065788,4341980
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",25204684,27971853,28781061,29357608,32280871,35453138
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,7029359,7456135,7613198,8090352,8541755,8624704
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,18175325,20515718,21167862,21267256,23739116,26828434
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,15627673,16418772,17392046,18123591,19489843,20948259
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",9164332,9719188,10426768,10774040,11509592,12402754
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,1704558,1692972,1830096,1951769,2047965,2115980
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,4758783,5006611,5135182,5397782,5932286,6429525
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",12639527,13475577,14662362,15209591,16400215,17254091
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",69,4,      Educational services,911896,950425,1078276,1022804,1120395,1226944
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,11727632,12525152,13584086,14186787,15279820,16027148
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",5099752,5362607,5733542,4437059,5923859,7123048
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1121734,1147553,1171648,854815,1299300,1776445
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,3978018,4215053,4561894,3582243,4624559,5346603
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),3186218,3409629,3535048,(D),3523662,3928202
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,31076208,32649291,33860469,34503059,36364711,38351853
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),(D),(D),909895,(D),1053174
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",88,,Trade,(D),(D),(D),(D),19715996,21463569
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),(D),(D),7515977
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,9086990,9560530,9849350,(D),10640240,11540719
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),(D),(D),17388900,(D),19895408
+40900,"Sacramento-Roseville-Folsom, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),(D),(D),97056799,(D),118028265
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",1,1,All industry total,164415211,170514475,176312791,175410139,192860220,209935558
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",2,2,  Private industries,148728161,154397006,159944746,158928323,175838861,192481741
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),374258,224589,(D),722430,920857
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",284703,281478,280271,268617,349925,355567
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",10,3,    Utilities,2645254,2655266,2578231,(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",11,3,    Construction,(D),(D),(D),(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",12,3,    Manufacturing,17518795,(D),(D),(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,(D),7738458,(D),(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,(D),(D),(D),(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",34,3,    Wholesale trade,12055555,(D),12997031,(D),14750510,16050807
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",35,3,    Retail trade,10092209,10317786,10380526,11094155,12664493,13499308
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,5293698,5696171,5896006,5583368,6725659,7537220
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",45,3,    Information,(D),(D),7714789,(D),7797958,8715771
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",33534656,33635764,35025474,36650766,39097462,(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",51,4,      Finance and insurance,14055229,14115775,14446480,15575661,15950426,16383023
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,19479427,19519990,20578994,21075106,23147036,(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",59,3,    Professional and business services,23942880,25575415,25971163,(D),27981211,30368707
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",12018193,12529873,12931401,12992217,14519215,15614297
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,6406045,7089412,(D),6473751,6551707,(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,5518642,5956130,(D),(D),6910290,(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",18422161,19168159,20035867,19623609,21054302,22255542
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",69,4,      Educational services,3022504,3143250,3276730,3093102,3384953,3650296
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",70,4,      Health care and social assistance,15399657,16024910,16759137,16530507,17669349,18605246
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",(D),(D),(D),(D),7117285,8313980
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",(D),(D),(D),(D),1877037,2216185
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",79,4,      Accommodation and food services,4712941,4915233,(D),(D),5240249,6097795
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),(D),(D),4141261,3981040,4235759,(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",83,2,Government and government enterprises,15687050,16117469,16368045,16481817,17021359,17453817
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),655736,504861,(D),1072355,1276424
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",88,,Trade,22147763,(D),23377558,(D),27415003,29550115
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",89,,Transportation and utilities,7938952,8351437,8474237,(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",90,,Manufacturing and information,(D),25823050,(D),(D),(D),(D)
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),27139655,(D),(D),(D),34977097
+41180,"St. Louis, MO-IL (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),127257351,(D),(D),(D),157504644
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",1,1,All industry total,91954184,99939694,107842226,108589411,123044193,135409299
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",2,2,  Private industries,81817078,89432022,96847737,97153295,111212029,122793441
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",23335,36856,20770,23220,40334,66862
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",1270145,1367623,1453723,1680581,2035337,2075104
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",10,3,    Utilities,415749,556852,682317,977403,1329585,1415045
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",11,3,    Construction,4895082,5450018,6283118,6880684,7603864,8797409
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",12,3,    Manufacturing,8191789,8972449,9325759,8522717,10842055,12857817
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,5017442,5163282,5169696,5315270,5953392,6599646
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,3174347,3809168,4156063,3207447,4888663,6258171
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",34,3,    Wholesale trade,5713934,5952373,6444203,6872840,7595815,8113688
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",35,3,    Retail trade,6475895,6786663,7136246,7778310,9207587,10205319
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,4261668,4593902,5102635,4266503,4968237,6584709
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",45,3,    Information,4167437,4321936,5036575,5210279,5777589,6576304
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",24290057,27654182,29948669,29616574,33051686,33666072
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",51,4,      Finance and insurance,13086278,14988338,17112836,16659850,18659537,18674845
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,11203779,12665844,12835832,12956725,14392148,14991226
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",59,3,    Professional and business services,11521397,12504502,13432526,13839266,15508680,17750030
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),7952678,(D),9692291,11163193
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),1983953,(D),2104191,2297678
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,3122963,3225345,3495895,3395200,3712198,4289160
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",5617958,5892097,6295755,6396449,7245087,7842496
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",69,4,      Educational services,961170,1045032,1201274,1252950,1527486,1537349
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",70,4,      Health care and social assistance,4656789,4847064,5094481,5143499,5717601,6305147
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",2731120,2975377,3223712,2557752,3266350,3928136
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",701665,758656,775878,610554,718410,900675
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",79,4,      Accommodation and food services,2029455,2216722,2447834,1947198,2547940,3027461
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),2241510,2367192,2461729,2530717,2739824,2914450
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",83,2,Government and government enterprises,10137106,10507672,10994489,11436116,11832164,12615858
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",87,,Natural resources and mining,1293480,1404479,1474493,1703801,2075671,2141966
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",88,,Trade,12189829,12739035,13580449,14651150,16803402,18319007
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",89,,Transportation and utilities,4677417,5150755,5784952,5243906,6297823,7999754
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",90,,Manufacturing and information,12359226,13294386,14362334,13732995,16619644,19434120
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,14380352,15826946,17083371,17107202,20521590,23797192
+41620,"Salt Lake City, UT (Metropolitan Statistical Area)",92,,Private services-providing industries 3,67436726,73605076,79764366,80046093,90690439,98996249
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",1,1,All industry total,118925670,127358282,133427324,134158599,146660892,163060744
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",2,2,  Private industries,98482538,106195993,111580823,111433511,122941534,138420021
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),63377,38472,(D),52833,48897
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",2545129,3301906,3498364,1995939,2376741,3352473
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",10,3,    Utilities,(D),1347493,(D),(D),(D),(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",11,3,    Construction,6343100,6693981,6272220,6411019,6894095,7152812
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",12,3,    Manufacturing,9157011,9836222,11054767,10576346,12214160,13544336
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,7107072,7536290,8665592,8293780,9373835,10318071
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,2049939,2299932,2389174,2282566,2840325,3226265
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",34,3,    Wholesale trade,(D),4835958,5231241,(D),(D),(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",35,3,    Retail trade,8645608,8911753,9285825,9931424,11930439,13040695
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,2656973,3705810,3937014,3394268,3859407,(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",45,3,    Information,6079293,6080992,6493222,6488436,6732453,7709342
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",25407306,28257437,29673792,33283705,33965222,38702413
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",51,4,      Finance and insurance,11813507,13196485,13858603,13882406,14482677,16735117
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,13593799,15060951,15815189,19401299,19482545,21967296
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",59,3,    Professional and business services,12467559,13187052,14101281,13943288,15980272,17611737
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",6354843,6673856,7237526,7135495,8141284,(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,1958007,2044459,2304417,2146801,2276037,(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,4154709,4468738,4559338,4660992,5562951,6039897
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",10425479,10950773,(D),11061259,12108770,12898084
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",69,4,      Educational services,1116035,1167666,(D),1185275,1286071,1380806
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",70,4,      Health care and social assistance,9309444,9783107,(D),9875984,10822700,11517277
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",5990131,6141469,6295928,5021200,6543483,7766363
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1123874,1132237,1206340,934748,1122453,(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",79,4,      Accommodation and food services,4866257,5009232,5089588,4086451,5421030,(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),2725593,2881770,3056910,2864003,3098821,3514063
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",83,2,Government and government enterprises,20443132,21162289,21846501,22725088,23719358,24640722
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),3365283,3536835,(D),2429574,3401370
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",88,,Trade,(D),13747712,14517066,(D),(D),(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),5053303,(D),(D),(D),(D)
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",90,,Manufacturing and information,15236304,15917214,17547988,17064782,18946613,21253677
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),19895486,20863821,(D),21537829,24098517
+41700,"San Antonio-New Braunfels, TX (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),86300507,90717002,(D),101403705,114321504
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",1,1,All industry total,224767520,234685540,245468318,246738140,272825696,295644871
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",2,2,  Private industries,180131751,190177300,200313324,199853587,223293356,245002828
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",652345,739323,714462,795031,870094,922153
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",96345,112299,108255,130069,150207,165854
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",10,3,    Utilities,1940256,1744006,1565933,2023275,2032019,2578478
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",11,3,    Construction,9444261,10146275,10542264,10470194,11582756,13227050
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,21277876,22462728,23639355,24345462,26329549,27574515
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,16193377,17048275,17847805,18558349,19731731,20860213
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,5084499,5414453,5791550,5787113,6597818,6714302
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,10917457,10622325,11986391,12099690,13130040,14841169
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",35,3,    Retail trade,12467788,12947507,13808675,13826017,15612959,16958866
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,3485405,3737510,3915908,2941928,4194655,5400488
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",45,3,    Information,11834192,12489477,13277071,12832035,14270432,15071883
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",42607634,45144147,45990772,46926323,51754001,55775483
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,9119239,9730694,9747166,10596639,12566521,12159639
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,33488395,35413454,36243607,36329683,39187480,43615844
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,33614085,37083737,39859149,41959808,47493056,51782585
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",23487258,26217554,28390030,30124567,33644057,36162083
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,3169051,3472369,3708480,4062941,4668941,4476285
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,6957775,7393813,7760640,7772299,9180058,11144218
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",15970752,16552410,17562265,18030297,19487009,21051275
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",69,4,      Educational services,2433436,2497587,2556352,2445039,2423826,2629052
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,13537315,14054823,15005914,15585257,17063183,18422223
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",11223091,11477538,12217557,9002216,11604801,14210778
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",2417271,2472001,2625370,1726591,2194363,2841965
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,8805819,9005537,9592187,7275625,9410438,11368813
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),4600263,4918018,5125268,4471243,4781778,5442252
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,44635769,44508239,45154994,46884553,49532340,50642043
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,748690,851622,822717,925099,1020301,1088007
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",88,,Trade,23385246,23569832,25795065,25925707,28742999,31800035
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,5425661,5481516,5481841,4965203,6226674,7978965
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,33112068,34952205,36916426,37177497,40599981,42646398
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,31470827,33460625,35004335,35740755,38932605,41889572
+41740,"San Diego-Chula Vista-Carlsbad, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,148660923,156716675,165308989,164112832,184360750,203113256
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",1,1,All industry total,526582864,569521796,606633398,611744434,697497699,729104843
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",2,2,  Private industries,482945980,523661642,559383703,563225692,647667136,678231162
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",(D),(D),(D),349100,360103,600813
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",240232,220038,171152,194231,(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",10,3,    Utilities,4183998,4601862,4536447,5009577,(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",11,3,    Construction,20290720,21899498,23155496,21156646,21446311,22259228
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,57810373,69067634,70078974,63179543,73601726,82835982
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,18755836,19173263,20275756,21707827,24484712,26707212
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,39054537,49894372,49803218,41471716,49117014,56128770
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,23540397,23415251,24604814,(D),(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",35,3,    Retail trade,23554031,24437931,25546042,24908831,28660092,31611881
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,(D),(D),(D),(D),(D),24111480
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",45,3,    Information,72247289,77972319,88306108,98564123,(D),124533127
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",102205920,110109746,114990851,123143462,140499076,142328733
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,38464687,40287997,42080276,46901014,57326838,54852089
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,63741233,69821750,72910575,76242447,83172237,87476643
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,99227777,107639111,113157941,119276367,131182881,138193666
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",72036665,79045400,84387883,91018993,100845404,103847656
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,12743859,12902149,12674890,12327051,12148838,11981126
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,14447253,15691562,16095168,15930323,18188639,22364884
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",32822757,34336286,36852954,37590569,42225494,42638818
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",69,4,      Educational services,5239521,5411238,6107949,5768287,6024518,6429606
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,27583236,28925048,30745005,31822282,36200976,36209213
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",20457919,21474837,23318558,19789134,26058456,24654898
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",5496460,5821593,5658786,3527989,5646935,7505560
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,14961458,15653244,17659772,16261145,20411520,17149338
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),9253695,10081878,10467876,9276009,(D),11074905
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,43636883,45860154,47249695,48518742,49830563,50873681
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,(D),(D),(D),543331,(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",88,,Trade,47094428,47853182,50150856,(D),(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),(D),(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,130057662,147039953,158385082,161743666,(D),207369109
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,(D),(D),(D),84879520,(D),(D)
+41860,"San Francisco-Oakland-Berkeley, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,(D),(D),(D),478346172,(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",1,1,All industry total,282663484,303563063,322552406,346552793,395506682,403513248
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",2,2,  Private industries,269839529,290142399,308590123,331817830,380353603,387895420
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",497683,525235,484394,487671,503295,601667
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",94490,68372,55649,60978,64984,70412
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",10,3,    Utilities,(D),(D),(D),(D),(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",11,3,    Construction,7954053,8339604,9036517,8768750,8880715,10095033
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,58342773,63125015,65576001,73198360,83542211,84741369
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,55627351,60117409,62499481,70335766,80313477,82073168
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,2715422,3007605,3076520,2862594,3228734,2668201
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,(D),(D),(D),(D),(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",35,3,    Retail trade,11975505,12153466,12728371,12368240,13752794,15303633
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,2033730,2524760,2600823,2148274,5238402,4140142
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",45,3,    Information,62973435,65382011,72041012,80692021,94039845,96249743
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",33858353,36392687,39819813,43794112,52371030,(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,7776617,8853879,9307836,10137340,13960002,12975120
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,26081735,27538809,30511977,33656773,38411028,(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,51654948,(D),(D),(D),75493109,72675091
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),(D),(D),(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),(D),(D),(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,7745242,6821668,6926955,6909992,7670939,8232967
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",17974383,19384156,20333844,20508446,21805772,23451670
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",69,4,      Educational services,5597067,5942186,6110206,5825125,6073606,6839673
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,12377316,13441970,14223637,14683321,15732166,16611997
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",6541206,7059558,7609422,5126321,6355633,7816904
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1440593,1602413,1696009,1126051,1397126,1835955
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,5100613,5457146,5913414,4000271,4958506,5980949
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),2904488,3123906,3234711,2815098,2940767,3262283
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,12823955,13420665,13962283,14734964,15153080,15617828
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,592173,593606,540043,548649,568279,672078
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",88,,Trade,(D),(D),(D),(D),(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),(D),(D),(D)
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,121316208,128507026,137617013,153890381,177582056,180991112
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,66888999,72058225,75152561,82515759,92991206,95508480
+41940,"San Jose-Sunnyvale-Santa Clara, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,202950530,218084174,233437561,249302071,287362397,292386940
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",1,1,All industry total,28853518,30752760,31728327,31609410,34838439,36876932
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",2,2,  Private industries,25898772,27720841,28659035,28503186,31618205,33520286
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",346116,410526,211583,281150,460278,249465
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",39323,50399,42431,58372,60626,60341
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",10,3,    Utilities,799129,810568,758015,890913,948263,1217997
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",11,3,    Construction,1875461,2482028,2647272,2449526,2506998,2704551
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,3953594,4050202,4237590,4471676,5341802,5463080
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,1634794,1759434,1858384,1939835,2457609,2513627
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,2318799,2290767,2379205,2531842,2884193,2949454
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,1255632,1293354,1366718,1360249,1450843,1493706
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",35,3,    Retail trade,2175730,2211323,2287099,2270280,2560861,2758554
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,394433,411244,425425,418822,506230,558657
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",45,3,    Information,777390,855819,802773,697026,760819,810658
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",6278616,6709436,6963160,7198185,7774865,8105897
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,1131459,1210054,1302479,1377729,1497523,1479576
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,5147157,5499382,5660681,5820455,6277342,6626321
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,2757628,2948210,3179341,3199310,3482903,3772824
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",1517846,1642036,1782431,1772127,1937950,2048226
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,340688,320287,319152,328552,356649,369859
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,899093,985888,1077759,1098632,1188304,1354740
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",2893594,3042798,3207017,3265534,3298723,3472338
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",69,4,      Educational services,206691,208777,243564,240915,202977,216470
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,2686903,2834022,2963453,3024619,3095746,3255868
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",1454170,1525261,1596001,1125118,1580385,1866422
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",302775,317797,329323,212444,275297,370363
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,1151394,1207464,1266677,912674,1305088,1496059
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),897956,919674,934611,817025,884611,985796
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,2954746,3031919,3069292,3106224,3220233,3356646
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,385439,460925,254014,339522,520904,309807
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",88,,Trade,3431362,3504677,3653816,3630528,4011704,4252260
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,1193562,1221812,1183440,1309735,1454493,1776654
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,4730984,4906021,5040362,5168703,6102620,6273738
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,6214494,6993154,7138876,7260724,8369704,8477438
+42220,"Santa Rosa-Petaluma, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,19684279,20727687,21520159,21242461,23248502,25042848
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",1,1,All industry total,152661007,161214245,170071775,175918088,197243036,219413810
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",2,2,  Private industries,137681208,146292130,154960591,159566766,180213692,201627362
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",443057,332576,410117,423757,354541,422269
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",45868,59312,60529,76893,53194,61732
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",10,3,    Utilities,2239863,2425597,2510227,2923720,3581060,4074255
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",11,3,    Construction,7188068,8000448,8690115,9316494,9923065,10496874
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",12,3,    Manufacturing,10592540,11232910,11382720,11448641,12696400,14525438
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,5798628,6057601,6277028,6530713,6890612,7613638
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,4793912,5175309,5105691,4917928,5805788,6911800
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",34,3,    Wholesale trade,9427298,9812422,10655897,10922101,12132577,13228053
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",35,3,    Retail trade,12153110,12705135,12846981,13615601,16157117,17903581
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,3351116,3578804,4112164,3326862,4672163,6174449
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",45,3,    Information,6444973,6294048,7033905,6729615,8068899,8747176
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",37226541,40363701,42182379,46979196,50645878,56365270
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",51,4,      Finance and insurance,12300769,13330690,13939008,15742105,17379496,19220218
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,24925773,27033011,28243371,31237091,33266383,37145052
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",59,3,    Professional and business services,22287342,24094270,25898652,26634009,30751661,34500664
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),(D),(D),18248367,20571113
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),(D),(D),(D),(D)
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,5735302,6166413,6433630,6520403,(D),(D)
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",15563793,16218165,17202879,17190158,18878883,20375242
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",69,4,      Educational services,1506126,1592214,1718381,1599878,1795476,1935363
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",70,4,      Health care and social assistance,14057667,14625951,15484498,15590280,17083408,18439878
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",7087116,7379453,7976874,6258802,8249846,10117691
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",1784403,1931257,2045459,1669002,2007505,2769188
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",79,4,      Accommodation and food services,5302712,5448196,5931415,4589800,6242341,7348503
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),3630522,3795289,3997152,3720916,4048408,4634669
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",83,2,Government and government enterprises,14979799,14922115,15111184,16351322,17029344,17786448
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",87,,Natural resources and mining,488925,391888,470645,500650,407735,484001
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",88,,Trade,21580409,22517557,23502877,24537703,28289693,31131634
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",89,,Transportation and utilities,5590979,6004401,6622391,6250582,8253223,10248704
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",90,,Manufacturing and information,17037513,17526957,18416625,18178256,20765299,23272614
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,18269533,19625245,20543480,21265786,23027201,25506313
+45300,"Tampa-St. Petersburg-Clearwater, FL (Metropolitan Statistical Area)",92,,Private services-providing industries 3,119411675,126666885,134417111,138300980,157186491,176121049
+46700,"Vallejo, CA (Metropolitan Statistical Area)",1,1,All industry total,22725056,26610754,30945346,31576656,34376655,35407753
+46700,"Vallejo, CA (Metropolitan Statistical Area)",2,2,  Private industries,18704774,22424044,26674672,27183020,29934189,30847040
+46700,"Vallejo, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",155451,222219,113921,114359,233957,219274
+46700,"Vallejo, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",106182,128158,112213,84105,101515,120243
+46700,"Vallejo, CA (Metropolitan Statistical Area)",10,3,    Utilities,464173,501820,478229,551314,634091,729882
+46700,"Vallejo, CA (Metropolitan Statistical Area)",11,3,    Construction,1365225,1523636,1913070,1657374,1863761,1936220
+46700,"Vallejo, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,5497400,8326624,11772902,12242373,13464280,12926506
+46700,"Vallejo, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,636609,715398,721795,705040,689672,760768
+46700,"Vallejo, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,4860791,7611226,11051107,11537333,12774608,12165738
+46700,"Vallejo, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,779728,809598,830760,866447,899497,1003095
+46700,"Vallejo, CA (Metropolitan Statistical Area)",35,3,    Retail trade,1466405,1486473,1551423,1689583,2069008,2277842
+46700,"Vallejo, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,449156,501669,521501,529335,640697,705343
+46700,"Vallejo, CA (Metropolitan Statistical Area)",45,3,    Information,280506,298391,301247,274175,294962,309695
+46700,"Vallejo, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",3486547,3694628,3857475,4095987,4253488,4680540
+46700,"Vallejo, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,519046,541404,559677,585058,602034,579171
+46700,"Vallejo, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,2967501,3153224,3297798,3510929,3651455,4101369
+46700,"Vallejo, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,1180278,1272698,1195848,1183666,1329730,1474555
+46700,"Vallejo, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",490773,538484,553222,556187,655648,710490
+46700,"Vallejo, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,128502,112660,112335,109773,97780,103414
+46700,"Vallejo, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,561004,621554,530292,517705,576302,660650
+46700,"Vallejo, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",2343795,2453238,2701206,2794574,2879736,3010096
+46700,"Vallejo, CA (Metropolitan Statistical Area)",69,4,      Educational services,148552,160475,172023,163780,167033,158131
+46700,"Vallejo, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,2195243,2292762,2529183,2630794,2712704,2851965
+46700,"Vallejo, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",680985,722906,783193,597744,739838,857711
+46700,"Vallejo, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",129795,129398,123080,62920,90818,118046
+46700,"Vallejo, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,551190,593508,660113,534824,649020,739666
+46700,"Vallejo, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),448943,481986,541684,501984,529628,596038
+46700,"Vallejo, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,4020282,4186710,4270674,4393637,4442466,4560713
+46700,"Vallejo, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+46700,"Vallejo, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,261633,350377,226134,198464,335471,339517
+46700,"Vallejo, CA (Metropolitan Statistical Area)",88,,Trade,2246133,2296071,2382184,2556030,2968505,3280937
+46700,"Vallejo, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,913329,1003489,999730,1080649,1274788,1435224
+46700,"Vallejo, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,5777906,8625015,12074148,12516548,13759242,13236201
+46700,"Vallejo, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,7124259,10200637,13912106,14098211,15663513,15202244
+46700,"Vallejo, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,11580515,12223407,12762566,13084809,14270676,15644796
+49700,"Yuba City, CA (Metropolitan Statistical Area)",1,1,All industry total,6342091,6823475,7091008,7222073,7977039,8608166
+49700,"Yuba City, CA (Metropolitan Statistical Area)",2,2,  Private industries,4538892,4927997,5131778,5185758,5854585,6431829
+49700,"Yuba City, CA (Metropolitan Statistical Area)",3,3,"    Agriculture, forestry, fishing and hunting",356935,403246,275782,349973,418828,389419
+49700,"Yuba City, CA (Metropolitan Statistical Area)",6,3,"    Mining, quarrying, and oil and gas extraction",49397,52397,48775,55236,70308,25623
+49700,"Yuba City, CA (Metropolitan Statistical Area)",10,3,    Utilities,(D),321442,(D),(D),449776,728238
+49700,"Yuba City, CA (Metropolitan Statistical Area)",11,3,    Construction,313842,359940,426062,348403,390283,420891
+49700,"Yuba City, CA (Metropolitan Statistical Area)",12,3,    Manufacturing,318118,321346,320230,308049,333847,346933
+49700,"Yuba City, CA (Metropolitan Statistical Area)",13,4,      Durable goods manufacturing,162098,166167,172082,165554,184782,192835
+49700,"Yuba City, CA (Metropolitan Statistical Area)",25,4,      Nondurable goods manufacturing,156020,155179,148147,142495,149065,154098
+49700,"Yuba City, CA (Metropolitan Statistical Area)",34,3,    Wholesale trade,(D),(D),(D),(D),(D),(D)
+49700,"Yuba City, CA (Metropolitan Statistical Area)",35,3,    Retail trade,468871,496081,531102,590562,670762,723912
+49700,"Yuba City, CA (Metropolitan Statistical Area)",36,3,    Transportation and warehousing,242204,(D),315044,343061,430772,483935
+49700,"Yuba City, CA (Metropolitan Statistical Area)",45,3,    Information,89886,99638,119877,116474,(D),(D)
+49700,"Yuba City, CA (Metropolitan Statistical Area)",50,3,"    Finance, insurance, real estate, rental, and leasing",933960,1073107,1048198,1054292,1106589,1170316
+49700,"Yuba City, CA (Metropolitan Statistical Area)",51,4,      Finance and insurance,132881,139177,142407,151232,168120,177019
+49700,"Yuba City, CA (Metropolitan Statistical Area)",56,4,      Real estate and rental and leasing,801080,933930,905791,903060,938468,993297
+49700,"Yuba City, CA (Metropolitan Statistical Area)",59,3,    Professional and business services,294935,(D),(D),363839,391466,422997
+49700,"Yuba City, CA (Metropolitan Statistical Area)",60,4,"      Professional, scientific, and technical services",(D),(D),(D),157033,165746,167805
+49700,"Yuba City, CA (Metropolitan Statistical Area)",64,4,      Management of companies and enterprises,(D),(D),(D),33320,44109,63777
+49700,"Yuba City, CA (Metropolitan Statistical Area)",65,4,      Administrative and support and waste management and remediation services,146065,146313,156135,173486,181612,191415
+49700,"Yuba City, CA (Metropolitan Statistical Area)",68,3,"    Educational services, health care, and social assistance",586339,(D),678992,721605,753008,797101
+49700,"Yuba City, CA (Metropolitan Statistical Area)",69,4,      Educational services,14150,(D),(D),(D),17872,(D)
+49700,"Yuba City, CA (Metropolitan Statistical Area)",70,4,      Health care and social assistance,572189,(D),(D),(D),735136,(D)
+49700,"Yuba City, CA (Metropolitan Statistical Area)",75,3,"    Arts, entertainment, recreation, accommodation, and food services",167914,179715,194110,166029,224392,263971
+49700,"Yuba City, CA (Metropolitan Statistical Area)",76,4,"      Arts, entertainment, and recreation",22904,24764,23434,16003,22735,30626
+49700,"Yuba City, CA (Metropolitan Statistical Area)",79,4,      Accommodation and food services,145010,154951,170676,150026,201657,233345
+49700,"Yuba City, CA (Metropolitan Statistical Area)",82,3,    Other services (except government and government enterprises),131340,139235,144718,137039,(D),154873
+49700,"Yuba City, CA (Metropolitan Statistical Area)",83,2,Government and government enterprises,1803200,1895479,1959229,2036315,2122455,2176337
+49700,"Yuba City, CA (Metropolitan Statistical Area)",,,Addenda:,,,,,,
+49700,"Yuba City, CA (Metropolitan Statistical Area)",87,,Natural resources and mining,406332,455643,324557,405209,489135,415042
+49700,"Yuba City, CA (Metropolitan Statistical Area)",88,,Trade,(D),(D),(D),(D),(D),(D)
+49700,"Yuba City, CA (Metropolitan Statistical Area)",89,,Transportation and utilities,(D),(D),(D),(D),880548,1212172
+49700,"Yuba City, CA (Metropolitan Statistical Area)",90,,Manufacturing and information,408004,420984,440106,424523,(D),(D)
+49700,"Yuba City, CA (Metropolitan Statistical Area)",91,,Private goods-producing industries 2,1038293,1136930,1070848,1061661,1213265,1182867
+49700,"Yuba City, CA (Metropolitan Statistical Area)",92,,Private services-providing industries 3,3500599,3791067,4060930,4124097,4641320,5248963
