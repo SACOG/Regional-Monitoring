@@ -54,11 +54,17 @@ def sequence(r1, r2, step):
 
 
 # Remove anything after specified string, use regular expression (currently set to remove everything after the first period)
-def re_remove_post(x, exp = '.'):
+def re_remove_post(x, exp = ' '):
     if x == 'nan':
         return 'nan'
     else:
         return x.split(exp, 1)[0]
+    
+def re_remove_pre(x, exp = ' '):
+    if x == 'nan':
+        return 'nan'
+    else:
+        return x.split(exp, 1)[1]
 
 
 # Split attributes string
@@ -1133,6 +1139,7 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
         return df_counties, df_mpo
     if geography == 'MSA':
         return df_msa
+
 
 
 
