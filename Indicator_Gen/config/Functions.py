@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import os
+import json
 from tqdm import tqdm
 import re
 from datetime import date
@@ -76,14 +77,14 @@ def ME_split(text):
 ### CENSUS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
 
 
-
+## Main geographic groupings
 group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
 group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
 group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
 group_mpo      = ['State FIPS', 'MPO'                              ]
 
 
-# Main function used to query data
+## Main function used to query data
 def query_census(
         df_urls
         , api_key, estimate, sample, geography, variables, year
@@ -169,8 +170,9 @@ def query_census(
 
 
 
+## ACS processing steps
 
-def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, path_main, path_git):
+def acs_processing_1(df_census, df_vars, geography, margin_of_error):
 
     '''
     User defined function to clean/process ACS data immediately after query
@@ -183,7 +185,9 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
     '''
 
     print('')
-    print('Processing 1...')
+    print('Processing Step 1:')
+    print('Reshaping data from columns to rows...')
+    print('Mapping Estimate ID field to table ID, table name, and estimate label... (if margin of errors were pulled, including those as well)')
 
     if geography == 'Places':
         geo_ID = ['state', 'place', 'NAME']
@@ -211,8 +215,63 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
     df_census = df_census.dropna()
     
     df_census['Total'] = df_census['Total'].apply(pd.to_numeric)
-    df_census = df_census.merge(df_vars[['ID', 'Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on = 'ID', how = 'left')
-    df_census = df_census[['ID'] + geo_ID + ['Year', 'Variable', 'Race_Ethnicity', 'Sort', 'Total']]
+    df_census = df_census.merge(df_vars[['ID', 'Table', 'Table Name', 'Label']], on = 'ID', how = 'left')
+
+
+    if margin_of_error == 'Yes':
+        df_census_me = df_census.copy()
+
+        df_me = df_census_me[df_census_me['Label'].isna()]
+        df_census_me = df_census_me.dropna()
+        df_me = df_me[['ID'] + geo_ID + ['Year', 'Total']].rename(columns = {'Total':'ME'})
+        df_me['ID'] = df_me['ID'].apply(lambda s : re.sub("M", "E", s))
+        df_census_me = df_census_me.merge(df_me, on = ['ID'] + geo_ID + ['Year'], how = 'left')
+        df_census_me['Year'] = df_census_me['Year'].astype(str)
+        df_census = df_census_me.copy()
+        df_census = df_census[list(df_census.drop(['Total', 'ME'], axis = 1).columns) + ['Total', 'ME']]
+
+    if margin_of_error == 'No':
+        df_census = df_census[list(df_census.drop(['Total'], axis = 1).columns) + ['Total']]
+
+    if geography == 'MSA':
+        df_census = df_census.sort_values(['MSA_ID', 'Year', 'ID'], ascending = [True, False, True])
+    else:
+        df_census = df_census.sort_values(geo_ID + ['Year', 'ID'], ascending = [item in geo_ID for item in geo_ID] + [False, True])
+
+    df_census = df_census.reset_index(drop = True)
+
+    print('')
+
+    return df_census
+
+# SACOG specific processing steps:
+def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_error, year_end, path_main, path_git):
+
+    if geography == 'Places':
+        geo_ID = ['state', 'place', 'NAME']
+    if geography == 'Block Groups':
+        geo_ID = ['state', 'County Name', 'county', 'tract', 'block group', 'NAME']
+    if geography == 'Tracts':
+        geo_ID = ['state', 'County Name', 'county', 'tract', 'NAME']
+    if geography == 'Counties':
+        geo_ID = ['state', 'County Name', 'county', 'NAME']
+    if geography == 'MSA':
+        df_census = df_census.rename(columns = {'metropolitan statistical area/micropolitan statistical area':'MSA_ID', 'NAME':'MSA'})
+        geo_ID = ['MSA_ID', 'MSA']
+
+    print('')
+    print('Processing Step 2:')
+    print('Mapping Estimate ID field to cleaned label field, variable grouping fields, race/ethnicity mapping, and variable sorting order...')
+    print('If needed, adjusting income data for inflation...')
+    print('If needed for any aggregations, population weights are merged onto the dataframe...')
+
+
+    df_census = df_census.merge(df_vars[['ID','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on = 'ID', how = 'left')
+
+    if margin_of_error == 'Yes':
+        df_census = df_census[['ID'] + geo_ID + ['Year', 'Variable', 'Race_Ethnicity', 'Sort', 'Total', 'ME']]
+    else:
+        df_census = df_census[['ID'] + geo_ID + ['Year', 'Variable', 'Race_Ethnicity', 'Sort', 'Total']]
 
     if indicator_name in ['Income_1', 'Income_3']:
         df_cpi = pd.read_excel(os.path.join(path_git, 'config', 'CPI Inflation Adjustment Factors.xlsx'), sheet_name = 'BLS_West')
@@ -260,7 +319,7 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
             df_census = df_census.merge(df_pop, on = ['NAME'  , 'Year', 'Race_Ethnicity'], how = 'left')
         # df_census = df_census.fillna(0)
         if indicator_name == 'Income_3':
-            df_census = df_census.dropna()      
+            df_census = df_census.dropna()
     
     df_census = df_census.rename(columns = {'ID':'Estimate ID'})
 
@@ -294,15 +353,15 @@ def acs_processing_1(df_census, df_vars, indicator_name, geography, year_end, pa
 
     return df_census
 
-
-def acs_processing_2(df_census, geography, margin_of_error):
+def acs_processing_3(df_census, geography):
 
     '''
     User defined function to clean/process ACS margin of error fields and sort the data
     '''
 
     print('')
-    print('Processing 2...')
+    print('Processing Step 3:')
+    print('Sort by user defined race/ethnicity field and variable sorting field, then drop those fields...')
 
     if geography == 'Places':
         geo_ID = ['State FIPS', 'Place ID', 'NAME']
@@ -314,17 +373,6 @@ def acs_processing_2(df_census, geography, margin_of_error):
         geo_ID = ['State FIPS', 'County FIPS', 'County Name', 'NAME']
     if geography == 'MSA':
         geo_ID = ['MSA_ID']
-        
-    if margin_of_error == 'Yes':
-        df_census_me = df_census.copy()
-
-        df_me = df_census_me[df_census_me['Variable'].isna()]
-        df_census_me = df_census_me.dropna()
-        df_me = df_me[['Estimate ID'] + geo_ID + ['Year', 'Total']].rename(columns = {'Total':'ME'})
-        df_me['Estimate ID'] = df_me['Estimate ID'].apply(lambda s : re.sub("M", "E", s))
-        df_census_me = df_census_me.merge(df_me, on = ['Estimate ID'] + geo_ID + ['Year'], how = 'left')
-        df_census_me['Year'] = df_census_me['Year'].astype(str)
-        df_census = df_census_me.copy()
 
     df_census['Race_Ethnicity_sort'] = pd.Categorical(df_census['Race_Ethnicity'], ['All'
                                                                 , 'American Indian or Alaska Native'
@@ -351,8 +399,7 @@ def acs_processing_2(df_census, geography, margin_of_error):
     
     return df_census
 
-
-def acs_processing_3(df_census, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips=None):
+def acs_processing_4(df_census, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips=None):
 
     '''
     User defined function to clean/process ACS data for rolling up geography/variable mappings 
@@ -361,7 +408,10 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
     '''
 
     print('')
-    print('Processing 3...')
+    print('Processing Step 4:')
+    print('Roll up estimates (and margin of errors) to user defined variable groupings...')
+    print('Calculate percentages by geography and year combinations, if needed...')
+    print('Reshape data from rows to columns...')
 
     if geography == 'Places':
         geo_ID = ['State FIPS', 'Place ID', 'NAME']
@@ -584,12 +634,13 @@ def acs_processing_3(df_census, indicator_name, geography, percentages, margin_o
         return df_census1, df_census2
 
 
-
+## PUMS processing steps
 
 def pums_processing_1(df_census, df_vars, sample_type, weight):
 
     print('')
-    print('Processing 1...')
+    print('Processing Step 1:')
+    print('Cleans FIPS codes fields, subsets to head of household (LEHD), reassigns raw variable values with the description, ...')
 
     groups  = list(df_vars[df_vars['Data Type'].str.contains('group')]['ID2'].unique())
     groups2 = list(df_vars[df_vars['Data Type'] ==           'group' ]['ID2'].unique())
@@ -639,11 +690,11 @@ def pums_processing_1(df_census, df_vars, sample_type, weight):
 
     return df_census, groups
 
-
 def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0, path_git):
     
     print('')
-    print('Processing 2...')
+    print('Processing Step 2:')
+    print()
 
     df_census = df_census.dropna()
     df_census = df_census.rename(columns = {'state':'State FIPS', 'county':'County FIPS'})
@@ -758,7 +809,6 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
             groups.remove('JWTRNS')
 
     return df_census, groups
-
 
 def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_thresh, percentages, groups):
 
@@ -1041,7 +1091,7 @@ def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_th
     return df_puma, df_counties, df_msa, df_mpo, groups
 
 
-
+## FOODSEC processing steps
 
 def food_processing_3(df_census, weight, percentages, groups):
 
@@ -1084,10 +1134,11 @@ def food_processing_3(df_census, weight, percentages, groups):
     return df_counties, df_mpo, groups
 
 
-
+## LEHD processing steps
 
 def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=None):
     if indicator_name == 'Jobs_4':
+        df_census['firmage'] = df_census['firmage'].astype('int')
         df_census = df_census[df_census['firmage'] != 0]
         df_census.loc[ df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Less than or equal to 5 years old'
         df_census.loc[~df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Greater than 5 years old'
@@ -1102,6 +1153,7 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
             df_census = df_census.merge(df_mpo, on = ['County Name'], how = 'left')
             
             df_census = df_census[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'Quarter', 'Firm Age', 'Emp']]
+            df_census['Emp'] = df_census['Emp'].astype('int')
 
             df_census['State FIPS' ] = df_census['State FIPS' ].astype(str).apply('{:0>2}'.format)
             df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
@@ -1142,6 +1194,7 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
 
 
 
+## Final organization/renaming of census data
 
 def rename_census(
         indicator_name, geography, sample_type, margin_of_error, percentages=None, groups=None, table_type=None,
@@ -1387,7 +1440,8 @@ def rename_census(
 
 
 
-# Line plot for data visualization
+## Line plot for data visualization
+
 def plot_lines(
     df
      , loop_vars, by_race, race_ethnicity, variable
@@ -1434,7 +1488,7 @@ def plot_lines(
 ### BLS FUNCTIONS -----------------------------------------------------------------------------------------------------------------
 
 
-def dict_maker(survey, geography, seasonal, df=None, sector=None, data_type=None, measure_code=None):
+def dict_maker(survey, geography, seasonal, df=None, list_sectors=None, data_type=None, measure_code=None):
     """
     Given the file: BLS Configuration File.xlsx under the BLS_MSA sheet, we can create a dictionary of 
     all of the MSA counties we want to test. Provide the sector (industry) that you want to pull, and the function will
@@ -1458,13 +1512,14 @@ def dict_maker(survey, geography, seasonal, df=None, sector=None, data_type=None
             area_code = str(df.loc[i, 'area_code'])
     
             if survey in ['LA']:
-                series_id = str(survey) + str(seasonal) + str(area_code)  + str(measure_code)
+                series_id = [str(survey) + str(seasonal) + str(area_code)  + str(measure_code)]
+
             if survey in ['SM', 'CE']:
                 state     = str(df.loc[i, 'State FIPS'])
-                series_id = str(survey) + str(seasonal) + str(state) + str(area_code) + str(sector) + str(data_type)
-            keys.append(series_id)
-            val = str(df.loc[i, 'area_text'])
-            vals.append(val)
+                series_id = list(map(lambda sector: str(survey) + str(seasonal) + str(state) + str(area_code) + str(sector) + str(data_type), list_sectors))
+                
+            keys.append(str(df.loc[i, 'area_text']))
+            vals.append(series_id)
         
     if geography == 'National':
 
@@ -1472,10 +1527,13 @@ def dict_maker(survey, geography, seasonal, df=None, sector=None, data_type=None
         # Construct the Series ID
         # Add Series ID and National label to lists
 
-        series_id = str(survey) + str(seasonal) + str(sector) + str(data_type)
-        keys.append(series_id)
-        val = 'National'
-        vals.append(val)
+        if survey in ['LA']:
+                series_id = str(survey) + str(seasonal) + str(area_code)  + str(measure_code)
+        if survey in ['SM', 'CE']:
+            series_id = list(map(lambda sector: str(survey) + str(seasonal) + str(sector) + str(data_type), list_sectors))
+                
+        keys.append('National')
+        vals.append(series_id)
 
 
     # Convert list of keys and values to dictionary
@@ -1506,7 +1564,7 @@ def bls_query_update(api_key, series_dict, dates):
     list_df = []
 
     # Queries ten years at once
-    year_step = 10
+    year_step = 20
 
     # Loop through the specified range of years in step intervals
     for year_range_start in range(dates[0], dates[1] + 1, year_step):
