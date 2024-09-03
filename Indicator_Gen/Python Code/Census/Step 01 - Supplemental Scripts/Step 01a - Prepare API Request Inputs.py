@@ -1,5 +1,37 @@
+print('Census Bureau import parameters:')
+print('')
 
-print("Preparing API request inputs...")
+# Import objects
+df_params = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = 'Inputs')
+
+# Set parameters for querying Census data
+indicator_name     = df_params[df_params['Type'] == 'indicator_name' ]['Input'].values[0]
+estimate           = df_params[df_params['Type'] == 'estimate'       ]['Input'].values[0]
+sample_type        = df_params[df_params['Type'] == 'sample'         ]['Input'].values[0]
+geography          = df_params[df_params['Type'] == 'geography'      ]['Input'].values[0]
+import_tab         = df_params[df_params['Type'] == 'import_tab'     ]['Input'].values[0]
+margin_of_error    = df_params[df_params['Type'] == 'margin_of_error']['Input'].values[0]
+year_start         = df_params[df_params['Type'] == 'year_start'     ]['Input'].values[0]
+year_end           = df_params[df_params['Type'] == 'year_end'       ]['Input'].values[0]
+
+# View
+print('Indicator name:   ' + indicator_name )
+print('Sample:           ' + sample_type    )
+print('Estimate:         ' + estimate       )
+print('Final geography:  ' + geography      )
+print('Import geography: ' + import_tab     )
+print('Margin of error:  ' + margin_of_error)
+print('Start year:       ' + str(year_start))
+print('End year:         ' + str(year_end  ))
+
+
+
+
+print('')
+print('')
+print("API request inputs:")
+print('')
+
 
 
 ## Import Variable Mapping
@@ -10,6 +42,8 @@ if year_start == 'timeseries':
     pass
 else:
     years_to_import = list(range(year_start, year_end+1))
+
+
 
 ## For DEC data
 if estimate == 'DEC':
@@ -53,6 +87,8 @@ if estimate == 'DEC':
     print('')
     print('Variables set to import by year:')
     print(dict_vars)
+
+
 
 ## For ACS1 or ACS5 data
 if sample_type in ['ACS', 'SUBJECT']:
@@ -102,7 +138,6 @@ if sample_type in ['ACS', 'SUBJECT']:
         print('Variables set to import:')
         print(list_vars)
 
-    
     # For MSA level pull
     if import_tab == 'MSA':
     
@@ -118,6 +153,7 @@ if sample_type in ['ACS', 'SUBJECT']:
         print("")
         print("List of variables to import:")
         print(list_vars)
+
 
 
 ## For PUMS data
@@ -192,6 +228,7 @@ if sample_type == 'PUMS':
 
 
 
+## For CPS data
 if estimate == 'CPS':
     
     df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = sample_type)
@@ -205,7 +242,6 @@ if estimate == 'CPS':
         table_type = 'P'
         weight = 'PWSSWGT'
         
-    
     dict_vars = {}
     for year in years_to_import:
         dict_vars[str(year)] = unique(df_vars[df_vars['Year'] == year]['ID'].to_list()) + [weight]
@@ -232,7 +268,7 @@ if estimate == 'CPS':
     print(dict_vars)
 
 
-
+## For LEHD data
 if estimate == 'LEHD':
     df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = estimate)
     df_vars = df_vars[df_vars['Sample'] == sample_type]
@@ -307,7 +343,9 @@ if estimate == 'LEHD':
 
 
 
+
 # view
 print('')
 print('Variable Mapping table:')
-df_vars.head(3)
+display(df_vars.head(3))
+
