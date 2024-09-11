@@ -1,3 +1,12 @@
+# MASTER FILE FOR ABOUT TAB EXPORTS.
+
+# If you want to edit any of these indicators, it's easiest to just CTRL + F the sample or indicator, and edit from there. 
+
+# A lot of these were built from already existing about tabs. 
+
+# Note: For the Census, we have both 5 year and 1 year samples we have to worry about.
+# Bc of this, there are two nests. '5YEAR' and '1YEAR'. User must define which one they want to pull by defining so in the function call. 
+
 DOF:  
   Pop_1:
     Indicator Title:
@@ -5,7 +14,7 @@ DOF:
     Source:
     - California Department of Finance E-5 (current decade) and E-8 (prior) series
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Estimated population
     Geography:
@@ -13,14 +22,14 @@ DOF:
     Website:
     - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Notes: The Department of Finance prepares its population estimates in ten-year series.
-      Each ten-year series begins with the results of the decennial census (census benchmark).
+    - 
+    Notes: The Department of Finance prepares its population estimates in ten-year series. \n
+      Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census
       periods, as the difference between the final year of the prior series and the
-      first of the new may stem largely from the new census benchmark. The monitoring
+      first of the new may stem largely from the new census benchmark. \n The monitoring
       program uses the decennial census benchmark for the decennial years (2000, 2010,
-      2020 etc.). The decennial census benchmark is for April 1st of the decennial year;
+      2020 etc.). \n The decennial census benchmark is for April 1st of the decennial year;
       all other population estimates are for January 1st of the given year.
   Pop_2:
     Indicator Title:
@@ -28,7 +37,7 @@ DOF:
     Source:
     - California Department of Finance E-5 (current decade) and E-8 (prior) series
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Percent change year over year
     Geography:
@@ -36,22 +45,23 @@ DOF:
     Website:
     - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Notes: The Department of Finance prepares its population estimates in ten-year series.
-      Each ten-year series begins with the results of the decennial census (census benchmark).
+    - 
+    Notes: The Department of Finance prepares its population estimates in ten-year series. \n
+      Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census
       periods, as the difference between the final year of the prior series and the
-      first of the new may stem largely from the new census benchmark. The monitoring
+      first of the new may stem largely from the new census benchmark. \n The monitoring
       program uses the decennial census benchmark for the decennial years (2000, 2010,
-      2020 etc.). The decennial census benchmark is for April 1st of the decennial year;
+      2020 etc.). \n The decennial census benchmark is for April 1st of the decennial year;
       all other population estimates are for January 1st of the given year.
+
   Pop_5:
     Indicator Title:
     - Population growth rate in largest regions
     Source:
     - California Department of Finance E-5 (current decade) and E-8 (prior) series
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Percent change year over year
     Geography:
@@ -59,14 +69,14 @@ DOF:
     Website:
     - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Notes: The Department of Finance prepares its population estimates in ten-year series.
-      Each ten-year series begins with the results of the decennial census (census benchmark).
+    - 
+    Notes: The Department of Finance prepares its population estimates in ten-year series. \n
+      Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census
       periods, as the difference between the final year of the prior series and the
-      first of the new may stem largely from the new census benchmark. The monitoring
+      first of the new may stem largely from the new census benchmark. \n The monitoring
       program uses the decennial census benchmark for the decennial years (2000, 2010,
-      2020 etc.). The decennial census benchmark is for April 1st of the decennial year;
+      2020 etc.). \n The decennial census benchmark is for April 1st of the decennial year;
       all other population estimates are for January 1st of the given year.
 
     Pop_6:
@@ -75,7 +85,7 @@ DOF:
       Source:
       - California Department of Finance E-5 (current decade) and E-8 (prior) series
       Year(s):
-      - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+      - 
       Description:
       -
       Geography:
@@ -83,17 +93,17 @@ DOF:
       Website:
       - 
       Last Updated:
-      - date.today().strftime('%Y-%m-%d')
+      - 
       Notes:
       -
-    # THESE 2 PRODS R DOF
+
   Production_2:
     Indicator Title:
     - Total new dwelling units by single family/multi-family
     Source:
     - DOF Housing Series
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -101,7 +111,7 @@ DOF:
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     -
   
@@ -111,7 +121,7 @@ DOF:
     Source:
     - DOF Housing Series
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -119,375 +129,1061 @@ DOF:
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     -
 
-ACS:
-  Pop_3:
-    Indicator Title:
-    - Population by Race/Ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of population at various geographies based Census Bureau
-      race/ethnicity categories
-    Geography:
-    - SACOG Region (MPO), counties, and census tracts
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
-      as well as the percentage. \n Key terms \n Rolling Average: The data are reported in
-      5 year rolling averages. For example, the 2022 output is not the individual year
-      of 2022, but the 5 year average of 2018-2022. Users looking for single year results
-      should use the separate 1 year ACS series. \n Margin of Error: all ACS outputs are
-      estimates. The downloadable data includes the margin of error statistics. Users
-      should pay particular to the margin of error, especially for smaller geographies
-      and race/ethnicity groups with relatively less population.\n State and County FIPS
-      are census numeric codes for different geographies'
-  Pop_4:
-    Indicator Title:
-    - Population by age cohorts
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of population at various geographies in three age cohorts
-      (below 18, 18 to 64, and 65 and above)
-    Geography:
-    - SACOG Region (MPO), counties, and census tracts
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Each of these geographies has the total population estimate by age cohort,
-      as well as the percentage. Key terms Rolling Average: The data are reported in
-      5 year rolling averages. For example, the 2022 output is not the individual year
-      of 2022, but the 5 year average of 2018-2022. Users looking for single year results
-      should use the separate 1 year ACS series Margin of Error: all ACS outputs are
-      estimates. The downloadable data includes the margin of error statistics. Users
-      should pay particular to the margin of error, especially for smaller geographies
-      and race/ethnicity groups with relatively less population.  State and County FIPS
-      are census numeric codes for different geographies'
+5YEAR:
+  ACS:
+    Pop_3:
+      Indicator Title:
+      - Population by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of population at various geographies based Census Bureau
+        race/ethnicity categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
+        as well as the percentage. \n Key terms \n Rolling Average: The data are reported in
+        5 year rolling averages. For example, the 2022 output is not the individual year
+        of 2022, but the 5 year average of 2018-2022. Users looking for single year results
+        should use the separate 1 year ACS series. \n Margin of Error: all ACS outputs are
+        estimates. The downloadable data includes the margin of error statistics. Users
+        should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population.\n State and County FIPS
+        are census numeric codes for different geographies'
+    Pop_4:
+      Indicator Title:
+      - Population by age cohorts
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of population at various geographies in three age cohorts
+        (below 18, 18 to 64, and 65 and above)
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Each of these geographies has the total population estimate by age cohort,
+        as well as the percentage. \n Key terms \n Rolling Average: The data are reported in
+        5 year rolling averages. For example, the 2022 output is not the individual year
+        of 2022, but the 5 year average of 2018-2022. Users looking for single year results
+        should use the separate 1 year ACS series \n Margin of Error: all ACS outputs are
+        estimates. The downloadable data includes the margin of error statistics. Users
+        should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population. \n State and County FIPS
+        are census numeric codes for different geographies'
 
-  Labor_1:
-    Indicator Title:
-    - Labor Force
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of working age population in the formal labor force, by
-      race/ethnicity
-    Geography:
-    - SACOG Region (MPO)
-    Website:
-    - American Community Survey (ACS) (census.gov)
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Key terms Rolling Average: The data are reported in 5 year rolling averages.
-      For example, the 2022 output is not the individual year of 2022, but the 5 year
-      average of 2018-2022. Users looking for single year results should use the separate
-      1 year ACS series Margin of Error: all ACS outputs are estimates. The downloadable
-      data includes the margin of error statistics. Users should pay particular to the
-      margin of error, especially for smaller geographies and race/ethnicity groups
-      with relatively less population. '
+    Labor_1:
+      Indicator Title:
+      - Labor Force
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of working age population in the formal labor force, by
+        race/ethnicity
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - American Community Survey (ACS) (census.gov)
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Rolling Average: The data are reported in 5 year rolling averages.
+        For example, the 2022 output is not the individual year of 2022, but the 5 year
+        average of 2018-2022. Users looking for single year results should use the separate
+        1 year ACS series. \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
 
-  Cost_3:
-    Indicator Title:
-    - Unoccupied Housing Units
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of residential housing occupancy
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Margin of Error: all ACS outputs are estimates. The downloadable data includes
-      the margin of error statistics. Users should pay particular attention to the margin
-      of error, especially for smaller geographies and race/ethnicity groups with relatively
-      less population.  Rolling Average: The data are reported in 5 year rolling averages.
-      For example, the 2022 output is not the individual year of 2022, but the 5 year
-      average of 2018-2022. Users looking for single year results should use the separate
-      1 year ACS series'
-  
-  Cost_5:
-    Indicator Title:
-    - Homeownership by Race/Ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of household homeownership across comparison regions based
-      Census Bureau race/ethnicity categories
-    Geography:
-    - SACOG Region, plus comparator peer regions (at Metropolitan Statistical Area)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'The indicator is measured at the household (not individual) level. Key terms
-      Rolling Average: The data are reported in 5 year rolling averages. For example,
-      the 2022 output is not the individual year of 2022, but the 5 year average of
-      2018-2022. Users looking for single year results should use the separate 1 year
-      ACS series Margin of Error: all ACS outputs are estimates. The downloadable data
-      includes the margin of error statistics. Users should pay particular to the margin
-      of error, especially for smaller geographies and race/ethnicity groups with relatively
-      less population. '
+    Cost_3:
+      Indicator Title:
+      - Unoccupied Housing Units
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of residential housing occupancy
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key Terms \n Margin of Error: all ACS outputs are estimates. The downloadable data includes
+        the margin of error statistics. Users should pay particular attention to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population.  \n Rolling Average: The data are reported in 5 year rolling averages.
+        For example, the 2022 output is not the individual year of 2022, but the 5 year
+        average of 2018-2022. Users looking for single year results should use the separate
+        1 year ACS series'
+    
+    Cost_5:
+      Indicator Title:
+      - Homeownership by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of household homeownership across comparison regions based
+        Census Bureau race/ethnicity categories
+      Geography:
+      - SACOG Region, plus comparator peer regions (at Metropolitan Statistical Area)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the household (not individual) level. \n Key terms \n 
+        Rolling Average: The data are reported in 5 year rolling averages. For example,
+        the 2022 output is not the individual year of 2022, but the 5 year average of
+        2018-2022. Users looking for single year results should use the separate 1 year
+        ACS series \n Margin of Error: all ACS outputs are estimates. The downloadable data
+        includes the margin of error statistics. Users should pay particular to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population. '
 
-  Income_1:
-    Indicator Title:
-    - Median Household Income
-    Source:
-    - Census 1 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 1 year estimate of median housheold income by region
-    Geography:
-    - MSA mid size national comparison regions and California comparison regions
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes:
-    - 'The indicator measures household income in inflation adjusted dollars ($2022) \n Key Terms- \n Margin of Error: all ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population. '
+    Income_1:
+      Indicator Title:
+      - Median Household Income
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year estimate of median housheold income by region
+      Geography:
+      - MSA mid size national comparison regions and California comparison regions
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes:
+      - 'The indicator measures household income in inflation adjusted dollars ($2022) \n
+        Key Terms- \n
+        Margin of Error: all ACS outputs are estimates.
+        The downloadable data includes the margin of error statistics.
+        Users should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population. '
 
-  Income_3:
-    Indicator Title:
-    - Median Household Income by Race/Ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of median housheold income by Census Bureau race and ethnicity
-      categories
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'The indicator compares the median household income by individual race/ethnicities
-      to the regional average. A value above 1 means the groups has a median household
-      income above regional median (while below 1 means below regional level) Key terms
-      Rolling Average: The data are reported in 5 year rolling averages. For example,
-      the 2022 output is not the individual year of 2022, but the 5 year average of
-      2018-2022. Users looking for single year results should use the separate 1 year
-      ACS series Margin of Error: all ACS outputs are estimates. The downloadable data
-      includes the margin of error statistics. Users should pay particular to the margin
-      of error, especially for smaller geographies and race/ethnicity groups with relatively
-      less population. '
+    Income_3:
+      Indicator Title:
+      - Median Household Income by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of median housheold income by Census Bureau race and ethnicity
+        categories
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator compares the median household income by individual race/ethnicities
+        to the regional average. \n A value above 1 means the groups has a median household
+        income above regional median (while below 1 means below regional level) \n Key terms \n
+        Rolling Average: The data are reported in 5 year rolling averages. For example,
+        the 2022 output is not the individual year of 2022, but the 5 year average of
+        2018-2022. Users looking for single year results should use the separate 1 year
+        ACS series. \n Margin of Error: all ACS outputs are estimates. The downloadable data
+        includes the margin of error statistics. Users should pay particular to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population. '
 
-  Income_4:
-    Indicator Title:
-    - Poverty rate by race/ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of % of households within census federal definition of
-      poverty
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Key terms Rolling Average: The data are reported in 5 year rolling averages.
-      For example, the 2022 output is not the individual year of 2022, but the 5 year
-      average of 2018-2022. Users looking for single year results should use the separate
-      1 year ACS series Margin of Error: all ACS outputs are estimates. The downloadable
-      data includes the margin of error statistics. Users should pay particular to the
-      margin of error, especially for smaller geographies and race/ethnicity groups
-      with relatively less population. '
-  Commute_1:
-    Indicator Title:
-    - Estimate Mode of Commute through time
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of estimated travel mode to work
-    Geography:
-    - SACOG Region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Key terms Rolling Average: The data are reported in 5 year rolling averages.
-      For example, the 2022 output is not the individual year of 2022, but the 5 year
-      average of 2018-2022. Users looking for single year results should use the separate
-      1 year ACS series Margin of Error: all ACS outputs are estimates. The downloadable
-      data includes the margin of error statistics. Users should pay particular to the
-      margin of error, especially for smaller geographies and race/ethnicity groups
-      with relatively less population. '
+    Income_4:
+      Indicator Title:
+      - Poverty rate by race/ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of % of households within census federal definition of
+        poverty
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Rolling Average: The data are reported in 5 year rolling averages.
+        For example, the 2022 output is not the individual year of 2022, but the 5 year
+        average of 2018-2022. Users looking for single year results should use the separate
+        1 year ACS series. \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+    Commute_1:
+      Indicator Title:
+      - Estimate Mode of Commute through time
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of estimated travel mode to work
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Rolling Average: The data are reported in 5 year rolling averages.
+        For example, the 2022 output is not the individual year of 2022, but the 5 year
+        average of 2018-2022. Users looking for single year results should use the separate
+        1 year ACS series. \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
 
-  Edu_1:
-    Indicator Title:
-    - Educational Attainment by Race/Ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of educational attainment at different geographies based
-      Census Bureau race/ethnicity categories
-    Geography:
-    - SACOG Region (MPO), counties, and census tracts
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
-      as well as the percentage. Key terms Rolling Average: The data are reported in
-      5 year rolling averages. For example, the 2022 output is not the individual year
-      of 2022, but the 5 year average of 2018-2022. Users looking for single year results
-      should use the separate 1 year ACS series Margin of Error: all ACS outputs are
-      estimates. The downloadable data includes the margin of error statistics. Users
-      should pay particular to the margin of error, especially for smaller geographies
-      and race/ethnicity groups with relatively less population.  State and County FIPS
-      are census numeric codes for different geographies'
+    Edu_1:
+      Indicator Title:
+      - Educational Attainment by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of educational attainment at different geographies based
+        Census Bureau race/ethnicity categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
+        as well as the percentage. \n Key terms \n Rolling Average: The data are reported in
+        5 year rolling averages. For example, the 2022 output is not the individual year
+        of 2022, but the 5 year average of 2018-2022. Users looking for single year results
+        should use the separate 1 year ACS series. \n Margin of Error: all ACS outputs are
+        estimates. The downloadable data includes the margin of error statistics. Users
+        should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population.  State and County FIPS
+        are census numeric codes for different geographies'
 
-  Health_2:
-    Indicator Title:
-    - Health Insurance by Race/Ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average at various geographies based Census Bureau race/ethnicity
-      categories
-    Geography:
-    - SACOG Region (MPO), counties, and census tracts
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Key terms Rolling Average: The data are reported in 5 year rolling averages.
-      For example, the 2022 output is not the individual year of 2022, but the 5 year
-      average of 2018-2022. Users looking for single year results should use the separate
-      1 year ACS series Margin of Error: all ACS outputs are estimates. The downloadable
-      data includes the margin of error statistics. Users should pay particular to the
-      margin of error, especially for smaller geographies and race/ethnicity groups
-      with relatively less population. '
+    Health_2:
+      Indicator Title:
+      - Health Insurance by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average at various geographies based Census Bureau race/ethnicity
+        categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Rolling Average: The data are reported in 5 year rolling averages.
+        For example, the 2022 output is not the individual year of 2022, but the 5 year
+        average of 2018-2022. Users looking for single year results should use the separate
+        1 year ACS series \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
 
-  Broadband_2:
-    Indicator Title:
-    - Household Internet Access by Race/Ethnicity
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average at various geographies based Census Bureau race/ethnicity
-      categories
-    Geography:
-    - SACOG Region (MPO), counties, and census tracts
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Low speed defined as having a computer with dial-up internet subscription
-      alone while high speed defined as computer with broadband internet subscription.
-      Metric is tracked on the household, not individual, level Key terms Rolling Average:
-      The data are reported in 5 year rolling averages. For example, the 2022 output
-      is not the individual year of 2022, but the 5 year average of 2018-2022. Users
-      looking for single year results should use the separate 1 year ACS series Margin
-      of Error: all ACS outputs are estimates. The downloadable data includes the margin
-      of error statistics. Users should pay particular to the margin of error, especially
-      for smaller geographies and race/ethnicity groups with relatively less population. '
-  Income_3:
-    Indicator Title:
-    - Median Household Income by Race/Ethnicity
-    Source:
-    - Census ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of median housheold income by Census Bureau race and ethnicity categories
-    Geography:
-    - SACOG Region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Notes:
-    - 'The indicator is in inflation-adjusted dollars \n 
-      The indicator compares the median household income by individual
-      race/ethnicities to the regional average. 
-      A value above 1 means the groups has a median household income above
-      regional median (while below 1 means below regional level) \n Key Terms: \n
-      Rolling Average: The data are reported in 5 year rolling averages. 
-      For example, the 2022 output is not the individual year of 2022, 
-      but the 5 year average of 2018-2022. Users looking for single year 
-      results should use the separate 1 year ACS series \n 
-      Margin of Error: all ACS outputs are estimates. The downloadable data 
-      includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population. 
-    '
+    Broadband_2:
+      Indicator Title:
+      - Household Internet Access by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average at various geographies based Census Bureau race/ethnicity
+        categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Low speed defined as having a computer with dial-up internet subscription
+        alone while high speed defined as computer with broadband internet subscription. \n
+        Metric is tracked on the household, not individual, level \n Key terms \n Rolling Average:
+        The data are reported in 5 year rolling averages. For example, the 2022 output
+        is not the individual year of 2022, but the 5 year average of 2018-2022. Users
+        looking for single year results should use the separate 1 year ACS series \n Margin
+        of Error: all ACS outputs are estimates. The downloadable data includes the margin
+        of error statistics. Users should pay particular to the margin of error, especially
+        for smaller geographies and race/ethnicity groups with relatively less population. '
 
-  Income_4:
-    Indicator Title:
-    - Poverty rate by race/ethnicity
-    Source:
-    - Census ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of % of households within census federal definition of poverty
-    Geography:
-    - SACOG Region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes:
-    - 'Measures households living in poverty using the census official poverty measure. The census poverty measure compares pretax money to a threshold adjusted by family size and for inflation through time. Importantly, the Census Bureau uses the same poverty threshold throughout the United States, which does not fully reflect the effect of high housing costs in states such as California. Recognizing this limitation, the monitoring program uses the indicator for a relative comparison across race/ethnicity. \n 
-      \n Key terms: \n
-      Rolling Average: The data are reported in 5 year rolling averages. For example, the 2022 output is not the individual year of 2022, but the 5 year average of 2018-2022. Users looking for single year results should use the separate 1 year ACS series \n
-      Margin of Error: all ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population.'
+    Income_1:
+      Indicator Title:
+      - Median Household Income
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of median housheold income by region
+      Geography:
+      - MSA mid size national comparison regions and California comparison regions
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n  Rolling Average: The data are reported in 5 year rolling averages.
+        For example, the 2022 output is not the individual year of 2022, but the 5 year
+        average of 2018-2022. Users looking for single year results should use the separate
+        1 year ACS series \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+
+    Income_3:
+      Indicator Title:
+      - Median Household Income by Race/Ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of median housheold income by Census Bureau race and ethnicity categories
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Notes:
+      - 'The indicator is in inflation-adjusted dollars \n 
+        The indicator compares the median household income by individual
+        race/ethnicities to the regional average. 
+        A value above 1 means the groups has a median household income above
+        regional median (while below 1 means below regional level) \n Key Terms: \n
+        Rolling Average: The data are reported in 5 year rolling averages. 
+        For example, the 2022 output is not the individual year of 2022, 
+        but the 5 year average of 2018-2022. Users looking for single year 
+        results should use the separate 1 year ACS series \n 
+        Margin of Error: all ACS outputs are estimates. The downloadable data 
+        includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population. 
+      '
+
+    Income_4:
+      Indicator Title:
+      - Poverty rate by race/ethnicity
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of % of households within census federal definition of poverty
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes:
+      - 'Measures households living in poverty using the census official poverty measure. The census poverty measure compares pretax money to a threshold adjusted by family size and for inflation through time. Importantly, the Census Bureau uses the same poverty threshold throughout the United States, which does not fully reflect the effect of high housing costs in states such as California. Recognizing this limitation, the monitoring program uses the indicator for a relative comparison across race/ethnicity. \n 
+        \n Key terms: \n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, the 2022 output is not the individual year of 2022, but the 5 year average of 2018-2022. Users looking for single year results should use the separate 1 year ACS series \n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+  PUMS:
+    Accessibility_1:
+      Indicator Title:
+      - Commute modes by race/ethnicity
+      Source:
+      - Census PUMS, 5 year ACS
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of head of commute modes by race/ethnicity
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the person level \n Key terms \n Margin of Error:
+        all ACS outputs are estimates. The downloadable data includes the margin of error
+        statistics. Users should pay particular to the margin of error, especially for
+        smaller geographies and race/ethnicity groups with relatively less population. \n
+        Given that this indicator uses 1 year ACS, it will have a higher margin of error
+        compared to the 5 year rolling average'
+
+    Accessibility_2:
+      Indicator Title:
+      - Commute modes by income bracket
+      Source:
+      - Census PUMS, 5 year ACS
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of head of household commute modes by income bracket
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'CPI Inflation Adjustment Factors.xlsx (sharepoint.com) \n The income brackets
+        (Low, Moderate, and High) are organized uniquely to each county, using the state
+        guidelines Income Limits 2023 (ca.gov) \n Key terms \n Rolling Average: The data are
+        reported in 5 year rolling averages. For example, the 2022 output is not the individual
+        year of 2022, but the 5 year average of 2018-2022. Users looking for single year
+        results should use the separate 1 year ACS series \n Margin of Error: all ACS outputs
+        are estimates. The downloadable data includes the margin of error statistics.
+        Users should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population.'
+
+    Accessibility_3:
+      Indicator Title:
+      - Vehicle ownership by household
+      Source:
+      - Census PUMS, 5 year ACS
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of household vehicle ownership
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the household level \n Key terms \n Rolling Average:
+        The data are reported in 5 year rolling averages. For example, the 2022 output
+        is not the individual year of 2022, but the 5 year average of 2018-2022. Users
+        looking for single year results should use the separate 1 year ACS series \n Margin
+        of Error: all ACS outputs are estimates. The downloadable data includes the margin
+        of error statistics. Users should pay particular to the margin of error, especially
+        for smaller geographies and race/ethnicity groups with relatively less population. '
+
+    Accessibility_4:
+      Indicator Title:
+      - Commute times by income bracket and by race/ethnicity
+      Source:
+      - Census PUMS, 5 year ACS
+      Year(s):
+      - 
+      Description:
+      - 5 year rolling average of head of household commute times by income bracket and
+        by race/ethnicity
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'CPI Inflation Adjustment Factors.xlsx (sharepoint.com) \n The income brackets
+        (Low, Moderate, and High) are organized uniquely to each county, using the state
+        guidelines Income Limits 2023 (ca.gov) \n Key terms \n Rolling Average: The data are
+        reported in 5 year rolling averages. For example, the 2022 output is not the individual
+        year of 2022, but the 5 year average of 2018-2022. Users looking for single year
+        results should use the separate 1 year ACS series \n Margin of Error: all ACS outputs
+        are estimates. The downloadable data includes the margin of error statistics.
+        Users should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population. '
+
+    Income_2:
+      Indicator Title:
+      - Household Income by Categories
+      Source:
+      - Census ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Rolling average of % of households within income categories
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Notes:
+      - 'The indicator measures household income in 2023 inflation adjusted dollars ($). \n
+
+        The income brackets (Low, Moderate, and High) are organized uniquely to each county, using the state guidelines.
+        https://www.hcd.ca.gov/sites/default/files/docs/grants-and-funding/income-limits-2023.pdf \n
+        
+        Key Terms - \n
+        - Rolling Average: The data are reported in 5-year rolling averages. For example, the 2022 output is not the individual year of 2022, but the 5-year average of 2018-2022. Users looking for single-year results should use the separate 1-year ACS series. \n 
+        - Margin of Error: All ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular attention to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively smaller populations.'
+
+    Cost_6:
+      Indicator Title:
+      - Housing Cost Burden by Race/Ethnicity
+      Source:
+      - Census PUMS, 1 year ACS
+      Year(s):
+      - 
+      Description:
+      - 'Yearly estimate of head of household spending on housing in three ranges: below
+        30% of income, 30 to 50% and above 50%, by race/ethnicity and ownership type.
+        Above 30% termed as housing cost burdened'
+      Geography:
+      - Sacramento region MSAs, plus comparator peer regions (at Metropolitan Statistical
+        Area)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the householders (head of household) level \n
+        Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable data
+        includes the margin of error statistics. Users should pay particular to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population. Given that this indicator uses 1 year ACS, it will have a higher
+        margin of error compared to the 5 year rolling average'
+
+1YEAR:
+  ACS:
+    Pop_3:
+      Indicator Title:
+      - Population by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year rolling average of population at various geographies based Census Bureau
+        race/ethnicity categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
+        as well as the percentage. \n Key terms \n Margin of Error: all ACS outputs are
+        estimates. The downloadable data includes the margin of error statistics. Users
+        should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population.\n State and County FIPS
+        are census numeric codes for different geographies'
+    Pop_4:
+      Indicator Title:
+      - Population by age cohorts
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year rolling average of population at various geographies in three age cohorts
+        (below 18, 18 to 64, and 65 and above)
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Each of these geographies has the total population estimate by age cohort,
+        as well as the percentage. \n Key terms \n Margin of Error: all ACS outputs are
+        estimates. The downloadable data includes the margin of error statistics. Users
+        should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population. \n State and County FIPS
+        are census numeric codes for different geographies'
+
+    Labor_1:
+      Indicator Title:
+      - Labor Force
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate of working age population in the formal labor force, by
+        race/ethnicity
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - American Community Survey (ACS) (census.gov)
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+
+    Cost_3:
+      Indicator Title:
+      - Unoccupied Housing Units
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year rolling average of residential housing occupancy
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key Terms \n Margin of Error: all ACS outputs are estimates. The downloadable data includes
+        the margin of error statistics. Users should pay particular attention to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population.'
+    
+    Cost_5:
+      Indicator Title:
+      - Homeownership by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of household homeownership across comparison regions based
+        Census Bureau race/ethnicity categories
+      Geography:
+      - SACOG Region, plus comparator peer regions (at Metropolitan Statistical Area)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the household (not individual) level. \n Key terms
+       \n Margin of Error: all ACS outputs are estimates. The downloadable data
+        includes the margin of error statistics. Users should pay particular to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population. '
+
+    Income_1:
+      Indicator Title:
+      - Median Household Income
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of median housheold income by region
+      Geography:
+      - MSA mid size national comparison regions and California comparison regions
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes:
+      - 'The indicator measures household income in inflation adjusted dollars ($2022) \n
+        Key Terms- \n
+        Margin of Error: all ACS outputs are estimates.
+        The downloadable data includes the margin of error statistics.
+        Users should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population. '
+
+    Income_3:
+      Indicator Title:
+      - Median Household Income by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of median housheold income by Census Bureau race and ethnicity
+        categories
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator compares the median household income by individual race/ethnicities
+        to the regional average. \n A value above 1 means the groups has a median household
+        income above regional median (while below 1 means below regional level) \n Key terms \n
+        Margin of Error: all ACS outputs are estimates. The downloadable data
+        includes the margin of error statistics. Users should pay particular to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population. '
+
+    Income_4:
+      Indicator Title:
+      - Poverty rate by race/ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate of % of households within census federal definition of
+        poverty
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+
+    Commute_1:
+      Indicator Title:
+      - Estimate Mode of Commute through time
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate of estimated travel mode to work
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+
+    Edu_1:
+      Indicator Title:
+      - Educational Attainment by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate of educational attainment at different geographies based
+        Census Bureau race/ethnicity categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
+        as well as the percentage. \n Key terms \n Margin of Error: all ACS outputs are
+        estimates. The downloadable data includes the margin of error statistics. Users
+        should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population.  State and County FIPS
+        are census numeric codes for different geographies'
+
+    Health_2:
+      Indicator Title:
+      - Health Insurance by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate at various geographies based Census Bureau race/ethnicity
+        categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+
+    Broadband_2:
+      Indicator Title:
+      - Household Internet Access by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate at various geographies based Census Bureau race/ethnicity
+        categories
+      Geography:
+      - SACOG Region (MPO), counties, and census tracts
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Low speed defined as having a computer with dial-up internet subscription
+        alone while high speed defined as computer with broadband internet subscription. \n
+        Metric is tracked on the household, not individual, level \n Key terms \n Margin
+        of Error: all ACS outputs are estimates. The downloadable data includes the margin
+        of error statistics. Users should pay particular to the margin of error, especially
+        for smaller geographies and race/ethnicity groups with relatively less population. '
+
+    Income_1:
+      Indicator Title:
+      - Median Household Income
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate of median housheold income by region
+      Geography:
+      - MSA mid size national comparison regions and California comparison regions
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable
+        data includes the margin of error statistics. Users should pay particular to the
+        margin of error, especially for smaller geographies and race/ethnicity groups
+        with relatively less population. '
+
+    Income_3:
+      Indicator Title:
+      - Median Household Income by Race/Ethnicity
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of median housheold income by Census Bureau race and ethnicity categories
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Notes:
+      - 'The indicator is in inflation-adjusted dollars \n 
+        The indicator compares the median household income by individual
+        race/ethnicities to the regional average. 
+        A value above 1 means the groups has a median household income above
+        regional median (while below 1 means below regional level) \n Key Terms: \n 
+        Margin of Error: all ACS outputs are estimates. The downloadable data 
+        includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population. 
+      '
+
+    Income_4:
+      Indicator Title:
+      - Poverty rate by race/ethnicity
+      Source:
+      - Census ACS (American Community Survey)
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of % of households within census federal definition of poverty
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes:
+      - 'Measures households living in poverty using the census official poverty measure. The census poverty measure compares pretax money to a threshold adjusted by family size and for inflation through time. Importantly, the Census Bureau uses the same poverty threshold throughout the United States, which does not fully reflect the effect of high housing costs in states such as California. Recognizing this limitation, the monitoring program uses the indicator for a relative comparison across race/ethnicity. \n 
+        \n Key terms: \n
+        Rolling Average: The data are reported in 1 year rolling averages. For example, the 2022 output is not the individual year of 2022, but the 5 year average of 2018-2022. Users looking for single year results should use the separate 1 year ACS series \n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+  PUMS:
+    Accessibility_1:
+      Indicator Title:
+      - Commute modes by race/ethnicity
+      Source:
+      - Census PUMS, 1 year ACS
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of head of commute modes by race/ethnicity
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the person level \n Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively less population. Given that this indicator uses 1 year ACS, it will have a higher margin of error compared to the 5 year rolling average'
+
+    Accessibility_2:
+      Indicator Title:
+      - Commute modes by income bracket
+      Source:
+      - Census PUMS, 1 year ACS
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of head of household commute modes by income bracket
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'CPI Inflation Adjustment Factors.xlsx (sharepoint.com) \n The income brackets
+        (Low, Moderate, and High) are organized uniquely to each county, using the state
+        guidelines Income Limits 2023 (ca.gov) \n Key terms \n Margin of Error: all ACS outputs
+        are estimates. The downloadable data includes the margin of error statistics.
+        Users should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population.'
+
+    Accessibility_3:
+      Indicator Title:
+      - Vehicle ownership by household
+      Source:
+      - Census PUMS, 1 year ACS
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of household vehicle ownership
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the household level \n Key terms \n Margin
+        of Error: all ACS outputs are estimates. The downloadable data includes the margin
+        of error statistics. Users should pay particular to the margin of error, especially
+        for smaller geographies and race/ethnicity groups with relatively less population. '
+
+    Accessibility_4:
+      Indicator Title:
+      - Commute times by income bracket and by race/ethnicity
+      Source:
+      - Census PUMS, 1 year ACS
+      Year(s):
+      - 
+      Description:
+      - Yearly estimate of head of household commute times by income bracket and
+        by race/ethnicity
+      Geography:
+      - SACOG region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'CPI Inflation Adjustment Factors.xlsx (sharepoint.com) \n The income brackets
+        (Low, Moderate, and High) are organized uniquely to each county, using the state
+        guidelines Income Limits 2023 (ca.gov) \n Key terms \n Margin of Error: all ACS outputs
+        are estimates. The downloadable data includes the margin of error statistics.
+        Users should pay particular to the margin of error, especially for smaller geographies
+        and race/ethnicity groups with relatively less population. '
+
+    Income_2:
+      Indicator Title:
+      - Household Income by Categories
+      Source:
+      - Census 1 year ACS PUMS (Public Use Microdata Sample)
+      Year(s):
+      - 
+      Description:
+      - 1 year estimate of % of households within income categories
+      Geography:
+      - SACOG Region (MPO)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Notes:
+      - 'The indicator measures household income in 2023 inflation adjusted dollars ($). \n
+
+        The income brackets (Low, Moderate, and High) are organized uniquely to each county, using the state guidelines.
+        https://www.hcd.ca.gov/sites/default/files/docs/grants-and-funding/income-limits-2023.pdf'
+      
+    Cost_6:
+      Indicator Title:
+      - Housing Cost Burden by Race/Ethnicity
+      Source:
+      - Census PUMS, 1 year ACS
+      Year(s):
+      - 
+      Description:
+      - "Yearly estimate of head of household spending on housing in three ranges: below 30% of income, 30 to 50% and above 50%, by race/ethnicity and ownership type. Above 30% termed as housing cost burdened"
+      Geography:
+      - Sacramento region MSAs, plus comparator peer regions (at Metropolitan Statistical
+        Area)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/microdata.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Housing Cost Burden looks at estimates of householder spending by race/ethnicity and by ownership type: renters, owners, and all (renters and owners combined). \n
+        The indicator is measured at the householders (head of household) level \n
+        Key terms \n Margin of Error: all ACS outputs are estimates. The downloadable data
+        includes the margin of error statistics. Users should pay particular to the margin
+        of error, especially for smaller geographies and race/ethnicity groups with relatively
+        less population. Given that this indicator uses 1 year ACS, it will have a higher
+        margin of error compared to the 5 year rolling average'
 
 BLS:      
   Labor_2:
@@ -496,7 +1192,7 @@ BLS:
     Source:
     - Bureau of Labor Statistics
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Estimated unemployment rate by counties
     Geography:
@@ -504,7 +1200,7 @@ BLS:
     Website:
     - .nan
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - .nan
 
@@ -514,7 +1210,7 @@ BLS:
     Source:
     - BLS monthly " State and Area Employment, Hours, and Earnings" CES Survey (Current Employment Statistics Survey)
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Monthly totals of people employed on the MSA level.
     Geography:
@@ -524,9 +1220,11 @@ BLS:
     API Series:
     - https://www.bls.gov/help/hlpforma.htm#SM
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
-    - The survey is updated on a monthly basis on the first of every month. \n Employment data refer to persons on establishment payrolls who receive pay for any part of the pay period that includes the 12th of the month.
+    - The survey is updated on a monthly basis on the first of every month. \n
+      Employment data refer to persons on establishment payrolls who receive pay
+      for any part of the pay period that includes the 12th of the month.
   
   Jobs_2: 
     Indicator Title:
@@ -534,7 +1232,7 @@ BLS:
     Source:
     - BLS monthly " State and Area Employment, Hours, and Earnings" CES Survey (Current Employment Statistics Survey)
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Monthly totals of people employed on the MSA level.
     Geography:
@@ -544,7 +1242,7 @@ BLS:
     API Series:
     - https://www.bls.gov/help/hlpforma.htm#SM
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - The survey is updated on a monthly basis on the first of every month.
   
@@ -554,7 +1252,7 @@ BLS:
     Source:
     - BLS monthly " State and Area Employment, Hours, and Earnings" CES Survey (Current Employment Statistics Survey)
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Monthly totals of people employed on the MSA level.
     Geography:
@@ -564,194 +1262,9 @@ BLS:
     API Series:
     - https://www.bls.gov/help/hlpforma.htm#SM
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - The survey is updated on a monthly basis on the first of every month.
-
-PUMS:
-  Accessibility_1:
-    Indicator Title:
-    - Commute modes by race/ethnicity
-    Source:
-    - Census PUMS, 1 year ACS
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - Yearly estimate of head of commute modes by race/ethnicity
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/microdata.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'The indicator is measured at the person level Key terms Margin of Error:
-      all ACS outputs are estimates. The downloadable data includes the margin of error
-      statistics. Users should pay particular to the margin of error, especially for
-      smaller geographies and race/ethnicity groups with relatively less population.
-      Given that this indicator uses 1 year ACS, it will have a higher margin of error
-      compared to the 5 year rolling average'
-
-  Accessibility_2:
-    Indicator Title:
-    - Commute modes by income bracket
-    Source:
-    - Census PUMS, 5 year ACS
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of head of household commute modes by income bracket
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/microdata.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'CPI Inflation Adjustment Factors.xlsx (sharepoint.com) The income brackets
-      (Low, Moderate, and High) are organized uniquely to each county, using the state
-      guidelines Income Limits 2023 (ca.gov) Key terms Rolling Average: The data are
-      reported in 5 year rolling averages. For example, the 2022 output is not the individual
-      year of 2022, but the 5 year average of 2018-2022. Users looking for single year
-      results should use the separate 1 year ACS series Margin of Error: all ACS outputs
-      are estimates. The downloadable data includes the margin of error statistics.
-      Users should pay particular to the margin of error, especially for smaller geographies
-      and race/ethnicity groups with relatively less population.'
-
-  Accessibility_3:
-    Indicator Title:
-    - Vehicle ownership by household
-    Source:
-    - Census PUMS, 5 year ACS
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of household vehicle ownership
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/microdata.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'The indicator is measured at the household level Key terms Rolling Average:
-      The data are reported in 5 year rolling averages. For example, the 2022 output
-      is not the individual year of 2022, but the 5 year average of 2018-2022. Users
-      looking for single year results should use the separate 1 year ACS series Margin
-      of Error: all ACS outputs are estimates. The downloadable data includes the margin
-      of error statistics. Users should pay particular to the margin of error, especially
-      for smaller geographies and race/ethnicity groups with relatively less population. '
-
-  Accessibility_4:
-    Indicator Title:
-    - Commute times by income bracket and by race/ethnicity
-    Source:
-    - Census PUMS, 5 year ACS
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of head of household commute times by income bracket and
-      by race/ethnicity
-    Geography:
-    - SACOG region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/microdata.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'CPI Inflation Adjustment Factors.xlsx (sharepoint.com) The income brackets
-      (Low, Moderate, and High) are organized uniquely to each county, using the state
-      guidelines Income Limits 2023 (ca.gov) Key terms Rolling Average: The data are
-      reported in 5 year rolling averages. For example, the 2022 output is not the individual
-      year of 2022, but the 5 year average of 2018-2022. Users looking for single year
-      results should use the separate 1 year ACS series Margin of Error: all ACS outputs
-      are estimates. The downloadable data includes the margin of error statistics.
-      Users should pay particular to the margin of error, especially for smaller geographies
-      and race/ethnicity groups with relatively less population. '
-
-
-  Income_1:
-    Indicator Title:
-    - Median Household Income
-    Source:
-    - Census 5 year ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 5 year rolling average of median housheold income by region
-    Geography:
-    - MSA mid size national comparison regions and California comparison regions
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'Key terms \n  Rolling Average: The data are reported in 5 year rolling averages.
-      For example, the 2022 output is not the individual year of 2022, but the 5 year
-      average of 2018-2022. Users looking for single year results should use the separate
-      1 year ACS series \n Margin of Error: all ACS outputs are estimates. The downloadable
-      data includes the margin of error statistics. Users should pay particular to the
-      margin of error, especially for smaller geographies and race/ethnicity groups
-      with relatively less population. '
-
-  Income_2:
-    Indicator Title:
-    - Household Income by Categories
-    Source:
-    - Census ACS (American Community Survey)
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - Rolling average of % of households within income categories
-    Geography:
-    - SACOG Region (MPO)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/microdata.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Notes:
-    - 'The indicator measures household income in 2023 inflation adjusted dollars ($). \n
-
-      The income brackets (Low, Moderate, and High) are organized uniquely to each county, using the state guidelines.
-      https://www.hcd.ca.gov/sites/default/files/docs/grants-and-funding/income-limits-2023.pdf \n
-      
-      Key Terms - \n
-      - Rolling Average: The data are reported in 5-year rolling averages. For example, the 2022 output is not the individual year of 2022, but the 5-year average of 2018-2022. Users looking for single-year results should use the separate 1-year ACS series. \n 
-      - Margin of Error: All ACS outputs are estimates. The downloadable data includes the margin of error statistics. Users should pay particular attention to the margin of error, especially for smaller geographies and race/ethnicity groups with relatively smaller populations.'
-
-  Cost_6:
-    Indicator Title:
-    - Housing Cost Burden by Race/Ethnicity
-    Source:
-    - Census PUMS, 1 year ACS
-    Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
-    Description:
-    - 'Yearly estimate of head of household spending on housing in three ranges: below
-      30% of income, 30 to 50% and above 50%, by race/ethnicity and ownership type.
-      Above 30% termed as housing cost burdened'
-    Geography:
-    - Sacramento region MSAs, plus comparator peer regions (at Metropolitan Statistical
-      Area)
-    Website:
-    - https://www.census.gov/programs-surveys/acs/microdata.html
-    Last Updated:
-    - date.today().strftime('%Y-%m-%d')
-    Margin of Error Limit:
-    - 5
-    Notes: 'The indicator is measured at the householders (head of household) level
-      Key terms Margin of Error: all ACS outputs are estimates. The downloadable data
-      includes the margin of error statistics. Users should pay particular to the margin
-      of error, especially for smaller geographies and race/ethnicity groups with relatively
-      less population. Given that this indicator uses 1 year ACS, it will have a higher
-      margin of error compared to the 5 year rolling average'
-
-
 
 CPS:
   Health_1:
@@ -760,7 +1273,7 @@ CPS:
     Source:
     - Census 1 Year CPS (American Community Survey)
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 2009-2022 estimate at the SACOG region MPO level by race/ethnicity categories
     Geography:
@@ -768,7 +1281,7 @@ CPS:
     Website:
     - CPS Supplement and Replicate Weights (census.gov)
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes: 'There are four possible pairings from these categories HES1A: Yes Yes No
       No'
 
@@ -779,7 +1292,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Number of housing permits allocated each year
     Geography:
@@ -787,7 +1300,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - .nan
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Margin of Error Limit:
     - 5
     Notes: Key terms
@@ -798,7 +1311,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -806,7 +1319,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - .nan
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Margin of Error Limit:
     - 5
     Notes: Key terms
@@ -817,7 +1330,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -825,7 +1338,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - .nan
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Margin of Error Limit:
     - 5
     Notes: Key terms
@@ -836,7 +1349,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -844,7 +1357,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - .nan
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Margin of Error Limit:
     - 5
     Notes: Key terms
@@ -855,7 +1368,7 @@ SACOG Housing: # Should be looked over at least 4-6
   Source:
   - SACOG Housing Permit Data
   Year(s):
-  - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+  - 
   Description:
   - 
   Geography:
@@ -863,7 +1376,7 @@ SACOG Housing: # Should be looked over at least 4-6
   Website:
   - 
   Last Updated:
-  - date.today().strftime('%Y-%m-%d')
+  - 
   Notes:
   - 
 
@@ -873,7 +1386,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -881,7 +1394,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     -
 
@@ -891,7 +1404,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -899,7 +1412,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     -
   Location_4:
@@ -908,7 +1421,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Housing Permit Data
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -916,7 +1429,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     -
   
@@ -926,7 +1439,7 @@ SACOG Housing: # Should be looked over at least 4-6
     Source:
     - SACOG Permit
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -934,9 +1447,47 @@ SACOG Housing: # Should be looked over at least 4-6
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - ''
+  
+  SACOG Permit Data:
+    Source:
+    - SACOG Housing Inventory
+    Time Period:
+    - Year by Year
+    Period Sourced:
+    - 8-12-24
+    Last Updated:
+    - 
+    Website:
+    - https://data.sacog.org/datasets/655b583a77ef4f82801946e004f3558e_20/explore?location=38.784891%2C-121.127367%2C8.44
+    Notes:
+    - |
+    
+      "Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database. From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region. The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to developing communities; developing communities to established communities; and established communities to centers and corridors. Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill housing, increase mobility, and reduce vehicle emissions.
+
+      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:
+      2018: WHEATLAND
+      2019: ISLETON, MARYSVILLE, WHEATLAND
+      2020: COLFAX, ISLETON, WHEATLAND
+      2021: ISLETON, MARYSVILLE
+      2022: ISLETON, MARYSVILLE
+      2023: COLFAX, ISLETON
+
+      Added COMM _TYPE or Community types: No Community Type and South Lake Tahoe. No Community Type refers to the period of 2001 to 2007 Housing permit records. Community types land use were not defined yet thus no community types were not  assigned from 2001-2007.
+      
+      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries. SACOG planning boundary do not fall within SLT.
+
+      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types. The following time period is used to defined that Community Type for that record year: 
+
+      2001-2007: No Community Type
+      2008-2011: 2008 to 2011 Community Types
+      2012-2015: 2012 to 2015 Commuinity Types
+      2016-2019: 2016-2019 Community Types
+      2020 to Current: 2020-2040 (MTP/SCS)
+      "
+    # For field dictionary, would probs be better to just link to somewhere?
 
 NPMRDS:
   Congestion_1:
@@ -945,7 +1496,7 @@ NPMRDS:
     Source:
     - NPMRDS PM3 Report
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Annual hours of Peak Hourly Excessive Delay per capita
     Geography:
@@ -955,9 +1506,12 @@ NPMRDS:
     Downloader:
     - https://npmrds.ritis.org/analytics/my-dashboard/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
-    - When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. These will be empty values. \n Download from the dashboard MAP-21 widget tool \n Salt Lake City UZA did not allow for this indicator to be selected on the dashboard UI. \n No data available at all for 2011. 
+    - When downloaded with the current year, this survey will return all of the months in the year, even ones in the future.
+     These will be empty values. \n Download from the dashboard MAP-21 widget tool \n 
+     Salt Lake City UZA did not allow for this indicator to be selected on the dashboard UI.
+      \n No data available at all for 2011. 
 
   Congestion_2:
     Indicator Title:
@@ -965,7 +1519,7 @@ NPMRDS:
     Source:
     - RTIS
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Annual hours of Peak Hourly Excessive Delay per capita
     Geography:
@@ -973,7 +1527,7 @@ NPMRDS:
     Website:
     - file:///\\data-svr\Modeling\Congestion%20Management%20Process\FHWA%20Deliverables\June2017%20Deliverables\Final%20PDFs\SACOG%20CMP%20Final%20Report_30Jun2017.pdf
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - Data pulled using SQL. 
 
@@ -984,7 +1538,7 @@ NPMRDS:
     Source:
     - NPMRDS PM3 Report
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - PM3 Metrics | Truck Travel Time Reliability, Interstate Travel Time Reliability, Non-Interstate Travel Time Reliability
     Geography:
@@ -994,9 +1548,10 @@ NPMRDS:
     Downloader:
     - https://npmrds.ritis.org/analytics/my-dashboard/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
-    - When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. These will be empty values. \n Download from the dashboard MAP-21 widget tool
+    - When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. 
+      These will be empty values. \n Download from the dashboard MAP-21 widget tool
 
 Zillow:
   Cost_1:
@@ -1005,7 +1560,7 @@ Zillow:
     Source:
     - Zillow
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Home sale prices are approximated with the Zillow Home Value Index. In their own words, this index is "a measure of the typical home value and market changes across a given region and housing type. It reflects the typical value for homes in the 35th to 65th percentile range. Available as a smoothed, seasonally adjusted measure and as a raw measure." The smoothed measure is used here.
     Geography:
@@ -1013,7 +1568,7 @@ Zillow:
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - 
 
@@ -1023,7 +1578,7 @@ Zillow:
     Source:
     - Zillow
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - This data uses the Zillow Observed Rent Index. In their own words, this is "a smoothed measure of the typical observed market rate rent across a given region. ZORI is a repeat-rent index that is weighted to the rental housing stock to ensure representativeness across the entire market, not just those homes currently listed for-rent. The index is dollar-denominated by computing the mean of listed rents that fall into the 40th to 60th percentile range for all homes and apartments in a given region, which is weighted to reflect the rental housing stock."
     Geography:
@@ -1031,7 +1586,7 @@ Zillow:
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - DOF has slightly higher vacancy rates than ACS (DOF includes sold/rented but not yet occupied). \n Could consider moving to ACS in future, but dont have ACS for all our counties
 
@@ -1042,7 +1597,7 @@ HCD:
     Source:
     - HCD housing series
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - This data uses the Zillow Observed Rent Index. In their own words, this is "a smoothed measure of the typical observed market rate rent across a given region. ZORI is a repeat-rent index that is weighted to the rental housing stock to ensure representativeness across the entire market, not just those homes currently listed for-rent. The index is dollar-denominated by computing the mean of listed rents that fall into the 40th to 60th percentile range for all homes and apartments in a given region, which is weighted to reflect the rental housing stock."
     Geography:
@@ -1050,7 +1605,7 @@ HCD:
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - 
 
@@ -1061,7 +1616,7 @@ IMHE:
     Source:
     - IMHE
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -1069,7 +1624,7 @@ IMHE:
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - 
     
@@ -1080,7 +1635,7 @@ BEA:
     Source:
     - BEA
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -1088,7 +1643,7 @@ BEA:
     Website:
     -
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - 
 
@@ -1099,7 +1654,7 @@ TIMS:
     Source:
     - TIMS
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Fatal and serious injury rate per 100 million VMT
     Geography:
@@ -1107,7 +1662,7 @@ TIMS:
     Website:
     - https://tims.berkeley.edu/tools/safetypm/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - TIMS uses the following data sets in the indicator preparation \n Serious Injury definition comes from SWITRS \n https://sacog.sharepoint.com/:x:/r/sites/RegionalMonitoringandReporting/_layouts/15/Doc.aspx?sourcedoc=%7B38A426CB-11A9-4812-82C0-80D97BABC978%7D&file=Safety_1%20Counties%20TIMS.xlsx&action=default&mobileredirect=true 
 
@@ -1118,7 +1673,7 @@ TIMS:
     Source:
     - TIMS
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Number of fatalities and serious injuries to non-motorized users resulting from vehicle crash
     Geography:
@@ -1126,7 +1681,7 @@ TIMS:
     Website:
     - https://tims.berkeley.edu/tools/safetypm/
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - TIMS uses the following data sets in the indicator preparation \n Serious Injury definition comes from SWITRS \n https://sacog.sharepoint.com/:x:/r/sites/RegionalMonitoringandReporting/_layouts/15/Doc.aspx?sourcedoc=%7B52DFD4CE-4151-40F4-99DC-A9EB66042402%7D&file=Safety_2%20MPO%20TIMS.xlsx&action=default&mobileredirect=true
 
@@ -1137,7 +1692,7 @@ IPEDS:
     Source:
     - Integrated Postsecondary Education Data System (IPEDS) Access Databases
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - Associates, bachelors, and graduate degrees by field
     Geography:
@@ -1145,7 +1700,7 @@ IPEDS:
     Website:
     - https://nces.ed.gov/ipeds/use-the-data/download-access-database
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Definitions:
     - 'This indicator combines different degrees into seven categores: 1. STEM (Science, Technology, Engineering, Math); 2. Education; 3. Health related fields; 4. Business/Management/Marketing; 5.  AHSS (Arts, Humanities, Social Sciences and other fields);  6. Trades; and 7. Multi-field/interdisciplinary, using the classification below. There is no single way to combine fields. A user can create their own categories based on the provided CIP codes.'
 
@@ -1156,7 +1711,7 @@ EDD:
     Source:
     - California Department of Ed
     Year(s):
-    - str(np.min(df['Year'].unique())) + '-' + str(np.max(df['Year'].unique()))
+    - 
     Description:
     - 
     Geography:
@@ -1164,14 +1719,14 @@ EDD:
     Website:
     - 
     Last Updated:
-    - date.today().strftime('%Y-%m-%d')
+    - 
     Notes:
     - ''
 
 # Another option for writing notes, is to just use | and then write it as you normally would, with no '' or \n. 
 
 
-# THESE R ONES I DONT HAVE TO DO RN 
+# THESE R ONES I FOR LATER MAYBE?
 
 Blueprint_1: {}
 Blueprint_2: {}
