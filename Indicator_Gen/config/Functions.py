@@ -13,6 +13,7 @@ import xlwt
 from xlwt.Workbook import *
 from pandas import ExcelWriter
 import xlsxwriter
+import yaml
 
 # Plotting
 import matplotlib.pyplot as plt
@@ -71,6 +72,72 @@ def re_remove_pre(x, exp = ' '):
 # Split attributes string
 def ME_split(text):
     return ",".join(text.split(',')[0:3:2])
+
+
+
+   
+# Function to write about page for each indicator
+def write_about(sample_type, indicator_name, geography, year_start, year_end, path_config0, MOE_thresh=None, estimate=None):
+
+    
+    '''
+    User defined function to create/export about documentation for each indicator
+    Inputs: .yaml file, specific indicator inputs (geography, sample type, ...), data frame to export, file paths, ...
+    Uses user defined inputs to organize .yaml file subset into pandas data frame then exports to excel file sheet
+    '''
+
+    # Reads in .yaml file
+    # Defines initialized objects in the yaml file with objects defined in processing script
+
+    path_yaml = os.path.join(path_config0, 'dict_about.yaml')
+    
+    try:
+        with open(path_yaml, 'r') as yaml_file:
+            dict_about = yaml.load(yaml_file, Loader=yaml.SafeLoader)
+    except FileNotFoundError:
+        print(f"Error: The file at {path_yaml} does not exist.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    if estimate is None:
+        df_dicto = pd.DataFrame.from_dict(dict_about[sample_type][indicator_name]).T.reset_index().rename(columns = {'index': 'Metadata', 0: 'Description'})
+    else:
+        df_dicto = pd.DataFrame.from_dict(dict_about[estimate][sample_type][indicator_name]).T.reset_index().rename(columns = {'index': 'Metadata', 0: 'Description'})
+
+    df_dicto.loc[df_dicto['Metadata'] == 'Last Updated', 'Description'] = date.today().strftime('%Y-%m-%d')
+    df_dicto.loc[df_dicto['Metadata'] == 'Year(s)'     , 'Description'] = f"{year_start}-{year_end}"
+    df_dicto.loc[df_dicto['Metadata'] == 'Geography'   , 'Description'] = geography
+    if MOE_thresh is not None:
+        df_dicto.loc[df_dicto['Metadata'] == 'Margin of Error Limit', 'Description'] = MOE_thresh
+
+    # Split notes into rows, for visual clarity in about
+    # Find the row with 'Notes', then use that to take the information
+    # Separate based off of NewLines, make the rows with this
+    # Make a blank row past the first one. This way, we don't have to see notes as a cell like 7 times.
+    # Create a df from the new separated rows. Drop the old notes row
+    # Combine original with new rows
+    # Finally, we split the notes
+    def split_notes(df):
+        notes_row = df[df['Metadata'] == 'Notes'].copy()
+        notes = notes_row['Description'].values[0]
+        
+        lines = notes.split('\\n')
+        new_rows = [{'Metadata': 'Notes' if i == 0 else '', 'Description': line} for i, line in enumerate(lines) if line]
+        
+        new_df = pd.DataFrame(new_rows)
+        df_filtered = df[df['Metadata'] != 'Notes']
+       
+        notes_df = pd.concat([df_filtered, new_df], ignore_index=True)
+        
+        return notes_df
+    
+   
+    df_dicto = split_notes(df_dicto)
+
+    return df_dicto
+
+
+
 
 
 
@@ -135,7 +202,8 @@ def query_census(
         if year == 'timeseries':
             location_ = '&for=county:' + county + '&in=state:' + state + '&time=from 2000-Q1 to 2023-Q4'
         else:
-            location_ = '&for=county:' + county + '&in=state:' + state
+            # location_ = '&for=county:' + county + '&in=state:' + state
+            location_ = '&for=county:*' + '&in=state:' + state
     if geography == 'MSA':
         if estimate in ['LEHD']:
             if year == 'timeseries':
@@ -144,6 +212,8 @@ def query_census(
                 location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state
         else:
             location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
+            # location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'
+
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     
@@ -202,6 +272,7 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
         geo_ID = ['MSA_ID', 'MSA']
 
     df_census = df_census.replace('-666666666', np.nan)
+    df_census = df_census.replace('-222222222', np.nan)
     df_census = df_census.replace('-555555555', np.nan)
     df_census = df_census.replace('-999999999.0', np.nan)
     df_census = df_census.replace('null', np.nan)
@@ -258,6 +329,7 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
     if geography == 'MSA':
         df_census = df_census.rename(columns = {'metropolitan statistical area/micropolitan statistical area':'MSA_ID', 'NAME':'MSA'})
         geo_ID = ['MSA_ID', 'MSA']
+    df_census['Year'] = df_census['Year'].astype(int)
 
     print('')
     print('Processing Step 2:')
@@ -284,16 +356,17 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
     # Some indicators require the roll up to be weighted by population
     # The following step aligns the Race/Ethnicity mappings with the population counts workbook
     if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+        path_pop = os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race')
         if geography == 'Places':
-            df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Places ACS5.xlsx'      ), sheet_name = 'Places'      )
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 Places ACS5.xlsx'      ), sheet_name = 'Places'      )
         if geography == 'Block Groups':
-            df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Block Groups ACS5.xlsx'), sheet_name = 'Block Groups')
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 Block Groups ACS5.xlsx'), sheet_name = 'Block Groups')
         if geography == 'Tracts':
-            df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Tracts ACS5.xlsx'      ), sheet_name = 'Tracts'      )
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 Tracts ACS5.xlsx'      ), sheet_name = 'Tracts'      )
         if geography == 'Counties':
-            df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 Counties ACS5.xlsx'    ), sheet_name = 'Counties'    )
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 Counties ACS5.xlsx'    ), sheet_name = 'Counties'    )
         if geography == 'MSA':
-            df_pop = pd.read_excel(os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race', 'Pop_3 MSA ACS5.xlsx'         ), sheet_name = 'MSA'         )
+            df_pop = pd.read_excel(os.path.join(path_pop, 'National', 'Pop_3 MSA ACS5_National.xlsx'), sheet_name = 'MSA')
 
         if geography == 'MSA':
             df_pop = df_pop[['MSA_ID', 'Year','Race_Ethnicity', 'Population']]
@@ -341,13 +414,17 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
             , 'county':'County FIPS'
             , 'tract':'Tract ID'
         })
-    if geography == 'Counties':
+    if geography == 'Counties':       
         df_census = df_census.rename(columns = {
             'state':'State FIPS'
             , 'county':'County FIPS'
         })
 
-    
+    if 'State FIPS' in df_census.columns:
+        df_census['State FIPS'] = df_census['State FIPS'].astype(str).apply('{:0>2}'.format)
+    if 'County FIPS' in df_census.columns:
+        df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
+
 
     print('')
 
@@ -724,7 +801,6 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
     if sample_type == 'FOODSEC':
         df_census = df_census.sort_values(['State FIPS', 'MPO', 'County FIPS', 'Year'] + groups, ascending = [True, True, True, False] + [item in groups for item in groups])
 
-    
     if 'HISP' in groups:
         df_census.loc[df_census['HISP'] == 'Hispanic or Latino', 'RAC1P'] = 'Hispanic or Latino'
         df_census = df_census.drop('HISP', axis = 1)
@@ -1688,3 +1764,61 @@ def full_bls(api_key, survey, geography, seasonal, dates, df=None, sector_list=N
 
 
     return df_chamber
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### SQL FUNCTIONS =======================================================================================================================
+
+
+
+def get_odbc_driver():
+    # gets name of ODBC driver, with name "ODBC Driver <version> for SQL Server"
+    drivers = [d for d in pyodbc.drivers() if 'ODBC Driver ' in d]
+    
+    if len(drivers) == 0:
+        errmsg = f"ERROR. No usable ODBC Driver found for SQL Server." \
+        f"drivers found include {drivers}. Check ODBC Administrator program" \
+        "for more information."
+        
+        raise Exception (errmsg)
+    else:
+        d_versions = [re.findall('\d+', dv)[0] for dv in drivers] # [re.findall('\d+', dv)[0] for dv in drivers]
+        latest_version = max([int(v) for v in d_versions])
+        driver = f"ODBC Driver {latest_version} for SQL Server"
+    
+        return driver
+
+def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):   
+
+    driver = get_odbc_driver()  
+
+    conn_str = f"DRIVER={driver};" \
+        f"SERVER={servername};" \
+        f"DATABASE={dbname};" \
+        f"Trusted_Connection={trustedconn}"
+        
+    conn_str = urllib.parse.quote_plus(conn_str)
+    engine = sqla.create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
+       
+    start_time = perf()
+
+    # create SQL table from the dataframe
+    print("Executing query. Results loading into dataframe...")
+    df = pd.read_sql_query(sql=query_str, con=engine)
+    rowcnt = df.shape[0]
+    
+    et_mins = round((perf() - start_time) / 60, 2)
+    print(f"Successfully executed query in {et_mins} minutes. {rowcnt} rows loaded into dataframe.")
+    
+    return df
