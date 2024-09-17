@@ -119,6 +119,9 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# API Keys
+api_key.txt
+
 # Environments
 .env
 .venv
