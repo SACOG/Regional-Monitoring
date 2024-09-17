@@ -64,9 +64,9 @@ if area_code == 'Yes':
             df_states = df_states[['MSA_ID', 'State FIPS', 'MSA']].drop_duplicates()
             df_area['MSA_ID'] = df_area['MSA_ID'].astype(str)
             df_area = df_area.merge(df_states, on = 'MSA_ID', how = 'left')
-            df_area = df_area[['State FIPS', 'area_code', 'area_text', 'MSA']]
+            df_area = df_area[['State FIPS', 'area_code', 'area_text', 'MSA', 'MSA_ID']]
         else:
-            df_area = df_area[['area_code', 'area_text']]
+            df_area = df_area[['area_code', 'area_text', 'MSA_ID']]
     if geography == 'Counties':
         df_area = df_area[df_area['area_type_code'] == 'F']
         if state_code == 'Yes':
@@ -85,6 +85,7 @@ if industry_code == 'Yes':
     df_industries = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsx")
                               , sheet_name = 'industry_codes'
                               , dtype = {'industry_code': object})
+    df_industries = df_industries[df_industries['Survey'] == survey]
     df_industries = df_industries[df_industries['Include'] == 'Yes']
     df_industries = df_industries[df_industries['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     list_sectors = list(df_industries['industry_code'].values)
@@ -160,7 +161,7 @@ df_series_area = pd.melt(
 )
     
 if survey in ['SM', 'LA']:
-    df_series_area = df_series_area.merge(df_area[['area_text', 'area_code']], on = 'area_text')
+    df_series_area = df_series_area.merge(df_area[['area_text', 'area_code', 'MSA_ID']], on = 'area_text')
     
 if survey == 'SM':
     df_series_area['industry_code'] = df_series_area['seriesID'].str[10:18]

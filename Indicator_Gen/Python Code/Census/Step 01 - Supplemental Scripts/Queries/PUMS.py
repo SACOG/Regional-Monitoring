@@ -49,6 +49,7 @@ for state in list(dict_fips.keys()):
             if margin_of_error == 'Yes':
                 print('Calculating margin of error using replicate weights...')
                 cols = [col for col in df_vars_years.columns if weight in col]
+                df_vars_years[cols] = df_vars_years[cols].replace('', np.nan)
                 df_vars_years[cols] = df_vars_years[cols].astype(int)
                 cols_to_drop = cols[:-1]
                 cols = list(df_vars_years.drop(cols_to_drop, axis = 1).columns)

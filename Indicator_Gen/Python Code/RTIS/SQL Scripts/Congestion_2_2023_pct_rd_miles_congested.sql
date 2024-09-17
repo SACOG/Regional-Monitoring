@@ -44,21 +44,22 @@ SELECT
 	DISTINCT tmc.tmc,
 	tmc.f_system,
 	tmc.nhs,
-	CASE WHEN f_system IN (1,2) 
+	CASE WHEN f_system IN (1,2)
 		THEN PERCENTILE_CONT(0.85)
 			WITHIN GROUP (ORDER BY speed)
-			OVER (PARTITION BY tmc_code) 
-		ELSE PERCENTILE_CONT(0.6) 
+			OVER (PARTITION BY tmc_code)
+		ELSE PERCENTILE_CONT(0.6)
 			WITHIN GROUP (ORDER BY speed)
-			OVER (PARTITION BY tmc_code) 
+			OVER (PARTITION BY tmc_code)
 		END AS ff_speed_art60thp --85th percentile speed for freeways; 60th percentile for arterials
 INTO #ff_spd_tbl
-FROM npmrds_2023_alltmc_txt tmc 
+FROM npmrds_2023_alltmc_txt tmc
 	LEFT JOIN npmrds_2023_alltmc_paxtruck_comb tt
 		ON tmc.tmc = tt.tmc_code
 WHERE (DATEPART(hh,measurement_tstamp) >= @FFprdStart
 		OR DATEPART(hh,measurement_tstamp) < @FFprdEnd)
-		AND tmc.nhs = 1 --on NHS only
+		AND tmc.nhs > 0
+		-- AND ((tmc.nhs = 1) OR (tmc.nhs = 2 AND f_system IN (1,2))) --on NHS only
 
 
 --get count of epochs during overnight "free flow" period
@@ -66,12 +67,13 @@ SELECT
 	tmc.tmc,
 	COUNT(*) AS epochs_night
 INTO #offpk_85th_epochs
-FROM npmrds_2023_alltmc_txt tmc 
+FROM npmrds_2023_alltmc_txt tmc
 	LEFT JOIN npmrds_2023_alltmc_paxtruck_comb tt
 		ON tmc.tmc = tt.tmc_code
 WHERE (DATEPART(hh,measurement_tstamp) >= @FFprdStart
 		OR DATEPART(hh,measurement_tstamp) < @FFprdEnd)
-		AND tmc.nhs = 1
+		AND tmc.nhs > 0
+		-- AND ((tmc.nhs = 1) OR (tmc.nhs = 2 AND tmc.f_system IN (1,2)))
 GROUP BY tmc.tmc
 
 
@@ -85,14 +87,14 @@ SELECT
 	AVG(tt.travel_time_seconds) AS avg_tt_sec_weekdy,
 	(COUNT(*) / SUM(1.0/tt.speed)) / ff.ff_speed_art60thp AS cong_ratio_hr_weekdy,
 	RANK() OVER (
-		PARTITION BY tt.tmc_code 
+		PARTITION BY tt.tmc_code
 		ORDER BY (COUNT(*) / SUM(1.0/tt.speed)) / ff.ff_speed_art60thp ASC
 		) AS hour_cong_rank
 INTO #avspd_x_tmc_hour
 FROM npmrds_2023_alltmc_paxtruck_comb tt
 	JOIN #ff_spd_tbl ff
 		ON tt.tmc_code = ff.tmc
-WHERE DATENAME(dw, measurement_tstamp) IN (SELECT day_name FROM @weekdays) 
+WHERE DATENAME(dw, measurement_tstamp) IN (SELECT day_name FROM @weekdays)
 GROUP BY 
 	tt.tmc_code,
 	DATEPART(hh,measurement_tstamp),
@@ -115,7 +117,6 @@ FROM npmrds_2023_alltmc_paxtruck_comb tt
 		AND DATEPART(hh, tt.measurement_tstamp) = avs.hour_of_day
 WHERE DATENAME(dw, tt.measurement_tstamp) IN (SELECT day_name FROM @weekdays) 
 	AND avs.hour_cong_rank < 5
-	--AND tt.tmc_code = '105+04687'
 GROUP BY 
 	tt.tmc_code,
 	ff.ff_speed_art60thp
@@ -152,7 +153,7 @@ FROM (
 		tmc.miles,
 		CASE WHEN ffs.ff_speed_art60thp IS NULL THEN -1.0 ELSE ffs.ff_speed_art60thp END AS ff_speed_art60thp,
 		CASE WHEN cong4.havg_spd_worst4hrs IS NULL THEN -1.0 ELSE cong4.havg_spd_worst4hrs END AS havg_spd_worst4hrs,
-		CASE WHEN cong4.havg_spd_worst4hrs / ffs.ff_speed_art60thp IS NULL THEN -1.0 
+		CASE WHEN cong4.havg_spd_worst4hrs / ffs.ff_speed_art60thp IS NULL THEN -1.0
 			WHEN cong4.havg_spd_worst4hrs / ffs.ff_speed_art60thp > 1 THEN 1.0 --sometimes the overnight speed won't be the fastest speed if there are insufficient data
 			ELSE cong4.havg_spd_worst4hrs / ffs.ff_speed_art60thp
 			END AS congratio_worst4hrs,
@@ -174,7 +175,8 @@ FROM (
 			ON tmc.tmc = slowest1.tmc_code
 		LEFT JOIN #offpk_85th_epochs epon
 			ON tmc.tmc = epon.TMC
-	WHERE tmc.nhs = 1
+	WHERE tmc.nhs > 0
+	-- WHERE ((tmc.nhs = 1) OR (tmc.nhs = 2 AND tmc.f_system IN (1,2)))
 	) subqry1
 WHERE tmc_appearance_n = 1
 
@@ -193,7 +195,7 @@ SELECT
 FROM #data_tmc_final
 
 select SUM(miles) from #data_tmc_final
-select SUM(miles) from npmrds_2023_alltmc_txt where nhs=1
+select SUM(miles) from npmrds_2023_alltmc_txt where nhs > 0
 
 select 
 	tmc, 

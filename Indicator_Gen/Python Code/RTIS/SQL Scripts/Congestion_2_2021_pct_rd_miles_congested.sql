@@ -58,7 +58,8 @@ FROM npmrds_2021_alltmc_txt tmc
 		ON tmc.tmc = tt.tmc_code
 WHERE (DATEPART(hh,measurement_tstamp) >= @FFprdStart
 		OR DATEPART(hh,measurement_tstamp) < @FFprdEnd)
-		AND tmc.nhs = 1 --on NHS only
+		AND tmc.nhs > 0
+		-- AND tmc.nhs = 1 --on NHS only
 
 
 --get count of epochs during overnight "free flow" period
@@ -71,7 +72,8 @@ FROM npmrds_2021_alltmc_txt tmc
 		ON tmc.tmc = tt.tmc_code
 WHERE (DATEPART(hh,measurement_tstamp) >= @FFprdStart
 		OR DATEPART(hh,measurement_tstamp) < @FFprdEnd)
-		AND tmc.nhs = 1
+		AND tmc.nhs > 0
+		-- AND tmc.nhs = 1
 GROUP BY tmc.tmc
 
 
@@ -174,7 +176,8 @@ FROM (
 			ON tmc.tmc = slowest1.tmc_code
 		LEFT JOIN #offpk_85th_epochs epon
 			ON tmc.tmc = epon.TMC
-	WHERE tmc.nhs = 1
+	WHERE tmc.nhs > 0
+	-- WHERE tmc.nhs = 1
 	) subqry1
 WHERE tmc_appearance_n = 1
 
@@ -183,17 +186,17 @@ SELECT
 	SUM(CASE WHEN havg_spd_worst4hrs > -1 
 			AND ff_speed_art60thp > -1 
 			THEN miles ELSE 0 END) AS tot_nhs_dirmiles,
-	SUM(CASE WHEN havg_spd_worst4hrs / ff_speed_art60thp < 0.6 
+	SUM(CASE WHEN havg_spd_worst4hrs / ff_speed_art60thp < 0.6
 			AND havg_spd_worst4hrs > -1 AND ff_speed_art60thp > -1
 			THEN miles ELSE 0 END)
-		/ SUM(CASE WHEN havg_spd_worst4hrs > -1 
+		/ SUM(CASE WHEN havg_spd_worst4hrs > -1
 			AND ff_speed_art60thp > -1 
 			THEN miles ELSE 0 END)
 			AS pct_dirmi_congested
 FROM #data_tmc_final
 
 select SUM(miles) from #data_tmc_final
-select SUM(miles) from npmrds_2021_alltmc_txt where nhs=1
+select SUM(miles) from npmrds_2021_alltmc_txt where nhs > 0
 
 select 
 	tmc, 

@@ -58,7 +58,8 @@ FROM npmrds_2022_alltmc_txt tmc
 		ON tmc.tmc = tt.tmc_code
 WHERE (DATEPART(hh,measurement_tstamp) >= @FFprdStart
 		OR DATEPART(hh,measurement_tstamp) < @FFprdEnd)
-		AND tmc.nhs = 1 --on NHS only
+		AND tmc.nhs > 0
+		-- AND ((tmc.nhs = 1) OR (tmc.nhs = 2 AND tmc.f_system IN (1,2))) --on NHS only
 
 
 --get count of epochs during overnight "free flow" period
@@ -71,7 +72,8 @@ FROM npmrds_2022_alltmc_txt tmc
 		ON tmc.tmc = tt.tmc_code
 WHERE (DATEPART(hh,measurement_tstamp) >= @FFprdStart
 		OR DATEPART(hh,measurement_tstamp) < @FFprdEnd)
-		AND tmc.nhs = 1
+		AND tmc.nhs > 0
+		-- AND ((tmc.nhs = 1) OR (tmc.nhs = 2 AND tmc.f_system IN (1,2)))
 GROUP BY tmc.tmc
 
 
@@ -113,7 +115,7 @@ FROM npmrds_2022_alltmc_paxtruck_comb tt
 	JOIN #avspd_x_tmc_hour avs
 		ON tt.tmc_code = avs.tmc_code
 		AND DATEPART(hh, tt.measurement_tstamp) = avs.hour_of_day
-WHERE DATENAME(dw, tt.measurement_tstamp) IN (SELECT day_name FROM @weekdays) 
+WHERE DATENAME(dw, tt.measurement_tstamp) IN (SELECT day_name FROM @weekdays)
 	AND avs.hour_cong_rank < 5
 	--AND tt.tmc_code = '105+04687'
 GROUP BY 
@@ -174,7 +176,8 @@ FROM (
 			ON tmc.tmc = slowest1.tmc_code
 		LEFT JOIN #offpk_85th_epochs epon
 			ON tmc.tmc = epon.TMC
-	WHERE tmc.nhs = 1
+	WHERE tmc.nhs > 0
+	-- WHERE ((tmc.nhs = 1) OR (tmc.nhs = 2 AND tmc.f_system IN (1,2)))
 	) subqry1
 WHERE tmc_appearance_n = 1
 
@@ -193,7 +196,7 @@ SELECT
 FROM #data_tmc_final
 
 select SUM(miles) from #data_tmc_final
-select SUM(miles) from npmrds_2022_alltmc_txt where nhs=1
+select SUM(miles) from npmrds_2022_alltmc_txt where nhs > 0
 
 select 
 	tmc, 
