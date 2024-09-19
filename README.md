@@ -4,6 +4,7 @@ The Regional Progress Report tracks change across economic growth, development, 
 This repository contains a majority of the Python code used to collect, process, and interpret the data required for the report and dashbaord.
 
 Repository organization:
+
 (1) __code__ folders:
 - The "Python Code" folder has a folder for each data source we collect
 - Data sources with an API available: Census Bureau, BLS, ...
@@ -18,6 +19,12 @@ Repository organization:
 (2) __config__ folders:
 - There is an overall config folder and a subsequent config folder for the data sources that have an API
 - The overall config folder:
-    - "Area Codes.xlsx" - a workbook that has all needed area code mappings (counties to PUMA's, counties to MSA's, census tracts to counties, ...)
-    - "CA State Income Brackets by Household Size.xlsx" - a workbook that 
+    - "Area Codes.xlsx" - a workbook that has all needed area code mappings (counties to PUMA's, counties to MSA's, census tracts to counties, ...) required for all indicators
+    - "CA State Income Brackets by Household Size.xlsx" - a table that shows the CA state income brackets by household size by county (for indicators that require income brackets)
+    - "CPI Inflation Adjustment Factors.xlsx" - a workbook that has various inflation adjustment factors (for indicators that include $-USD)
+    - "about_indicators.yaml" - a _.yaml_ file used to create the documentation files associated with each indicator
+    - "Functions.py" - a python script with user defined functions that all data sources utilize
+ - Data source config folder:
+    - "Configuration File.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
+    - "Functions.py" - a python script with user defined functions that the specific data source requires
 
