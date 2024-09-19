@@ -3,7 +3,7 @@ The Regional Progress Report tracks change across economic growth, development, 
 
 This repository contains a majority of the Python code used to collect, process, and interpret the data required for the report and dashbaord.  
 
-__Note from the owner__:  (For the data sources that have an API) The data pipelines in this repository can be used by anyone who would like to streamline their approach to data collection using an API with Python.  The data processing steps can also be used by anyone, but they are geared towards how SACOG wants to track indicators (specific estimate groupings, inflation adjustments, income brackets, race/ethnicity definitions, ...).  I tried to build the pipelines in a simple and user-friendly approach that anyone can use with some practice.
+__Note from the owner__:  (For the data sources that have an API) The data pipelines built for regional monitoring can be used by anyone who would like to streamline their approach to data collection using an API with Python.  The data processing steps can also be used by anyone, but they are geared towards how SACOG wants to track indicators (specific estimate groupings, inflation adjustments, income brackets, race/ethnicity definitions, ...).  I tried to build the pipelines in a simple and user-friendly approach that anyone can use with some practice.
 
 
 ## Repository organization:
