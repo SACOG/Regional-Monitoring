@@ -1,7 +1,10 @@
 # Regional-Monitoring
 The Regional Progress Report tracks change across economic growth, development, travel, and other important indicators in the Sacramento region.  By assessing where the region is on a range of key topics the Progress Report serves as a first step for updating the Metropolitan Transportation Plan/Sustainable Communities Strategy (MTP/SCS), SACOG’s long-range plan updated every four years to pro-actively link land use, air quality, and transportation needs in the Sacramento region. The Progress Report is provided in part to help identify important issues that should be prioritized in the next MTP/SCS update.  There is a live public-facing ArcGIS Online Dashboard that supports the Regional Progress Report, which can be found here:
 
-This repository contains a majority of the Python code used to collect, process, and interpret the data required for the report and dashbaord.
+This repository contains a majority of the Python code used to collect, process, and interpret the data required for the report and dashbaord.  
+
+__Note from the owner__:  (For the data sources that have an API) The data pipelines in this repository can be used by anyone who would like to streamline their approach to data collection using an API with Python.  The data processing steps can also be used by anyone, but they are geared towards how SACOG wants to track indicators (specific estimate groupings, inflation adjustments, income brackets, race/ethnicity definitions, ...).  I tried to build the pipelines in a simple and user-friendly approach that anyone can use with some practice.
+
 
 ## Repository organization:
 
@@ -28,3 +31,9 @@ This repository contains a majority of the Python code used to collect, process,
     - "Configuration File.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
     - "Functions.py" - a python script with user defined functions that the specific data source requires
 
+
+
+## How to use:
+
+
+Each pipeline run requires the "Configuration File.xlsx" excel workbook.  This workbook allows the user to set up exactly which geographies and estimates they want to pull.  The user needs to define an "indicator" that is linked to those estimates... (summary in progress)
