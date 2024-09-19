@@ -88,7 +88,7 @@ def write_about(sample_type, indicator_name, geography, year_start, year_end, pa
     # Reads in .yaml file
     # Defines initialized objects in the yaml file with objects defined in processing script
 
-    path_yaml = os.path.join(path_config0, 'dict_about.yaml')
+    path_yaml = os.path.join(path_config0, 'about_indicators.yaml')
     
     try:
         with open(path_yaml, 'r') as yaml_file:

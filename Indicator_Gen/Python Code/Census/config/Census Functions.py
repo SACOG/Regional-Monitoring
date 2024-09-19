@@ -24,14 +24,14 @@ import plotly.io as pio
 
 
 
-# Aggregations
+## Aggregations for processing weighted averages and rolling up margins of error
 wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
 sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                         # Square root of the sum of squares (to roll up SE's when +/- random variables)
 
 
 
 
-# Split attributes string
+## Split attributes field in the "Census Configuration File.xlsx" ACS tab to get the ME estimate ID
 def ME_split(text):
     return ",".join(text.split(',')[0:3:2])
 
@@ -44,22 +44,22 @@ def ME_split(text):
 
 
 
-## Main function used to query data
+## Main function used to query data ------
+
+'''
+User defined function to import Data from the Census Bureau
+User inputs: [api_key, estimate, geography variables, year] to tell Census Bureau that we have access with the API key and
+                what type of sample data to pull, which variables we want to import, what year, and which state
+The "df_urls" object pulls the "URL" tab from the "Census Configuration File.xlsx", which contains the root URL needed for any API request available here https://api.census.gov/data.html         
+Only pulls 1 year at a time (geography IDs, like census tracts, sometimes change at the start of each decade)
+'''
+
 def query_census(
         df_urls
         , api_key, estimate, sample, geography, variables, year
         , state=None, county=None, msa=None, puma=None
     ):
         
-    '''
-    User defined function to import Data from the Census Bureau
-    User inputs: [api_key, estimate, geography variables, year] to tell ACS that we have access with the API key and
-                    what type of sample data to pull, which variables we want to import, what year, 
-                    and which state and record type (persons or households)
-                    - record type is for PUMS data only
-                    - only pulls 1 year at a time (geography IDs, like census tracts, change at the start of each decade)
-    '''
-
     # Assert that inputs for estimate and geography are appropriate
     assert estimate  in ['ACS5'  , 'ACS1'        , 'DEC', 'CPS' , 'LEHD'                                   ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
     assert sample    in ['ACS'   , 'DEC'         , 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'RH'  , 'SA', 'SE'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
@@ -132,12 +132,15 @@ def query_census(
 
 
 
+## ------
 
 
 
 
 
-## Main geographic groupings
+
+
+## Main geographic groupings used throughout processing functions
 group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
 group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
 group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
@@ -148,26 +151,48 @@ group_mpo      = ['State FIPS', 'MPO'                              ]
 
 
 
+## Processing steps ------
 
+
+'''
+Disclaimer: The processing steps are somewhat unique to how SACOG has defined the indicators, meaning this is 
+how we wanted to process the data for our own data needs.  These steps may or may not be useful to other users
+that want to pull data from the Census Bureau.
+
+All user defined geography/variable mappings seen throughout the processing steps are predetermined by the user
+in the "Census Configuration File.xlsx" workbook.  This includes which estimates are being pulled, how to group
+different estimates together, which race/ethnicities to include, and how to sort the variables for a clean output.
+Also includes whether or not to include the margin of error estimates and whether or not to calculate percentages.
+
+All function inputs/objects are assigned in the processing script (Step 02 - Process Census Data.ipynb), before
+these functions are called (so they are already lined up perfectly).
+
+Some of the functions here (like "sequence()") are user defined functions that are stored in the Regional-Monitoring/
+Indicator_Gen/config/Functions.py script.
+'''
+
+
+## ACS processing steps ---
 
 ## ACS processing step (1)
 
-def acs_processing_1(df_census, df_vars, geography, margin_of_error):
+'''
+User defined function to clean/process ACS tables immediately after query
+Replaces weird missing values with np.nan
+Drops rows with all missing
+Melts data from wide to long
+Merges clean variable mapping, race/ethnicity label, and sorting assignment
+Removes unneeded columns
+Adjusts dollars for inflation as needed
+'''
 
-    '''
-    User defined function to clean/process ACS data immediately after query
-    Replaces weird missing values with np.nan
-    Drops rows with all missing
-    Melts data from wide to long
-    Merges clean variable mapping, race/ethnicity label, and sorting assignment
-    Removes unneeded columns
-    Adjusts dollars for inflation as needed
-    '''
+def acs_processing_1(df_census, df_vars, geography, margin_of_error):
 
     print('')
     print('Processing Step 1:')
     print('Reshaping data from columns to rows...')
     print('Mapping Estimate ID field to table ID, table name, and estimate label... (if margin of errors were pulled, including those as well)')
+    print('')
 
     if geography == 'Places':
         geo_ID = ['state', 'place', 'NAME']
@@ -198,10 +223,8 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
     df_census['Total'] = df_census['Total'].apply(pd.to_numeric)
     df_census = df_census.merge(df_vars[['ID', 'Table', 'Table Name', 'Label']], on = 'ID', how = 'left')
 
-
     if margin_of_error == 'Yes':
         df_census_me = df_census.copy()
-
         df_me = df_census_me[df_census_me['Label'].isna()]
         df_census_me = df_census_me.dropna()
         df_me = df_me[['ID'] + geo_ID + ['Year', 'Total']].rename(columns = {'Total':'ME'})
@@ -221,8 +244,6 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
 
     df_census = df_census.reset_index(drop = True)
 
-    print('')
-
     return df_census
 
 
@@ -231,7 +252,21 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
 
 ## ACS processing step (2)
 
+'''
+User defined function to process ACS tables for SACOG specific indicators
+Maps the Estimate ID's from the Census Bureau to cleaned label fields, rolls up groupings, race/ethnicity mappings, and sorting order
+For any indicator involving money ($-USD), adjusts for inflation based on latest year
+For any indicator involving rolls ups that need to be weighted by the population by geography, imports and merges population estimates
+'''
+
 def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_error, year_end, path_main, path_git):
+
+    print('')
+    print('Processing Step 2:')
+    print('Mapping Estimate ID field to cleaned label field, variable grouping fields, race/ethnicity mapping, and variable sorting order...')
+    print('If needed, adjusting income data for inflation...')
+    print('If needed for any aggregations, population weights are merged onto the dataframe...')
+    print('')
 
     if geography == 'Places':
         geo_ID = ['state', 'place', 'NAME']
@@ -245,13 +280,6 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
         df_census = df_census.rename(columns = {'metropolitan statistical area/micropolitan statistical area':'MSA_ID', 'NAME':'MSA'})
         geo_ID = ['MSA_ID', 'MSA']
     df_census['Year'] = df_census['Year'].astype(int)
-
-    print('')
-    print('Processing Step 2:')
-    print('Mapping Estimate ID field to cleaned label field, variable grouping fields, race/ethnicity mapping, and variable sorting order...')
-    print('If needed, adjusting income data for inflation...')
-    print('If needed for any aggregations, population weights are merged onto the dataframe...')
-
 
     df_census = df_census.merge(df_vars[['ID','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on = 'ID', how = 'left')
 
@@ -340,27 +368,24 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
     if 'County FIPS' in df_census.columns:
         df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
 
-
-    print('')
-
     return df_census
-
-
 
 
 
 
 ## ACS processing step (3)
 
-def acs_processing_3(df_census, geography):
+'''
+User defined function to clean/process ACS tables margin of error fields
+Also sorts the table by race/ethnicity (for consistency in the outputs) and by assigned variable sorting order
+'''
 
-    '''
-    User defined function to clean/process ACS margin of error fields and sort the data
-    '''
+def acs_processing_3(df_census, geography):
 
     print('')
     print('Processing Step 3:')
     print('Sort by user defined race/ethnicity field and variable sorting field, then drop those fields...')
+    print('')
 
     if geography == 'Places':
         geo_ID = ['State FIPS', 'Place ID', 'NAME']
@@ -394,8 +419,6 @@ def acs_processing_3(df_census, geography):
     df_census = df_census.sort_values(by = geo_ID + ['Year', 'Race_Ethnicity_sort', 'Sort'], ascending = [item in geo_ID for item in geo_ID] + [False, True, True])
     df_census = df_census.drop(['Race_Ethnicity_sort', 'Sort'], axis = 1)
     
-    print('')
-    
     return df_census
 
 
@@ -405,20 +428,19 @@ def acs_processing_3(df_census, geography):
 
 ## ACS processing step (4)
 
+'''
+User defined function to process ACS tables
+Rolls up population/household counts and standard errors and calculates percentages based on user defined geography/variable mappings
+'''
 
 def acs_processing_4(df_census, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips=None):
-
-    '''
-    User defined function to clean/process ACS data for rolling up geography/variable mappings 
-    for population/household counts and standard errors and calculates percentages based on
-    geography/variable mappings
-    '''
 
     print('')
     print('Processing Step 4:')
     print('Roll up estimates (and margin of errors) to user defined variable groupings...')
     print('Calculate percentages by geography and year combinations, if needed...')
     print('Reshape data from rows to columns...')
+    print('')
 
     if geography == 'Places':
         geo_ID = ['State FIPS', 'Place ID', 'NAME']
@@ -561,9 +583,8 @@ def acs_processing_4(df_census, indicator_name, geography, percentages, margin_o
         df_mpo2 = df_mpo2.sort_values(['MPO', 'Year'], ascending = [True, False])
 
     # Replace infinite values with NaN
-    df_census1 = df_census1.replace([np.inf, -np.inf, 0], np.nan)
-    
     # missing values represent a population of 0
+    df_census1 = df_census1.replace([np.inf, -np.inf, 0], np.nan)    
     df_census2 = df_census2.fillna(0)
     
     ## Check if we want to calculate proportions
@@ -609,8 +630,6 @@ def acs_processing_4(df_census, indicator_name, geography, percentages, margin_o
                                         , on = ['State FIPS','MPO', 'Year', 'Race_Ethnicity']
                                         , how = 'left')
             
-    print('')
-
     if geography == 'Counties':
         return df_census1, df_census2, df_mpo1, df_mpo2
     else:
@@ -618,16 +637,27 @@ def acs_processing_4(df_census, indicator_name, geography, percentages, margin_o
 
 
 
+## ---
 
+
+## PUMS processing steps ---
 
 
 ## PUMS processing step (1)
+
+'''
+User defined function to do initial cleaning of PUMS tables
+Cleans the FIPS codes fields
+Subsets to head of household (LEHD)
+Reassigns raw variable values with the descriptio on user defined geography/variable mappings
+'''
 
 def pums_processing_1(df_census, df_vars, sample_type, weight):
 
     print('')
     print('Processing Step 1:')
     print('Cleans FIPS codes fields, subsets to head of household (LEHD), reassigns raw variable values with the description, ...')
+    print('')
 
     groups  = list(df_vars[df_vars['Data Type'].str.contains('group')]['ID2'].unique())
     groups2 = list(df_vars[df_vars['Data Type'] ==           'group' ]['ID2'].unique())
@@ -679,16 +709,21 @@ def pums_processing_1(df_census, df_vars, sample_type, weight):
 
 
 
-
-
 ## PUMS processing step (2)
 
+'''
+User defined function to process PUMS tables
+Maps area codes together
+Links PUMA codes to county FIPS codes by year
+Then maps the county FIPS codes to MSA IDs
+'''
 
-def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0, path_git):
+def pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_git):
     
     print('')
     print('Processing Step 2:')
-    print()
+    print('Mapping PUMA codes to other area codes...')
+    print('')
 
     df_census = df_census.dropna()
     df_census = df_census.rename(columns = {'state':'State FIPS', 'county':'County FIPS'})
@@ -717,6 +752,26 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
     
     if sample_type == 'FOODSEC':
         df_census = df_census.sort_values(['State FIPS', 'MPO', 'County FIPS', 'Year'] + groups, ascending = [True, True, True, False] + [item in groups for item in groups])
+
+    return df_census
+
+
+
+## PUMS processing step (3)
+
+'''
+User defined function to clean grouping fields of PUMS tables
+Adjusts the race/ethnicity field to include hispanic or latino
+Creates new groups for Cost_6 indicator
+Adjusts $USD fields for inflation to the latest year (creates groupings as needed)
+'''
+
+def pums_processing_3(df_census, groups, indicator_name, path_config0):
+
+    print('')
+    print('Processing Step 3:')
+    print('Cleaning the race/ethnicity fields, creating new groups for specific indicators, adjusting income variables for inflation, ...')
+    print('')
 
     if 'HISP' in groups:
         df_census.loc[df_census['HISP'] == 'Hispanic or Latino', 'RAC1P'] = 'Hispanic or Latino'
@@ -806,15 +861,19 @@ def pums_processing_2(df_census, groups, indicator_name, dict_fips, path_config0
 
 
 
+## PUMS processing step (4)
 
+'''
+User defined function to process PUMS tables
+Rolls up population/household counts and standard errors and calculates percentages based on user defined geography/variable mappings
+'''
 
-## PUMS processing step (3)
-
-
-def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_thresh, percentages, groups):
+def pums_processing_4(df_census, indicator_name, weight, margin_of_error, MOE_thresh, percentages, groups):
 
     print('')
-    print('Processing 3...')
+    print('Processing Step 4:')
+    print('Rolling up estimtaes to desired group variables and geographies, and calculating percentages...')
+    print('')
 
     df_puma     = df_census.drop([                            'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis = 1)
     df_counties = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA',                               'SERIALNO'], axis = 1)
@@ -1087,18 +1146,23 @@ def pums_processing_3(df_census, indicator_name, weight, margin_of_error, MOE_th
             df_msa      = pd.concat([df_msa1     , df_msa2     ])
             df_mpo      = pd.concat([df_mpo1     , df_mpo2     ])
 
-
     return df_puma, df_counties, df_msa, df_mpo, groups
 
 
 
+## ---
 
-## FOODSEC processing step (3) (use 1-2 from PUMS)
 
-def food_processing_3(df_census, weight, percentages, groups):
+## CPS processing steps ---
+
+## FOODSEC processing step (4) (use 1-3 from PUMS process steps)
+
+def food_processing_4(df_census, weight, percentages, groups):
 
     print('')
-    print('Processing 3...')
+    print('Processing 4:')
+    print('Rolling up estimtaes to desired group variables and geographies, and calculating percentages...')
+    print('')
 
     if 'PTDTRACE' in groups:
         groups.remove('PTDTRACE')
@@ -1136,12 +1200,12 @@ def food_processing_3(df_census, weight, percentages, groups):
     return df_counties, df_mpo, groups
 
 
+## ---
 
 
 
 
-
-## LEHD processing step
+## LEHD processing steps ---
 
 def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=None):
     if indicator_name == 'Jobs_4':
@@ -1181,31 +1245,33 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
         if geography == 'MSA':
             
             df_census = df_census[['State FIPS', 'MSA_ID', 'MSA', 'Quarter', 'Firm Age', 'Emp']]
-
             df_census['State FIPS' ] = df_census['State FIPS' ].astype(str).apply('{:0>2}'.format)
 
             df_msa = df_census.groupby(['State FIPS', 'MSA_ID', 'MSA', 'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
-            
             df_msa = df_msa.sort_values(['State FIPS',  'MSA', 'Quarter', 'Firm Age'], ascending = [True, True, False, False])
-            
             df_msa = df_msa.reset_index(drop = True)
 
             if percentages == 'Yes':
                 df_msa['Percentage'] = 100*df_msa['Total'] / df_msa.groupby(['State FIPS', 'MSA', 'Quarter'])['Total'].transform('sum')
 
-    
     if geography == 'Counties':
         return df_counties, df_mpo
     if geography == 'MSA':
         return df_msa
 
 
+## ---
 
 
 
 
 
 ## Final organization/renaming of census data
+
+'''
+User defined function to finalize organizing of Census Bureau tables, based on SACOG specific indicators
+'''
+
 def rename_census(
         indicator_name, geography, sample_type, margin_of_error, percentages=None, groups=None, table_type=None,
         df_places1=None, df_blocks1=None, df_tracts1=None, df_counties1=None, df_mpo1=None, df_msa1=None, df_puma=None, df_counties=None, df_msa=None, df_mpo=None
