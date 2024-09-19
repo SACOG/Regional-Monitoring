@@ -3,7 +3,7 @@ The Regional Progress Report tracks change across economic growth, development, 
 
 This repository contains a majority of the Python code used to collect, process, and interpret the data required for the report and dashbaord.
 
-Repository organization:
+## Repository organization:
 
 (1) __code__ folders:
 - The __Python Code__ folder has a folder for each data source we collect
