@@ -200,6 +200,8 @@ if sample_type == 'PUMS':
     df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
                             , sheet_name = 'CountyFIPS'
                             , dtype = {'State FIPS': object, 'County FIPS': object})
+    # df_fips = df_fips[df_fips['Chamber Study'] == 'Yes']
+    # df_fips = df_fips[df_fips['Peer MSA'     ] == 'Yes']
     df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
                                  , sheet_name = 'PUMAcodes'
                                  , dtype = {'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
@@ -276,12 +278,6 @@ if estimate == 'LEHD':
     df_vars = df_vars[df_vars['Include'] == 'Yes']
     variables = df_vars['ID'].unique()
     variables = ','.join(variables)
-    # if sample_type == 'RH':
-    #     variables = 'race,' + variables
-    # if sample_type == 'SA':
-    #     variables = 'agegrp,' + variables
-    # if sample_type == 'SE':
-    #     variables = 'sex,' + variables
 
     if indicator_name == 'Jobs_4':
         variables = variables + '&ownercode=A05'
