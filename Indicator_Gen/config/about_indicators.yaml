@@ -13,7 +13,7 @@ DOF:
     Indicator Title:
     - Total population
     Source:
-    - California Department of Finance E- (current decade) and E-8 (prior) series
+    - California Department of Finance E-5 (current decade) and E-8 (prior) series
     Year(s):
     - 2000-2024
     Description:
@@ -40,7 +40,7 @@ DOF:
     Indicator Title:
     - Population growth rate
     Source:
-    - California Department of Finance E- (current decade) and E-8 (prior) series
+    - California Department of Finance E-5 (current decade) and E-8 (prior) series
     Year(s):
     - 2000-2024
     Description:
@@ -67,7 +67,7 @@ DOF:
     Indicator Title:
     - Population growth rate in largest regions
     Source:
-    - California Department of Finance E- (current decade) and E-8 (prior) series
+    - California Department of Finance E-5 (current decade) and E-8 (prior) series
     Year(s):
     - 2000-2024
     Description:
@@ -1665,33 +1665,41 @@ Zillow:
     Year(s):
     - 2000-2023
     Description:
-    - Home sale prices are approximated with the Zillow Home Value Index. In their own words, this index is "a measure of the typical home value and market changes across a given region and housing type. It reflects the typical value for homes in the 3th to 6th percentile range. Available as a smoothed, seasonally adjusted measure and as a raw measure." The smoothed measure is used here.
+    - Average sale price of homes in raw USD (not adjusted for inflation)
     Geography:
-    - 
+    - MPO
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
     - 
-    Notes:
-    - 
+    Notes: 'Home sale prices are approximated with the Zillow Home Value Index. In their own words,\n 
+    this index is "a measure of the typical home value and market changes across a given region\n 
+    and housing type. It reflects the typical value for homes in the 3th to 6th percentile range.\n 
+    Available as a smoothed, seasonally adjusted measure and as a raw measure." The smoothed measure is used here.'
 
   Cost_2:
     Indicator Title:
-    - Monthly Rent Price
+    - Average Rent Price
     Source:
     - Zillow
     Year(s):
     - 2000-2023
     Description:
-    - This data uses the Zillow Observed Rent Index. In their own words, this is "a smoothed measure of the typical observed market rate rent across a given region. ZORI is a repeat-rent index that is weighted to the rental housing stock to ensure representativeness across the entire market, not just those homes currently listed for-rent. The index is dollar-denominated by computing the mean of listed rents that fall into the 40th to 60th percentile range for all homes and apartments in a given region, which is weighted to reflect the rental housing stock."
+    - Average rent price of units in raw USD (not adjusted for inflation)
     Geography:
-    - MSA, MPO, County, Cities, ZIP (SACOG only)
+    - MPO
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
     - 
-    Notes:
-    -
+    Notes: 'This data uses the Zillow Observed Rent Index. In their own words,\n
+    this is "a smoothed measure of the typical observed market rate rent across\n
+    a given region. ZORI is a repeat-rent index that is weighted to the rental\n
+    housing stock to ensure representativeness across the entire market, not just\n 
+    those homes currently listed for-rent. The index is dollar-denominated by\n
+    computing the mean of listed rents that fall into the 40th to 60th percentile\n 
+    range for all homes and apartments in a given region, which is weighted to\n
+    reflect the rental housing stock."'
 
 
 
