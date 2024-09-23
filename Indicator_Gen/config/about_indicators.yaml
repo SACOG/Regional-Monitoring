@@ -1334,6 +1334,63 @@ BLS:
       who receive pay for any part of the pay period that includes the 
       12th of the month.'
 
+  CE:
+    Jobs_1: 
+      Indicator Title:
+      - Total Jobs by MSA
+      Source:
+      - BLS (Bureau of Labor Statistics) State and Area Employment, Hours, and Earnings Survey (Current Employment Statistics Survey)
+      Year(s):
+      - 2000-2024
+      Description:
+      - Monthly totals of people employed
+      Geography:
+      - National
+      Website:
+      - https://www.bls.gov/sae/overview.htm
+      Last Updated:
+      - 
+      Notes: 'The survey is updated on a monthly basis on the first of every month.\n
+      Employment data refer to persons on establishment payrolls who receive pay 
+      for any part of the pay period that includes the 12th of the month.'
+    
+    Jobs_2: 
+      Indicator Title:
+      - Total Number of Jobs by NAICS Sector
+      Source:
+      - BLS (Bureau of Labor Statistics) State and Area Employment, Hours, and Earnings Survey (Current Employment Statistics Survey)
+      Year(s):
+      - 2000-2024
+      Description:
+      - Monthly totals of people employed on the MSA level.
+      Geography:
+      - National
+      Website:
+      - https://www.bls.gov/sae/overview.htm
+      Last Updated:
+      - 
+      Notes: 'The survey is updated on a monthly basis on the first of every month.'
+    
+    Jobs_3: 
+      Indicator Title:
+      - Total Jobs by public/private and goods/services
+      Source:
+      - BLS (Bureau of Labor Statistics) State and Area Employment, Hours, and Earnings Survey (Current Employment Statistics Survey)
+      Year(s):
+      - 2000-2024
+      Description:
+      - Monthly totals of people employed
+      Geography:
+      - National
+      Website:
+      - https://www.bls.gov/sae/overview.htm
+      Last Updated:
+      - 
+      Notes: 'Employment data refer to persons on establishment payrolls 
+      who receive pay for any part of the pay period that includes the 
+      12th of the month.'
+
+
 
 
 SACOG Housing:
@@ -1616,21 +1673,20 @@ RTIS:
 
   Congestion_2:
     Indicator Title:
-    - Change in person hours delay
+    - Percent of road miles congested
     Source:
     - RTIS
     Year(s):
     - 2017-2023
     Description:
-    - Annual hours of Peak Hourly Excessive Delay per capita
+    - Percent of road miles congested
     Geography:
-    - SACOG Regions.
+    - SACOG MPO
     Website:
-    - file:///\\data-svr\Modeling\Congestion%20Management%20Process\FHWA%20Deliverables\June2017%20Deliverables\Final%20PDFs\SACOG%20CMP%20Final%20Report_30Jun2017.pdf
+    - file://data-svr/Modeling/Congestion%20Management%20Process/FHWA%20Deliverables/June2017%20Deliverables/Final%20PDFs/SACOG%20CMP%20Final%20Report_30Jun2017.pdf
     Last Updated:
     - 
-    Notes:
-    -
+    Notes: 'Data retreived from NPMRDS tool provided by RTIS'
 
   Congestion_3:
     Indicator Title:
@@ -1758,8 +1814,8 @@ TIMS:
     - https://tims.berkeley.edu/tools/safetypm/
     Last Updated:
     - 
-    Notes:
-    - TIMS uses the following data sets in the indicator preparation \n Serious Injury definition comes from SWITRS
+    Notes: 'TIMS uses the following data sets in the indicator preparation\n
+    Serious Injury definition comes from SWITRS'
 
   Safety_2:
     Indicator Title:
@@ -1776,8 +1832,8 @@ TIMS:
     - https://tims.berkeley.edu/tools/safetypm/
     Last Updated:
     - 
-    Notes:
-    - TIMS uses the following data sets in the indicator preparation \n Serious Injury definition comes from SWITRS
+    Notes: 'TIMS uses the following data sets in the indicator preparation\n 
+    Serious Injury definition comes from SWITRS'
 
 
 

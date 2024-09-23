@@ -11,27 +11,27 @@ df_urls = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xls
 
 # For ACS tables
 if sample_type == 'ACS':
-    exec(open(os.path.join(path_code, 'Step 01 - Supplemental Scripts', 'Queries', 'ACS.py')).read())
+    exec(open(os.path.join(path_code, 'Supplemental Scripts', 'Queries', 'ACS.py')).read())
 
 # For SUBJECT tables
 if sample_type == 'SUBJECT':
-    exec(open(os.path.join(path_code, 'Step 01 - Supplemental Scripts', 'Queries', 'SUBJECT.py')).read())
+    exec(open(os.path.join(path_code, 'Supplemental Scripts', 'Queries', 'SUBJECT.py')).read())
 
 # For DEC tables
 if estimate == 'DEC':
-    exec(open(os.path.join(path_code, 'Step 01 - Supplemental Scripts', 'Queries', 'DEC.py')).read())
+    exec(open(os.path.join(path_code, 'Supplemental Scripts', 'Queries', 'DEC.py')).read())
 
 # For PUMS tables
 if geography == 'PUMA':
-    exec(open(os.path.join(path_code, 'Step 01 - Supplemental Scripts', 'Queries', 'PUMS.py')).read())
+    exec(open(os.path.join(path_code, 'Supplemental Scripts', 'Queries', 'PUMS.py')).read())
 
 # For CPS Tables
 if estimate == 'CPS':
-    exec(open(os.path.join(path_code, 'Step 01 - Supplemental Scripts', 'Queries', 'CPS.py')).read())
+    exec(open(os.path.join(path_code, 'Supplemental Scripts', 'Queries', 'CPS.py')).read())
 
 # For LEHD Tables
 if estimate == 'LEHD':
-    exec(open(os.path.join(path_code, 'Step 01 - Supplemental Scripts', 'Queries', 'LEHD.py')).read())
+    exec(open(os.path.join(path_code, 'Supplemental Scripts', 'Queries', 'LEHD.py')).read())
 
 
 ## Calculate time amounted while requesting data
