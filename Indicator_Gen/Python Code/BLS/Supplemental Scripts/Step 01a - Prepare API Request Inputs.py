@@ -154,6 +154,7 @@ print('')
 print('Geography to Series ID mapping table: ')
 print('')
 
+
 df_series_area = pd.melt(
     pd.DataFrame.from_dict(dict_series)
     , var_name = 'area_text'

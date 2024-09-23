@@ -131,7 +131,6 @@ def write_about(sample_type, indicator_name, geography, year_start, year_end, pa
         
         return df_notes
     
-   
     df = split_notes(df)
 
     return df
