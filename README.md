@@ -36,5 +36,4 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 
 ## How to use data pipeline:
 
-
 Each pipeline run requires the "Configuration File.xlsx" excel workbook.  This workbook allows the user to set up exactly which geographies and estimates they want to pull.  The user needs to define an "indicator" that is linked to those estimates... (summary in progress)
