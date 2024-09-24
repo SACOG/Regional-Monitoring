@@ -16,8 +16,10 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
         2) Processing
         3) Data Visualization
         4) Exporting to Dashboard
+      
       *Steps 2-4 are specific processing steps for SACOG specific indicators
 - Data sources without an API available: TIMS, DOF, RTIS, Zillow, ... (technically, Zillow has an API, SACOG just doesn't meet the terms of use requirements)
+      - These data sources typically have one script, since we typically do not collect as much data and no "importing" step necessary
 
 (2) __config__ folders:
 - There is an overall config folder and a subsequent config folder for the data sources that have an API
@@ -25,15 +27,14 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
     - "Area Codes.xlsx" - a workbook that has all needed area code mappings (counties to PUMA's, counties to MSA's, census tracts to counties, ...) required for all indicators
     - "CA State Income Brackets by Household Size.xlsx" - a table that shows the CA state income brackets by household size by county (for indicators that require income brackets)
     - "CPI Inflation Adjustment Factors.xlsx" - a workbook that has various inflation adjustment factors (for indicators that include $-USD)
-    - "about_indicators.yaml" - a _.yaml_ file used to create the documentation files associated with each indicator
+    - "about_indicators.yaml" - a _yaml_ file used to create the documentation files associated with each indicator
     - "Functions.py" - a python script with user defined functions that all data sources utilize
  - Data source __config__ folder:
     - "Configuration File.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
     - "Functions.py" - a python script with user defined functions that the specific data source requires
 
 
-
-## How to use:
+## How to use data pipeline:
 
 
 Each pipeline run requires the "Configuration File.xlsx" excel workbook.  This workbook allows the user to set up exactly which geographies and estimates they want to pull.  The user needs to define an "indicator" that is linked to those estimates... (summary in progress)
