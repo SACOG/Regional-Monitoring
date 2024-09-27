@@ -24,6 +24,8 @@ DOF:
     - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
     - 
+    Next Update:
+    - 
     Notes: 'The Department of Finance prepares its population estimates in ten-year series. \n
       Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census periods, 
@@ -51,6 +53,8 @@ DOF:
     - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
     - 
+    Next Update:
+    - 
     Notes: 'The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
       Users should pay careful attention when using data that spans two decennial census
@@ -77,6 +81,8 @@ DOF:
     Website:
     - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
+    - 
+    Next Update:
     - 
     Notes: 
     - '\n The Department of Finance prepares its population estimates in ten-year series.\n
@@ -116,6 +122,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'This indicator shows the total population estimate by race/ethnicity, as well as the percentage.\n
@@ -142,7 +150,9 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
-      - 5
+      - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 
       Notes: 'This indicator shows the total population estimate by age cohort, as well as the percentage.\n 
@@ -169,6 +179,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -198,6 +210,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -222,6 +236,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -251,6 +267,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -277,6 +295,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -306,6 +326,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -337,6 +359,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -361,6 +385,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -388,6 +414,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -412,6 +440,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -441,6 +471,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -467,6 +499,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -497,6 +531,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -531,6 +567,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level\n
@@ -556,6 +594,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -586,6 +626,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -611,6 +653,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -640,6 +684,8 @@ ACS5:
       Website:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -672,6 +718,8 @@ ACS5:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -701,6 +749,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
@@ -727,6 +777,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by age cohort,
@@ -751,6 +803,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -777,6 +831,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -799,6 +855,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -826,6 +884,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -850,6 +910,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -876,6 +938,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -906,6 +970,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -928,6 +994,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -953,6 +1021,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -975,6 +1045,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -1002,6 +1074,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1026,6 +1100,10 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
+      - 
+      Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
         https://www.bls.gov/regions/west/news-release/consumerpriceindex_west.htm \n 
@@ -1051,6 +1129,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/data.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -1083,6 +1163,8 @@ ACS1:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
       - 
+      Next Update:
+      - 
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level 
@@ -1106,6 +1188,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -1135,6 +1219,8 @@ ACS1:
       Website:
       - https://www.census.gov/programs-surveys/acs/microdata.html
       Last Updated:
+      - 
+      Next Update:
       - 
       Margin of Error Limit:
       - 5
@@ -1228,29 +1314,52 @@ ACS1:
 
 
 CPS:
-  Health_1:
-    Indicator Title:
-    - Access to grocery stores by Race/Ethnicity
-    Source:
-    - Census 1 Year CPS (Current Population Survey) Food Security Sample
-    Year(s):
-    - 2009-2022
-    Description:
-    - 2009-2022 estimate at the SACOG region MPO level by race/ethnicity categories
-    Geography:
-    - Counties, MPO's
-    Website:
-    - https://www.census.gov/data/datasets/time-series/demo/cps/cps-supp_cps-repwgt/cps-food-security.html
-    Last Updated:
-    - 5
-    Notes: 'Category Names\n
-      HES1A:  Shopped at supermarket/grocery store for food purchases within the last week\n
-      HES1B:  Shopped at dollar stores, convenience, pharmacies, etc... for food purchases within the last week\n
-      There are for possible pairings from these categories:\n
-      Yes/Yes:  Used both supermarkets and dollar stores/pharmacies/convenience stores for food purchases within last week\n
-      Yes/No:  Exclusively used supermarket/grocery stores for food purchases within last week\n
-      No/Yes:  Exclusively used dollar/pharmacy/convenience store for food purchase within last week\n
-      No/No:  Did not make food purchase within last week'
+  FOODSEC:
+    Health_1:
+      Indicator Title:
+      - Access to grocery stores by Race/Ethnicity
+      Source:
+      - Census 1 Year CPS (Current Population Survey) Food Security Sample
+      Year(s):
+      - 2009-2022
+      Description:
+      - 2009-2022 estimate at the SACOG region MPO level by race/ethnicity categories
+      Geography:
+      - Counties, MPO's
+      Website:
+      - https://www.census.gov/data/datasets/time-series/demo/cps/cps-supp_cps-repwgt/cps-food-security.html
+      Last Updated:
+      - 5
+      Notes: 'Category Names\n
+        HES1A:  Shopped at supermarket/grocery store for food purchases within the last week\n
+        HES1B:  Shopped at dollar stores, convenience, pharmacies, etc... for food purchases within the last week\n
+        There are for possible pairings from these categories:\n
+        Yes/Yes:  Used both supermarkets and dollar stores/pharmacies/convenience stores for food purchases within last week\n
+        Yes/No:  Exclusively used supermarket/grocery stores for food purchases within last week\n
+        No/Yes:  Exclusively used dollar/pharmacy/convenience store for food purchase within last week\n
+        No/No:  Did not make food purchase within last week'
+
+  
+LEHD:
+  SA:
+    Jobs_4:
+      Indicator Title:
+      - Number of employees at young job firms
+      Source:
+      - Census LEHD (Longitudinal Employer-Household Dynamics) Quarterly Workforce Indicators
+      Year(s):
+      - 2009-2023
+      Description:
+      - Number of employees working at firms aged 5 years or less
+      Geography:
+      - Counties, MPO's, MSA's
+      Website:
+      - https://lehd.ces.census.gov/
+      Last Updated:
+      - 
+      Next Update:
+      - 
+      Notes: 'Number of jobs for firms aged 5 years or less, updated on a quarterly basis.'
 
 
 
@@ -1778,24 +1887,23 @@ Zillow:
 #     Notes:
 #     - 
     
-# BEA:
-#   Output_1:
-#     Indicator Title:
-#     - GRP
-#     Source:
-#     - BEA
-#     Year(s):
-#     - 
-#     Description:
-#     - 
-#     Geography:
-#     - 
-#     Website:
-#     -
-#     Last Updated:
-#     - 
-#     Notes:
-#     - 
+BEA:
+  Output_1:
+    Indicator Title:
+    - GRP
+    Source:
+    - BEA
+    Year(s):
+    - 
+    Description:
+    - 
+    Geography:
+    - 
+    Website:
+    -
+    Last Updated:
+    - 
+    Notes: 'Test'
 
 
 TIMS:

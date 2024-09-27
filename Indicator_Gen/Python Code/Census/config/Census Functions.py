@@ -1209,6 +1209,10 @@ def food_processing_4(df_census, weight, percentages, groups):
 
 def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=None):
     if indicator_name == 'Jobs_4':
+
+        df_census = df_census[df_census['Emp'] != 'null']
+        df_census = df_census[~df_census['Emp'].isna()]
+        df_census['Emp'    ] = df_census['Emp'    ].astype('int')
         df_census['firmage'] = df_census['firmage'].astype('int')
         df_census = df_census[df_census['firmage'] != 0]
         df_census.loc[ df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Less than or equal to 5 years old'
@@ -1216,7 +1220,7 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
         df_census = df_census.drop(['Year', 'ownercode', 'firmage'], axis = 1)
 
         df_census = df_census.rename(columns = {'time':'Quarter'})
-        df_census = df_census[df_census['Quarter'].str.contains('Q3')] # remove this if you want to show all quarters
+        # df_census = df_census[df_census['Quarter'].str.contains('Q3')] # remove this if you want to show all quarters
 
         if geography == 'Counties':
 
@@ -1244,15 +1248,14 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
 
         if geography == 'MSA':
             
-            df_census = df_census[['State FIPS', 'MSA_ID', 'MSA', 'Quarter', 'Firm Age', 'Emp']]
-            df_census['State FIPS' ] = df_census['State FIPS' ].astype(str).apply('{:0>2}'.format)
+            df_census = df_census[['MSA_ID', 'MSA', 'Quarter', 'Firm Age', 'Emp']]
 
-            df_msa = df_census.groupby(['State FIPS', 'MSA_ID', 'MSA', 'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
-            df_msa = df_msa.sort_values(['State FIPS',  'MSA', 'Quarter', 'Firm Age'], ascending = [True, True, False, False])
+            df_msa = df_census.groupby(['MSA_ID', 'MSA', 'Quarter', 'Firm Age'], as_index = False).agg(Total = ('Emp', 'sum'))
+            df_msa = df_msa.sort_values(['MSA', 'Quarter', 'Firm Age'], ascending = [True, False, False])
             df_msa = df_msa.reset_index(drop = True)
 
             if percentages == 'Yes':
-                df_msa['Percentage'] = 100*df_msa['Total'] / df_msa.groupby(['State FIPS', 'MSA', 'Quarter'])['Total'].transform('sum')
+                df_msa['Percentage'] = 100*df_msa['Total'] / df_msa.groupby(['MSA', 'Quarter'])['Total'].transform('sum')
 
     if geography == 'Counties':
         return df_counties, df_mpo
