@@ -39,11 +39,6 @@ def ME_split(text):
 
 
 
-
-
-
-
-
 ## Main function used to query data ------
 
 '''
@@ -1516,12 +1511,6 @@ def rename_census(
         return df_puma, df_counties, df_msa, df_mpo
     else:
         return df_org
-
-
-
-
-
-
 
 
 
