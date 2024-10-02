@@ -200,54 +200,54 @@ def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
 plots_link = 'https://mapping.sacog.org/monitoring/Data/'
 
 
-color_map_nat_peermsa = {
-                 "SACOG":"#9DC209",
-                 "National": "#1F45FC",
-                 "Peer MSA": "#1E90FF"
-}
+# color_map_nat_peermsa = {
+#                  "SACOG":"#9DC209",
+#                  "National": "#1F45FC",
+#                  "Peer MSA": "#1E90FF"
+# }
 
 
-def remove_metro(x):
-    x = re.sub(' Metro Area', '', x)
-    return x
+# def remove_metro(x):
+#     x = re.sub(' Metro Area', '', x)
+#     return x
 
 
-color_map_nat_peers = {
-    'Sacramento-Roseville-Folsom, CA': "#9DC209"
-    , 'Yuba City, CA': "#9DC209"
-    , 'National': "#1F45FC"
-    , 'Austin-Round Rock-Georgetown, TX': "#1E90FF"
-    , 'Charlotte-Concord-Gastonia, NC-SC': "#1E90FF"
-    , 'Cincinnati, OH-KY-IN': "#1E90FF"
-    , 'Cleveland-Elyria, OH': "#1E90FF"
-    , 'Columbus, OH': "#1E90FF"
-    , 'Detroit-Warren-Dearborn, MI': "#1E90FF"
-    , 'Indianapolis-Carmel-Anderson, IN': "#1E90FF"
-    , 'Kansas City, MO-KS': "#1E90FF"
-    , 'Miami-Fort Lauderdale-Pompano Beach, FL': "#1E90FF"
-    , 'Orlando-Kissimmee-Sanford, FL': "#1E90FF"
-    , 'Phoenix-Mesa-Chandler, AZ': "#1E90FF"
-    , 'Pittsburgh, PA': "#1E90FF"
-    , 'Portland-Vancouver-Hillsboro, OR-WA': "#1E90FF"
-    , 'Riverside-San Bernardino-Ontario, CA': "#1E90FF"
-    , 'Salt Lake City, UT': "#1E90FF"
-    , 'San Antonio-New Braunfels, TX': "#1E90FF"
-    , 'San Diego-Chula Vista-Carlsbad, CA': "#1E90FF"
-    , 'San Francisco-Oakland-Berkeley, CA': "#1E90FF"
-    , 'San Jose-Sunnyvale-Santa Clara, CA': "#1E90FF"
-    , 'St. Louis, MO-IL': "#1E90FF"
-    , 'Tampa-St. Petersburg-Clearwater, FL': "#1E90FF"
-}
+# color_map_nat_peers = {
+#     'Sacramento-Roseville-Folsom, CA': "#9DC209"
+#     , 'Yuba City, CA': "#9DC209"
+#     , 'National': "#1F45FC"
+#     , 'Austin-Round Rock-Georgetown, TX': "#1E90FF"
+#     , 'Charlotte-Concord-Gastonia, NC-SC': "#1E90FF"
+#     , 'Cincinnati, OH-KY-IN': "#1E90FF"
+#     , 'Cleveland-Elyria, OH': "#1E90FF"
+#     , 'Columbus, OH': "#1E90FF"
+#     , 'Detroit-Warren-Dearborn, MI': "#1E90FF"
+#     , 'Indianapolis-Carmel-Anderson, IN': "#1E90FF"
+#     , 'Kansas City, MO-KS': "#1E90FF"
+#     , 'Miami-Fort Lauderdale-Pompano Beach, FL': "#1E90FF"
+#     , 'Orlando-Kissimmee-Sanford, FL': "#1E90FF"
+#     , 'Phoenix-Mesa-Chandler, AZ': "#1E90FF"
+#     , 'Pittsburgh, PA': "#1E90FF"
+#     , 'Portland-Vancouver-Hillsboro, OR-WA': "#1E90FF"
+#     , 'Riverside-San Bernardino-Ontario, CA': "#1E90FF"
+#     , 'Salt Lake City, UT': "#1E90FF"
+#     , 'San Antonio-New Braunfels, TX': "#1E90FF"
+#     , 'San Diego-Chula Vista-Carlsbad, CA': "#1E90FF"
+#     , 'San Francisco-Oakland-Berkeley, CA': "#1E90FF"
+#     , 'San Jose-Sunnyvale-Santa Clara, CA': "#1E90FF"
+#     , 'St. Louis, MO-IL': "#1E90FF"
+#     , 'Tampa-St. Petersburg-Clearwater, FL': "#1E90FF"
+# }
 
 
 
 
-color_map_eth  = {
-    'Asian': '#9DC209'
-    , 'Black or African American': '#1E90FF'
-    , 'Hispanic or Latino': "#FBB117"
-    , 'White (NH)': "#DC381F"
-}
+# color_map_eth  = {
+#     'Asian': '#9DC209'
+#     , 'Black or African American': '#1E90FF'
+#     , 'Hispanic or Latino': "#FBB117"
+#     , 'White (NH)': "#DC381F"
+# }
 
 
 
