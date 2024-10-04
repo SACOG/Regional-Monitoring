@@ -197,6 +197,33 @@ def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
 
 
 
+
+
+font_family = 'Microsoft YaHei'
+template = 'plotly_white'
+config={'modeBarButtonsToRemove': ['select', 'lasso', 'toImage'], 'displaylogo': False}
+
+
+def plot_agol(export):
+    fig.update_layout(
+        legend_title=None
+        , title=title
+        , template=template
+        , font_family=font_family
+        , xaxis_title=None
+        , yaxis_title=None
+        , yaxis=dict(tickfont=dict(size=12))
+        , xaxis=dict(tickfont=dict(size=12))
+        )
+    
+    fig.show(config=config)
+    
+    if export:
+        fig.write_html(file=os.path.join(path_plots, f'{indicator_name}_{plot_name}.html'), config=config)
+
+
+
+
 plots_link = 'https://mapping.sacog.org/monitoring/Data/'
 
 
@@ -205,11 +232,6 @@ plots_link = 'https://mapping.sacog.org/monitoring/Data/'
 #                  "National": "#1F45FC",
 #                  "Peer MSA": "#1E90FF"
 # }
-
-
-# def remove_metro(x):
-#     x = re.sub(' Metro Area', '', x)
-#     return x
 
 
 # color_map_nat_peers = {
@@ -240,8 +262,6 @@ plots_link = 'https://mapping.sacog.org/monitoring/Data/'
 # }
 
 
-
-
 # color_map_eth  = {
 #     'Asian': '#9DC209'
 #     , 'Black or African American': '#1E90FF'
@@ -250,14 +270,3 @@ plots_link = 'https://mapping.sacog.org/monitoring/Data/'
 # }
 
 
-
-
-font_family = 'Microsoft YaHei'
-template = 'plotly_white'
-
-
-# color_mapping = {
-#                  "Dodger Blue": "#1E90FF",
-#                  "Blue Orchid": "#1F45FC",
-#                  "Pistachio Green":"#9DC209"
-# }
