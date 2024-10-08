@@ -44,13 +44,28 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 
 This is only relevant to the _BLS_ and _Census_ folders.  Using the Census Bureau as an example:
 
-The data pipeline for the Census Bureau can be found in the _Regional-Monitoring/Indicator_Gen/Data/Census_ folder.  The Census Bureau has data from multiple surveys and samples that can be accessed through an API.  This link here https://api.census.gov/data.html, tells you exactly which surveys have data available through their API and how to access them (which geographies are available, what variables are available, which years, and exactly how to write the API request query).  The "Census Configuration File.xlsx" workbook found in the _config_ folder summarizes their API data structure.  This is where a user configures the data pipeline, meaning they can set up which survey/sample, years, variables, and geographies they would like to pull data from.
+The data pipeline for the Census Bureau can be found in the _Regional-Monitoring/Indicator_Gen/Data/Census_ folder.  The Census Bureau has data from multiple surveys and samples that can be accessed through an API.  
+This link here https://api.census.gov/data.html, tells you exactly which surveys have data available through their API and how to access them (which geographies are available, what variables are available, which years, and exactly how to write the API request query).
+
+The "Census Configuration File.xlsx" workbook found in the _config_ folder summarizes their API data structure.  This is where a user configures the data pipeline, meaning they can set up which survey/sample, years, variables, and geographies they would like to pull data from.
 
 For example, suppose a user would like to pull data for the Sacramento region on means of transportation to work from the American Community Survey (Table ID B08301):
-(1) Start with the "ACS" tab.  This contains all the tables/variables that can be pulled from ACS (https://api.census.gov/data/2022/acs/acs5/variables.html). The user sets the "Indicator Name" and "Include" columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed).  The "Indicator Name" is a user defined reference table name.  The "Include" column requires a Yes/No input.  For Table ID B08301, the indicator name is currently defined as "Commute_1" and the estimates are set to include _Estimate!!Total:!!Car, truck, or van:!!Drove alone_, _Estimate!!Total:!!Car, truck, or van:!!Carpooled:_, etc...
-(2) 
+
+(1) Go to the "ACS" tab.  This contains all the tables/variables that can be pulled from ACS (https://api.census.gov/data/2022/acs/acs5/variables.html). 
+The user sets the "Indicator Name" and "Include" columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed).  
+The "Indicator Name" is a user defined reference table name (name it whatever you want).  The "Include" column requires a Yes/No input.  
+For Table ID B08301, set the indicator name to "Commute_1" and set the Include to "Yes" for  _Estimate!!Total:!!Car, truck, or van:!!Drove alone_ and _Estimate!!Total:!!Worked from home_ and "No" for all other estimates.
+
+(2) In the Counties tab, make sure the counties listed are El Dorado, Placer, Sacramento, Sutter, Yolo, and Yuba.  Make sure the states listed are all "CA".
+
+(3) In the Inputs tab, set the indicator name to "Commute_1", estimate to "ACS5", sample to "ACS", geography to "Counties", import_tab to "Counties", margin_of_error to "No", year_start to "2009", and year_end to "2022".
+
+(4) Save the excel workbook.
 
 
+You have now configured your data pipeline to import all ACS5 estimate variables from the ACS tab linked to "Commute_1" for the years 2009 to 2022 and counties listed in the Counties tab (not including margin of errors).
 
 
-(Detailed instructions in progress)
+Now, you can navigate over to the "Step 01 - Query Census Data.ipynb" jupyter notebook and hit run all to import and export the data (make sure to update the file paths in the "Preparing Workspace" section of the notebook).
+
+
