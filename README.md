@@ -51,21 +51,21 @@ The "Census Configuration File.xlsx" workbook found in the _config_ folder summa
 
 For example, suppose a user would like to pull data for the Sacramento region on means of transportation to work from the American Community Survey (Table ID B08301):
 
-(1) Go to the "ACS" tab.  This contains all the tables/variables that can be pulled from ACS (https://api.census.gov/data/2022/acs/acs5/variables.html). 
-The user sets the "Indicator Name" and "Include" columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed).  
-The "Indicator Name" is a user defined reference table name (name it whatever you want).  The "Include" column requires a Yes/No input.  
+1) Go to the __ACS__ tab.  This contains all the tables/variables that can be pulled from ACS (https://api.census.gov/data/2022/acs/acs5/variables.html). 
+The user sets the *Indicator Name* and *Include* columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed). 
+The "Indicator Name" is a user defined reference table name (you can name it whatever you want). The "Include" column requires a Yes/No input. 
 For Table ID B08301, set the indicator name to "Commute_1" and set the Include to "Yes" for  _Estimate!!Total:!!Car, truck, or van:!!Drove alone_ and _Estimate!!Total:!!Worked from home_ and "No" for all other estimates.
 
-(2) In the Counties tab, make sure the counties listed are El Dorado, Placer, Sacramento, Sutter, Yolo, and Yuba.  Make sure the states listed are all "CA".
+2) In the __Counties__ tab, make sure the counties listed are El Dorado, Placer, Sacramento, Sutter, Yolo, and Yuba.  Make sure the states listed are all "CA".
 
-(3) In the Inputs tab, set the indicator name to "Commute_1", estimate to "ACS5", sample to "ACS", geography to "Counties", import_tab to "Counties", margin_of_error to "No", year_start to "2009", and year_end to "2022".
+3) In the __Inputs__ tab, set the *indicator_name* to "Commute_1", *estimate* to "ACS5", *sample* to "ACS", *geography* to "Counties", *import_tab* to "Counties", *margin_of_error* to "No", *year_start* to "2009", and *year_end* to "2022".
 
-(4) Save the excel workbook.
+4) Save the excel workbook.
 
 
 You have now configured your data pipeline to import all ACS5 estimate variables from the ACS tab linked to "Commute_1" for the years 2009 to 2022 and counties listed in the Counties tab (not including margin of errors).
 
 
-Now, you can navigate over to the "Step 01 - Query Census Data.ipynb" jupyter notebook and hit run all to import and export the data (make sure to update the file paths in the "Preparing Workspace" section of the notebook).
+Now, you can open the "Step 01 - Query Census Data.ipynb" jupyter notebook and hit run all to import and export the data (make sure to update the file paths in the "Preparing Workspace" section of the notebook).
 
 
