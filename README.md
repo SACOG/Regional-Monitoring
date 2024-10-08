@@ -52,9 +52,9 @@ The "Census Configuration File.xlsx" workbook found in the _config_ folder summa
 For example, suppose a user would like to pull data for the Sacramento region on means of transportation to work from the American Community Survey (Table ID B08301):
 
 1) Go to the __ACS__ tab.  This contains all the tables/variables that can be pulled from ACS (https://api.census.gov/data/2022/acs/acs5/variables.html). 
-The user sets the *Indicator Name* and *Include* columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed). 
-The "Indicator Name" is a user defined reference table name (you can name it whatever you want). The "Include" column requires a Yes/No input. 
-For Table ID B08301, set the indicator name to "Commute_1" and set the Include to "Yes" for  _Estimate!!Total:!!Car, truck, or van:!!Drove alone_ and _Estimate!!Total:!!Worked from home_ and "No" for all other estimates.
+The user sets the __Indicator Name__ and __Include__ columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed). 
+The __Indicator Name__ is a user defined reference table name (you can name it whatever you want). The __Include__ column requires a Yes/No input. 
+For Table ID B08301, set the __Indicator Name__ to "Commute_1" and set the __Include__ column to "Yes" for  _Estimate!!Total:!!Car, truck, or van:!!Drove alone_ and _Estimate!!Total:!!Worked from home_ and "No" for all other estimates.
 
 2) In the __Counties__ tab, make sure the counties listed are El Dorado, Placer, Sacramento, Sutter, Yolo, and Yuba.  Make sure the states listed are all "CA".
 
