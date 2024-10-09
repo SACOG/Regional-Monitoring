@@ -63,7 +63,7 @@ For Table ID B08301, set the __Indicator Name__ to "Commute_1" and set the __Inc
 4) Save the excel workbook.
 
 
-You have now configured your data pipeline to import all ACS5 estimate variables from the ACS tab linked to "Commute_1" for the years 2009 to 2022 and counties listed in the Counties tab (not including margin of errors).
+You have now configured your data pipeline to import all ACS5 estimate variables linked to "Commute_1" in the ACS tab for the years 2009 to 2022 and counties listed in the Counties tab (not including margin of errors).
 
 
 Now, you can open the "Step 01 - Query Census Data.ipynb" jupyter notebook and hit run all to import and export the data (make sure to update the file paths in the "Preparing Workspace" section of the notebook).
