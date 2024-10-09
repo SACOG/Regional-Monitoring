@@ -2,14 +2,13 @@ print('Bureau of Labor Statistics importing parameters:')
 print('')
 
 # Import objects
-df_params = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsx'), sheet_name = 'Inputs')
+df_params = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsm'), sheet_name = 'Inputs', usecols='A:B')
 
 
 # Set parameters for querying BLS data
 indicator_name = df_params[df_params['Type'] == 'indicator_name']['Input'].values[0]
 survey         = df_params[df_params['Type'] == 'survey'        ]['Input'].values[0]
 geography      = df_params[df_params['Type'] == 'geography'     ]['Input'].values[0]
-percentages    = df_params[df_params['Type'] == 'percentages'   ]['Input'].values[0]
 year_start     = df_params[df_params['Type'] == 'year_start'    ]['Input'].values[0]
 year_end       = df_params[df_params['Type'] == 'year_end'      ]['Input'].values[0]
 
@@ -18,7 +17,6 @@ year_end       = df_params[df_params['Type'] == 'year_end'      ]['Input'].value
 print('Indicator name: ' + indicator_name )
 print('Survey:         ' + survey         )
 print('Geography:      ' + geography      )
-print('Percentages:    ' + percentages    )
 print('Start year:     ' + str(year_start))
 print('End year:       ' + str(year_end  ))
 
@@ -29,7 +27,7 @@ print('Series ID construction for API request:')
 print('')
 
 # Import objects
-df_series_map = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsx'), sheet_name = 'Series ID Map')
+df_series_map = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsm'), sheet_name = 'Series ID Map')
 df_series_map = df_series_map[['Type', survey]]
 
 # Set parameters for querying BLS data
@@ -46,14 +44,14 @@ dict_series = {}
 print('Survey prefix: ' + survey)
 
 if seasonal_code == 'Yes':
-    df_seasonal = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsx'), sheet_name = 'seasonal_adj_codes')
+    df_seasonal = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsm'), sheet_name = 'seasonal_adj_codes')
     df_seasonal = df_seasonal[df_seasonal['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_seasonal = df_seasonal[df_seasonal['Include'] == 'Yes']
     seasonal_code = df_seasonal['seasonal_code'].values[0]
     print('Seasonal code: ' + seasonal_code)
     
 if area_code == 'Yes':
-    df_area = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsx'), sheet_name = 'area_codes', dtype = {'County FIPS': object, 'MSA_ID': object})
+    df_area = pd.read_excel(os.path.join(path_config, 'BLS Configuration File.xlsm'), sheet_name = 'area_codes', dtype = {'County FIPS': object, 'MSA_ID': object})
     df_area = df_area[df_area['Survey'] == survey]
     df_area = df_area[df_area['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_area = df_area[df_area['Include'] == 'Yes']
@@ -82,9 +80,7 @@ if area_code == 'Yes':
 
 
 if industry_code == 'Yes':
-    df_industries = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsx")
-                              , sheet_name = 'industry_codes'
-                              , dtype = {'industry_code': object})
+    df_industries = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsm"), sheet_name = 'industry_codes', dtype = {'industry_code': object})
     df_industries = df_industries[df_industries['Survey'] == survey]
     df_industries = df_industries[df_industries['Include'] == 'Yes']
     df_industries = df_industries[df_industries['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
@@ -95,9 +91,7 @@ if industry_code == 'Yes':
 
     
 if data_type_code == 'Yes':
-    df_datatypes = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsx")
-                             , sheet_name = 'datatype_codes'
-                              , dtype = {'data_type_code': object})
+    df_datatypes = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsm"), sheet_name = 'datatype_codes', dtype = {'data_type_code': object})
     df_datatypes = df_datatypes[df_datatypes['Survey'].str.contains(survey)]
     df_datatypes = df_datatypes[df_datatypes['Include'] == 'Yes']
     df_datatypes = df_datatypes[df_datatypes['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
@@ -106,9 +100,7 @@ if data_type_code == 'Yes':
 
 
 if measure_code == 'Yes':
-    df_measures = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsx")
-                             , sheet_name = 'measure_codes'
-                              , dtype = {'data_type_code': object})
+    df_measures = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsm"), sheet_name = 'measure_code', dtype = {'data_type_code': object})
     df_measures = df_measures[df_measures['Survey'].str.contains(survey)]
     df_measures = df_measures[df_measures['Include'] == 'Yes']
     df_measures = df_measures[df_measures['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]

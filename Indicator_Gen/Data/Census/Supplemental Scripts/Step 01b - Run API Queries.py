@@ -4,7 +4,7 @@ start_time = time.time()
 
 
 ## Import Census Bureau data to url mapping table
-df_urls = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = 'URL')
+df_urls = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = 'URL')
 
 
 ## API Request Scripts
