@@ -2,10 +2,10 @@ print('Census Bureau processing parameters:')
 print('')
 
 # Import parameters table
-df_params = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = 'Inputs')
+df_params = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = 'Inputs', usecols='A:B')
 
 # Import indicators table
-df_indicators = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = 'Indicators')
+df_indicators = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = 'Indicators')
 
 
 # Set parameters for querying Census data

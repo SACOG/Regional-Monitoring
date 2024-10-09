@@ -76,7 +76,7 @@ def re_remove_pre(x, exp = ' '):
 
    
 # Function to write about page for each indicator
-def write_about(sample_type, indicator_name, geography, year_start, year_end, path_config0, MOE_thresh=None, estimate=None):
+def write_about(sample_type, indicator_name, year_start, year_end, path_config0, geography=None, MOE_thresh=None, estimate=None):
 
     
     '''
@@ -105,7 +105,8 @@ def write_about(sample_type, indicator_name, geography, year_start, year_end, pa
 
     df.loc[df['Indicator'] == 'Last Updated', indicator_name] = date.today().strftime('%Y-%m-%d')
     df.loc[df['Indicator'] == 'Year(s)'     , indicator_name] = f"{year_start}-{year_end}"
-    df.loc[df['Indicator'] == 'Geography'   , indicator_name] = geography
+    if geography is not None:
+        df.loc[df['Indicator'] == 'Geography'   , indicator_name] = geography
     if MOE_thresh is not None:
         df.loc[df['Indicator'] == 'Margin of Error Limit', indicator_name] = MOE_thresh
 

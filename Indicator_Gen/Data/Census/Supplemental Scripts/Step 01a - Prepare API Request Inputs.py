@@ -2,7 +2,7 @@ print('Census Bureau import parameters:')
 print('')
 
 # Import objects
-df_params = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = 'Inputs')
+df_params = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = 'Inputs', usecols='A:B')
 
 # Set parameters for querying Census data
 indicator_name     = df_params[df_params['Type'] == 'indicator_name' ]['Input'].values[0]
@@ -35,7 +35,7 @@ print('')
 
 
 ## Import Variable Mapping
-df_inputs = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = import_tab)
+df_inputs = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = import_tab)
 
 # Set years
 if year_start == 'timeseries':
@@ -53,7 +53,7 @@ if estimate == 'DEC':
     # Import County FIPS mapping
     # Convert to dictionary object for easy state-county combination importing
 
-    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = estimate)
+    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = estimate)
     df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_vars = df_vars[df_vars['Include'] == 'Yes']
     
@@ -93,7 +93,7 @@ if estimate == 'DEC':
 ## For ACS1 or ACS5 data
 if sample_type in ['ACS', 'SUBJECT']:
 
-    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = sample_type)
+    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = sample_type)
     df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_vars = df_vars[df_vars['Include'] == 'Yes']
     
@@ -163,7 +163,7 @@ if sample_type == 'PUMS':
     # Create dictionary of variable mappings by year (sometimes the variable name changes over time)
     # Import County FIPS mapping
     # Convert to dictionary object for easy state-county combination importing
-    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = sample_type)
+    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = sample_type)
     df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
     df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     if 'H' in df_vars['Table Type'].unique():
@@ -233,7 +233,7 @@ if sample_type == 'PUMS':
 ## For CPS data
 if estimate == 'CPS':
     
-    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = sample_type)
+    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = sample_type)
     df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
     df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_vars = df_vars[df_vars['Include'] == 'Yes']
@@ -272,7 +272,7 @@ if estimate == 'CPS':
 
 ## For LEHD data
 if estimate == 'LEHD':
-    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsx'), sheet_name = estimate)
+    df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = estimate)
     df_vars = df_vars[df_vars['Sample'] == sample_type]
     df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_vars = df_vars[df_vars['Include'] == 'Yes']
