@@ -80,6 +80,8 @@ def query_census(
     variables_ = variables
 
     # Specify which geography to import
+    if geography == 'Congressional Districts':
+        location_ = '&for=congressional%20district:*' + '&in=state:' + state
     if geography == 'Places':
         location_ = '&for=place:*' + '&in=state:' + state
     if geography == 'Block Groups':
