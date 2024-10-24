@@ -56,9 +56,9 @@ def query_census(
     ):
         
     # Assert that inputs for estimate and geography are appropriate
-    assert estimate  in ['ACS5'  , 'ACS1'        , 'DEC', 'CPS' , 'LEHD'                                   ], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
-    assert sample    in ['ACS'   , 'DEC'         , 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'RH'  , 'SA', 'SE'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
-    assert geography in ['Places', 'Block Groups', 'Tracts'     , 'Counties', 'MSA'    , 'PUMA'            ], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
+    assert estimate  in ['ACS5', 'ACS1', 'DEC', 'CPS' , 'LEHD']                                                                                                                             , "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
+    assert sample    in ['ACS', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'RH'  , 'SA', 'SE']                                                                                            , "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
+    assert geography in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA', 'Congressional Districts', 'State Legislative Upper Districts', 'State Legislative Lower Districts'], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
@@ -82,6 +82,10 @@ def query_census(
     # Specify which geography to import
     if geography == 'Congressional Districts':
         location_ = '&for=congressional%20district:*' + '&in=state:' + state
+    if geography == 'State Legislative Upper Districts':
+        location_ = '&for=state%20legislative%20district%20(upper%20chamber):*' + '&in=state:' + state
+    if geography == 'State Legislative Lower Districts':
+        location_ = '&for=state%20legislative%20district%20(lower%20chamber):*' + '&in=state:' + state
     if geography == 'Places':
         location_ = '&for=place:*' + '&in=state:' + state
     if geography == 'Block Groups':
@@ -142,6 +146,9 @@ group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
 group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
 group_msa      = ['State FIPS',        'MSA_ID'     , 'MSA'        ]
 group_mpo      = ['State FIPS', 'MPO'                              ]
+group_cd       = ['State FIPS', 'Congressional District'           ]
+group_slud     = ['State FIPS', 'State Legislative Upper District' ]
+group_slld     = ['State FIPS', 'State Legislative Lower District' ]
 
 
 
@@ -202,6 +209,13 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
     if geography == 'MSA':
         df_census = df_census.rename(columns = {'metropolitan statistical area/micropolitan statistical area':'MSA_ID', 'NAME':'MSA'})
         geo_ID = ['MSA_ID', 'MSA']
+    if geography == 'Congressional Districts':
+        geo_ID = ['NAME', 'state', 'congressional district']
+    if geography == 'State Legislative Upper Districts':
+        geo_ID = ['NAME', 'state', 'state legislative district (upper chamber)']
+    if geography == 'State Legislative Lower Districts':
+        geo_ID = ['NAME', 'state', 'state legislative district (lower chamber)']
+
 
     df_census = df_census.replace('-666666666', np.nan)
     df_census = df_census.replace('-222222222', np.nan)
@@ -276,6 +290,12 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
     if geography == 'MSA':
         df_census = df_census.rename(columns = {'metropolitan statistical area/micropolitan statistical area':'MSA_ID', 'NAME':'MSA'})
         geo_ID = ['MSA_ID', 'MSA']
+    if geography == 'Congressional Districts':
+        geo_ID = ['NAME', 'state', 'congressional district']
+    if geography == 'State Legislative Upper Districts':
+        geo_ID = ['NAME', 'state', 'state legislative district (upper chamber)']
+    if geography == 'State Legislative Lower Districts':
+        geo_ID = ['NAME', 'state', 'state legislative district (lower chamber)']
     df_census['Year'] = df_census['Year'].astype(int)
 
     df_census = df_census.merge(df_vars[['ID','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on = 'ID', how = 'left')
@@ -307,6 +327,12 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
             df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 Counties ACS5.xlsx'    ), sheet_name = 'Counties'    )
         if geography == 'MSA':
             df_pop = pd.read_excel(os.path.join(path_pop, 'National', 'Pop_3 MSA ACS5_National.xlsx'), sheet_name = 'MSA')
+        if geography == 'Congressional Districts':
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 Congressional Districts ACS5.xlsx'), sheet_name = 'CD')
+        if geography == 'State Legislative Upper Districts':
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 State Legislative Upper Districts ACS5.xlsx'), sheet_name = 'SLDU')
+        if geography == 'State Legislative Lower Districts':
+            df_pop = pd.read_excel(os.path.join(path_pop, 'Pop_3 State Legislative Lower Districts ACS5.xlsx'), sheet_name = 'SLDL')
 
         if geography == 'MSA':
             df_pop = df_pop[['MSA_ID', 'Year','Race_Ethnicity', 'Population']]
@@ -359,11 +385,32 @@ def acs_processing_2(df_census, df_vars, indicator_name, geography, margin_of_er
             'state':'State FIPS'
             , 'county':'County FIPS'
         })
+    if geography == 'Congressional Districts':       
+        df_census = df_census.rename(columns = {
+            'state':'State FIPS'
+            , 'congressional district':'Congressional District'
+        })
+    if geography == 'State Legislative Upper Districts':       
+        df_census = df_census.rename(columns = {
+            'state':'State FIPS'
+            , 'state legislative district (upper chamber)':'State Legislative Upper District'
+        })
+    if geography == 'State Legislative Lower Districts':       
+        df_census = df_census.rename(columns = {
+            'state':'State FIPS'
+            , 'state legislative district (lower chamber)':'State Legislative Lower District'
+        })
 
     if 'State FIPS' in df_census.columns:
         df_census['State FIPS'] = df_census['State FIPS'].astype(str).apply('{:0>2}'.format)
     if 'County FIPS' in df_census.columns:
         df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
+    if 'Congressional District' in df_census.columns:
+        df_census['Congressional District'] = df_census['Congressional District'].astype(str).apply('{:0>2}'.format)
+    if 'State Legislative Upper District' in df_census.columns:
+        df_census['State Legislative Upper District'] = df_census['State Legislative Upper District'].astype(str).apply('{:0>3}'.format)
+    if 'State Legislative Lower District' in df_census.columns:
+        df_census['State Legislative Lower District'] = df_census['State Legislative Lower District'].astype(str).apply('{:0>3}'.format)
 
     return df_census
 
@@ -394,6 +441,12 @@ def acs_processing_3(df_census, geography):
         geo_ID = ['State FIPS', 'County FIPS', 'County Name', 'NAME']
     if geography == 'MSA':
         geo_ID = ['MSA_ID']
+    if geography == 'Congressional Districts':
+        geo_ID = ['Congressional District']
+    if geography == 'State Legislative Upper Districts':
+        geo_ID = ['State Legislative Upper District']
+    if geography == 'State Legislative Lower Districts':
+        geo_ID = ['State Legislative Lower District']
 
     df_census['Race_Ethnicity_sort'] = pd.Categorical(df_census['Race_Ethnicity'], ['All'
                                                                 , 'American Indian or Alaska Native'
@@ -449,6 +502,13 @@ def acs_processing_4(df_census, indicator_name, geography, percentages, margin_o
         geo_ID = ['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME']
     if geography == 'MSA':
         geo_ID = ['MSA_ID', 'MSA']
+    if geography == 'Congressional Districts':
+        geo_ID = ['State FIPS', 'Congressional District', 'NAME']
+    if geography == 'State Legislative Upper Districts':
+        geo_ID = ['State FIPS', 'State Legislative Upper District', 'NAME']
+    if geography == 'State Legislative Lower Districts':
+        geo_ID = ['State FIPS', 'State Legislative Lower District', 'NAME']
+
 
 
     if geography == 'Counties':
@@ -1274,7 +1334,7 @@ User defined function to finalize organizing of Census Bureau tables, based on S
 
 def rename_census(
         indicator_name, geography, sample_type, margin_of_error, percentages=None, groups=None, table_type=None,
-        df_places1=None, df_blocks1=None, df_tracts1=None, df_counties1=None, df_mpo1=None, df_msa1=None, df_puma=None, df_counties=None, df_msa=None, df_mpo=None
+        df_places1=None, df_blocks1=None, df_tracts1=None, df_counties1=None, df_mpo1=None, df_msa1=None, df_puma=None, df_counties=None, df_msa=None, df_mpo=None, df_cd1=None, df_sldu1=None, df_sldl1=None
         ):
     
     if geography == 'Places':
@@ -1292,6 +1352,16 @@ def rename_census(
     if geography == 'MSA':
         geo_ID = ['MSA_ID', 'MSA']
         df_org = df_msa1.copy()
+    if geography == 'Congressional Districts':
+        geo_ID = ['State FIPS', 'Congressional District', 'NAME']
+        df_org = df_cd1.copy()
+    if geography == 'State Legislative Upper Districts':
+        geo_ID = ['State FIPS', 'State Legislative Upper District', 'NAME']
+        df_org = df_sldu1.copy()
+    if geography == 'State Legislative Lower Districts':
+        geo_ID = ['State FIPS', 'State Legislative Lower District', 'NAME']
+        df_org = df_sldl1.copy()
+
 
 
     if margin_of_error == 'Yes':
@@ -1381,6 +1451,18 @@ def rename_census(
 
     ## Renaming specifically by indicators
     if indicator_name in ['Income_3']:
+        path_inc = os.path.join(path_main, 'Vibrant and Inclusive Places', 'Economy', 'Income', 'Income_1 HH Income')
+        df_mpo_wm = pd.read_excel(os.path.join(path_inc, 'Income_1 MPO ACS5.xlsx'), sheet_name='MPO')
+        df_mpo_wm = df_mpo_wm[df_mpo_wm['Race_Ethnicity'] == 'All'].reset_index(drop = True)
+    
+        df_org = df_org.merge(df_mpo_wm[['Year', 'Regional Median Income']].rename(columns = {'Regional Median Income':'Regional Median Household Income'}), on = ['Year'], how = 'left')
+        if geography == 'Counties':
+            df_mpo1 = df_mpo1.merge(df_mpo_wm[['Year', 'Regional Median Income']].rename(columns = {'Regional Median Income':'Regional Median Household Income'}), on = ['Year'], how = 'left')
+    
+        df_org['Percent of Regional Median Household Income'] = 100*(df_org['Total']/df_org['Regional Median Household Income'])
+        if geography == 'Counties':
+            df_mpo1['Percent of Regional Median Household Income'] = 100*(df_mpo1['Total']/df_mpo1['Regional Median Household Income'])
+
         df_org = df_org.rename(columns = {'Total':'Median Household Income'})
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Median Household Income'})

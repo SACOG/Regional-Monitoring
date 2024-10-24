@@ -154,6 +154,26 @@ if sample_type in ['ACS', 'SUBJECT']:
         print("List of variables to import:")
         print(list_vars)
 
+    # For State level pull
+    if import_tab == 'States':
+    
+        # Set MSAs to import
+        # Import County FIPS mapping
+        # Convert to dictionary object for easy state-county combination importing
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+                                , sheet_name = 'CountyFIPS'
+                                , dtype = {'State FIPS': object, 'County FIPS': object})
+        df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
+        states_to_import = list(df_fips['State FIPS'].unique())
+    
+        # view
+        print("")
+        print("States set to import:")
+        print(states_to_import)
+        print("")
+        print("List of variables to import:")
+        print(list_vars)
+
 
 
 ## For PUMS data
