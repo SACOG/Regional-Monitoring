@@ -88,6 +88,21 @@ for table in tables:
                     except Exception as e: print(e)
             df_years = pd.concat(list_df_years)
 
+        if import_tab == 'National':
+            for year in tqdm(years_to_import):
+                try:
+                    list_df_years.append(
+                        query_census(df_urls      = df_urls
+                                        , api_key   = api_key
+                                        , estimate  = estimate
+                                        , sample    = sample_type
+                                        , geography = geography
+                                        , variables = variables
+                                        , year      = year)
+                    )
+                except Exception as e: print(e)
+            df_years = pd.concat(list_df_years)
+
         list_df_vars.append(df_years)
 
     if geography == 'Places':
@@ -106,6 +121,10 @@ for table in tables:
         df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'state legislative district (upper chamber)', 'Year'], how = 'outer'), list_df_vars)
     if geography == 'State Legislative Lower Districts':
         df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'state legislative district (lower chamber)', 'Year'], how = 'outer'), list_df_vars)
+    if geography == 'States':
+        df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'Year'], how = 'outer'), list_df_vars)
+    if geography == 'National':
+        df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'Year'], how = 'outer'), list_df_vars)
 
     list_df_census.append(df_vars_all)
     print("All variables from table ID " + table + " have been reduced together into one table")
@@ -151,3 +170,9 @@ if geography == 'State Legislative Upper Districts':
 if geography == 'State Legislative Lower Districts':
     df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'state legislative district (lower chamber)', 'Year'], how = 'outer'), list_df_census)
     df_census_raw = df_census_raw.set_index(['NAME', 'state', 'state legislative district (lower chamber)', 'Year']).reset_index()
+if geography == 'States':
+    df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'Year'], how = 'outer'), list_df_census)
+    df_census_raw = df_census_raw.set_index(['NAME', 'state','Year']).reset_index()
+if geography == 'National':
+    df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'Year'], how = 'outer'), list_df_census)
+    df_census_raw = df_census_raw.set_index(['NAME', 'Year']).reset_index()
