@@ -174,6 +174,15 @@ if sample_type in ['ACS', 'SUBJECT']:
         print("List of variables to import:")
         print(list_vars)
 
+    # For National level pull
+    if import_tab == 'National':
+    
+        print("Setting to import data at a national level")
+        print("")
+        print("List of variables to import:")
+        print(list_vars)
+
+
 
 
 ## For PUMS data

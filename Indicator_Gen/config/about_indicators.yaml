@@ -2425,6 +2425,26 @@ TIMS:
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS'
 
+  Safety_4:
+    Indicator Title:
+    - Bicyclists vs Pedestrians
+    Source:
+    - TIMS
+    Year(s):
+    - 2014-2023
+    Description:
+    - Number of fatalities and serious injuries concerning bicyclists and pedestrians
+    Geography:
+    - SACOG Counties
+    Website:
+    - https://tims.berkeley.edu/summary.php
+    Last Updated:
+    - 
+    Next Update:
+    - 2025-06-01
+    Notes: 'TIMS uses the following data sets in the indicator preparation\n
+      Serious Injury definition comes from SWITRS'
+
 
 
 
