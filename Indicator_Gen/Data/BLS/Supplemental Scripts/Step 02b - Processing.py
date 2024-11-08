@@ -1,14 +1,5 @@
 # Import queried BLS data
 
-print('Display data imported from BLS: ')
-
-export_title = f"{indicator_name}_{geography}_BLS_raw.csv"
-df_bls = pd.read_csv(os.path.join(path_raw, export_title))
-
-display(df_bls.head())
-
-
-
 
 print('')
 print('Processing BLS data...')
@@ -73,13 +64,20 @@ if indicator_name == 'Jobs_2':
     if geography == 'MSA':
         df_bls_msa = df_bls1.copy()
         df_bls_msa = df_bls_msa.rename(columns = {'area_text':'MSA'})
-        df_bls_msa = df_bls_msa[df_bls_msa['MSA'].str.contains('Sacramento|Yuba')]
         df_bls_msa = df_bls_msa.drop_duplicates()
-        df_bls_mpo = df_bls_msa.copy()
-        df_bls_mpo = df_bls_mpo.groupby(['date_', 'Variable', 'industry_code'], as_index = False).agg(value = ('Value', 'sum'))
+        df_bls_mpo = df_bls_msa[df_bls_msa['MSA'].str.contains('Sacramento|Yuba')]
+
+        df_bls_msa = df_bls_msa.groupby(['MSA', 'date_', 'Variable', 'industry_code'], as_index = False).agg(value = ('Value', 'sum'))
+        df_bls_mpo = df_bls_mpo.groupby([       'date_', 'Variable', 'industry_code'], as_index = False).agg(value = ('Value', 'sum'))
         df_bls_mpo['MPO'] = 'SACOG'
+
+        df_bls_msa = df_bls_msa.pivot_table(index = ['MSA', 'date_'], columns = 'Variable', values = 'value').reset_index()
         df_bls_mpo = df_bls_mpo.pivot_table(index = ['MPO', 'date_'], columns = 'Variable', values = 'value').reset_index()
+
+        df_bls_msa = pd.melt(df_bls_msa, id_vars = ['MSA', 'date_'], var_name = 'Variable', value_name = 'Value')
         df_bls_mpo = pd.melt(df_bls_mpo, id_vars = ['MPO', 'date_'], var_name = 'Variable', value_name = 'Value')
+
+        df_bls_msa = df_bls_msa.merge(df_series_area[['Variable', 'industry_code']], on = 'Variable')     
         df_bls_mpo = df_bls_mpo.merge(df_series_area[['Variable', 'industry_code']], on = 'Variable')
     
         if percentages == 'Yes':
@@ -94,8 +92,8 @@ if indicator_name == 'Jobs_2':
         df_bls_msa = df_bls_msa.sort_values(['MSA', 'date_', 'industry_code'], ascending = [True, False, True])
         df_bls_mpo = df_bls_mpo.sort_values(['MPO', 'date_', 'industry_code'], ascending = [True, False, True])
         
-        df_bls_msa = df_bls_msa.drop(['area_code', 'industry_code'], axis = 1)
-        df_bls_mpo = df_bls_mpo.drop([             'industry_code'], axis = 1)
+        df_bls_msa = df_bls_msa.drop(['industry_code'], axis = 1)
+        df_bls_mpo = df_bls_mpo.drop(['industry_code'], axis = 1)
     
         df_bls_msa['date_'] = df_bls_msa['date_'].astype('str')
         df_bls_mpo['date_'] = df_bls_mpo['date_'].astype('str')
@@ -156,6 +154,8 @@ print('')
 print('Final renaming and reorganization of data: ')
 
 
+
+
 if indicator_name == 'Jobs_1':
     df_bls1 = df_bls1.rename(columns = {'area_text':'MSA', 'Variable':'Sector', 'Value':'Total Jobs', 'area_code':'MSA ID'})
     display(df_bls1.head())
@@ -163,7 +163,6 @@ if indicator_name == 'Jobs_1':
 if indicator_name == 'Labor_2':
     df_bls1 = df_bls1.rename(columns = {'area_text':'Geography', 'value':'Unemployment Rate'})
     display(df_bls1.head())
-    
 
 if indicator_name == 'Jobs_2':
     if geography == 'MSA':

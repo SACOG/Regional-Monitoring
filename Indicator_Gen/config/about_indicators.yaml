@@ -2277,6 +2277,7 @@ RTIS:
 
 
 Zillow:
+
   Cost_1:
     Indicator Title:
     - Average Sale Price of Homes
@@ -2322,6 +2323,7 @@ Zillow:
       reflect the rental housing stock."'
 
 
+
 EIA:
 
   Road_1:
@@ -2344,6 +2346,40 @@ EIA:
     Notes: 'Annual average of petroleum fuel prices in dollars per gallon'
 
 
+CEC:
+
+  Road_4:
+    Indicator Title:
+    - New Zero Emission Vehicle Sales
+    Source:
+    - California Energy Commision
+    Year(s):
+    - 1998-2023
+    Description:
+    - Zero Emission Vehicles (ZEV) sales, updated on a quarterly basis
+    Geography:
+    - California and National
+    Website:
+    - https://www.eia.gov/
+    Last Updated:
+    - 
+    Next Update:
+    - 2025-06-01
+    Notes: 'Zero Emission Vehicles (ZEV) sales, updated on a quarterly basis by examining the DMV Vehicle Registration 
+      database for vehicles which show no evidence of transfer of ownership, and were purchased within the specified timeframe. 
+      To account for vehicles which may have been brought in from outside California, only those vehicles with a low odometer reading are treated as new sales.\n
+      ZEV: Zero Emission Vehicles, includes BEVs, PHEVs, and FCEVs\n
+      BEV: Battery Electric Vehicle\n
+      PHEV: Plug-in Hybrid Electric Vehicles\n
+      FCEV: Fuel Cell Electric Vehicles\n
+      Non-ZEV: Non- Zero Emission Vehicles\n
+      MSA: Metropolitan Statistical Area\n
+      California Energy Commission (2024). California Energy Commission Zero Emission Vehicle and Infrastructure Statistics. Data last updated August 6, 2024. Retrieved Oct 31, 2024 from http://www.energy.ca.gov/zevstats.'
+
+
+
+
+
 # IMHE:
 #   Health_4:
 #     Indicator Title:
@@ -2364,6 +2400,7 @@ EIA:
 #     - 
     
 BEA:
+
   Output_1:
     Indicator Title:
     - GRP
@@ -2385,6 +2422,7 @@ BEA:
 
 
 TIMS:
+
   Safety_1:
     Indicator Title:
     - Fatal and Injury Rate
@@ -2444,6 +2482,57 @@ TIMS:
     - 2025-06-01
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS'
+
+
+
+NTD:
+
+  Transit_1:
+    Indicator Title:
+    - Transit service hours
+    Source:
+    - National Transit Database (NTD) Triennial Performance Audits
+    Year(s):
+    - 2002-2022
+    Description:
+    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    Geography:
+    - Transit Operator level
+    Website:
+    - Audits can be found on individual transit operator websites
+    Last Updated:
+    - 
+    Next Update:
+    - 2025-11-01
+    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
+      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
+      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
+      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
+      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+
+  Transit_2:
+    Indicator Title:
+    - Transit service ridership
+    Source:
+    - National Transit Database (NTD) Triennial Performance Audits
+    Year(s):
+    - 2002-2022
+    Description:
+    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    Geography:
+    - Transit Operator level
+    Website:
+    - Audits can be found on individual transit operator websites
+    Last Updated:
+    - 
+    Next Update:
+    - 2025-11-01
+    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
+      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
+      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
+      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
+      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+
 
 
 
