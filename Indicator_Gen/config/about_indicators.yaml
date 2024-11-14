@@ -25,7 +25,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - 2025-02-01
+    - '2025-02-01'
     Notes: 'The Department of Finance prepares its population estimates in ten-year series. \n
       Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census periods, 
@@ -54,7 +54,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - 2025-02-01
+    - '2025-02-01'
     Notes: 'The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
       Users should pay careful attention when using data that spans two decennial census
@@ -83,7 +83,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - 2025-02-01
+    - '2025-02-01'
     Notes: 
     - '\n The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
@@ -123,7 +123,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator shows the total population estimate by race/ethnicity, as well as the percentage.\n
@@ -152,7 +152,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 
       Notes: 'This indicator shows the total population estimate by age cohort, as well as the percentage.\n 
@@ -181,7 +181,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Excludes population in Armed Forces\n
@@ -211,7 +211,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -238,7 +238,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -268,7 +268,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -297,7 +297,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator compares the median household income (in inflation-adjusted dollars) by individual race/ethnicities
@@ -328,7 +328,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -360,7 +360,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -387,7 +387,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Educational attainment is based on residents 26 years or older\n
@@ -415,7 +415,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -442,7 +442,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Low speed defined as having a computer with dial-up internet subscription
@@ -472,7 +472,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -501,7 +501,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -533,7 +533,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -568,7 +568,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level\n
@@ -596,7 +596,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -627,7 +627,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -655,7 +655,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -686,7 +686,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -719,7 +719,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -750,7 +750,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
@@ -778,7 +778,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by age cohort,
@@ -805,7 +805,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Excludes population in Armed Forces \n Excludes population under age 16 \n
@@ -832,7 +832,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -857,7 +857,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -885,7 +885,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -912,7 +912,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator compares the median household income (in inflation-adjusted dollars) by individual race/ethnicities to the regional average.\n
@@ -940,7 +940,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -971,7 +971,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -996,7 +996,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Educational attainment is based on residents 26 years or older
@@ -1022,7 +1022,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1047,7 +1047,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Low speed defined as having a computer with dial-up internet subscription
@@ -1075,7 +1075,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1102,7 +1102,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1131,7 +1131,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -1164,7 +1164,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level 
@@ -1190,7 +1190,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1221,7 +1221,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1247,7 +1247,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1276,7 +1276,7 @@ ACS1:
       Last Updated:
       -  
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1306,7 +1306,7 @@ ACS1:
       Last Updated:
       -  
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -1337,7 +1337,7 @@ CPS:
       Last Updated:
       -  
       Next Update:
-      - 2025-02-01
+      - '2025-02-01'
       Notes: 'Category Names\n
         HES1A:  Shopped at supermarket/grocery store for food purchases within the last week\n
         HES1B:  Shopped at dollar stores, convenience, pharmacies, etc... for food purchases within the last week\n
@@ -1366,7 +1366,7 @@ LEHD:
       Last Updated:
       -  
       Next Update:
-      - 2025-02-01
+      - '2025-04-01'
       Notes: 'Number of jobs for firms aged 5 years or less, updated on a quarterly basis.'
 
 
@@ -1392,7 +1392,7 @@ BLS:
       Last Updated:
       -
       Next Update:
-      - 2025-03-01
+      - '2025-03-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.\n
         Employment data refer to persons on establishment payrolls who receive pay for
         any part of the pay period that includes the 12th of the month.'
@@ -1435,7 +1435,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - 2025-03-01
+      - '2025-03-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.'
     
     Jobs_3: 
@@ -1454,7 +1454,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - 2025-03-01
+      - '2025-03-01'
       Notes: 'Employment data refer to persons on establishment payrolls 
         who receive pay for any part of the pay period that includes the 
         12th of the month.'
@@ -1476,7 +1476,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - 2025-03-01
+      - '2025-03-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.\n
         Employment data refer to persons on establishment payrolls who receive pay 
         for any part of the pay period that includes the 12th of the month.'
@@ -1497,7 +1497,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - 2025-03-01
+      - '2025-03-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.'
     
     Jobs_3: 
@@ -1516,7 +1516,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - 2025-03-01
+      - '2025-03-01'
       Notes: 'Employment data refer to persons on establishment payrolls 
         who receive pay for any part of the pay period that includes the 
         12th of the month.'
@@ -1541,7 +1541,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1593,7 +1593,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1645,7 +1645,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1697,7 +1697,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1749,7 +1749,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1801,7 +1801,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1853,7 +1853,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1905,7 +1905,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1957,7 +1957,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -2009,7 +2009,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -2061,7 +2061,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -2113,7 +2113,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -2165,7 +2165,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -2225,7 +2225,7 @@ RTIS:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. These will be empty values.\n
       Download from the dashboard MAP-21 widget tool \n
       Salt Lake City UZA did not allow for this indicator to be selected on the dashboard UI.\n
@@ -2245,7 +2245,7 @@ RTIS:
     Website:
     - file://data-svr/Modeling/Congestion%20Management%20Process/FHWA%20Deliverables/June2017%20Deliverables/Final%20PDFs/SACOG%20CMP%20Final%20Report_30Jun2017.pdf
     Last Updated:
-    - 2025-09-01
+    - '2025-09-01'
     Next Update:
     - August, 2025
     Notes: 'Data retreived from NPMRDS tool provided by RTIS'
@@ -2268,7 +2268,7 @@ RTIS:
     Last Updated:
     - 
     Next Update:
-    - 2025-09-01
+    - '2025-09-01'
     Notes: 'When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. These will be empty values.\n
       Download from the dashboard MAP-21 widget tool \n
       Salt Lake City UZA did not allow for this indicator to be selected on the dashboard UI.\n
@@ -2292,7 +2292,9 @@ Zillow:
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
-    - 2025-05-01
+    - 
+    Next Update:
+    - ''2025-06-01''
     Notes: 'Home sale prices are approximated with the Zillow Home Value Index. In their own words,\n
       this index is "a measure of the typical home value and market changes across a given region\n
       and housing type. It reflects the typical value for homes in the 3th to 6th percentile range.\n
@@ -2312,7 +2314,9 @@ Zillow:
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
-    - 2025-05-01
+    - 
+    Next Update:
+    - ''2025-06-01''
     Notes: 'This data uses the Zillow Observed Rent Index. In their own words,\n
       this is "a smoothed measure of the typical observed market rate rent across\n
       a given region. ZORI is a repeat-rent index that is weighted to the rental\n
@@ -2342,7 +2346,7 @@ EIA:
     Last Updated:
     - 
     Next Update:
-    - 2025-06-01
+    - '2025-06-01'
     Notes: 'Annual average of petroleum fuel prices in dollars per gallon'
 
 
@@ -2364,7 +2368,7 @@ CEC:
     Last Updated:
     - 
     Next Update:
-    - 2025-06-01
+    - ''2025-11-01''
     Notes: 'Zero Emission Vehicles (ZEV) sales, updated on a quarterly basis by examining the DMV Vehicle Registration 
       database for vehicles which show no evidence of transfer of ownership, and were purchased within the specified timeframe. 
       To account for vehicles which may have been brought in from outside California, only those vehicles with a low odometer reading are treated as new sales.\n
@@ -2417,7 +2421,7 @@ BEA:
     Last Updated:
     - 
     Next Update:
-    - 2025-02-01
+    - '2025-06-01'
     Notes: 'Test'
 
 
@@ -2439,7 +2443,7 @@ TIMS:
     Last Updated:
     - 
     Next Update:
-    - 2025-06-01
+    - '2025-10-01'
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS'
 
@@ -2459,7 +2463,7 @@ TIMS:
     Last Updated:
     - 
     Next Update:
-    - 2025-06-01
+    - '2025-10-01'
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS'
 
@@ -2479,9 +2483,10 @@ TIMS:
     Last Updated:
     - 
     Next Update:
-    - 2025-06-01
+    - '2025-10-01'
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
-      Serious Injury definition comes from SWITRS'
+      Serious Injury definition comes from SWITRS\n
+      Totals differ slightly from combined bike and ped collision indicator, likely due to underlying source treatment of other non-motorized modes'
 
 
 
@@ -2503,7 +2508,7 @@ NTD:
     Last Updated:
     - 
     Next Update:
-    - 2025-11-01
+    - '2025-11-01'
     Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
       https://www.transit.dot.gov/ntd/transit-agency-profiles \n
       Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
@@ -2526,7 +2531,7 @@ NTD:
     Last Updated:
     - 
     Next Update:
-    - 2025-11-01
+    - '2025-11-01'
     Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
       https://www.transit.dot.gov/ntd/transit-agency-profiles \n
       Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n

@@ -100,7 +100,7 @@ if data_type_code == 'Yes':
 
 
 if measure_code == 'Yes':
-    df_measures = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsm"), sheet_name = 'measure_code', dtype = {'data_type_code': object})
+    df_measures = pd.read_excel(os.path.join(path_config, "BLS Configuration File.xlsm"), sheet_name = 'measure_codes', dtype = {'data_type_code': object})
     df_measures = df_measures[df_measures['Survey'].str.contains(survey)]
     df_measures = df_measures[df_measures['Include'] == 'Yes']
     df_measures = df_measures[df_measures['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
