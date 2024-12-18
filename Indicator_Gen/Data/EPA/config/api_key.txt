@@ -1,0 +1,4 @@
+dict_api = {
+'AQI':'aquaram35'
+, 'CAM':'HGGSJSskfuCqTGf1CLUiLRea7BFbDe4nsfyQdLZz'
+}

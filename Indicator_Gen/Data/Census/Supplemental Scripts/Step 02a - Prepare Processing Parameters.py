@@ -47,7 +47,7 @@ print('')
 project     = df_indicators['Project'        ].values[0]
 export_loc  = df_indicators['Export Location'].values[0]
 folder      = df_indicators['Folder'         ].values[0]
-if estimate != 'LEHD':
+if estimate not in ['LEHD', 'CPS']:
     MOE_thresh  = df_indicators['MOE Threshold'  ].values[0]
     MOE_thresh = int(MOE_thresh)
     print('MOE threshold: ' + str(MOE_thresh) + '%')

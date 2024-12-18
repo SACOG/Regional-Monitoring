@@ -94,6 +94,7 @@ if estimate == 'DEC':
 if sample_type in ['ACS', 'SUBJECT']:
 
     df_vars = pd.read_excel(os.path.join(path_config, 'Census Configuration File.xlsm'), sheet_name = sample_type)
+    df_vars = df_vars[df_vars['Year'] == 2023]
     df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
     df_vars = df_vars[df_vars['Include'] == 'Yes']
     
