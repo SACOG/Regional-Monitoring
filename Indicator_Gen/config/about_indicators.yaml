@@ -1,13 +1,10 @@
 # MASTER FILE FOR ABOUT TAB EXPORTS.
 
-# If you want to edit any of these indicators, it's easiest to just CTRL + F the sample or indicator, and edit from there. 
 
-# A lot of these were built from already existing about tabs. 
 
-# Note: For the Census, we have both  year and 1 year samples we have to worry about.
-# Bc of this, there are two nests. 'YEAR' and '1YEAR'. User must define which one they want to pull by defining so in the function call. 
+## Regional Monitoring and Reporting -------------------------------------------------------------------------------------------------------------------------
 
-DOF:  
+DOF:
 
   Pop_1:
     Indicator Title:
@@ -25,7 +22,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - '2025-02-01'
+    - '2025-12-15'
     Notes: 'The Department of Finance prepares its population estimates in ten-year series. \n
       Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census periods, 
@@ -54,7 +51,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - '2025-02-01'
+    - '2025-12-15'
     Notes: 'The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
       Users should pay careful attention when using data that spans two decennial census
@@ -83,7 +80,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - '2025-02-01'
+    - '2025-12-15'
     Notes: 
     - '\n The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
@@ -111,7 +108,7 @@ ACS5:
       Indicator Title:
       - Population by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -123,7 +120,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator shows the total population estimate by race/ethnicity, as well as the percentage.\n
@@ -139,12 +136,11 @@ ACS5:
       Indicator Title:
       - Population by age cohorts
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
-      - 5 year rolling average of population in three age cohorts
-        (below 18, 18 to 64, and 6 and above)
+      - 5 year rolling average of population in three age cohorts (below 18, 18 to 64, and 6 and above)
       Geography:
       - Block groups, census tracts, counties, MSA's, and MPO's
       Website:
@@ -152,7 +148,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 
       Notes: 'This indicator shows the total population estimate by age cohort, as well as the percentage.\n 
@@ -168,12 +164,11 @@ ACS5:
       Indicator Title:
       - Labor force participation
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
-      - 5 year rolling average of working age population in the formal labor force by
-        race/ethnicity
+      - 5 year rolling average of working age population in the formal labor force by race/ethnicity
       Geography:
       - Block groups, census tracts, counties, MSA's, and MPO's
       Website:
@@ -181,7 +176,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Excludes population in Armed Forces\n
@@ -199,7 +194,7 @@ ACS5:
       Indicator Title:
       - Unoccupied Housing Units
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -211,7 +206,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -221,12 +216,12 @@ ACS5:
         Margin of Error: all ACS outputs are estimates. The downloadable data includes 
         the margin of error statistics. Users should pay particular to the margin of error, 
         especially for smaller geographies and race/ethnicity groups with relatively less population.'
-    
+
     Cost_5:
       Indicator Title:
       - Homeownership by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -238,7 +233,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -256,7 +251,7 @@ ACS5:
       Indicator Title:
       - Median Household Income
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -268,7 +263,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -284,12 +279,11 @@ ACS5:
       Indicator Title:
       - Median Household Income by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
-      - 5 year rolling average of median housheold income race/ethnicity
-        categories
+      - 5 year rolling average of median housheold income race/ethnicity categories
       Geography:
       - Block groups, census tracts, counties, MSA's, and MPO's
       Website:
@@ -297,7 +291,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator compares the median household income (in inflation-adjusted dollars) by individual race/ethnicities
@@ -316,7 +310,7 @@ ACS5:
       Indicator Title:
       - Poverty rate by race/ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -328,7 +322,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -344,11 +338,12 @@ ACS5:
         Margin of Error: all ACS outputs are estimates. The downloadable data includes 
         the margin of error statistics. Users should pay particular to the margin of error, 
         especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
     Commute_1:
       Indicator Title:
       - Estimate Mode of Commute through time
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -360,7 +355,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -375,7 +370,7 @@ ACS5:
       Indicator Title:
       - Educational Attainment by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -387,7 +382,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Educational attainment is based on residents 26 years or older\n
@@ -403,7 +398,7 @@ ACS5:
       Indicator Title:
       - Health Insurance by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -415,7 +410,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -430,7 +425,7 @@ ACS5:
       Indicator Title:
       - Household Internet Access by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -442,7 +437,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Low speed defined as having a computer with dial-up internet subscription
@@ -460,7 +455,7 @@ ACS5:
       Indicator Title:
       - Median Household Income
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -472,7 +467,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -489,7 +484,7 @@ ACS5:
       Indicator Title:
       - Median Household Income by Race/Ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 
       Description:
@@ -501,7 +496,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -521,7 +516,7 @@ ACS5:
       Indicator Title:
       - Poverty rate by race/ethnicity
       Source:
-      - Census  year ACS (American Community Survey)
+      - Census 5 year ACS (American Community Survey)
       Year(s):
       - 2009-2022
       Description:
@@ -533,7 +528,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -550,13 +545,69 @@ ACS5:
         the margin of error statistics. Users should pay particular to the margin of error, 
         especially for smaller geographies and race/ethnicity groups with relatively less population.'
 
+    RHNA_POPEMP_16:
+      Indicator Title:
+      - Owners vs Renters
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 2009-2022
+      Description:
+      - 5 year rolling average of household homeownership by race/ethnicity
+      Geography:
+      - Census Designated Places (Jurisdictions)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2025-12-15'
+      Margin of Error Limit:
+      - 5
+      Notes: 'The indicator is measured at the household (not individual) level. \n
+        Homeownership by Race/Ethnicity estimates the portion of households, by race/ethnicity,
+        that are renters (renter occupied) and those that are homeowners (owner occupied)\n
+        Key terms\n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, 
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Users looking for single year results should use the separate 1 year ACS series.\n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
+        the margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+    RHNA_HSG_2:
+      Indicator Title:
+      - Occupied vs Unoccupied Housing Units
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 2009-2022
+      Description:
+      - 5 year rolling average of residential housing occupancy
+      Geography:
+      - Census Designated Places (Jurisdictions)
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Margin of Error Limit:
+      - 5
+      Notes: 'Key terms\n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, 
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Users looking for single year results should use the separate 1 year ACS series.\n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
+        the margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+    
+
 
   PUMS:
     Accessibility_1:
       Indicator Title:
       - Commute modes by race/ethnicity
       Source:
-      - Census  year PUMS (Public Use Microdata Sample)
+      - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
       - 2009-2022
       Description:
@@ -568,7 +619,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level\n
@@ -584,7 +635,7 @@ ACS5:
       Indicator Title:
       - Commute modes by income bracket
       Source:
-      - Census  year PUMS (Public Use Microdata Sample)
+      - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
       - 2009-2022
       Description:
@@ -596,7 +647,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -615,7 +666,7 @@ ACS5:
       Indicator Title:
       - Vehicle ownership by household
       Source:
-      - Census  year PUMS (Public Use Microdata Sample)
+      - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
       - 2009-2022
       Description:
@@ -627,7 +678,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -642,12 +693,11 @@ ACS5:
       Indicator Title:
       - Commute times by income bracket and by race/ethnicity
       Source:
-      - Census  year PUMS (Public Use Microdata Sample)
+      - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
       - 2009-2022
       Description:
-      - 5 year rolling average of head of household commute times by income bracket and
-        by race/ethnicity
+      - 5 year rolling average of head of household commute times by income bracket and by race/ethnicity
       Geography:
       - Block groups, census tracts, counties, MSA's, and MPO's
       Website:
@@ -655,7 +705,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -674,7 +724,7 @@ ACS5:
       Indicator Title:
       - Household Income by Categories
       Source:
-      - Census  year PUMS (Public Use Microdata Sample)
+      - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
       - 2009-2022
       Description:
@@ -686,7 +736,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -705,7 +755,7 @@ ACS5:
       Indicator Title:
       - Housing Cost Burden by Race/Ethnicity
       Source:
-      - Census  year PUMS (Public Use Microdata Sample)
+      - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
       - 2009-2022
       Description:
@@ -719,7 +769,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -750,7 +800,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
@@ -769,8 +819,7 @@ ACS1:
       Year(s):
       - 2009-2022
       Description:
-      - Yearly estimate of population in three age cohorts
-        (below 18, 18 to 64, and 6 and above)
+      - Yearly estimate of population in three age cohorts (below 18, 18 to 64, and 6 and above)
       Geography:
       - Block groups, census tracts, counties, MSA's, and MPO's
       Website:
@@ -778,7 +827,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by age cohort,
@@ -805,7 +854,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Excludes population in Armed Forces \n Excludes population under age 16 \n
@@ -832,7 +881,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -857,7 +906,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -885,7 +934,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -912,7 +961,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator compares the median household income (in inflation-adjusted dollars) by individual race/ethnicities to the regional average.\n
@@ -940,7 +989,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -971,7 +1020,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -996,7 +1045,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Educational attainment is based on residents 26 years or older
@@ -1022,7 +1071,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1047,7 +1096,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Low speed defined as having a computer with dial-up internet subscription
@@ -1075,7 +1124,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1102,7 +1151,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1131,7 +1180,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -1164,7 +1213,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level 
@@ -1190,7 +1239,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1221,7 +1270,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1247,7 +1296,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1276,7 +1325,7 @@ ACS1:
       Last Updated:
       -  
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1306,7 +1355,7 @@ ACS1:
       Last Updated:
       -  
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -1337,7 +1386,7 @@ CPS:
       Last Updated:
       -  
       Next Update:
-      - '2025-02-01'
+      - '2025-12-15'
       Notes: 'Category Names\n
         HES1A:  Shopped at supermarket/grocery store for food purchases within the last week\n
         HES1B:  Shopped at dollar stores, convenience, pharmacies, etc... for food purchases within the last week\n
@@ -1364,7 +1413,7 @@ LEHD:
       Website:
       - https://lehd.ces.census.gov/
       Last Updated:
-      -  
+      - 
       Next Update:
       - '2025-04-01'
       Notes: 'Number of jobs for firms aged 5 years or less, updated on a quarterly basis.'
@@ -2294,7 +2343,7 @@ Zillow:
     Last Updated:
     - 
     Next Update:
-    - ''2025-06-01''
+    - '2025-06-01'
     Notes: 'Home sale prices are approximated with the Zillow Home Value Index. In their own words,\n
       this index is "a measure of the typical home value and market changes across a given region\n
       and housing type. It reflects the typical value for homes in the 3th to 6th percentile range.\n
@@ -2316,7 +2365,7 @@ Zillow:
     Last Updated:
     - 
     Next Update:
-    - ''2025-06-01''
+    - '2025-06-01'
     Notes: 'This data uses the Zillow Observed Rent Index. In their own words,\n
       this is "a smoothed measure of the typical observed market rate rent across\n
       a given region. ZORI is a repeat-rent index that is weighted to the rental\n
@@ -2326,6 +2375,51 @@ Zillow:
       range for all homes and apartments in a given region, which is weighted to\n
       reflect the rental housing stock."'
 
+
+
+EPA:
+
+  # Health_3:
+  #   Indicator Title:
+  #   - Air Quality Index levels of concern
+  #   Source:
+  #   - US Environmental Protection Agency
+  #   Year(s):
+  #   - 1999-2023
+  #   Description:
+  #   - Number of days within each Air Quality Index levels of concern category each year (Ozone and/or PM2.5)
+  #   Geography:
+  #   - MSA
+  #   Website:
+  #   - https://www.epa.gov/
+  #   Last Updated:
+  #   - 
+  #   Next Update:
+  #   - '2025-06-01'
+  #   Notes: 'Number of days violating national ambient air quality standards each year (Ozone and/or PM2.5).\n
+  #    In California, PM2.5 monitors were installed in 1998.\n
+  #    Data on Ozone AQI can be collected started in 1980.'
+
+  Health_3:
+    Indicator Title:
+    - Days violating national ambient air quality standards
+    Source:
+    - US Environmental Protection Agency
+    Year(s):
+    - 1999-2023
+    Description:
+    - Number of days violating national ambient air quality standards each year (Ozone and/or PM2.5)
+    Geography:
+    - MSA
+    Website:
+    - https://www.epa.gov/
+    Last Updated:
+    - 
+    Next Update:
+    - '2025-06-01'
+    Notes: 'Number of days violating national ambient air quality standards each year (Ozone and/or PM2.5)\n
+     In California, PM2.5 monitors were installed in 1998.\n
+     Data on Ozone AQI can be collected started in 1980.'
 
 
 EIA:
@@ -2368,7 +2462,7 @@ CEC:
     Last Updated:
     - 
     Next Update:
-    - ''2025-11-01''
+    - '2025-11-01'
     Notes: 'Zero Emission Vehicles (ZEV) sales, updated on a quarterly basis by examining the DMV Vehicle Registration 
       database for vehicles which show no evidence of transfer of ownership, and were purchased within the specified timeframe. 
       To account for vehicles which may have been brought in from outside California, only those vehicles with a low odometer reading are treated as new sales.\n
@@ -2580,18 +2674,3 @@ NTD:
 #     Notes:
 #     - ''
 
-
-# # Another option for writing notes, is to just use | and then write it as you normally would, with no '' or \n. 
-
-
-# # THESE R ONES I FOR LATER MAYBE?
-
-# Blueprint_1: {}
-# Blueprint_2: {}
-# Blueprint_3: {}
-# Blueprint_4: {}
-# Blueprint_: {}
-
-# Cost_8: {}
-
-# Jobs_4: {}

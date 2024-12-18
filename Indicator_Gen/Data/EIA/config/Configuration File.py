@@ -1,5 +1,16 @@
 
-indicator_name = input("Indicator Name: ")
+
+try:
+    indicator_name
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
+
+if var_exists:
+    pass
+else:
+    indicator_name = input("Indicator Name: ")
 
 print('')
 print('')
@@ -8,7 +19,8 @@ print('Importing API routes to help with preparing API request...')
 print('(it takes a few minutes)')
 
 df_api = pd.read_excel(os.path.join(path_config, 'Routes.xlsx'))
-display(df_api.head())
+# display(df_api.head())
+print('View this link as needed to help with choosing routes: ', 'https://www.eia.gov/opendata/browser/')
 
 print('')
 print('')
@@ -266,3 +278,27 @@ except:
 print(freq)
 print('')
 display(df_api)
+
+
+## Export to text file
+with open(os.path.join(path_config, 'Configurations', f'{indicator_name}.txt'), 'w') as f:
+    f.write(f"Indicator Name: {indicator_name}\n")
+    f.write(f"Category: {cat}\n")
+    f.write(f"Route 1: {route1}\n")
+    try:
+        f.write(f"Route 2: {route2}\n")
+    except:
+        pass
+    try:
+        f.write(f"Facet Option: {facetOption}\n")
+    except:
+        pass
+    try:
+        f.write(f"Facet: {facet}\n")
+    except:
+        pass
+    try:
+        f.write(f"Data Type: {datatype}\n")
+    except:
+        pass
+    f.write(f"Frequency: {freq}\n")

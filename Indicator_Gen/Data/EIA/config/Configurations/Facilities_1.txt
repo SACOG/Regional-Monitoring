@@ -1,0 +1,7 @@
+Indicator Name: Facilities_1
+Category: Electricity
+Route 1: Electric Power Operations for Individual Power Plants (Annual and Monthly)
+Facet Option: state
+Facet: California
+Data Type: generation
+Frequency: Annual

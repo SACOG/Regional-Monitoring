@@ -19,7 +19,7 @@ for table in tables:
     print("")
     list_df_tables = []
 
-    df_table = df_vars[df_vars['Table'] == table]
+    df_table = df_vars[(df_vars['Table'] == table) & (df_vars['Year'] == 2023)]
     if margin_of_error == 'Yes':
         list_table_vars = [['NAME'] + df_table['ID_Attributes'].to_list()[x:x+20] for x in range(0, len(df_table['ID_Attributes'].to_list()), 20)]
     else:
@@ -124,7 +124,7 @@ for table in tables:
     if geography == 'States':
         df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'Year'], how = 'outer'), list_df_vars)
     if geography == 'National':
-        df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'Year'], how = 'outer'), list_df_vars)
+        df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'us', 'Year'], how = 'outer'), list_df_vars)
 
     list_df_census.append(df_vars_all)
     print("All variables from table ID " + table + " have been reduced together into one table")
@@ -174,5 +174,6 @@ if geography == 'States':
     df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'Year'], how = 'outer'), list_df_census)
     df_census_raw = df_census_raw.set_index(['NAME', 'state','Year']).reset_index()
 if geography == 'National':
-    df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'Year'], how = 'outer'), list_df_census)
-    df_census_raw = df_census_raw.set_index(['NAME', 'Year']).reset_index()
+    df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'us', 'Year'], how = 'outer'), list_df_census)
+    df_census_raw = df_census_raw.set_index(['NAME', 'us', 'Year']).reset_index()
+    df_census_raw = df_census_raw.drop('us', axis=1)
