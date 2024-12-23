@@ -18,7 +18,8 @@ print('')
 print('Importing API routes to help with preparing API request...')
 print('(it takes a few minutes)')
 
-df_api = pd.read_excel(os.path.join(path_config, 'Routes.xlsx'))
+path_routes = r"I:/Projects/Josh/Regional Monitoring"
+df_api = pd.read_excel(os.path.join(path_routes, 'Routes.xlsx'))
 # display(df_api.head())
 print('View this link as needed to help with choosing routes: ', 'https://www.eia.gov/opendata/browser/')
 

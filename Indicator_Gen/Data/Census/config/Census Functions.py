@@ -625,7 +625,10 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                 df_mpo1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
             if geography == 'Places':
                 df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))
-                path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'Monitoring and Reporting':
+                    path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'RHNA':
+                    path_server = os.path.join(path_prod, export_loc)                
                 df_counties = pd.read_excel(os.path.join(path_server, f'{indicator_name} Counties {estimate}.xlsx'), sheet_name='Counties')
                 df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Variable', 'Median Household Income', 'Margin of Error']], on=['County Name', 'Year', 'Race_Ethnicity', 'Variable'], how='left')
                 df_inc1['diff'] = df_inc1['Median Household Income'] - df_inc1['Total']
@@ -682,7 +685,10 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                 df_mpo1['Use for Reporting'] = np.select(conditions, choices, default = 'No')
             if geography == 'Places':
                 df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
-                path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'Monitoring and Reporting':
+                    path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'RHNA':
+                    path_server = os.path.join(path_prod, export_loc)
                 df_counties = pd.read_excel(os.path.join(path_server, f'{indicator_name} Counties {estimate}.xlsx'), sheet_name='Counties')
                 if 'Population' in df_counties.columns:
                     df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Variable', 'Population', 'Margin of Error']], on=['County Name', 'Year', 'Race_Ethnicity', 'Variable'], how='left')
@@ -723,7 +729,10 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                 df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
             if geography == 'Places':
                 df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
-                path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'Monitoring and Reporting':
+                    path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'RHNA':
+                    path_server = os.path.join(path_prod, export_loc)
                 df_counties = pd.read_excel(os.path.join(path_server, f'{indicator_name} Counties {estimate}.xlsx'), sheet_name='Counties')
                 df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Variable', 'Median Household Income']], on=['County Name', 'Year', 'Race_Ethnicity', 'Variable'], how='left')
                 df_inc1['diff'] = df_inc1['Median Household Income'] - df_inc1['Total']
@@ -740,7 +749,10 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                 df_mpo1 = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'))
             if geography == 'Places':
                 df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'))
-                path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'Monitoring and Reporting':
+                    path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
+                if project == 'RHNA':
+                    path_server = os.path.join(path_prod, export_loc)
                 df_counties = pd.read_excel(os.path.join(path_server, f'{indicator_name} Counties {estimate}.xlsx'), sheet_name='Counties')
                 if 'Population' in df_counties.columns:
                     df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Variable', 'Population']], on=['County Name', 'Year', 'Race_Ethnicity', 'Variable'], how='left')
@@ -1620,7 +1632,7 @@ def rename_census(
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Median Household Income'})
 
-    if indicator_name in ['Cost_5', 'Income_2', 'Broadband_2']:
+    if indicator_name in ['Cost_5', 'Income_2', 'Broadband_2', 'RHNA_HSG_2', 'RHNA_HSG_3']:
         df_org = df_org.rename(columns = {'Total':'Households'})
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Households'})
@@ -1630,7 +1642,7 @@ def rename_census(
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Housing Units'})
 
-    if indicator_name in ['Pop_3', 'Pop_4', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1']:
+    if indicator_name in ['Pop_3', 'Pop_4', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1', 'RHNA_POPEMP_3', 'RHNA_POPEMP_5', 'RHNA_POPEMP_6', 'RHNA_POPEMP_7', 'RHNA_POPEMP_8', 'RHNA_POPEMP_9', 'RHNA_POPEMP_10a', 'RHNA_POPEMP_10b', 'RHNA_POPEMP_16']:
         df_org = df_org.rename(columns = {'Total':'Population'})
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Population'})
@@ -1648,10 +1660,10 @@ def rename_census(
         df_msa     ['RAC1P_sort'] = pd.Categorical(df_msa     ['RAC1P'], factor_race)
         df_mpo     ['RAC1P_sort'] = pd.Categorical(df_mpo     ['RAC1P'], factor_race)
 
-        df_puma     = df_puma    .sort_values(by = group_puma     + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True, True, True, False, True, True])
-        df_counties = df_counties.sort_values(by = group_counties + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True, True, True, False, True, True])
-        df_msa      = df_msa     .sort_values(by = group_msa      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True, True, False, True, True])
-        df_mpo      = df_mpo     .sort_values(by = group_mpo      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True, False, True, True])
+        df_puma     = df_puma    .sort_values(by = group_puma     + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True,  True,  True, False, True, True])
+        df_counties = df_counties.sort_values(by = group_counties + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True,  True,  True, False, True, True])
+        df_msa      = df_msa     .sort_values(by = group_msa      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True,  True, False,  True, True      ])
+        df_mpo      = df_mpo     .sort_values(by = group_mpo      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending = [True, True, False,  True,  True            ])
 
         df_puma     = df_puma    .drop(['RAC1P_sort', 'JWTRNS_sort'], axis = 1)
         df_counties = df_counties.drop(['RAC1P_sort', 'JWTRNS_sort'], axis = 1)
