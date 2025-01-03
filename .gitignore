@@ -1,3 +1,16 @@
+
+
+## Necessary ---
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# API keys
+api_key.txt
+
+
+## Hytham's ---
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -74,9 +87,6 @@ docs/_build/
 # PyBuilder
 .pybuilder/
 target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
 
 # IPython
 profile_default/
