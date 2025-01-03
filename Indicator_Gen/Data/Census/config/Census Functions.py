@@ -1642,7 +1642,7 @@ def rename_census(
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Housing Units'})
 
-    if indicator_name in ['Pop_3', 'Pop_4', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1', 'RHNA_POPEMP_3', 'RHNA_POPEMP_5', 'RHNA_POPEMP_6', 'RHNA_POPEMP_7', 'RHNA_POPEMP_8', 'RHNA_POPEMP_9', 'RHNA_POPEMP_10a', 'RHNA_POPEMP_10b', 'RHNA_POPEMP_16']:
+    if indicator_name in ['Pop_3', 'Pop_4', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1', 'RHNA_POPEMP_3', 'RHNA_POPEMP_5', 'RHNA_POPEMP_6', 'RHNA_POPEMP_7', 'RHNA_POPEMP_8', 'RHNA_POPEMP_9', 'RHNA_POPEMP_10a', 'RHNA_POPEMP_10b', 'RHNA_POPEMP_16', 'RHNA_POPEMP_23']:
         df_org = df_org.rename(columns = {'Total':'Population'})
         if geography == 'Counties':
             df_mpo1 = df_mpo1.rename(columns = {'Total':'Population'})

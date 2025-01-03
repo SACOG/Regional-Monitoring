@@ -57,8 +57,11 @@ for table in tables:
         if import_tab == 'MSA':
             for year in tqdm(years_to_import):
                 try:
+                    msa_to_import = df_fips[df_fips['Year'] == year]
+                    msa_to_import = list(msa_to_import['MSA_ID'].values)
+                    msa_to_import = ','.join(msa_to_import)
                     list_df_years.append(
-                        query_census(df_urls      = df_urls
+                        query_census(df_urls        = df_urls
                                         , api_key   = api_key
                                         , estimate  = estimate
                                         , sample    = sample_type

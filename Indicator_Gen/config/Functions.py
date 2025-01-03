@@ -71,9 +71,6 @@ def re_remove_pre(x, exp = ' '):
 
 
 
-
-
-
    
 # Function to write about page for each indicator
 def write_about(sample_type, indicator_name, year_start, year_end, path_config0, geography=None, MOE_thresh=None, estimate=None):
@@ -357,6 +354,7 @@ peer_msa_labels = {
     , 'Cincinnati, OH-KY-IN Metropolitan Statistical Area'                     : 'Cincinnati, OH'
     , 'Cleveland-Elyria'                                                       : 'Cleveland, OH'
     , 'Cleveland-Elyria, OH'                                                   : 'Cleveland, OH'
+    , 'Cleveland, OH Metro Area'                                               : 'Cleveland, OH'
     , 'Cleveland-Elyria, OH Metro Area'                                        : 'Cleveland, OH'
     , 'Cleveland-Elyria-Mentor, OH Metro Area'                                 : 'Cleveland, OH'
     , 'Cleveland-Elyria, OH Metropolitan Statistical Area'                     : 'Cleveland, OH'
@@ -372,6 +370,7 @@ peer_msa_labels = {
     , 'Indianapolis-Carmel-Anderson'                                           : 'Indianapolis, IN'
     , 'Indianapolis-Carmel-Anderson, IN'                                       : 'Indianapolis, IN'
     , 'Indianapolis-Carmel-Anderson, IN Metro Area'                            : 'Indianapolis, IN'
+    , 'Indianapolis-Carmel-Greenwood, IN Metro Area'                           : 'Indianapolis, IN'
     , 'Indianapolis-Carmel-Anderson, IN Metropolitan Statistical Area'         : 'Indianapolis, IN'
     , 'Kansas City'                                                            : 'Kansas City, MO'
     , 'Kansas City, MO-KS'                                                     : 'Kansas City, MO'
@@ -430,6 +429,7 @@ peer_msa_labels = {
     , 'San Francisco-Oakland-Berkeley, CA'                                     : 'San Francisco, CA'
     , 'San Francisco-Oakland-Hayward, CA'                                      : 'San Francisco, CA'
     , 'San Francisco-Oakland-Berkeley, CA Metro Area'                          : 'San Francisco, CA'
+    , 'San Francisco-Oakland-Fremont, CA Metro Area'                           : 'San Francisco, CA'
     , 'San Francisco-Oakland-Hayward, CA Metropolitan Statistical Area'        : 'San Francisco, CA'
     , 'San Jose'                                                               : 'San Jose, CA'
     , 'San Jose-Sunnyvale-Santa Clara'                                         : 'San Jose, CA'

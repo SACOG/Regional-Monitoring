@@ -143,14 +143,18 @@ if sample_type in ['ACS', 'SUBJECT']:
     if import_tab == 'MSA':
     
         # Set MSAs to import
-        df_inputs['msa'] = df_inputs['msa'].astype("string")
-        msa_to_import = df_inputs['msa'].values
-        msa_to_import = ",".join(msa_to_import)
+        msa_to_import = list(df_inputs['msa'].values)
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx'), sheet_name='MSAcodes', dtype = {'MSA_ID': object})
+        df_fips = df_fips[['Year', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates()
+        df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
     
         # view
         print("")
-        print("MSA IDs set to import:")
+        print("MSA set to import:")
         print(msa_to_import)
+        print("")
+        print("MSA IDs:")
+        display(df_fips)
         print("")
         print("List of variables to import:")
         print(list_vars)
