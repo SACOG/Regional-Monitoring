@@ -22,7 +22,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - '2025-12-15'
+    - '2026-12-15'
     Notes: 'The Department of Finance prepares its population estimates in ten-year series. \n
       Each ten-year series begins with the results of the decennial census (census benchmark). \n
       Users should pay careful attention when using data that spans two decennial census periods, 
@@ -51,7 +51,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - '2025-12-15'
+    - '2026-12-15'
     Notes: 'The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
       Users should pay careful attention when using data that spans two decennial census
@@ -80,7 +80,7 @@ DOF:
     Last Updated:
     - 
     Next Update:
-    - '2025-12-15'
+    - '2026-12-15'
     Notes: 
     - '\n The Department of Finance prepares its population estimates in ten-year series.\n
       Each ten-year series begins with the results of the decennial census (census benchmark).\n
@@ -110,7 +110,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of population by race/ethnicity
       Geography:
@@ -120,7 +120,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator shows the total population estimate by race/ethnicity, as well as the percentage.\n
@@ -138,7 +138,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of population in three age cohorts (below 18, 18 to 64, and 6 and above)
       Geography:
@@ -148,10 +148,122 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 
       Notes: 'This indicator shows the total population estimate by age cohort, as well as the percentage.\n 
+        Key terms\n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, 
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Users looking for single year results should use the separate 1 year ACS series.\n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
+        the margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+    Pop_6:
+      Indicator Title:
+      - Birth rates
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 2009-2023
+      Description:
+      - 5 year rolling average of birth rates for women aged 15-44 (Total number of births in a year)/(Total Population) * 1000
+      Geography:
+      - Block groups, census tracts, counties, MSA's, and MPO's
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2026-12-15'
+      Margin of Error Limit:
+      - 
+      Notes: 'This indicator shows the total number of births from women aged 15-44 within last year and an estimated birth rate per 1,000 people.\n 
+        Key terms\n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, 
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Users looking for single year results should use the separate 1 year ACS series.\n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
+        the margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+    Pop_7:
+      Indicator Title:
+      - Marriage rates
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 2009-2023
+      Description:
+      - 5 year rolling average of marriage rates (Total number of women aged 15 and over married within last year)/(Total number of women aged 15 and over) * 1000
+      Geography:
+      - Block groups, census tracts, counties, MSA's, and MPO's
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2026-12-15'
+      Margin of Error Limit:
+      - 
+      Notes: 'This indicator shows the total number of women aged 15 and over married within last year and an estimated marriage rate per 1,000 people.\n 
+        Key terms\n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, 
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Users looking for single year results should use the separate 1 year ACS series.\n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
+        the margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+    Pop_8:
+      Indicator Title:
+      - Marriage status
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 2012-2023
+      Description:
+      - 5 year rolling average of marriage status for population aged 18-44 (never married, married, divorced, or widowed)
+      Geography:
+      - Block groups, census tracts, counties, MSA's, and MPO's
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2026-12-15'
+      Margin of Error Limit:
+      - 
+      Notes: 'This indicator shows the total population of marriage status for population aged 18-44 (never married, married, divorced, or widowed).\n 
+        Key terms\n
+        Rolling Average: The data are reported in 5 year rolling averages. For example, 
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Users looking for single year results should use the separate 1 year ACS series.\n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
+        the margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+
+    Pop_9:
+      Indicator Title:
+      - Location 1 year ago
+      Source:
+      - Census 5 year ACS (American Community Survey)
+      Year(s):
+      - 2009-2023
+      Description:
+      - 5 year rolling average of population based on location of residence 1 year ago
+      Geography:
+      - Block groups, census tracts, counties, MSA's, and MPO's
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2026-12-15'
+      Margin of Error Limit:
+      - 5
+      Notes: 'This indicator shows the total population based on location of residence 1 year ago.\n 
         Key terms\n
         Rolling Average: The data are reported in 5 year rolling averages. For example, 
         the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
@@ -166,7 +278,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of working age population in the formal labor force by race/ethnicity
       Geography:
@@ -176,7 +288,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Excludes population in Armed Forces\n
@@ -196,7 +308,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of residential housing occupancy
       Geography:
@@ -206,7 +318,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -223,7 +335,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of household homeownership by race/ethnicity
       Geography:
@@ -233,7 +345,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -253,7 +365,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of median housheold income (in inflation adjusted dollars)
       Geography:
@@ -263,7 +375,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -281,7 +393,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of median housheold income race/ethnicity categories
       Geography:
@@ -291,7 +403,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator compares the median household income (in inflation-adjusted dollars) by individual race/ethnicities
@@ -312,7 +424,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of % of households within census federal definition of poverty
       Geography:
@@ -322,7 +434,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -345,7 +457,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of estimated travel mode to work
       Geography:
@@ -355,7 +467,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -372,7 +484,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of educational attainment by race/ethnicity
       Geography:
@@ -382,7 +494,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Educational attainment is based on residents 26 years or older\n
@@ -400,7 +512,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of health insurance rates by race/ethnicity
       Geography:
@@ -410,7 +522,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -427,7 +539,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of household internet subscriptions by race/ethnicity 
       Geography:
@@ -437,7 +549,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Low speed defined as having a computer with dial-up internet subscription
@@ -457,7 +569,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of median housheold income by region
       Geography:
@@ -467,7 +579,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -496,7 +608,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -518,7 +630,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of % of households within census federal definition of poverty
       Geography:
@@ -528,7 +640,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -551,7 +663,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of household homeownership by race/ethnicity
       Geography:
@@ -561,7 +673,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -581,7 +693,7 @@ ACS5:
       Source:
       - Census 5 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of residential housing occupancy
       Geography:
@@ -609,7 +721,7 @@ ACS5:
       Source:
       - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of head of household commute modes by race/ethnicity
       Geography:
@@ -619,7 +731,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level\n
@@ -637,7 +749,7 @@ ACS5:
       Source:
       - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of head of household commute modes by income bracket
       Geography:
@@ -647,7 +759,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -668,7 +780,7 @@ ACS5:
       Source:
       - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of household vehicle ownership
       Geography:
@@ -678,7 +790,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
@@ -695,7 +807,7 @@ ACS5:
       Source:
       - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of head of household commute times by income bracket and by race/ethnicity
       Geography:
@@ -705,7 +817,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -726,7 +838,7 @@ ACS5:
       Source:
       - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 5 year rolling average of % of households within income categories
       Geography:
@@ -736,7 +848,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -757,7 +869,7 @@ ACS5:
       Source:
       - Census 5 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 'Yearly estimate of head of household spending on housing in three ranges: below
         30% of income, 30 to 0% and above 0%, by race/ethnicity and ownership type.
@@ -769,7 +881,7 @@ ACS5:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -790,7 +902,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of population by race/ethnicity
       Geography:
@@ -800,7 +912,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by race/ethnicity,
@@ -817,7 +929,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of population in three age cohorts (below 18, 18 to 64, and 6 and above)
       Geography:
@@ -827,11 +939,63 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Each of these geographies has the total population estimate by age cohort,
         as well as the percentage.\n
+        Key terms \n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes the 
+        margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.\n 
+        State and County FIPS are census numeric codes for different geographies'
+
+    Pop_6:
+      Indicator Title:
+      - Birth rates
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 2009-2023
+      Description:
+      - Yearly estimate of birth rates for women aged 15-44 (Total number of births in a year)/(Total Population) * 1000
+      Geography:
+      - Counties, MSA's, and MPO's
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2026-12-15'
+      Margin of Error Limit:
+      - 5
+      Notes: 'This indicator shows the total number of births from women aged 15-44 within last year and an estimated birth rate per 1,000 people.\n
+        Key terms \n
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes the 
+        margin of error statistics. Users should pay particular to the margin of error, 
+        especially for smaller geographies and race/ethnicity groups with relatively less population.\n 
+        State and County FIPS are census numeric codes for different geographies'
+
+    Pop_9:
+      Indicator Title:
+      - Location 1 year ago
+      Source:
+      - Census 1 year ACS (American Community Survey)
+      Year(s):
+      - 2005-2023
+      Description:
+      - Yearly estimate of population based on location of residence 1 year ago
+      Geography:
+      - counties, MSA's, and MPO's
+      Website:
+      - https://www.census.gov/programs-surveys/acs/data.html
+      Last Updated:
+      - 
+      Next Update:
+      - '2026-12-15'
+      Margin of Error Limit:
+      - 5
+      Notes: 'This indicator shows the total population based on location of residence 1 year ago.\n 
         Key terms \n
         Margin of Error: all ACS outputs are estimates. The downloadable data includes the 
         margin of error statistics. Users should pay particular to the margin of error, 
@@ -844,7 +1008,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of working age population in the formal labor force by race/ethnicity
       Geography:
@@ -854,7 +1018,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Excludes population in Armed Forces \n Excludes population under age 16 \n
@@ -871,7 +1035,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of residential housing occupancy
       Geography:
@@ -881,7 +1045,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -896,7 +1060,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of household homeownership by race/ethnicity
       Geography:
@@ -906,7 +1070,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the household (not individual) level. \n
@@ -924,7 +1088,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of median housheold income (in inflation adjusted dollars)
       Geography:
@@ -934,7 +1098,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator measures household income in inflation adjusted dollars\n
@@ -951,7 +1115,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of median housheold income race/ethnicity categories
       Geography:
@@ -961,7 +1125,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator compares the median household income (in inflation-adjusted dollars) by individual race/ethnicities to the regional average.\n
@@ -979,7 +1143,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of % of households within census federal definition of poverty
       Geography:
@@ -989,7 +1153,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -1010,7 +1174,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of estimated travel mode to work
       Geography:
@@ -1020,7 +1184,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1035,7 +1199,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of educational attainment by race/ethnicity
       Geography:
@@ -1045,7 +1209,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Educational attainment is based on residents 26 years or older
@@ -1061,7 +1225,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of health insurance rates by race/ethnicity
       Geography:
@@ -1071,7 +1235,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1086,7 +1250,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of household internet subscriptions by race/ethnicity 
       Geography:
@@ -1096,7 +1260,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Low speed defined as having a computer with dial-up internet subscription
@@ -1114,7 +1278,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of median housheold income by region
       Geography:
@@ -1124,7 +1288,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1141,7 +1305,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of median housheold income by Census Bureau race and ethnicity categories
       Geography:
@@ -1151,7 +1315,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1170,7 +1334,7 @@ ACS1:
       Source:
       - Census 1 year ACS (American Community Survey)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of % of households within census federal definition of poverty
       Geography:
@@ -1180,7 +1344,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Measures households living in poverty using the census official poverty measure. 
@@ -1203,7 +1367,7 @@ ACS1:
       Source:
       - Census 1 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of head of household commute modes by race/ethnicity
       Geography:
@@ -1213,7 +1377,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the person level 
@@ -1229,7 +1393,7 @@ ACS1:
       Source:
       - Census 1 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of head of household commute modes by income bracket
       Geography:
@@ -1239,7 +1403,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1260,7 +1424,7 @@ ACS1:
       Source:
       - Census 1 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of household vehicle ownership
       Geography:
@@ -1270,7 +1434,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'Key terms \n
@@ -1285,7 +1449,7 @@ ACS1:
       Source:
       - Census 1 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of head of household commute times by income bracket and
         by race/ethnicity
@@ -1296,7 +1460,7 @@ ACS1:
       Last Updated:
       - 
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1315,7 +1479,7 @@ ACS1:
       Source:
       - Census 1 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - Yearly estimate of % of households within income categories
       Geography:
@@ -1325,7 +1489,7 @@ ACS1:
       Last Updated:
       -  
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'This indicator measures household income in inflation adjusted dollars\n
@@ -1343,7 +1507,7 @@ ACS1:
       Source:
       - Census 1 year PUMS (Public Use Microdata Sample)
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
       - 'Yearly estimate of head of household spending on housing in three ranges: below
         30% of income, 30 to 0% and above 0%, by race/ethnicity and ownership type.
@@ -1355,7 +1519,7 @@ ACS1:
       Last Updated:
       -  
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Margin of Error Limit:
       - 5
       Notes: 'The indicator is measured at the householders (head of household) level\n 
@@ -1376,9 +1540,9 @@ CPS:
       Source:
       - Census 1 Year CPS (Current Population Survey) Food Security Sample
       Year(s):
-      - 2009-2022
+      - 2009-2023
       Description:
-      - 2009-2022 estimate at the SACOG region MPO level by race/ethnicity categories
+      - 2009-2023 estimate at the SACOG region MPO level by race/ethnicity categories
       Geography:
       - Counties, MPO's
       Website:
@@ -1386,7 +1550,7 @@ CPS:
       Last Updated:
       -  
       Next Update:
-      - '2025-12-15'
+      - '2026-12-15'
       Notes: 'Category Names\n
         HES1A:  Shopped at supermarket/grocery store for food purchases within the last week\n
         HES1B:  Shopped at dollar stores, convenience, pharmacies, etc... for food purchases within the last week\n

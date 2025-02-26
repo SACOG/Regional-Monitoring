@@ -73,7 +73,7 @@ years_to_import = range(year_start, year_end+1)
 
 
 
-counties=False
+counties=True
 msa=False
 places=False
 congressional_districts=False
@@ -135,11 +135,11 @@ if counties:
     df_config = pd.read_csv(file_in)
     df_config = clean_fips(df_config)
 
-    df_counties = df_counties.merge(df_config, on=['State', 'State FIPS', 'County FIPS', 'County Name'], how='left')
+    df_counties = df_counties.merge(df_config, on=['State', 'State FIPS', 'County FIPS', 'County Name'], how='outer')
+    display(df_counties)
 
-
-    # file_out = path_csv / 'CountyFIPS.csv'
-    # df_counties.to_csv(file_out)
+    file_out = path_csv / 'CountyFIPS.csv'
+    df_counties.to_csv(file_out, index=False)
 
 
 

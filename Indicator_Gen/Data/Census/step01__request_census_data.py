@@ -69,7 +69,7 @@ with open(file_api, 'r') as file:
 
 
 ## Export setting ---
-export=False
+export=True
 
 
 
@@ -122,13 +122,14 @@ if export:
         end = 'raw.csv'
     export_title = f"{indicator_name}_{geography}_{estimate}_{end}"
     
-    
+    print(); print()
     print(f"Exporting {export_title} to the following location: ")
-    print(path_out)
+    print(path_raw)
     
-    df_census_raw.to_csv(os.path.join(path_out, export_title), index = False)
+    file_out = path_raw / export_title
+    df_census_raw.to_csv(file_out, index = False)
     
-    print('')
+    print()
     print('Successfully exported!')
 
 

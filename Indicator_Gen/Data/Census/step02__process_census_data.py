@@ -30,6 +30,7 @@ import functools as ft
 from IPython.display import display
 
 
+
 ## Setting file paths ---
 
 user = getpass.getuser()
@@ -43,6 +44,7 @@ path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indi
 path_code    = path_git / 'Data' / 'Census'
 path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
+
 
 
 ## User defined functions ---
@@ -67,10 +69,11 @@ with open(file_api, 'r') as file:
 
 
 ## Export setting ---
+
 export=True
-
-
-
+about=True
+update=True
+server=False
 
 
 # Execute script to prepare API request inputs
@@ -78,7 +81,7 @@ path_1a = path_code / 'supplemental_scripts' / 'step01a__prepare_api_request_inp
 with path_1a.open("r") as f:
     exec(f.read())
     
-df_vars.head(3)
+display(df_vars.head(3))
 
 
 
@@ -92,9 +95,9 @@ else:
     end = 'raw.csv'
 export_title = f"{indicator_name}_{geography}_{estimate}_{end}"
 
-
-df_census_raw = pd.read_csv(os.path.join(path_raw, export_title))
-df_census_raw.head()
+file_out = path_raw / export_title
+df_census_raw = pd.read_csv(file_out)
+display(df_census_raw.head())
 
 
 
@@ -106,10 +109,10 @@ df_census_raw.head()
 
 
 
-# Execute script to prepare API request inputs
-path_2a = path_code / 'supplemental_scripts' / 'step02a__prepare_processing_parameters.py'
-with path_2a.open("r") as f:
-    exec(f.read())
+# # Execute script to prepare API request inputs
+# path_2a = path_code / 'supplemental_scripts' / 'step02a__prepare_processing_parameters.py'
+# with path_2a.open("r") as f:
+#     exec(f.read())
     
 
 
@@ -351,14 +354,10 @@ if geography == 'PUMA':
 # ***************************************************************************
 
 
-
-about=True
-update=False
-
 if export:
     if about:
         if update:
-            path_about = os.path.join(path_sp, 'Process Revamp', 'Task 6. Process Map')
+            path_about = path_sp / 'Process Revamp' / 'Task 6. Process Map'
             year_start = df_census_raw.Year.min()
             year_end   = df_census_raw.Year.max()
             df_about = write_about(sample_type      = sample_type
@@ -368,7 +367,8 @@ if export:
                                    , path_config0   = path_config0
                                    , MOE_thresh     = MOE_thresh
                                    , estimate       = estimate)
-            with pd.ExcelWriter(os.path.join(path_about, 'About Indicators.xlsx'), mode = 'a', engine = 'openpyxl', if_sheet_exists = 'replace') as writer:
+            file_about = path_about / 'About Indicators.xlsx'
+            with pd.ExcelWriter(file_about, mode = 'a', engine = 'openpyxl', if_sheet_exists = 'replace') as writer:
                 df_about.to_excel(writer, index = False, sheet_name = indicator_name, header = False)
 
 
@@ -397,7 +397,7 @@ if export:
 
 
 
-
+print(); print()
 
 if export:
     if geography == 'PUMA':
@@ -430,7 +430,9 @@ if export:
         path_out_sp = r'I:\Projects\Warren\Environmental_Justice_March_2023\SACOG_EJ_UPDATE_2024\Python\YOUR_OUTPUT_FOLDER\2 - Processed'
     
     if project == 'Monitoring and Reporting':
-        paths = [path_out_server, path_out_sp]
+        if server:
+            paths = [path_out_server, path_out_sp]
+        else: paths = [path_out_sp]
     else:
         paths = [path_out_sp]
     
@@ -508,13 +510,6 @@ if export:
             if geography == 'MSA':
                 path_wb = path_ / workbook_name
                 export_indicator(indicator_name, geography, df_msa1, path_wb, about)
-
-
-
-
-
-paths
-
 
 
 

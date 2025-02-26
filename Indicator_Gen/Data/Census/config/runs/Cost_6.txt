@@ -1,0 +1,10 @@
+Project: Monitoring and Reporting
+Indicator Name: Cost_6
+Export Location: Vibrant and Inclusive Places\\Development\\Housing Cost
+Folder: Housing Cost Burden
+Sample: PUMS
+Estimate: ACS5
+Geography: PUMA
+Years Imported: [2016, 2017, 2018, 2019, 2020, 2021]
+Import Tab: Counties
+Margin of Error: Yes
