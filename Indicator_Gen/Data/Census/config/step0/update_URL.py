@@ -20,6 +20,7 @@ import xlsxwriter
 import time
 import functools as ft
 from IPython.display import display
+import urllib.request, json
 
 
 
@@ -28,11 +29,16 @@ from IPython.display import display
 user = getpass.getuser()
 path_users = Path.home()
 
-path_git = path_users / 'Documents' / 'Projects' / 'General' / 'Regional Monitoring' / 'REVAMPED PROCESS'
-path_out  = path_git / 'OUT'
+path_sp = path_users / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+path_raw = path_sp / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
+path_main = path_sp / 'Data'
+path_prod = path_sp / 'Products'
+path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
 path_code    = path_git / 'Data' / 'Census'
 path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
+
+path_csv = path_config / 'step0' / 'csv'
 
 
 ## User defined functions ---
@@ -93,5 +99,5 @@ df_url = df_url2.merge(df_url1, on = ['title', 'c_vintage', 'c_dataset', 'c_url'
 
 ## Exporting -------------------------------------------------------------------------------------------------------------------
 
-# file_csv = path_config / 'step0' / 'csv' / 'census_url.csv'
-# df_url.to_csv(file_csv, index=False)
+file_csv = path_config / 'step0' / 'csv' / 'census_url.csv'
+df_url.to_csv(file_csv, index=False)

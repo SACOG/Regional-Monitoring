@@ -12,22 +12,40 @@ print()
 
 list_df_census = []
 
-for state in list(dict_fips.keys()):
-    print('State: ' + state)
-    for year in tqdm(years_to_import):
-        try:
-            list_df_census.append(
-                query_census(df_urls       = df_urls
-                                , api_key   = api_key
-                                , estimate  = estimate
-                                , sample    = sample_type
-                                , geography = geography
-                                , variables = ','.join(dict_vars[str(year)])
-                                , year      = year
-                                , state     = state
-                                , county    = dict_fips[state])
-            )
-        except Exception as e: print(e)
+if import_tab == 'Counties':
+    for state in list(dict_fips.keys()):
+        print('State: ' + state)
+        for year in tqdm(years_to_import):
+            try:
+                list_df_census.append(
+                    query_census(df_urls       = df_urls
+                                    , api_key   = api_key
+                                    , estimate  = estimate
+                                    , sample    = sample_type
+                                    , geography = geography
+                                    , variables = ','.join(dict_vars[str(year)])
+                                    , year      = year
+                                    , state     = state
+                                    , county    = dict_fips[state])
+                )
+            except Exception as e: print(e)
+
+if import_tab == 'States':
+    for state in states_to_import:
+        print('State: ' + state)
+        for year in tqdm(years_to_import):
+            try:
+                list_df_census.append(
+                    query_census(df_urls      = df_urls
+                                    , api_key   = api_key
+                                    , estimate  = estimate
+                                    , sample    = sample_type
+                                    , geography = geography
+                                    , variables = variables
+                                    , year      = year
+                                    , state     = state)
+                )
+            except Exception as e: print(e)
                 
 if geography == 'Tracts':
     df_census_raw = pd.concat(list_df_census)

@@ -12,8 +12,8 @@ if var_exists:
 else:
     indicator_name = input("Indicator Name: ")
 
-print('')
-print('')
+print()
+print()
 
 print('Importing API routes to help with preparing API request...')
 print('(it takes a few minutes)')
@@ -23,8 +23,8 @@ df_api = pd.read_excel(os.path.join(path_routes, 'Routes.xlsx'))
 # display(df_api.head())
 print('View this link as needed to help with choosing routes: ', 'https://www.eia.gov/opendata/browser/')
 
-print('')
-print('')
+print()
+print()
 
 
 ## Subsets ---
@@ -77,16 +77,16 @@ print("Categories: ");print(categories)
 
 while True:
     try:
-        print('')
+        print()
         cat = input("Enter your choice: ")
         if cat in categories:
-            print('')
+            print()
             break
         else:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ");print(categories)
     except ValueError:
-        print('')
+        print()
         print("Invalid choice. Please choose from options outlined here: ")
 
 
@@ -95,21 +95,21 @@ while True:
 df_api = df_api[df_api['category_name'] == cat]
 routes1 = list(df_api['route1_name'].unique())
 
-print('')
+print()
 print("Routes 1: ");print(routes1)
 
 while True:
     try:
-        print('')
+        print()
         route1 = input("Enter your choice: ")
         if route1 in routes1:
-            print('')
+            print()
             break
         else:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ");print(routes1)
     except ValueError:
-        print('')
+        print()
         print("Invalid choice. Please choose from options outlined here: ")
 
 
@@ -121,21 +121,21 @@ if (cat in categories_no_route2) & (route1 in route1_no_route2):
     pass
 else:
     routes2 = list(df_api['route2_name'].unique())
-    print('')
+    print()
     print("Routes 2: ");print(routes2)
     
     while True:
         try:
-            print('')
+            print()
             route2 = input("Enter your choice: ")
             if route2 in routes2:
-                print('')
+                print()
                 break
             else:
-                print('')
+                print()
                 print("Invalid choice. Please choose from options outlined here: ");print(routes2)
         except ValueError:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ")
 
 if (cat in categories_no_route2) & (route1 in route1_no_route2):
@@ -150,21 +150,21 @@ if (cat in categories_no_facets) & (route1 in route1_no_facets):
 else:
     facetOptions = list(df_api['facetOption'].unique())
     
-    print('')
+    print()
     print("Facet Options: ");print(facetOptions)
     
     while True:
         try:
-            print('')
+            print()
             facetOption = input("Enter your choice: ")
             if facetOption in facetOptions:
-                print('')
+                print()
                 break
             else:
-                print('')
+                print()
                 print("Invalid choice. Please choose from options outlined here: ");print(facetOptions)
         except ValueError:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ")
 
 
@@ -177,21 +177,21 @@ else:
     df_api = df_api[df_api['facetOption'] == facetOption]
     facets = list(df_api['facet_name'].unique())
     
-    print('')
+    print()
     print("Facets: ");print(facets)
     
     while True:
         try:
-            print('')
+            print()
             facet = input("Enter your choice: ")
             if facet in facets:
-                print('')
+                print()
                 break
             else:
-                print('')
+                print()
                 print("Invalid choice. Please choose from options outlined here: ");print(facets)
         except ValueError:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ")
 
 
@@ -208,21 +208,21 @@ if (cat in categories_no_data) & (route1 in route1_no_data):
 else:
     datatypes = list(df_api['data_type'].unique())
         
-    print('')
+    print()
     print("Data Type Options: ");print(datatypes)
     
     while True:
         try:
-            print('')
+            print()
             datatype = input("Enter your choice: ")
             if datatype in datatypes:
-                print('')
+                print()
                 break
             else:
-                print('')
+                print()
                 print("Invalid choice. Please choose from options outlined here: ");print(datatypes)
         except ValueError:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ")
 
 if (cat in categories_no_data) & (route1 in route1_no_data):
@@ -235,29 +235,29 @@ else:
 
 ## Frequency
 freqs = ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annual']
-print('')
+print()
 print("Frequency Options: ");print(freqs)
 
 while True:
     try:
-        print('')
+        print()
         freq = input("Enter your choice: ")
         if freq in freqs:
-            print('')
+            print()
             break
         else:
-            print('')
+            print()
             print("Invalid choice. Please choose from options outlined here: ");print(freqs)
     except ValueError:
-        print('')
+        print()
         print("Invalid choice. Please choose from options outlined here: ")
 
 
 
-print('')
-print('')
+print()
+print()
 print('Your request: ')
-print('')
+print()
 print(cat)
 print(route1)
 try:
@@ -277,7 +277,7 @@ try:
 except:
     pass
 print(freq)
-print('')
+print()
 display(df_api)
 
 

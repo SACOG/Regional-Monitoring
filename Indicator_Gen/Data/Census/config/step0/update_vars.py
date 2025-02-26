@@ -69,7 +69,7 @@ with open(file_api, 'r') as file:
 
 ACS=False
 PUMS=False
-DEC=False
+DEC=True
 LEHD=False
 CPS=False
 SUBJECT=False
@@ -81,9 +81,9 @@ SUBJECT=False
 
 if ACS:
 
-    print('')
+    print()
     print('ACS ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
     ## ACS5 ---
     ## Organize list of all variables from all years into one nice table
@@ -171,9 +171,9 @@ if ACS:
 
 if PUMS:
 
-    print('')
+    print()
     print('PUMS ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
     ## PUMS1 ---
@@ -186,8 +186,8 @@ if PUMS:
         # append to list
     # concatenate all data frames together
 
-    print(''); print('')
-    print('Importing PUMS variables tables by year...'); print('')
+    print(); print()
+    print('Importing PUMS variables tables by year...'); print()
 
     years = sequence(2005, 2023, 1)
     years.remove(2020)
@@ -229,8 +229,8 @@ if PUMS:
 
     # concatenate all data frames together
 
-    print(''); print('')
-    print('Cleaned PUMS variables table:'); print('')
+    print(); print()
+    print('Cleaned PUMS variables table:'); print()
 
     list_df_years = []
 
@@ -300,8 +300,8 @@ if PUMS:
         # append to list
     # concatenate all data frames together
 
-    print(''); print('')
-    print('Importing PUMS variables tables by year...'); print('')
+    print(); print()
+    print('Importing PUMS variables tables by year...'); print()
 
     years = sequence(2020, 2020, 1)
     list_df_pums = []
@@ -341,8 +341,8 @@ if PUMS:
 
     # concatenate all data frames together
 
-    print(''); print('')
-    print('Cleaned PUMS variables table:'); print('')
+    print(); print()
+    print('Cleaned PUMS variables table:'); print()
 
     list_df_years = []
 
@@ -432,9 +432,9 @@ if PUMS:
 
 if DEC:
 
-    print('')
+    print()
     print('DEC ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
 
@@ -442,44 +442,40 @@ if DEC:
 
     with urllib.request.urlopen("https://api.census.gov/data/2000/dec/sf1/variables.json") as url:
         dict_dec_2000 = json.load(url)
-
     df_dec_2000 = pd.DataFrame.from_dict(dict_dec_2000['variables']).T.reset_index().rename(columns = {'index':'ID'})
     df_dec_2000 = df_dec_2000[['ID', 'label', 'concept', 'predicateType', 'group']]
     df_dec_2000['Year'] = 2000
-    df_dec_2000['sample_type'] = 'DEC_sf1'
+    df_dec_2000['estimate'] = 'sf1'
     df_dec_2000 = df_dec_2000.sort_values(['ID'])
     display(df_dec_2000.head())
 
 
     with urllib.request.urlopen("https://api.census.gov/data/2010/dec/sf1/variables.json") as url:
         dict_dec_2010 = json.load(url)
-
     df_dec_2010 = pd.DataFrame.from_dict(dict_dec_2010['variables']).T.reset_index().rename(columns = {'index':'ID'})
     df_dec_2010 = df_dec_2010[['ID', 'label', 'concept', 'predicateType', 'group']]
     df_dec_2010['Year'] = 2010
-    df_dec_2010['sample_type'] = 'DEC_dp'
+    df_dec_2010['estimate'] = 'sf1'
     df_dec_2010 = df_dec_2010.sort_values(['ID'])
     display(df_dec_2010.head())
 
 
     with urllib.request.urlopen("https://api.census.gov/data/2020/dec/dp/variables.json") as url:
         dict_dec_2020 = json.load(url)
-        
     df_dec_2020 = pd.DataFrame.from_dict(dict_dec_2020['variables']).T.reset_index().rename(columns = {'index':'ID'})
     df_dec_2020 = df_dec_2020[['ID', 'label', 'concept', 'predicateType', 'group']]
     df_dec_2020['Year'] = 2020
-    df_dec_2020['sample_type'] = 'DEC_dp'
+    df_dec_2020['estimate'] = 'dp'
     df_dec_2020 = df_dec_2020.sort_values(['ID'])
     display(df_dec_2020.head())
 
 
     with urllib.request.urlopen("https://api.census.gov/data/2020/dec/dhc/variables.json") as url:
         dict_dhc_2020 = json.load(url)
-        
     df_dhc_2020 = pd.DataFrame.from_dict(dict_dhc_2020['variables']).T.reset_index().rename(columns = {'index':'ID'})
     df_dhc_2020 = df_dhc_2020[['ID', 'label', 'concept', 'predicateType', 'group']]
     df_dhc_2020['Year'] = 2020
-    df_dhc_2020['sample_type'] = 'DEC_dhc'
+    df_dhc_2020['estimate'] = 'dhc'
     df_dhc_2020 = df_dhc_2020.sort_values(['ID'])
     display(df_dhc_2020.head())
 
@@ -491,17 +487,12 @@ if DEC:
     df_dec['Label_clean'] = df_dec['label'].str.replace('Estimate!!', '')
     df_dec['Label_clean'] = df_dec['Label_clean'].str.replace('!!', ' ')
     df_dec['Label_clean'] = df_dec['Label_clean'].str.replace(':', '')
-    display(df_dec.head())
-
-
 
     df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='DEC')
     df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
     df_dec = df_dec.merge(df_config, on=['ID'], how='left')
-    display(df_dec.head())
-
-
+    df_dec = df_dec[['Year', 'ID', 'label', 'concept', 'predicateType', 'group', 'Indicator Name', 'Include', 'estimate', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
 
 
     ## Exporting to Git ---
@@ -509,13 +500,14 @@ if DEC:
     # file_out = path_csv / 'DEC.csv'
     # df_dec.to_csv(file_out, index=False)
 
+    display(df_dec)
 
 
 if LEHD:
 
-    print('')
+    print()
     print('LEHD ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
     ## Importing ---
 
@@ -564,9 +556,9 @@ if LEHD:
 
 if CPS:
 
-    print('')
+    print()
     print('CPS ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
     ## Importing ---
 
@@ -580,8 +572,8 @@ if CPS:
         # append to list
     # concatenate all data frames together
 
-    print(''); print('')
-    print('Importing CPS variables tables by year...'); print('')
+    print(); print()
+    print('Importing CPS variables tables by year...'); print()
 
     year_start = 2009
     year_end   = 2023
@@ -632,8 +624,8 @@ if CPS:
     # concatenate all data frames together
 
 
-    print(''); print('')
-    print('Cleaned CPS variables table:'); print('')
+    print(); print()
+    print('Cleaned CPS variables table:'); print()
 
     list_df_years = []
 
@@ -728,9 +720,9 @@ if CPS:
 
 if SUBJECT:
         
-    print('')
+    print()
     print('SUBJECT ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
     ## ACS5 ---
     ## Organize list of all variables from all years into one nice table

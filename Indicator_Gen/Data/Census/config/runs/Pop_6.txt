@@ -1,0 +1,10 @@
+Project: Monitoring and Reporting
+Indicator Name: Pop_6
+Export Location: Vibrant and Inclusive Places\\People and Community\\Pop and Demographics
+Folder: Birth Rates
+Sample: ACS
+Estimate: ACS5
+Geography: Tracts
+Years Imported: [2023]
+Import Tab: Counties
+Margin of Error: Yes

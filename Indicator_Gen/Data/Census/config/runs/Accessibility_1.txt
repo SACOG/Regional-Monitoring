@@ -1,0 +1,10 @@
+Project: Monitoring and Reporting
+Indicator Name: Accessibility_1
+Export Location: Safe Equitable Resilient Infrastructure\\Accessibility
+Folder: Travel Mode by Race
+Sample: PUMS
+Estimate: ACS5
+Geography: PUMA
+Years Imported: ['2', '0', '2', '1']
+Import Tab: Counties
+Margin of Error: Yes
