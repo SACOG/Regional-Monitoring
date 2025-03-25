@@ -9,6 +9,7 @@ Project:
   - 'Monitoring and Reporting'
   - 'RHNA'
   - 'Blueprint'
+  - 'Cap to Cap'
 
 Indicators:
   Monitoring and Reporting:
@@ -573,6 +574,103 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+
+  Blueprint:
+    EJ_Analysis:
+      sp_location: 'Small Data Requests\\2025\\EJ Analysis'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 8
+      percentages: 'No'
+    Blueprint_34:
+      sp_location: 'Small Data Requests\\2025\\Blueprint'
+      folder: ''
+      sample: ['ACS', 'PUMS']
+      MOE_threshold: 5
+      number_of_variables: 3
+      percentages: 'Yes'
+    Blueprint_35:
+      sp_location: 'Small Data Requests\\2025\\Blueprint'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 5
+      number_of_variables: 3
+      percentages: 'Yes'
+    Blueprint_36:
+      sp_location: 'Small Data Requests\\2025\\Blueprint'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 5
+      percentages: 'No'
+    Blueprint_84:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 1
+      percentages: 'No'
+    Blueprint_84b:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 1
+      percentages: 'No'
+    Blueprint_84c:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 2
+      percentages: 'Yes'
+    Blueprint_95:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 5
+      percentages: 'Yes'
+    Blueprint_95b:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 5
+      percentages: 'Yes'
+    Blueprint_97:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 1
+      percentages: 'Yes'
+    Blueprint_97b:
+      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 6
+      percentages: 'Yes'
+
+
+
+  Cap to Cap:
+    Cap_1:
+      sp_location: 'Small Data Requests\\2025\\Cap to Cap\\OG'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 1
+      percentages: 'Yes'
+    Cap_2:
+      sp_location: 'Small Data Requests\\2025\\Cap to Cap\\OG'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 1
+      percentages: 'No'
 
 
 Samples:

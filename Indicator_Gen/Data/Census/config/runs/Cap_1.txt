@@ -1,0 +1,10 @@
+Project: Cap to Cap
+Indicator Name: Cap_1
+Export Location: Small Data Requests\\2025\\Cap to Cap\\OG
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: MSA
+Years Imported: [2023]
+Import Tab: MSA
+Margin of Error: Yes

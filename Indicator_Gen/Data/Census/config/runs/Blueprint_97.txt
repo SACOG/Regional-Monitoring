@@ -1,0 +1,10 @@
+Project: Blueprint
+Indicator Name: Blueprint_97
+Export Location: Small Data Requests\\2025\\Blueprint\extra
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: [2023]
+Import Tab: States
+Margin of Error: Yes

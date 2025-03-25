@@ -1,0 +1,10 @@
+Project: Blueprint
+Indicator Name: Blueprint_35
+Export Location: Small Data Requests\\2025\\Blueprint
+Folder: 
+Sample: PUMS
+Estimate: ACS1
+Geography: PUMA
+Years Imported: [2019, 2021, 2022, 2023]
+Import Tab: Counties
+Margin of Error: No
