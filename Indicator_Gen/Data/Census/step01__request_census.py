@@ -30,7 +30,6 @@ import functools as ft
 from IPython.display import display
 
 
-
 ## Setting file paths ---
 
 user = getpass.getuser()
@@ -44,7 +43,6 @@ path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indi
 path_code    = path_git / 'Data' / 'Census'
 path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
-
 
 
 ## User defined functions ---
@@ -102,7 +100,6 @@ with path_1b.open("r") as f:
     exec(f.read())
 
 
-
 # ***************************************************************************
 # 
 # Exporting
@@ -133,7 +130,6 @@ if export:
     print('Successfully exported!')
 
 
-
 # ***************************************************************************
 # 
 # Processing (optional)
@@ -141,29 +137,63 @@ if export:
 # ***************************************************************************
 
 
+# if geography == 'Counties':
+#     mpo = 'No'
+# if geography == 'Places':
+#     unincorporated = 'No'
+
 
 df_census = df_census_raw.copy()
 
 if sample_type in ['ACS', 'SUBJECT']:
     df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error)
-    display(df_census)
-
-if sample_type in ['PUMS', 'FOODSEC']:
-    df_census, groups = pums_processing_1(df_census, df_vars, sample_type, weight)
-    print('Groups: ' + ', '.join(groups))
-    display(df_census)
-
-## LEHD processing steps are still a work in progress
-percentages = 'Yes'
-if estimate == 'LEHD':
-    if geography == 'Counties':
-        df_counties, df_mpo = lehd_processing(df_census, geography, indicator_name, percentages, df_fips)
-        display(df_counties)
-    if geography == 'MSA':
-        df_msa = lehd_processing(df_census, geography, indicator_name, percentages)
-        display(df_msa)
+    # df_census = acs_processing_2(df_census, df_vars, estimate, indicator_name, geography, margin_of_error, year_end, path_main, path_git)
+    # df_census = acs_processing_3(df_census, geography)
+    # if geography != 'Counties':
+    #     df_census = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+    # if geography == 'Counties':
+    #     if mpo == 'Yes':
+    #         df_census, df_mpo = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
+    #     else:
+    #         df_census = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+    display(df_census.head(3))
 
 
+# if sample_type in ['PUMS', 'FOODSEC']:
+#     df_census, groups = pums_processing_1(df_census, df_vars, sample_type, weight)
+#     print('Groups: ' + ', '.join(groups))
+#     display(df_census)
+
+# ## LEHD processing steps are still a work in progress
+# percentages = 'Yes'
+# if estimate == 'LEHD':
+#     if geography == 'Counties':
+#         df_counties, df_mpo = lehd_processing(df_census, geography, indicator_name, percentages, df_fips)
+#         display(df_counties)
+#     if geography == 'MSA':
+#         df_msa = lehd_processing(df_census, geography, indicator_name, percentages)
+#         display(df_msa)
 
 
+
+# if export:
+
+#     if geography == 'PUMA':
+#         estimate = re.sub('ACS', 'PUMS', estimate)
+    
+#     if margin_of_error == 'No':
+#         end = 'NoME_raw.csv'
+#     else:
+#         end = 'raw.csv'
+#     export_title = f"{indicator_name}_{geography}_{estimate}_{end}"
+    
+#     print(); print()
+#     print(f"Exporting {export_title} to the following location: ")
+#     print(path_raw)
+    
+#     file_out = path_raw / export_title
+#     df_census.to_csv(file_out, index = False)
+    
+#     print()
+#     print('Successfully exported!')
 

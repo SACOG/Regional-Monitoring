@@ -70,12 +70,13 @@ with open(file_api, 'r') as file:
 year_start = 2023
 year_end   = 2023
 years_to_import = range(year_start, year_end+1)
+years_to_import = [2000, 2010, 2020]
 
 
 
-counties=True
+counties=False
 msa=False
-places=False
+places=True
 congressional_districts=False
 state_legislative_districts_upper=False
 state_legislative_districts_lower=False
@@ -100,19 +101,20 @@ df_states = df_states.reset_index(drop = True)
 df_states['State FIPS' ] = df_states['State FIPS' ].astype(str).apply('{:0>2}'.format)
 
 states = df_states['State FIPS'].unique()
+states=['51']
 
 
 
 if counties:
 
-    print('')
+    print()
     print('Counties ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
     start_time = time.time()
 
-    print('')
-    print('Importing County FIPS codes...'); print('')
+    print()
+    print('Importing County FIPS codes...'); print()
 
     # Use URL to county fips mapping table
     # Import county FIPS codes by state
@@ -152,16 +154,16 @@ if counties:
 
 if msa:
 
-    print('')
+    print()
     print('MSA ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
     start_time = time.time()
 
     list_df_census = []
 
-    print(''); print('Importing MSA codes for all states...'); print('')
+    print(); print('Importing MSA codes for all states...'); print()
 
     for year in tqdm(years_to_import, position=0):
 
@@ -190,7 +192,7 @@ if msa:
         list_df_census.append(df_msa)
 
 
-    print('')
+    print()
     print('Concatenating all states together...')
 
     df_msa = pd.concat(list_df_census)
@@ -297,9 +299,9 @@ if msa:
 
 if places:
 
-    print('')
+    print()
     print('Census Designated Places ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
     start_time = time.time()
@@ -307,9 +309,9 @@ if places:
 
     list_df_census = []
 
-    print('')
+    print()
     print('Importing place IDs for all states...')
-    print('')
+    print()
 
     for state in tqdm(states, position=0):
         for year in years_to_import:
@@ -322,7 +324,10 @@ if places:
             # convert parsed response text to pandas df
             # apply year tag
             
-            root_ = f'https://api.census.gov/data/{year}/acs/acs5'
+            if year in [2000, 2010]:
+                root_ = f'https://api.census.gov/data/{year}/dec/sf1'
+            else:
+                root_ = f'https://api.census.gov/data/{year}/dec/dhc'
             g_ = '?get='
             variables_ = 'NAME'
             location_ = '&for=place:*' + '&in=state:' + state
@@ -339,15 +344,14 @@ if places:
             list_df_census.append(df_cdp)
 
 
-    print('')
+    print()
     print('Concatenating all states together...')
 
     df_cdp = pd.concat(list_df_census)
 
-    df_cdp = df_cdp[df_cdp['Year'] == df_cdp.Year.max()]
-    df_cdp = df_cdp.drop('Year', axis=1)
+    df_cdp = df_cdp.sort_values(['Year', 'state', 'place', 'NAME'], ascending=[False, True, True, True])
+    df_cdp = df_cdp.set_index('Year').reset_index()
 
-    # Remove anything after specified string, use regular expression (currently set to remove everything after the first period)
     def re_remove_post(x, exp = ','):
         if x == 'nan':
             return 'nan'
@@ -356,8 +360,8 @@ if places:
             
     df_cdp['NAME'] = df_cdp['NAME'].apply(re_remove_post)
 
-    # file_out = path_csv / 'CDPcodes.csv'
-    # df_cdp.to_csv(file_out)
+    file_out = path_csv / 'CDPcodes.csv'
+    df_cdp.to_csv(file_out, index=False)
 
 
     print("")
@@ -371,9 +375,9 @@ if places:
 
 if congressional_districts:
 
-    print('')
+    print()
     print('Congressional Districts ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
     start_time = time.time()
@@ -381,9 +385,9 @@ if congressional_districts:
 
     list_df_census = []
 
-    print('')
+    print()
     print('Importing Congressional Districts for all states...')
-    print('')
+    print()
 
     for year in tqdm(years_to_import, position=0):
         
@@ -412,7 +416,7 @@ if congressional_districts:
         list_df_census.append(df_cd)
 
 
-    print('')
+    print()
     print('Concatenating all states together...')
 
     df_cd = pd.concat(list_df_census)
@@ -428,7 +432,7 @@ if congressional_districts:
     print("")
     print("Finished!!")
     print(f"Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes --- to update all Congressional District codes")
-    print('')
+    print()
 
 
 
@@ -438,9 +442,9 @@ if congressional_districts:
 
 if state_legislative_districts_upper:
 
-    print('')
+    print()
     print('State Legislative Upper Districts ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
 
@@ -449,7 +453,7 @@ if state_legislative_districts_upper:
 
 
     print('Importing State Legislative Upper Districts for all states...')
-    print('')
+    print()
 
     list_df_states = []
 
@@ -491,7 +495,7 @@ if state_legislative_districts_upper:
             list_df_states.append(df_state)
         except: pass
 
-    print('')
+    print()
     print('Concatenating all states together...')
 
     df_sldu = pd.concat(list_df_states)
@@ -509,9 +513,9 @@ if state_legislative_districts_upper:
 
 if state_legislative_districts_lower:
 
-    print('')
+    print()
     print('State Legislative Lower Districts ------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
 
@@ -519,7 +523,7 @@ if state_legislative_districts_lower:
 
 
     print('Importing place IDs for all states...')
-    print('')
+    print()
 
     list_df_states = []
 
@@ -564,7 +568,7 @@ if state_legislative_districts_lower:
             list_df_states.append(df_state)
         except: pass
 
-    print('')
+    print()
     print('Concatenating all states together...')
 
     df_sldl = pd.concat(list_df_states)
@@ -583,9 +587,9 @@ if state_legislative_districts_lower:
 
 if puma:
 
-    print('')
+    print()
     print('PUMAs --------------------------------------------------------------------------------------------------------------------------------------------')
-    print('')
+    print()
 
 
     # Use URL to county fips mapping table

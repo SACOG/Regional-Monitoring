@@ -30,7 +30,6 @@ import functools as ft
 from IPython.display import display
 
 
-
 ## Setting file paths ---
 
 user = getpass.getuser()
@@ -44,8 +43,7 @@ path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indi
 path_code    = path_git / 'Data' / 'Census'
 path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
-
-
+path_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
 ## User defined functions ---
 
@@ -71,8 +69,8 @@ with open(file_api, 'r') as file:
 ## Export setting ---
 
 export=True
-about=True
-update=True
+about=False
+update=False
 server=False
 
 
@@ -80,8 +78,14 @@ server=False
 path_1a = path_code / 'supplemental_scripts' / 'step01a__prepare_api_request_inputs.py'
 with path_1a.open("r") as f:
     exec(f.read())
+
+if geography == 'Counties':
+    mpo = 'No'
+if geography == 'Places':
+    unincorporated = 'No'
     
 display(df_vars.head(3))
+
 
 
 
@@ -100,7 +104,6 @@ df_census_raw = pd.read_csv(file_out)
 display(df_census_raw.head())
 
 
-
 # ***************************************************************************
 # 
 # Processing
@@ -109,17 +112,9 @@ display(df_census_raw.head())
 
 
 
-# # Execute script to prepare API request inputs
-# path_2a = path_code / 'supplemental_scripts' / 'step02a__prepare_processing_parameters.py'
-# with path_2a.open("r") as f:
-#     exec(f.read())
-    
-
-
-
-
 ## Make copy of raw data
 df_census = df_census_raw.copy()
+
 print(); print()
 
 if sample_type in ['ACS', 'SUBJECT']:
@@ -148,36 +143,17 @@ if sample_type in ['ACS', 'SUBJECT']:
     # Link various FIPS codes
     # Roll up population/households/SE's to the desired geography and variable groupings
     # Calculate percentages by geography, race/ethnicity, and variables
-    if geography == 'Places':
-        df_places1, df_places2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_places1.head(3))
-    if geography == 'Block Groups':
-        df_blocks1, df_blocks2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_blocks1.head(3))
-    if geography == 'Tracts':
-        df_tracts1, df_tracts2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_tracts1.head(3))
+    if geography != 'Counties':
+        df_census = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+        display(df_census.head(3))
     if geography == 'Counties':
-        df_counties1, df_counties2, df_mpo1, df_mpo2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
-        display(df_mpo1.head(3))
-    if geography == 'MSA':
-        df_msa1, df_msa2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_msa1.head(3))
-    if geography == 'Congressional Districts':
-        df_cd1, df_cd2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_cd1.head(3))
-    if geography == 'State Legislative Upper Districts':
-        df_sldu1, df_sldu2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_sldu1.head(3))
-    if geography == 'State Legislative Lower Districts':
-        df_sldl1, df_sldl2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_sldl1.head(3))
-    if geography == 'States':
-        df_states1, df_states2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_states1.head(3))
-    if geography == 'National':
-        df_nat1, df_nat2 = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_nat1.head(3))
+        if mpo == 'Yes':
+            df_census, df_mpo = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
+            display(df_mpo.head(3))
+        else:
+            df_census = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+            display(df_census.head(3))
+
 
 
 
@@ -236,101 +212,34 @@ print(); print()
 print('Final Results: ')
 print()
 
-if geography == 'Places':
-    df_places1 = rename_census(df_places1        = df_places1
+if geography not in ['Counties', 'PUMA']:
+    df_census = rename_census(df_census         = df_census
                                , geography       = geography
                                , indicator_name  = indicator_name
                                , margin_of_error = margin_of_error
                                , percentages     = percentages
                                , sample_type     = sample_type)
-    display(df_places1)
-if geography == 'Block Groups':
-    df_blocks1 = rename_census(df_blocks1        = df_blocks1
-                               , geography       = geography
-                               , indicator_name  = indicator_name
-                               , margin_of_error = margin_of_error
-                               , percentages     = percentages
-                               , sample_type     = sample_type)
-    display(df_blocks1)
-if geography == 'Tracts':
-    df_tracts1 = rename_census(df_tracts1        = df_tracts1
-                               , geography       = geography
-                               , indicator_name  = indicator_name
-                               , margin_of_error = margin_of_error
-                               , percentages     = percentages
-                               , sample_type     = sample_type)
-    display(df_tracts1)
-if geography == 'Congressional Districts':
-    df_cd1 = rename_census(df_cd1            = df_cd1
-                           , geography       = geography
-                           , indicator_name  = indicator_name
-                           , margin_of_error = margin_of_error
-                           , percentages     = percentages
-                           , sample_type     = sample_type)
-    display(df_cd1)
-if geography == 'State Legislative Upper Districts':
-    df_sldu1 = rename_census(df_sldu1            = df_sldu1
-                               , geography       = geography
-                               , indicator_name  = indicator_name
-                               , margin_of_error = margin_of_error
-                               , percentages     = percentages
-                               , sample_type     = sample_type)
-    display(df_sldu1)
-if geography == 'State Legislative Lower Districts':
-    df_sldl1 = rename_census(df_sldl1            = df_sldl1
-                               , geography       = geography
-                               , indicator_name  = indicator_name
-                               , margin_of_error = margin_of_error
-                               , percentages     = percentages
-                               , sample_type     = sample_type)
-    display(df_sldl1)
+    display(df_census)
 if geography == 'Counties':
     if sample_type in ['ACS', 'SUBJECT']:
-        df_counties1, df_mpo1 = rename_census(df_counties1      = df_counties1
-                                              , df_mpo1         = df_mpo1
-                                              , geography       = geography
-                                              , indicator_name  = indicator_name
-                                              , margin_of_error = margin_of_error
-                                              , percentages     = percentages
-                                              , sample_type     = sample_type
-                                              , df_vars         = df_vars)
-        display(df_counties1, df_mpo1)
-    if sample_type == 'FOODSEC':
-        df_counties, df_mpo = rename_census(df_counties         = df_counties
-                                              , df_mpo          = df_mpo
-                                              , geography       = geography
-                                              , indicator_name  = indicator_name
-                                              , sample_type     = sample_type
-                                              , table_type      = table_type
-                                              , groups          = groups)
-        display(df_counties, df_mpo)
-if geography == 'MSA':
-    if sample_type in ['ACS', 'SUBJECT']:
-        df_msa1 = rename_census(df_msa1           = df_msa1
-                                , geography       = geography
-                                , indicator_name  = indicator_name
-                                , margin_of_error = margin_of_error
-                                , percentages     = percentages
-                                , sample_type     = sample_type)
-        display(df_msa1)
-if geography == 'States':
-    if sample_type in ['ACS', 'SUBJECT']:
-        df_states1 = rename_census(df_states1         = df_states1
+        if mpo == 'Yes':
+            df_census, df_mpo = rename_census(df_census             = df_census
+                                                , df_mpo          = df_mpo
+                                                , geography       = geography
+                                                , indicator_name  = indicator_name
+                                                , margin_of_error = margin_of_error
+                                                , percentages     = percentages
+                                                , sample_type     = sample_type
+                                                , df_vars         = df_vars)
+            display(df_census, df_mpo)
+        else:
+            df_census = rename_census(df_census         = df_census
                                     , geography       = geography
                                     , indicator_name  = indicator_name
                                     , margin_of_error = margin_of_error
                                     , percentages     = percentages
                                     , sample_type     = sample_type)
-        display(df_states1)
-if geography == 'National':
-    if sample_type in ['ACS', 'SUBJECT']:
-        df_nat1 = rename_census(df_nat1           = df_nat1
-                                , geography       = geography
-                                , indicator_name  = indicator_name
-                                , margin_of_error = margin_of_error
-                                , percentages     = percentages
-                                , sample_type     = sample_type)
-        display(df_nat1)
+            display(df_census)
 if geography == 'PUMA':
     df_puma, df_counties, df_msa, df_mpo = rename_census(df_puma           = df_puma
                                                          , df_counties     = df_counties
@@ -352,6 +261,7 @@ if geography == 'PUMA':
 # Exporting
 # 
 # ***************************************************************************
+
 
 
 if export:
@@ -413,9 +323,10 @@ if export:
     
     elif geography == 'Counties':
         workbook_name1 = f"{indicator_name} {geography} {estimate}.xlsx"
-        workbook_name2 = f"{indicator_name} MPO {estimate}.xlsx"
         print(workbook_name1)
-        print(workbook_name2)
+        if mpo == 'Yes':
+            workbook_name2 = f"{indicator_name} MPO {estimate}.xlsx"
+            print(workbook_name2)
     else:
         workbook_name = f"{indicator_name} {geography} {estimate}.xlsx"
         print(workbook_name)
@@ -424,11 +335,9 @@ if export:
     path_out_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
     path_out_sp = path_main / export_loc / f"{indicator_name} {folder}"
     
-    if 'RHNA' in indicator_name:
+    if project != 'Monitoring and Reporting':
         path_out_sp = path_prod / export_loc
-    if indicator_name == 'EJ_Analysis':
-        path_out_sp = r'I:\Projects\Warren\Environmental_Justice_March_2023\SACOG_EJ_UPDATE_2024\Python\YOUR_OUTPUT_FOLDER\2 - Processed'
-    
+
     if project == 'Monitoring and Reporting':
         if server:
             paths = [path_out_server, path_out_sp]
@@ -445,32 +354,18 @@ if export:
             if geography == 'Places':
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator_name] = 'Census Designated Places (Jurisdictions)'
-                export_indicator(indicator_name, geography, df_places1, path_wb, about)
-            if geography == 'Block Groups':
-                export_indicator(indicator_name, geography, df_blocks1, path_wb, about)
-            if geography == 'Tracts':
-                export_indicator(indicator_name, geography, df_tracts1, path_wb, about)
+            if geography != 'Counties':
+                export_indicator(indicator_name, geography, df_census, path_wb, about)
             if geography == 'Counties':
                 path_wb = path_ / workbook_name1
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator_name] = 'Counties'
-                export_indicator(indicator_name, geography, df_counties1, path_wb, about)
-                path_wb = path_ / workbook_name2
-                if about:
-                    df_about.loc[df_about['Indicator'] == 'Geography', indicator_name] = 'MPO'
-                export_indicator(indicator_name, geography, df_mpo1, path_wb, about)
-            if geography == 'MSA':
-                export_indicator(indicator_name, geography, df_msa1, path_wb, about)
-            if geography == 'Congressional Districts':
-                export_indicator(indicator_name, geography, df_cd1, path_wb, about)
-            if geography == 'State Legislative Upper Districts':
-                export_indicator(indicator_name, geography, df_sldu1, path_wb, about)
-            if geography == 'State Legislative Lower Districts':
-                export_indicator(indicator_name, geography, df_sldl1, path_wb, about)
-            if geography == 'States':
-                export_indicator(indicator_name, geography, df_states1, path_wb, about)
-            if geography == 'National':
-                export_indicator(indicator_name, geography, df_nat1, path_wb, about)
+                export_indicator(indicator_name, geography, df_census, path_wb, about)
+                if mpo == 'Yes':
+                    path_wb = path_ / workbook_name2
+                    if about:
+                        df_about.loc[df_about['Indicator'] == 'Geography', indicator_name] = 'MPO'
+                    export_indicator(indicator_name, geography, df_mpo, path_wb, about)
         
         if sample_type == 'PUMS':
             # path_wb = path_ / workbook_name1
@@ -502,14 +397,17 @@ if export:
                 path_wb = path_ / workbook_name1
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator_name] = 'Counties'
-                export_indicator(indicator_name, geography, df_counties, path_wb, about)
+                export_indicator(indicator_name, geography, df_census, path_wb, about)
                 path_wb = path_ / workbook_name2
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MPO'
                 export_indicator(indicator_name, geography, df_mpo, path_wb, about)
             if geography == 'MSA':
                 path_wb = path_ / workbook_name
-                export_indicator(indicator_name, geography, df_msa1, path_wb, about)
+                export_indicator(indicator_name, geography, df_census, path_wb, about)
+
+
+
 
 
 

@@ -3,7 +3,7 @@
 import arcpy, os
 
 # Define the input CSV file path and the output geodatabase path
-csv_file = r"I:/Projects/Josh/Regional Monitoring/ArcPro_v2/Data/pop3_counties_acs5.csv"
+csv_file = r"I:/Projects/Josh/Regional Monitoring/ArcPro_v2/Data/2020_urban_blocks_CA_v2.csv"
 out_gdb = r"I:/Projects/Josh/Regional Monitoring/ArcPro_v2/MnR.gdb"
 
 # Check if the geodatabase exists, create if it doesn't

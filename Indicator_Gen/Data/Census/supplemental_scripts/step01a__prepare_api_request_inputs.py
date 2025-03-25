@@ -184,6 +184,7 @@ if version == 2:
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
             states_to_import = list(df_fips['State FIPS'].unique())
+            states_to_import = [str(state) for state in states_to_import]
         
             # view
             print()
@@ -275,7 +276,8 @@ if version == 2:
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
             states_to_import = list(df_fips['State FIPS'].unique())
-        
+            states_to_import = [str(state) for state in states_to_import]
+            
             # view
             print()
             print("States set to import:")
