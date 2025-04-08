@@ -58,7 +58,7 @@ for state in list(dict_fips.keys()):
                                     , var_name   = 'replicates'
                                     , value_name = 'replicate_weights')
                 df_me['sq_diff'] = (df_me['replicate_weights'] - df_me[weight])**2
-                df_me = df_me.groupby(cols, as_index = False)['sq_diff'].agg(sum)
+                df_me = df_me.groupby(cols, as_index = False)['sq_diff'].agg('sum') # Change from sum to 'sum'
                 df_me['variance'] = df_me['sq_diff']*(4/80)
                 df_me['SE'] = np.sqrt(df_me['variance'])
                 df_me['ME'] = df_me['SE']*1.645

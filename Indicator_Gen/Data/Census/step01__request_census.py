@@ -67,7 +67,7 @@ with open(file_api, 'r') as file:
 
 
 ## Export setting ---
-export=True
+export=False
 
 
 

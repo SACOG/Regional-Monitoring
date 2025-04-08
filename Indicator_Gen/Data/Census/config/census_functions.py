@@ -361,7 +361,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator_name, geography, ma
 
     # Some indicators require the roll up to be weighted by population
     # The following step aligns the Race/Ethnicity mappings with the population counts workbook
-    if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+    if indicator_name in ['Income_1', 'Income_3', 'Chamber_H_5']:
         path_pop = os.path.join(path_main, 'Vibrant and Inclusive Places', 'People and Community', 'Pop and Demographics', 'Pop_3 Race')
         if geography == 'Places':
             df_pop = pd.read_excel(os.path.join(path_pop, 'Weights', f'Pop_3 Places {estimate}_All.xlsx'), sheet_name = 'Places')
@@ -407,6 +407,13 @@ def acs_processing_2(df_census, df_vars, estimate, indicator_name, geography, ma
             df_census = df_census.merge(df_pop, on = ['MSA_ID', 'Year', 'Race_Ethnicity'], how = 'left')
         else:
             df_census = df_census.merge(df_pop, on = ['NAME'  , 'Year', 'Race_Ethnicity'], how = 'left')
+        if indicator_name == 'Chamber_H_5':
+            df_hisp = df_census[df_census['Race_Ethnicity'] == 'Hispanic or Latino']
+            df_hisp = df_hisp[geo_ID + ['Year', 'Population']]
+            df_hisp = df_hisp.rename(columns={'Population':'Hispanic Population'})
+            df_census = df_census.merge(df_hisp, on=geo_ID+['Year'], how='left')
+            df_census.loc[df_census['Race_Ethnicity'] == 'All', 'Population'] = df_census['Population'] - df_census['Hispanic Population']
+            df_census = df_census.drop('Hispanic Population', axis=1)
         # df_census = df_census.fillna(0)
         # if indicator_name == 'Income_3':
         #     df_census = df_census.dropna()
@@ -605,12 +612,12 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
     # Roll up metrics to variable mappings (and MPO if Counties)
         
     if margin_of_error == 'Yes':
-        if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+        if indicator_name in ['Income_1', 'Income_3', 'Chamber_H_5']:
             cols = geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total', 'ME']
         else:
             cols = geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME']
     else:
-        if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+        if indicator_name in ['Income_1', 'Income_3', 'Chamber_H_5']:
             cols = geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Population', 'Total']
         else:
             cols = geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Total']
@@ -623,14 +630,22 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
     # roll up to different geographies using population weighted average
 
     if margin_of_error == 'Yes':
-        if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
+        if indicator_name in ['Income_1', 'Income_3', 'Chamber_H_5']:
             df_census['Population'] = df_census['Population'].fillna(0)
             df_census['Population'] = df_census['Population'].replace(0, 1)
             wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
             df_census.loc[df_census['ME'] < 0, 'ME'] = np.nan
 
+            if indicator_name == 'Chamber_H_5':
+                conditions = [
+                        (df_census["Race_Ethnicity"] == 'All'               ),
+                        (df_census["Race_Ethnicity"] == 'Hispanic or Latino')
+                    ]
+                choices = ["Not Hispanic or Latino", "Hispanic or Latino"]
+                df_census["Race_Ethnicity"] = np.select(conditions, choices)
+
             df_census = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))
-            df_census['ME_ratio'] = df_census['ME']/df_census['Total']*100
+            df_census['ME_ratio'] = df_census['ME']/df_census['Total']
             conditions = [
                 (df_census['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
                 , df_census['ME_ratio'] <= MOE_thresh
@@ -641,7 +656,7 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
             if geography == 'Counties':
                 if mpo == 'Yes':
                     df_mpo = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm), ME = ('ME', sqrtsumsq))
-                    df_mpo['ME_ratio'] = df_mpo['ME']/df_mpo['Total']*100
+                    df_mpo['ME_ratio'] = df_mpo['ME']/df_mpo['Total']
                     conditions = [
                         (df_mpo['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
                         , df_mpo['ME_ratio'] <= MOE_thresh
@@ -664,7 +679,7 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                     df_inc1['NAME'    ] = 'Unincorporated'
                     df_uninc = df_inc1[['State FIPS', 'County Name', 'Place ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'diff', 'diff_ME']]
                     df_uninc = df_uninc.rename(columns = {'diff': 'Total', 'diff_ME':'ME'})
-                    df_uninc['ME_ratio'] = df_uninc['ME']/df_uninc['Total']*100
+                    df_uninc['ME_ratio'] = df_uninc['ME']/df_uninc['Total']
                     conditions = [
                         (df_uninc['Race_Ethnicity'] == 'All') & (len(df_uninc['Race_Ethnicity'].unique()) > 1)
                         , df_uninc['ME_ratio'] <= MOE_thresh
@@ -685,7 +700,7 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
             else:
                 df_census = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
                 
-            df_census['ME_ratio'] = df_census['ME']/df_census['Total']*100
+            df_census['ME_ratio'] = df_census['ME']/df_census['Total']
             conditions = [
                 (df_census['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
                 , df_census['ME_ratio'] <= MOE_thresh
@@ -703,7 +718,7 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                         df_mpo = pd.concat([df_mpo1, df_mpo2])
                     else:
                         df_mpo = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Total = ('Total', 'sum'), ME = ('ME', sqrtsumsq))
-                    df_mpo['ME_ratio'] = df_mpo['ME']/df_mpo['Total']*100
+                    df_mpo['ME_ratio'] = df_mpo['ME']/df_mpo['Total']
                     conditions = [
                         (df_mpo['Race_Ethnicity'] == 'All') & (len(df_census['Race_Ethnicity'].unique()) > 1)
                         , df_mpo['ME_ratio'] <= MOE_thresh
@@ -733,7 +748,7 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                     df_inc1['NAME'    ] = 'Unincorporated'
                     df_uninc = df_inc1[['State FIPS', 'County Name', 'Place ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'diff', 'diff_ME']]
                     df_uninc = df_uninc.rename(columns = {'diff': 'Total', 'diff_ME':'ME'})
-                    df_uninc['ME_ratio'] = df_uninc['ME']/df_uninc['Total']*100
+                    df_uninc['ME_ratio'] = df_uninc['ME']/df_uninc['Total']
                     conditions = [
                         (df_uninc['Race_Ethnicity'] == 'All') & (len(df_uninc['Race_Ethnicity'].unique()) > 1)
                         , df_uninc['ME_ratio'] <= MOE_thresh
@@ -752,11 +767,20 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
                 df_mpo = df_mpo.sort_values(['MPO', 'Year'], ascending = [True, False])
 
     if margin_of_error == 'No':
-        if indicator_name in ['Income_1', 'Income_3', 'Labor_2']:
-            # Income_3 and Labor_2 need to be a weighted average by population
+        if indicator_name in ['Income_1', 'Income_3', 'Chamber_H_5']:
+            # Income variables need to be a weighted average by population
             df_census['Population'] = df_census['Population'].fillna(0)
             df_census['Population'] = df_census['Population'].replace(0, 1)
             wm         = lambda x: np.average(x, weights = df_census.loc[x.index, "Population"]) # weighted average
+
+            if indicator_name == 'Chamber_H_5':
+                conditions = [
+                        (df_census["Race_Ethnicity"] == 'All'               ),
+                        (df_census["Race_Ethnicity"] == 'Hispanic or Latino')
+                    ]
+                choices = ["Not Hispanic or Latino", "Hispanic or Latino"]
+                df_census["Race_Ethnicity"] = np.select(conditions, choices)
+
             df_census = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index = False, sort = False).agg(Population = ('Population', 'sum'), Total = ('Total', wm))
             df_census = df_census.sort_values(geo_ID + ['Year'], ascending = [item in geo_ID for item in geo_ID] + [False])
             if geography == 'MSA':
@@ -826,16 +850,16 @@ def acs_processing_4(df_census, estimate, indicator_name, geography, percentages
     if percentages == 'Yes':
 
         if num_vars == 1:
-            df_census['Percentage'] = 100*df_census['Total'] / df_census[df_census['Race_Ethnicity'] != 'All'].groupby(geo_ID + ['Year'])['Total'].transform('sum')
+            df_census['Percentage'] = df_census['Total'] / df_census[df_census['Race_Ethnicity'] != 'All'].groupby(geo_ID + ['Year'])['Total'].transform('sum')
             if geography == 'Counties':
                 if mpo == 'Yes':
-                    df_mpo['Percentage'] = 100*df_mpo['Total'] / df_mpo[df_mpo['Race_Ethnicity'] != 'All'].groupby(['State FIPS', 'MPO', 'Year'])['Total'].transform('sum')
+                    df_mpo['Percentage'] = df_mpo['Total'] / df_mpo[df_mpo['Race_Ethnicity'] != 'All'].groupby(['State FIPS', 'MPO', 'Year'])['Total'].transform('sum')
 
         if num_vars > 1:
-            df_census['Percentage'] = 100*df_census['Total'] / df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity'])['Total'].transform('sum')
+            df_census['Percentage'] = df_census['Total'] / df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity'])['Total'].transform('sum')
             if geography == 'Counties':
                 if mpo == 'Yes':
-                    df_mpo['Percentage'] = 100*df_mpo['Total'] / df_mpo.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity'])['Total'].transform('sum')
+                    df_mpo['Percentage'] = df_mpo['Total'] / df_mpo.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity'])['Total'].transform('sum')
 
             
     if geography == 'Counties':
@@ -936,7 +960,7 @@ def pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_g
     print('Mapping PUMA codes to other area codes...')
     print()
 
-    df_census = df_census.dropna()
+    # df_census = df_census.dropna()
     df_census = df_census.rename(columns = {'state':'State FIPS', 'county':'County FIPS'})
 
     if sample_type == 'PUMS':
@@ -985,9 +1009,15 @@ def pums_processing_3(df_census, groups, indicator_name, path_config0):
     print()
 
     if 'HISP' in groups:
-        df_census.loc[df_census['HISP'] == 'Hispanic or Latino', 'RAC1P'] = 'Hispanic or Latino'
-        df_census = df_census.drop('HISP', axis = 1)
-        groups.remove('HISP')
+        if project == 'Monitoring and Reporting':
+            df_census.loc[df_census['HISP'] == 'Hispanic or Latino', 'RAC1P'] = 'Hispanic or Latino'
+            df_census = df_census.drop('HISP', axis = 1)
+            groups.remove('HISP')
+        # if project == 'Chamber Study Missions': ## HERE
+        #     df_census.loc[df_census['HISP'] == 'Hispanic or Latino', 'RAC1P'] = 'Hispanic or Latino'
+        #     df_census = df_census.drop('HISP', axis = 1)
+        #     groups.remove('HISP')
+
 
     if 'HHLDRHISP' in groups:
         df_census.loc[df_census['HHLDRHISP'] == 'Hispanic or Latino', 'HHLDRRAC1P'] = 'Hispanic or Latino'
@@ -1180,10 +1210,10 @@ def pums_processing_4(df_census, indicator_name, weight, margin_of_error, MOE_th
             df_mpo3.loc[:, 'housing_type'] = 'Owners and Renters'
             df_mpo = pd.concat([df_mpo2, df_mpo3])
 
-            df_puma    ['ME_ratio'] = df_puma    ['ME']/df_puma    ['Total']*100
-            df_counties['ME_ratio'] = df_counties['ME']/df_counties['Total']*100
-            df_msa     ['ME_ratio'] = df_msa     ['ME']/df_msa     ['Total']*100
-            df_mpo     ['ME_ratio'] = df_mpo     ['ME']/df_mpo     ['Total']*100
+            df_puma    ['ME_ratio'] = df_puma    ['ME']/df_puma    ['Total']
+            df_counties['ME_ratio'] = df_counties['ME']/df_counties['Total']
+            df_msa     ['ME_ratio'] = df_msa     ['ME']/df_msa     ['Total']
+            df_mpo     ['ME_ratio'] = df_mpo     ['ME']/df_mpo     ['Total']
         
         else:
             df_puma     = df_puma    .groupby(list(df_puma    .drop([weight, 'ME'], axis = 1).columns), as_index = False, sort = False).agg(Total = (weight, 'sum'), ME = ('ME', sqrtsumsq))
@@ -1191,10 +1221,10 @@ def pums_processing_4(df_census, indicator_name, weight, margin_of_error, MOE_th
             df_msa      = df_msa     .groupby(list(df_msa     .drop([weight, 'ME'], axis = 1).columns), as_index = False, sort = False).agg(Total = (weight, 'sum'), ME = ('ME', sqrtsumsq))
             df_mpo      = df_mpo     .groupby(list(df_mpo     .drop([weight, 'ME'], axis = 1).columns), as_index = False, sort = False).agg(Total = (weight, 'sum'), ME = ('ME', sqrtsumsq))
         
-        df_puma    ['ME_ratio'] = df_puma    ['ME']/df_puma    ['Total']*100
-        df_counties['ME_ratio'] = df_counties['ME']/df_counties['Total']*100
-        df_msa     ['ME_ratio'] = df_msa     ['ME']/df_msa     ['Total']*100
-        df_mpo     ['ME_ratio'] = df_mpo     ['ME']/df_mpo     ['Total']*100
+        df_puma    ['ME_ratio'] = df_puma    ['ME']/df_puma    ['Total']
+        df_counties['ME_ratio'] = df_counties['ME']/df_counties['Total']
+        df_msa     ['ME_ratio'] = df_msa     ['ME']/df_msa     ['Total']
+        df_mpo     ['ME_ratio'] = df_mpo     ['ME']/df_mpo     ['Total']
         
         conditions = [df_puma['ME_ratio'] <= MOE_thresh, df_puma['ME_ratio']  > MOE_thresh]
         choices = ['Yes', 'No']
@@ -1262,7 +1292,7 @@ def pums_processing_4(df_census, indicator_name, weight, margin_of_error, MOE_th
             df_puma3 = df_puma2[df_puma2['housing_type'].isin(['Owner', 'Renter'])]
             df_puma3 = df_puma3.groupby(list(df_puma3.drop(['Total'], axis = 1).columns), as_index = False).agg(Total = ('Total', 'sum'))
             df_puma3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_puma3['Percentage'] = 100*df_puma3['Total']/df_puma3.groupby(list(df_puma3.drop(['housing_burden', 'Total'], axis = 1).columns))['Total'].transform('sum')
+            df_puma3['Percentage'] = df_puma3['Total']/df_puma3.groupby(list(df_puma3.drop(['housing_burden', 'Total'], axis = 1).columns))['Total'].transform('sum')
             df_puma = pd.concat([df_puma2, df_puma3])
 
             df_counties1 = df_counties.groupby(list(df_counties.drop([weight         ], axis = 1).columns), as_index = False).agg(Total = (weight, 'sum'))
@@ -1305,26 +1335,26 @@ def pums_processing_4(df_census, indicator_name, weight, margin_of_error, MOE_th
     if percentages == 'Yes':
         if margin_of_error == 'Yes':
             if len(groups) > 1:
-                df_puma    ['Percentage'] = 100*df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_msa     ['Percentage'] = 100*df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_puma    ['Percentage'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_msa     ['Percentage'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
             if len(groups) == 1:
-                df_puma    ['Percentage'] = 100*df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_msa     ['Percentage'] = 100*df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_puma    ['Percentage'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_msa     ['Percentage'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups      + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
         if margin_of_error == 'No':
             if len(groups) > 1:
-                df_puma    ['Percentage'] = 100*df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
-                df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
-                df_msa     ['Percentage'] = 100*df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
-                df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_puma    ['Percentage'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_msa     ['Percentage'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups[:-1] + ['Total'], axis = 1).columns))['Total'].transform('sum')
             if len(groups) == 1:
-                df_puma    ['Percentage'] = 100*df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
-                df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
-                df_msa     ['Percentage'] = 100*df_msa     ['Total'] / df_msa     .groupby(list(df_mpo     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')           
-                df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_puma    ['Percentage'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
+                df_msa     ['Percentage'] = df_msa     ['Total'] / df_msa     .groupby(list(df_mpo     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')           
+                df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
 
     df_puma    .reset_index(drop = True, inplace = True)
     df_counties.reset_index(drop = True, inplace = True)
@@ -1348,10 +1378,10 @@ def pums_processing_4(df_census, indicator_name, weight, margin_of_error, MOE_th
                 df_counties1 = df_counties1.drop('Percentage', axis = 1)
                 df_msa1      = df_msa1     .drop('Percentage', axis = 1)
                 df_mpo1      = df_mpo1     .drop('Percentage', axis = 1)
-                df_puma1    ['Percentage'] = 100*df_puma1    ['Total'] / df_puma1    .groupby(list(df_puma1    .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_counties1['Percentage'] = 100*df_counties1['Total'] / df_counties1.groupby(list(df_counties1.drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_msa1     ['Percentage'] = 100*df_msa1     ['Total'] / df_msa1     .groupby(list(df_msa1     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
-                df_mpo1     ['Percentage'] = 100*df_mpo1     ['Total'] / df_mpo1     .groupby(list(df_mpo1     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_puma1    ['Percentage'] = df_puma1    ['Total'] / df_puma1    .groupby(list(df_puma1    .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_counties1['Percentage'] = df_counties1['Total'] / df_counties1.groupby(list(df_counties1.drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_msa1     ['Percentage'] = df_msa1     ['Total'] / df_msa1     .groupby(list(df_msa1     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
+                df_mpo1     ['Percentage'] = df_mpo1     ['Total'] / df_mpo1     .groupby(list(df_mpo1     .drop(groups[:-1] + ['Total', 'ME', 'ME_ratio', 'Use for Reporting'], axis = 1).columns))['Total'].transform('sum')
             df_puma     = pd.concat([df_puma1    , df_puma2    ])
             df_counties = pd.concat([df_counties1, df_counties2])
             df_msa      = pd.concat([df_msa1     , df_msa2     ])
@@ -1399,8 +1429,8 @@ def food_processing_4(df_census, weight, percentages, groups):
     df_mpo      = df_mpo     .groupby(list(df_mpo     .drop([weight], axis = 1).columns), as_index = False, sort = False).agg(Total = (weight, 'sum'))
 
     if percentages == 'Yes':
-        df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups_to_drop + ['Total'], axis = 1).columns))['Total'].transform('sum')
-        df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups_to_drop + ['Total'], axis = 1).columns))['Total'].transform('sum')
+        df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups_to_drop + ['Total'], axis = 1).columns))['Total'].transform('sum')
+        df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups_to_drop + ['Total'], axis = 1).columns))['Total'].transform('sum')
 
     df_counties['Total'] = round(df_counties['Total'])
     df_mpo     ['Total'] = round(df_mpo     ['Total'])
@@ -1454,8 +1484,8 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
             df_mpo      = df_mpo     .reset_index(drop = True)
 
             if percentages == 'Yes':
-                df_counties['Percentage'] = 100*df_counties['Total'] / df_counties.groupby(['State FIPS',        'County FIPS', 'Quarter'])['Total'].transform('sum')
-                df_mpo     ['Percentage'] = 100*df_mpo     ['Total'] / df_mpo     .groupby(['State FIPS', 'MPO',                'Quarter'])['Total'].transform('sum')
+                df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(['State FIPS',        'County FIPS', 'Quarter'])['Total'].transform('sum')
+                df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(['State FIPS', 'MPO',                'Quarter'])['Total'].transform('sum')
 
         if geography == 'MSA':
             
@@ -1466,7 +1496,7 @@ def lehd_processing(df_census, geography, indicator_name, percentages, df_fips=N
             df_msa = df_msa.reset_index(drop = True)
 
             if percentages == 'Yes':
-                df_msa['Percentage'] = 100*df_msa['Total'] / df_msa.groupby(['MSA', 'Quarter'])['Total'].transform('sum')
+                df_msa['Percentage'] = df_msa['Total'] / df_msa.groupby(['MSA', 'Quarter'])['Total'].transform('sum')
 
     if geography == 'Counties':
         return df_counties, df_mpo
@@ -1730,10 +1760,10 @@ def rename_census(
             if mpo == 'Yes':
                 df_mpo = df_mpo.merge(df_mpo_wm[['Year', 'Median Household Income']].rename(columns = {'Median Household Income':'Regional Median Household Income'}), on = ['Year'], how = 'left')
     
-        df_census['Percent of Regional Median Household Income'] = 100*(df_census['Total']/df_census['Regional Median Household Income'])
+        df_census['Percent of Regional Median Household Income'] = (df_census['Total']/df_census['Regional Median Household Income'])
         if geography == 'Counties':
             if mpo == 'Yes':
-                df_mpo['Percent of Regional Median Household Income'] = 100*(df_mpo['Total']/df_mpo['Regional Median Household Income'])
+                df_mpo['Percent of Regional Median Household Income'] = (df_mpo['Total']/df_mpo['Regional Median Household Income'])
 
         df_census = df_census.rename(columns = {'Total':'Median Household Income'})
         if geography == 'Counties':
@@ -1943,7 +1973,7 @@ def export_indicator(indicator_name, geography, df_census, path_wb, about):
     workbook = writer.book
     
     format_numbers = workbook.add_format({'num_format': '#,##0'   })
-    formet_percent = workbook.add_format({'num_format': '#,##0.0' })
+    formet_percent = workbook.add_format({'num_format': '0.0%'    })
     formet_dollars = workbook.add_format({'num_format': '$#,##0'  })
     
 
