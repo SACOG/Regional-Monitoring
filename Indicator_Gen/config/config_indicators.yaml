@@ -7,9 +7,12 @@
 
 Project:
   - 'Monitoring and Reporting'
+  - 'StoryMaps'
   - 'RHNA'
   - 'Blueprint'
+  - 'Chamber Study Missions'
   - 'Cap to Cap'
+
 
 Indicators:
   Monitoring and Reporting:
@@ -167,6 +170,67 @@ Indicators:
       MOE_threshold: 5
       number_of_variables: 3
       percentages: 'Yes'
+  
+  StoryMaps:
+    Housing_1:
+      sp_location: 'StoryMaps\\Housing\\original_export'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 10
+      percentages: 'No'
+    Housing_2:
+      sp_location: 'StoryMaps\\Housing\\original_export'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 7
+      percentages: 'Yes'
+
+  Chamber Study Missions:
+    Chamber_H_1aa:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 2
+      percentages: 'Yes'
+    Chamber_H_1ab:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'SUBJECT'
+      MOE_threshold: 5
+      number_of_variables: 2
+      percentages: 'Yes'
+    Chamber_H_2:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 4
+      percentages: 'No'
+    Chamber_H_4:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: ['PUMS', 'ACS']
+      MOE_threshold: 5
+      number_of_variables: 24
+      percentages: 'Yes'
+    Chamber_H_5:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 5
+      number_of_variables: 2
+      percentages: 'No'
+    Chamber_H_6:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 5
+      number_of_variables: 2
+      percentages: 'Yes'
+
   RHNA:
     RHNA_POPEMP_1:
       sp_location: 'RHNA\\New Data Collected'
@@ -583,35 +647,14 @@ Indicators:
       MOE_threshold: 5
       number_of_variables: 8
       percentages: 'No'
-    Blueprint_34:
-      sp_location: 'Small Data Requests\\2025\\Blueprint'
-      folder: ''
-      sample: ['ACS', 'PUMS']
-      MOE_threshold: 5
-      number_of_variables: 3
-      percentages: 'Yes'
-    Blueprint_35:
-      sp_location: 'Small Data Requests\\2025\\Blueprint'
-      folder: ''
-      sample: 'PUMS'
-      MOE_threshold: 5
-      number_of_variables: 3
-      percentages: 'Yes'
-    Blueprint_36:
-      sp_location: 'Small Data Requests\\2025\\Blueprint'
-      folder: ''
-      sample: 'ACS'
-      MOE_threshold: 5
-      number_of_variables: 5
-      percentages: 'No'
-    Blueprint_84:
+    Blueprint_84ba:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
       MOE_threshold: 5
       number_of_variables: 1
       percentages: 'No'
-    Blueprint_84b:
+    Blueprint_84bb:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
@@ -625,14 +668,7 @@ Indicators:
       MOE_threshold: 5
       number_of_variables: 2
       percentages: 'Yes'
-    Blueprint_95:
-      sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
-      MOE_threshold: 5
-      number_of_variables: 5
-      percentages: 'Yes'
-    Blueprint_95b:
+    Blueprint_95d:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
@@ -653,8 +689,6 @@ Indicators:
       MOE_threshold: 5
       number_of_variables: 6
       percentages: 'Yes'
-
-
 
   Cap to Cap:
     Cap_1:
@@ -718,10 +752,36 @@ Samples:
     ACS5:
       geographies_available:
       - PUMA
-      years_available: [2016, 2017, 2018, 2019, 2020, 2021]
+      years_available: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
     ACS1:
       geographies_available:
       - PUMA
+      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+  SUBJECT:
+    ACS5:
+      geographies_available:
+      - Block Groups
+      - Tracts
+      - Counties
+      - MSA
+      - Places
+      - ZIP Codes
+      - Congressional Districts
+      - State Legislative Upper Districts
+      - State Legislative Lower Districts
+      - States
+      - National
+      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+    ACS1:
+      geographies_available:
+      - Counties
+      - MSA
+      - Places
+      - Congressional Districts
+      - State Legislative Upper Districts
+      - State Legislative Lower Districts
+      - States
+      - National
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
 
 

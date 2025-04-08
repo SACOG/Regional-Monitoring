@@ -67,14 +67,15 @@ with open(file_api, 'r') as file:
 
 
 
-ACS=False
+ACS=True
 PUMS=False
-DEC=True
+DEC=False
 LEHD=False
 CPS=False
 SUBJECT=False
 
 
+export=True
 
 
 
@@ -152,18 +153,21 @@ if ACS:
     df_acs = df_acs.reset_index(drop=True)
 
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='ACS')
+    file_acs = path_config / 'census_configuration_file2.xlsx'
+    sheet_name='ACS'
+    df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
     df_config = df_config[['Table', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
     df_acs = df_acs.merge(df_config, on=['Table', 'ID'], how='left')
-
-
+    df_acs = df_acs.drop_duplicates()
+    df_acs = df_acs.reset_index(drop=True)
 
 
     ## Exporting to Git ---
 
-    # file_out = path_csv / 'ACS.csv'
-    # df_acs.to_csv(file_out, index=False)
+    if export:
+        file_out = path_csv / 'ACS.csv'
+        df_acs.to_csv(file_out, index=False)
 
 
 
@@ -372,7 +376,7 @@ if PUMS:
             
                         for value in df_ID['values'][0]['range']:
                             dict_values = {
-                                            'Value1'     : [value['min']]
+                                            'Value1'   : [value['min']]
                                         , 'Value2'     : [value['max']]
                                         , 'Description': [value['description']]
                                         }
@@ -408,24 +412,30 @@ if PUMS:
     df_pums5 = df_pums5[df_pums5['Year'] == 2020]
 
     df_pums = pd.concat([df_pums1, df_pums5])
-    df_pums = df_pums.sort_values(['ID', 'Value1', 'Year'], ascending = [True, True, False])
+    df_pums = df_pums.drop_duplicates()
+    df_pums['Value1'] = df_pums['Value1'].astype('str')
+    df_pums = df_pums.sort_values(['Year', 'ID', 'Value1'], ascending = [False, True, True])
     df_pums = df_pums.reset_index(drop=True)
 
     display(df_pums.head())
 
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='PUMS')
-    df_config = df_config[['ID', 'Indicator Name', 'Include', 'ID2', 'Description2', 'Data Type', 'Table Type']]
+    file_config = path_config / 'census_configuration_file2.xlsx'
+    sheet_name='PUMS'
+    df_config = pd.read_excel(file_config, sheet_name=sheet_name, dtype={'Value1':'str'})
+    df_config = df_config[['ID', 'Value1', 'Indicator Name', 'Include', 'ID2', 'Description2', 'Data Type', 'Table Type']]
 
-    df_pums = df_pums.merge(df_config, on=['ID'], how='left')
+    df_pums = df_pums.merge(df_config, on=['ID', 'Value1'], how='left')
+    df_pums = df_pums.drop_duplicates()
+    df_pums = df_pums.set_index('Year').reset_index()
     display(df_pums.head())
 
 
 
     ## Exporting to Git ---
-
-    # file_out = path_csv / 'PUMS.csv'
-    # df_pums.to_csv(file_out, index=False)
+    if export:
+        file_out = path_csv / 'PUMS.csv'
+        df_pums.to_csv(file_out, index=False)
 
 
 
@@ -496,11 +506,10 @@ if DEC:
 
 
     ## Exporting to Git ---
+    if export:
+        file_out = path_csv / 'DEC.csv'
+        df_dec.to_csv(file_out, index=False)
 
-    # file_out = path_csv / 'DEC.csv'
-    # df_dec.to_csv(file_out, index=False)
-
-    display(df_dec)
 
 
 if LEHD:
@@ -548,8 +557,9 @@ if LEHD:
 
     ## Exporting to Git ---
 
-    # file_out = path_csv / 'LEHD.csv'
-    # df_vars.to_csv(file_out, index=False)
+    if export:
+        file_out = path_csv / 'LEHD.csv'
+        df_vars.to_csv(file_out, index=False)
 
 
 
@@ -709,9 +719,9 @@ if CPS:
 
 
     ## Exporting to Git ---
-
-    # file_out = path_csv / 'CPS.csv'
-    # df_cps.to_csv(file_out, index=False)
+    if export:
+        file_out = path_csv / 'CPS.csv'
+        df_cps.to_csv(file_out, index=False)
 
 
 
@@ -739,7 +749,7 @@ if SUBJECT:
         
         df_vars = pd.DataFrame.from_dict(dict_acs['variables']).T.reset_index().rename(columns = {'index':'ID'})
         
-        df_vars = df_vars[['ID', 'attributes', 'label', 'concept']]
+        df_vars = df_vars[['group', 'ID', 'attributes', 'label', 'concept']].rename(columns = {'group':'Table'})
         df_vars['Label_clean'] = df_vars['label'].str.replace('Estimate!!', '')
         df_vars['Label_clean'] = df_vars['Label_clean'].str.replace('!!', ' ')
         df_vars['Label_clean'] = df_vars['Label_clean'].str.replace(':', '')
@@ -771,7 +781,7 @@ if SUBJECT:
         
         df_vars = pd.DataFrame.from_dict(dict_acs['variables']).T.reset_index().rename(columns = {'index':'ID'})
         
-        df_vars = df_vars[['ID', 'attributes', 'label', 'concept']]
+        df_vars = df_vars[['group', 'ID', 'attributes', 'label', 'concept']].rename(columns = {'group':'Table'})
         df_vars['Label_clean'] = df_vars['label'].str.replace('Estimate!!', '')
         df_vars['Label_clean'] = df_vars['Label_clean'].str.replace('!!', ' ')
         df_vars['Label_clean'] = df_vars['Label_clean'].str.replace(':', '')
@@ -799,7 +809,7 @@ if SUBJECT:
     display(df_acs.head())
 
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='SUBJECT')
+    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name='SUBJECT')
     df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
     df_acs = df_acs.merge(df_config, on=['ID'], how='left')
@@ -809,6 +819,7 @@ if SUBJECT:
 
     ## Exporting to Git ---
 
-    # file_out = path_csv / 'SUBJECT.csv'
-    # df_acs.to_csv(file_out, index=False)
+    if export:
+        file_out = path_csv / 'SUBJECT.csv'
+        df_acs.to_csv(file_out, index=False)
 

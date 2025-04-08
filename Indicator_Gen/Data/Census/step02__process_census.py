@@ -68,7 +68,7 @@ with open(file_api, 'r') as file:
 
 ## Export setting ---
 
-export=True
+export=False
 about=False
 update=False
 server=False
@@ -80,7 +80,7 @@ with path_1a.open("r") as f:
     exec(f.read())
 
 if geography == 'Counties':
-    mpo = 'No'
+    mpo = 'Yes'
 if geography == 'Places':
     unincorporated = 'No'
     

@@ -304,7 +304,8 @@ if version == 2:
         # Create dictionary of variable mappings by year (sometimes the variable name changes over time)
         # Import County FIPS mapping
         # Convert to dictionary object for easy state-county combination importing
-        df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = sample_type)
+        file_pums = path_config / 'census_configuration_file2.xlsx'
+        df_vars = pd.read_excel(file_pums, sheet_name = sample_type)
         df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
         df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
         if 'H' in df_vars['Table Type'].unique():
@@ -338,14 +339,15 @@ if version == 2:
         for year in years_to_import:
             dict_vars[str(year)] = unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
             
-        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        file_fips = path_git / 'config' / 'Area Codes.xlsx'
+        df_fips = pd.read_excel(file_fips
                                 , sheet_name = 'CountyFIPS'
-                                , dtype = {'State FIPS': object, 'County FIPS': object})
+                                , dtype = {'State FIPS': str, 'County FIPS': str})
         # df_fips = df_fips[df_fips['Chamber Study'] == 'Yes']
         # df_fips = df_fips[df_fips['Peer MSA'     ] == 'Yes']
-        df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        df_fips_pums = pd.read_excel(file_fips
                                     , sheet_name = 'PUMAcodes'
-                                    , dtype = {'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
+                                    , dtype = {'STATEFP': str, 'COUNTYFP': str, 'TRACTCE': str, 'PUMA5CE': str})
         df_fips_pums = df_fips_pums.rename(columns = {'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS'})
 
         df_fips = df_fips.merge(df_fips_pums[['State FIPS', 'County FIPS', 'PUMA5CE']].drop_duplicates(), on = ['State FIPS', 'County FIPS'])

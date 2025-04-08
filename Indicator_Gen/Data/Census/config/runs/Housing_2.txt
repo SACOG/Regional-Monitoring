@@ -1,0 +1,10 @@
+Project: StoryMaps
+Indicator Name: Housing_2
+Export Location: StoryMaps\\Housing\\original_export
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: Block Groups
+Years Imported: [2023]
+Import Tab: Counties
+Margin of Error: Yes

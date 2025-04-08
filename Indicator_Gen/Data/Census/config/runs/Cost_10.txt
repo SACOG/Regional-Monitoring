@@ -1,0 +1,10 @@
+Project: Monitoring and Reporting
+Indicator Name: Cost_10
+Export Location: Small Data Requests\\2025\\Housing Cost Burden
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: Block Groups
+Years Imported: [2023]
+Import Tab: Counties
+Margin of Error: Yes
