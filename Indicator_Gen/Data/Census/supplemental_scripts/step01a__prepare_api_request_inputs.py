@@ -24,6 +24,7 @@ if version == 2:
     display(dict_config['Project']); print()
     print('Which project are you pulling data for?'); print()
     project = input()
+    assert project in dict_config['Project'], 'Unacceptable input, please choose from options displayed above'
     print()
     print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -32,19 +33,21 @@ if version == 2:
     display(list(dict_config['Indicators'][project].keys())); print()
     print('Which indicator do you need to rerun?'); print()
     indicator_name = input()
+    assert indicator_name in list(dict_config['Indicators'][project].keys()), 'Unacceptable input, please choose from options displayed above'
     print()
     print('---------------------------------------------------------------------------------------------------------------------------------------')
 
     print()
     display(dict_config['Indicators'][project][indicator_name])
-    sample_type = dict_config['Indicators'][project][indicator_name]['sample']
-    if isinstance(sample_type, list):
+    sample_types = dict_config['Indicators'][project][indicator_name]['sample']
+    if isinstance(sample_types, list):
         print('Samples available:')
-        display(sample_type); print()
+        display(sample_types); print()
         print('Which sample do you want to pull data from?')
         sample_type = input()
+        assert sample_type in sample_types, 'Unacceptable input, please choose from options displayed above'
     else:
-        pass
+        sample_type = dict_config['Indicators'][project][indicator_name]['sample']
 
     export_loc  =     dict_config['Indicators'][project][indicator_name]['sp_location'        ]
     folder      =     dict_config['Indicators'][project][indicator_name]['folder'             ]
@@ -58,6 +61,7 @@ if version == 2:
     display(list(dict_config['Samples'][sample_type].keys())); print()
     print('Which estimate do you want to pull data from?'); print()
     estimate = input()
+    assert estimate in list(dict_config['Samples'][sample_type].keys()), 'Unacceptable input, please choose from options displayed above'
     print()
     print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -67,6 +71,7 @@ if version == 2:
     display(dict_config['Samples'][sample_type][estimate]['geographies_available']); print()
     print('Which geography do you want to pull data for?'); print()
     geography = input()
+    assert geography in dict_config['Samples'][sample_type][estimate]['geographies_available'], 'Unacceptable input, please choose from options displayed above'
     print()
     print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -77,7 +82,7 @@ if version == 2:
     all_years = input()
     if all_years == 'Yes':
         years_to_import = dict_config['Samples'][sample_type][estimate]['years_available']
-    if all_years == 'No':
+    elif all_years == 'No':
         print()
         print('Please type which years you want to pull data from, separated by commas:'); print()
         years_to_import = input()
@@ -86,6 +91,9 @@ if version == 2:
             years_to_import = [int(year) for year in years_to_import]
         else:
             years_to_import = [int(years_to_import)]
+    else:
+        assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
+
         
     print()
     year_end   = np.max(years_to_import)
@@ -95,8 +103,9 @@ if version == 2:
     print('---------------------------------------------------------------------------------------------------------------------------------------')
 
     print()
-    print('Do you want to pull the Marging of Error estimates?  Select Yes/No: '); print()
+    print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
     margin_of_error = input()
+    assert margin_of_error in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
 
     file_config_set = path_config / 'runs' / f'{indicator_name}.txt'
     with open(file_config_set, 'w') as f:
