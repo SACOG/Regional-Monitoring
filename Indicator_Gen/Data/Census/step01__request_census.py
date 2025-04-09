@@ -67,8 +67,8 @@ with open(file_api, 'r') as file:
 
 
 ## Export setting ---
-export=False
-
+rerun=False
+export=True
 
 
 # ***************************************************************************
@@ -117,7 +117,7 @@ if export:
         end = 'NoME_raw.csv'
     else:
         end = 'raw.csv'
-    export_title = f"{indicator_name}_{geography}_{estimate}_{end}"
+    export_title = f"{indicator}_{geography}_{estimate}_{end}"
     
     print(); print()
     print(f"Exporting {export_title} to the following location: ")
@@ -147,15 +147,15 @@ df_census = df_census_raw.copy()
 
 if sample_type in ['ACS', 'SUBJECT']:
     df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error)
-    # df_census = acs_processing_2(df_census, df_vars, estimate, indicator_name, geography, margin_of_error, year_end, path_main, path_git)
+    # df_census = acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_git)
     # df_census = acs_processing_3(df_census, geography)
     # if geography != 'Counties':
-    #     df_census = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+    #     df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
     # if geography == 'Counties':
     #     if mpo == 'Yes':
-    #         df_census, df_mpo = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
+    #         df_census, df_mpo = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
     #     else:
-    #         df_census = acs_processing_4(df_census, estimate, indicator_name, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+    #         df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
     display(df_census.head(3))
 
 
@@ -168,10 +168,10 @@ if sample_type in ['ACS', 'SUBJECT']:
 # percentages = 'Yes'
 # if estimate == 'LEHD':
 #     if geography == 'Counties':
-#         df_counties, df_mpo = lehd_processing(df_census, geography, indicator_name, percentages, df_fips)
+#         df_counties, df_mpo = lehd_processing(df_census, geography, indicator, percentages, df_fips)
 #         display(df_counties)
 #     if geography == 'MSA':
-#         df_msa = lehd_processing(df_census, geography, indicator_name, percentages)
+#         df_msa = lehd_processing(df_census, geography, indicator, percentages)
 #         display(df_msa)
 
 
@@ -185,7 +185,7 @@ if sample_type in ['ACS', 'SUBJECT']:
 #         end = 'NoME_raw.csv'
 #     else:
 #         end = 'raw.csv'
-#     export_title = f"{indicator_name}_{geography}_{estimate}_{end}"
+#     export_title = f"{indicator}_{geography}_{estimate}_{end}"
     
 #     print(); print()
 #     print(f"Exporting {export_title} to the following location: ")
