@@ -88,8 +88,6 @@ display(df_vars.head(3))
 
 
 
-
-
 if geography == 'PUMA':
     estimate = re.sub('ACS', 'PUMS', estimate)
 
@@ -102,6 +100,7 @@ export_title = f"{indicator_name}_{geography}_{estimate}_{end}"
 file_out = path_raw / export_title
 df_census_raw = pd.read_csv(file_out)
 display(df_census_raw.head())
+
 
 
 # ***************************************************************************
