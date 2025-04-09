@@ -11,7 +11,7 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 (1) __Data__:
 - This folder contains all code used to import/process data used for regional monitoring (pipelines for data sources with an API)
 - Each data source has their own folder
-- Data sources with an API available: Census Bureau, BLS, ...
+- Data sources with an API available: Census Bureau, BLS, EPA, and EIA
     - Data pipeline:
         1) Importing
         2) Processing
@@ -28,10 +28,11 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
     - "CA State Income Brackets by Household Size.xlsx" - a table that shows the CA state income brackets by household size by county (for indicators that require income brackets)
     - "CPI Inflation Adjustment Factors.xlsx" - a workbook that has various inflation adjustment factors (for indicators that include $-USD)
     - "about_indicators.yaml" - a _yaml_ file used to create the documentation files associated with each indicator
-    - "Functions.py" - a python script with user defined functions that all data sources utilize
+    - "config_indicators.yaml" - a _yaml_ file used to configure the data pipeline that pulls/processes data
+    - \href{https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/Functions.py}{Functions.py} - a python script with user defined functions that all data sources utilize
  - Data source __config__ folder:
-    - "Configuration File.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
-    - "Functions.py" - a python script with user defined functions that the specific data source requires
+    - "configuration_file.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
+    - "functions.py" - a python script with user defined functions that the specific data source requires
 
 (3) __AGOL Dashboard__:
 - This folder contains all code that is used to build the plots/charts used in the online public-facing AGOL dashboard
@@ -42,30 +43,22 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 
 ## How to use data pipeline for data sources with an API:
 
-This is only relevant to the _BLS_ and _Census_ folders.  Using the Census Bureau as an example:
+This is only relevant to the _BLS_, _EPA_, _EIA_ and _Census_ folders.  Using the Census Bureau as an example:
 
-The data pipeline for the Census Bureau can be found in the _Regional-Monitoring/Indicator_Gen/Data/Census_ folder.  The Census Bureau has data from multiple surveys and samples that can be accessed through an API.  
-This link here https://api.census.gov/data.html, tells you exactly which surveys have data available through their API and how to access them (which geographies are available, what variables are available, which years, and exactly how to write the API request query).
+Before updating any indicators, check to make sure we are up to date with any data releases American Community Survey Data Releases.  If there is a new data release (usually December of each year), update the variables using the update_vars.py script, update the area codes using the update_FIPS.py script, and update the URL’s using the update_URL.py script.
 
-The "Census Configuration File.xlsx" workbook found in the _config_ folder summarizes their API data structure.  This is where a user configures the data pipeline, meaning they can set up which survey/sample, years, variables, and geographies they would like to pull data from.
+To update any indicator pulled from ACS data, start in the overall config folder and Census Data folder.  Then update both configuration files: config_indicators.yaml and census_configuration_file2.xlsx.  Also, view the census_functions.py script.
 
-For example, suppose a user would like to pull data for the Sacramento region on means of transportation to work from the American Community Survey (Table ID B08301):
+Open the census_configuration_file2.xlsx workbook found in the config folder.  This workbook summarizes their API data structure. The survey tabs (ACS, PUMS, etc…) is where the user configures variables and geographies for the data pipeline, meaning they organize the variable IDs, labels, years, etc… and set the name of the indicator.  This is also where the user sets which geographies they would like to pull data from in the geography tabs (Counties, State, and MSA, depending on which geography you wish to pull data from).  This workbook helps organize which estimates and which geographies are set for the API request in Python.
 
-1) Go to the __ACS__ tab.  This contains all the tables/variables that can be pulled from ACS (https://api.census.gov/data/2022/acs/acs5/variables.html). 
-The user sets the __Indicator Name__ and __Include__ columns to define which variables they would like to pull data for (columns I through L are used for the processing step, if needed). 
-The __Indicator Name__ is a user defined reference table name (you can name it whatever you want). The __Include__ column requires a Yes/No input. 
-For Table ID B08301, set the __Indicator Name__ to "Commute_1" and set the __Include__ column to "Yes" for  _Estimate!!Total:!!Car, truck, or van:!!Drove alone_ and _Estimate!!Total:!!Worked from home_ and "No" for all other estimates.
+Open the config_indicators.yaml file.  This helps organize indicators by project and where to export the file, what sample they come from, the number of variables, whether to calculate percentages by the user defined groups, and what the desired margin of error threshold is.  This config file also has parameters for each sample and geography level, like years available and which geography to use for importing.  The user needs to make sure this is configured properly if setting up a new indicator.
 
-2) In the __Counties__ tab, make sure the counties listed are El Dorado, Placer, Sacramento, Sutter, Yolo, and Yuba.  Make sure the states listed are all "CA".
+After checking/configuring the data pipeline, run the Python script step01__request_census.py.  The code imports the configuration files to form the API request.  Here is an example:
+1.	Which project are you pulling data for? – Monitoring and Reporting
+2.	Which indicator do you need to rerun? – Commute_1
+3.	Which estimate do you want to pull data from? – ACS5
+4.	Which geography do you want to pull data for? – MSA
+5.	Do you want to pull data for all years?  Select Yes/No: - Yes
+6.	Do you want to pull the Margin of Error estimates?  Select Yes/No: - Yes
 
-3) In the __Inputs__ tab, set the *indicator_name* to "Commute_1", *estimate* to "ACS5", *sample* to "ACS", *geography* to "Counties", *import_tab* to "Counties", *margin_of_error* to "No", *year_start* to "2009", and *year_end* to "2022".
-
-4) Save the excel workbook.
-
-
-You have now configured your data pipeline to import all ACS5 estimate variables linked to "Commute_1" in the ACS tab for the years 2009 to 2022 and counties listed in the Counties tab (not including margin of errors).
-
-
-Now, you can open the "Step 01 - Query Census Data.ipynb" jupyter notebook and hit run all to import and export the data (make sure to update the file paths in the "Preparing Workspace" section of the notebook).
-
-
+\textit{Note – This configuration will pull from the ACS sample all ACS 5-year estimate data and margin of errors for all input MSA’s for all variables that are linked to Commute_1 from the years 2009 to 2023.  Notice how the each question offers a list of input options provided  from the config_indicators.yaml file.  To see which variables are currently linked to the Commute_1 indicator, in the census_configuration_file2.xlsx workbook, navigate to the “ACS” tab and filter the “Indicator Name” to Commute_1.  To see which MSA’s are set to import, navigate to the “MSA” tab. These mappings can be updated as needed.}
