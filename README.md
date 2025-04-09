@@ -29,7 +29,7 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
     - "CPI Inflation Adjustment Factors.xlsx" - a workbook that has various inflation adjustment factors (for indicators that include $-USD)
     - "about_indicators.yaml" - a _yaml_ file used to create the documentation files associated with each indicator
     - "config_indicators.yaml" - a _yaml_ file used to configure the data pipeline that pulls/processes data
-    - \href{https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/Functions.py}{Functions.py} - a python script with user defined functions that all data sources utilize
+    - [Functions.py](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/Functions.py) - a python script with user defined functions that all data sources utilize
  - Data source __config__ folder:
     - "configuration_file.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
     - "functions.py" - a python script with user defined functions that the specific data source requires
