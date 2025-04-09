@@ -11,7 +11,7 @@ version = 2
 
 
     # # Subset to specific indicator
-    # print('Indicator name:      ' + indicator_name )
+    # print('Indicator name:      ' + indicator )
     # print('Sample:              ' + sample_type    )
     # print('Estimate:            ' + estimate       )
     # print('Final geography:     ' + geography      )
@@ -48,7 +48,7 @@ if version == 1:
 
 
     # Set parameters for querying Census data
-    indicator_name     = df_params[df_params['Type'] == 'indicator_name' ]['Input'].values[0]
+    indicator     = df_params[df_params['Type'] == 'indicator' ]['Input'].values[0]
 
 
     estimate           = df_params[df_params['Type'] == 'estimate'       ]['Input'].values[0]
@@ -60,12 +60,12 @@ if version == 1:
     year_end           = df_params[df_params['Type'] == 'year_end'       ]['Input'].values[0]
 
     # Subset to specific indicator
-    df_indicators = df_indicators[df_indicators['Indicator'] == indicator_name]
+    df_indicators = df_indicators[df_indicators['Indicator'] == indicator]
     percentages = df_indicators['Percentages'        ].values[0]
     num_vars    = df_indicators['Number of Variables'].values[0]
 
     # View
-    print('Indicator name:      ' + indicator_name )
+    print('Indicator name:      ' + indicator )
     print('Sample:              ' + sample_type    )
     print('Estimate:            ' + estimate       )
     print('Final geography:     ' + geography      )

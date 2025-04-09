@@ -32,93 +32,121 @@ if version == 2:
     print('Indicators available:'); print()
     display(list(dict_config['Indicators'][project].keys())); print()
     print('Which indicator do you need to rerun?'); print()
-    indicator_name = input()
-    assert indicator_name in list(dict_config['Indicators'][project].keys()), 'Unacceptable input, please choose from options displayed above'
+    indicator = input()
+    assert indicator in list(dict_config['Indicators'][project].keys()), 'Unacceptable input, please choose from options displayed above'
     print()
     print('---------------------------------------------------------------------------------------------------------------------------------------')
 
-    print()
-    display(dict_config['Indicators'][project][indicator_name])
-    sample_types = dict_config['Indicators'][project][indicator_name]['sample']
-    if isinstance(sample_types, list):
-        print('Samples available:')
-        display(sample_types); print()
-        print('Which sample do you want to pull data from?')
-        sample_type = input()
-        assert sample_type in sample_types, 'Unacceptable input, please choose from options displayed above'
+
+    if rerun:
+        file_txt = path_config / 'runs' / f'{indicator}.txt'
+
+        df_run = pd.read_csv(file_txt, sep=': ', names=['Parameter', 'Input'])
+        print(); display(df_run); print()
+
+        def remove_colon(x):
+            return x.replace(':', '')
+
+        df_run['Parameter'] = df_run['Parameter'].apply(remove_colon)
+        project         = df_run[df_run['Parameter'] == 'Project'        ]['Input'].values[0]
+        indicator       = df_run[df_run['Parameter'] == 'Indicator Name' ]['Input'].values[0]
+        sample_type     = df_run[df_run['Parameter'] == 'Sample'         ]['Input'].values[0]
+        estimate        = df_run[df_run['Parameter'] == 'Estimate'       ]['Input'].values[0]
+        geography       = df_run[df_run['Parameter'] == 'Geography'      ]['Input'].values[0]
+        years_to_import = df_run[df_run['Parameter'] == 'Years Imported' ]['Input'].values[0]
+        import_tab      = df_run[df_run['Parameter'] == 'Import Tab'     ]['Input'].values[0]
+        margin_of_error = df_run[df_run['Parameter'] == 'Margin of Error']['Input'].values[0]
+        export_loc  = dict_config['Indicators'][project][indicator]['sp_location'        ]
+        folder      = dict_config['Indicators'][project][indicator]['folder'             ]
+        MOE_thresh  = dict_config['Indicators'][project][indicator]['MOE_threshold'      ]
+        num_vars    = dict_config['Indicators'][project][indicator]['number_of_variables']
+        percentages = dict_config['Indicators'][project][indicator]['percentages'        ]
+        years_to_import = years_to_import.split(', ')
+        years_to_import = [int(year) for year in years_to_import]
+        year_end   = np.max(years_to_import)
+        year_start = np.min(years_to_import)
     else:
-        sample_type = dict_config['Indicators'][project][indicator_name]['sample']
+        export_loc  = dict_config['Indicators'][project][indicator]['sp_location'        ]
+        folder      = dict_config['Indicators'][project][indicator]['folder'             ]
+        MOE_thresh  = dict_config['Indicators'][project][indicator]['MOE_threshold'      ]
+        num_vars    = dict_config['Indicators'][project][indicator]['number_of_variables']
+        percentages = dict_config['Indicators'][project][indicator]['percentages'        ]
 
-    export_loc  =     dict_config['Indicators'][project][indicator_name]['sp_location'        ]
-    folder      =     dict_config['Indicators'][project][indicator_name]['folder'             ]
-    MOE_thresh  = int(dict_config['Indicators'][project][indicator_name]['MOE_threshold'      ])
-    num_vars    = int(dict_config['Indicators'][project][indicator_name]['number_of_variables'])
-    percentages =     dict_config['Indicators'][project][indicator_name]['percentages'        ]
-
-
-    print()
-    print('Estimates available:')
-    display(list(dict_config['Samples'][sample_type].keys())); print()
-    print('Which estimate do you want to pull data from?'); print()
-    estimate = input()
-    assert estimate in list(dict_config['Samples'][sample_type].keys()), 'Unacceptable input, please choose from options displayed above'
-    print()
-    print('---------------------------------------------------------------------------------------------------------------------------------------')
-
-
-    print()
-    print('Geographies available:'); print()
-    display(dict_config['Samples'][sample_type][estimate]['geographies_available']); print()
-    print('Which geography do you want to pull data for?'); print()
-    geography = input()
-    assert geography in dict_config['Samples'][sample_type][estimate]['geographies_available'], 'Unacceptable input, please choose from options displayed above'
-    print()
-    print('---------------------------------------------------------------------------------------------------------------------------------------')
-
-    print()
-    print('Years available:')
-    display(dict_config['Samples'][sample_type][estimate]['years_available']); print()
-    print('Do you want to pull data for all years available?  Select Yes/No: '); print()
-    all_years = input()
-    if all_years == 'Yes':
-        years_to_import = dict_config['Samples'][sample_type][estimate]['years_available']
-    elif all_years == 'No':
         print()
-        print('Please type which years you want to pull data from, separated by commas:'); print()
-        years_to_import = input()
-        if ',' in years_to_import:
-            years_to_import = years_to_import.split(', ')
-            years_to_import = [int(year) for year in years_to_import]
+        display(dict_config['Indicators'][project][indicator])
+        sample_types = dict_config['Indicators'][project][indicator]['sample']
+        if isinstance(sample_types, list):
+            print('Samples available:')
+            display(sample_types); print()
+            print('Which sample do you want to pull data from?')
+            sample_type = input()
+            assert sample_type in sample_types, 'Unacceptable input, please choose from options displayed above'
         else:
-            years_to_import = [int(years_to_import)]
-    else:
-        assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
+            sample_type = dict_config['Indicators'][project][indicator]['sample']
 
-        
-    print()
-    year_end   = np.max(years_to_import)
-    year_start = np.min(years_to_import)
-    import_tab = dict_config['Import Geographies'][geography]
+        print()
+        print('Estimates available:')
+        display(list(dict_config['Samples'][sample_type].keys())); print()
+        print('Which estimate do you want to pull data from?'); print()
+        estimate = input()
+        assert estimate in list(dict_config['Samples'][sample_type].keys()), 'Unacceptable input, please choose from options displayed above'
+        print()
+        print('---------------------------------------------------------------------------------------------------------------------------------------')
 
-    print('---------------------------------------------------------------------------------------------------------------------------------------')
 
-    print()
-    print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
-    margin_of_error = input()
-    assert margin_of_error in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
+        print()
+        print('Geographies available:'); print()
+        display(dict_config['Samples'][sample_type][estimate]['geographies_available']); print()
+        print('Which geography do you want to pull data for?'); print()
+        geography = input()
+        assert geography in dict_config['Samples'][sample_type][estimate]['geographies_available'], 'Unacceptable input, please choose from options displayed above'
+        print()
+        print('---------------------------------------------------------------------------------------------------------------------------------------')
 
-    file_config_set = path_config / 'runs' / f'{indicator_name}.txt'
-    with open(file_config_set, 'w') as f:
-        f.write(f"Project: {project}\n")
-        f.write(f"Indicator Name: {indicator_name}\n")
-        f.write(f"Export Location: {export_loc}\n")
-        f.write(f"Folder: {folder}\n")
-        f.write(f"Sample: {sample_type}\n")
-        f.write(f"Estimate: {estimate}\n")
-        f.write(f"Geography: {geography}\n")
-        f.write(f"Years Imported: {years_to_import}\n")
-        f.write(f"Import Tab: {import_tab}\n")
-        f.write(f"Margin of Error: {margin_of_error}\n")
+        print()
+        print('Years available:')
+        display(dict_config['Samples'][sample_type][estimate]['years_available']); print()
+        print('Do you want to pull data for all years available?  Select Yes/No: '); print()
+        all_years = input()
+        if all_years == 'Yes':
+            years_to_import = dict_config['Samples'][sample_type][estimate]['years_available']
+        elif all_years == 'No':
+            print()
+            print('Please type which years you want to pull data from, separated by commas:'); print()
+            years = input()
+            if ',' in years:
+                years_to_import = years.split(', ')
+                years_to_import = [int(year) for year in years_to_import]
+            else:
+                years_to_import = [int(years_to_import)]
+        else:
+            assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
+
+            
+        print()
+        year_end   = np.max(years_to_import)
+        year_start = np.min(years_to_import)
+        import_tab = dict_config['Import Geographies'][geography]
+
+        print('---------------------------------------------------------------------------------------------------------------------------------------')
+
+        print()
+        print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
+        margin_of_error = input()
+        assert margin_of_error in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
+
+        file_config_set = path_config / 'runs' / f'{indicator}.txt'
+        with open(file_config_set, 'w') as f:
+            f.write(f"Project: {project}\n")
+            f.write(f"Indicator Name: {indicator}\n")
+            f.write(f"Export Location: {export_loc}\n")
+            f.write(f"Folder: {folder}\n")
+            f.write(f"Sample: {sample_type}\n")
+            f.write(f"Estimate: {estimate}\n")
+            f.write(f"Geography: {geography}\n")
+            f.write(f"Years Imported: {years}\n")
+            f.write(f"Import Tab: {import_tab}\n")
+            f.write(f"Margin of Error: {margin_of_error}\n")
 
 
 
@@ -146,7 +174,7 @@ if version == 2:
         # Convert to dictionary object for easy state-county combination importing
 
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = estimate)
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
 
         if margin_of_error == 'Yes':
@@ -210,7 +238,7 @@ if version == 2:
 
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name=sample_type)
         df_vars = df_vars[df_vars['Year'] == 2023]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         
         # Set tables and variables to import
@@ -316,7 +344,7 @@ if version == 2:
         file_pums = path_config / 'census_configuration_file2.xlsx'
         df_vars = pd.read_excel(file_pums, sheet_name = sample_type)
         df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         if 'H' in df_vars['Table Type'].unique():
             table_type = 'H'
             weight = 'WGTP'
@@ -387,7 +415,7 @@ if version == 2:
         
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = sample_type)
         df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         if 'H' in df_vars['Table Type'].unique():
             table_type = 'H'
@@ -426,12 +454,12 @@ if version == 2:
     if estimate == 'LEHD':
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = estimate)
         df_vars = df_vars[df_vars['Sample'] == sample_type]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         variables = df_vars['ID'].unique()
         variables = ','.join(variables)
 
-        if indicator_name == 'Jobs_4':
+        if indicator == 'Jobs_4':
             variables = variables + '&ownercode=A05'
 
         print()
@@ -517,7 +545,7 @@ if version == 1:
     df_params = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name = 'Inputs', usecols='A:B')
 
     # Set parameters for querying Census data
-    indicator_name     = df_params[df_params['Type'] == 'indicator_name' ]['Input'].values[0]
+    indicator     = df_params[df_params['Type'] == 'indicator' ]['Input'].values[0]
     estimate           = df_params[df_params['Type'] == 'estimate'       ]['Input'].values[0]
     sample_type        = df_params[df_params['Type'] == 'sample'         ]['Input'].values[0]
     geography          = df_params[df_params['Type'] == 'geography'      ]['Input'].values[0]
@@ -527,7 +555,7 @@ if version == 1:
     year_end           = df_params[df_params['Type'] == 'year_end'       ]['Input'].values[0]
 
     # View
-    print('Indicator name:   ' + indicator_name )
+    print('Indicator name:   ' + indicator )
     print('Sample:           ' + sample_type    )
     print('Estimate:         ' + estimate       )
     print('Final geography:  ' + geography      )
@@ -566,7 +594,7 @@ if version == 1:
         # Convert to dictionary object for easy state-county combination importing
 
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name = estimate)
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         
         if margin_of_error == 'Yes':
@@ -607,7 +635,7 @@ if version == 1:
 
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name=sample_type)
         df_vars = df_vars[df_vars['Year'] == 2023]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         
         # Set tables and variables to import
@@ -711,7 +739,7 @@ if version == 1:
         # Convert to dictionary object for easy state-county combination importing
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name = sample_type)
         df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         if 'H' in df_vars['Table Type'].unique():
             table_type = 'H'
             weight = 'WGTP'
@@ -781,7 +809,7 @@ if version == 1:
         
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name = sample_type)
         df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         if 'H' in df_vars['Table Type'].unique():
             table_type = 'H'
@@ -820,12 +848,12 @@ if version == 1:
     if estimate == 'LEHD':
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name = estimate)
         df_vars = df_vars[df_vars['Sample'] == sample_type]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator_name).replace(np.nan, False)]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         variables = df_vars['ID'].unique()
         variables = ','.join(variables)
 
-        if indicator_name == 'Jobs_4':
+        if indicator == 'Jobs_4':
             variables = variables + '&ownercode=A05'
 
         print()

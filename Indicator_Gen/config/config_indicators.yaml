@@ -20,154 +20,154 @@ Indicators:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Race'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
     Pop_4:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Age'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     Pop_6:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Birth Rates'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
     Pop_7:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Marriage Rates'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
     Pop_8:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Marriage Status'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
     Pop_9:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Location 1 Year Ago'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
     Health_2:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Healthy Places'
       folder: 'Uninsured'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
     Broadband_2:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Healthy Places\\Broadband'
       folder: 'Access'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     Cost_3:
       sp_location: 'Vibrant and Inclusive Places\\Development\\Housing Cost'
       folder: 'Residential Vacancy'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     Cost_5:
       sp_location: 'Vibrant and Inclusive Places\\Development\\Housing Cost'
       folder: 'Home Ownership'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
     Income_1:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'HH Income'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
     Income_3:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'By Race'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
     Income_4:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'Poverty Rate'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
     Labor_1:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Labor Force'
       folder: 'Participation Rate'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
     Edu_1:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Education'
       folder: 'Attainment'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
     Commute_1:
       sp_location: 'Next Gen of Mobility Solutions\\Commute mode'
       folder: 'Modes of Commute'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
     Cost_6:
       sp_location: 'Vibrant and Inclusive Places\\Development\\Housing Cost'
       folder: 'Housing Cost Burden'
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     Income_2:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'Income Categories'
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     Accessibility_1:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Travel Mode by Race'
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
     Accessibility_2:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Travel Mode by Household Income'
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     Accessibility_3:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Auto Ownership'
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
     Accessibility_4:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Commute Times'
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
   
@@ -176,14 +176,14 @@ Indicators:
       sp_location: 'StoryMaps\\Housing\\original_export'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 10
       percentages: 'No'
     Housing_2:
       sp_location: 'StoryMaps\\Housing\\original_export'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
 
@@ -192,42 +192,42 @@ Indicators:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
     Chamber_H_1ab:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
       sample: 'SUBJECT'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
     Chamber_H_2:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'No'
     Chamber_H_4:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
       sample: ['PUMS', 'ACS']
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 24
       percentages: 'Yes'
     Chamber_H_5:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
     Chamber_H_6:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
       sample: 'PUMS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
 
@@ -243,70 +243,70 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Population by Race'
       sample: ['ACS', 'DEC']
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
     RHNA_POPEMP_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Race'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
     RHNA_POPEMP_4:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Age'
       sample: ['ACS', 'DEC']
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
     RHNA_POPEMP_5:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Location 1 Year Ago'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
     RHNA_POPEMP_6:
       sp_location: 'RHNA\\New Data Collected'
       folder: Employment by Industry'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 8 
       percentages: 'Yes'
     RHNA_POPEMP_7:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Resident Employment by Occupation'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
     RHNA_POPEMP_8:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Class by Workers'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
     RHNA_POPEMP_9:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Class of Workers, by Place of Work'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
     RHNA_POPEMP_10a:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Earnings, by Jurisdiction as Place of Residence'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
     RHNA_POPEMP_10b:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Earnings, by Jurisdiction as Place of Work'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
     RHNA_POPEMP_11:
@@ -348,7 +348,7 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Owners vs Renters'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 2 
       percentages: 'Yes'
     RHNA_POPEMP_17:
@@ -369,15 +369,15 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Owners: Housing Tenure by Year Moved to Current Residence'
       sample: 'ACS'
-      MOE_threshold: 5 
-      number_of_variables: 5 
+      MOE_threshold: 0.05
+      number_of_variables: 5
       percentages: 'Yes'
     RHNA_POPEMP_19b:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Renters: Housing Tenure by Year Moved to Current Residence'
       sample: 'ACS'
-      MOE_threshold: 5 
-      number_of_variables: 5 
+      MOE_threshold: 0.05
+      number_of_variables: 5
       percentages: 'Yes'
     RHNA_POPEMP_20:
       sp_location: 'RHNA\\New Data Collected'
@@ -404,14 +404,14 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Household Type'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 6 
       percentages: 'Yes'
     RHNA_POPEMP_24:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Households by Presence of Children'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 2 
       percentages: 'Yes'
     RHNA_HSG_1:
@@ -425,22 +425,22 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Occupancy'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 2 
       percentages: 'Yes'
     RHNA_HSG_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Vacancies'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 8 
       percentages: 'Yes'
     RHNA_HSG_4:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Housing Units by Year Structure Built'
       sample: 'ACS'
-      MOE_threshold: 5 
-      number_of_variables: 5 
+      MOE_threshold: 0.05
+      number_of_variables: 5
       percentages: 'Yes'
     RHNA_HSG_5:
       sp_location: 'RHNA\\New Data Collected'
@@ -460,7 +460,7 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Homes Values of Owner-Occupied Units'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 7 
       percentages: 'Yes'
     RHNA_HSG_8:
@@ -474,7 +474,7 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Contract Rents for Renter-Occupied Units'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 7 
       percentages: 'Yes'
     RHNA_OVER_1:
@@ -523,7 +523,7 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Cost Burden Severity'
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 4 
       percentages: 'Yes'
     RHNA_LGFEM_1:
@@ -537,7 +537,7 @@ Indicators:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Households by Household Size'
       sample: 'ACS'
-      MOE_threshold: 5 
+      MOE_threshold: 0.05
       number_of_variables: 4 
       percentages: 'Yes'
     RHNA_LGFEM_3:
@@ -644,49 +644,49 @@ Indicators:
       sp_location: 'Small Data Requests\\2025\\EJ Analysis'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'No'
     Blueprint_84ba:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
     Blueprint_84bb:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
     Blueprint_84c:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
     Blueprint_95d:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
     Blueprint_97:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
     Blueprint_97b:
       sp_location: 'Small Data Requests\\2025\\Blueprint\extra'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
 
@@ -695,14 +695,14 @@ Indicators:
       sp_location: 'Small Data Requests\\2025\\Cap to Cap\\OG'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
     Cap_2:
       sp_location: 'Small Data Requests\\2025\\Cap to Cap\\OG'
       folder: ''
       sample: 'ACS'
-      MOE_threshold: 5
+      MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
 
