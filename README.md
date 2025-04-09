@@ -8,7 +8,7 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 
 ## Repository organization:
 
-(1) __Data__:
+(1) [__Data__](https://github.com/SACOG/Regional-Monitoring/tree/main/Indicator_Gen/Data):
 - This folder contains all code used to import/process data used for regional monitoring (pipelines for data sources with an API)
 - Each data source has their own folder
 - Data sources with an API available: Census Bureau, BLS, EPA, and EIA
@@ -20,21 +20,21 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 - Data sources without an API available: TIMS, DOF, RTIS, Zillow, ... (technically, Zillow has an API, SACOG just doesn't meet the terms of use requirements)
       - These data sources typically have one "processing" script, since we have no way of importing the data through an API (we download the data manually and store locally or on our SQL server)
 
-(2) __config__:
+(2) [__config__](https://github.com/SACOG/Regional-Monitoring/tree/main/Indicator_Gen/config):
 - These folders contain all necessary files needed to configure a data pipeline located in the data folder
 - There is an overall config folder and a subsequent config folder for the data sources that have an API
 - The overall __config__ folder:
-    - "Area Codes.xlsx" - a workbook that has all needed area code mappings (counties to PUMA's, counties to MSA's, census tracts to counties, ...) required for all indicators
-    - "CA State Income Brackets by Household Size.xlsx" - a table that shows the CA state income brackets by household size by county (for indicators that require income brackets)
-    - "CPI Inflation Adjustment Factors.xlsx" - a workbook that has various inflation adjustment factors (for indicators that include $-USD)
-    - "about_indicators.yaml" - a _yaml_ file used to create the documentation files associated with each indicator
-    - "config_indicators.yaml" - a _yaml_ file used to configure the data pipeline that pulls/processes data
+    - [Area Codes.xlsx](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/Area%20Codes.xlsx) - a workbook that has all needed area code mappings (counties to PUMA's, counties to MSA's, census tracts to counties, ...) required for all indicators
+    - [CA State Income Brackets by Household Size.xlsx](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/CA%20State%20Income%20Brackets%20by%20Household%20Size.xlsx) - a table that shows the CA state income brackets by household size by county (for indicators that require income brackets)
+    - [CPI Inflation Adjustment Factors.xlsx](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/CPI%20Inflation%20Adjustment%20Factors.xlsx) - a workbook that has various inflation adjustment factors (for indicators that include $-USD)
+    - [about_indicators.yaml](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/about_indicators.yaml) - a _yaml_ file used to create the documentation files associated with each indicator
+    - [config_indicators.yaml](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/config_indicators.yaml) - a _yaml_ file used to configure the data pipeline that pulls/processes data
     - [Functions.py](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/Functions.py) - a python script with user defined functions that all data sources utilize
  - Data source __config__ folder:
     - "configuration_file.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request)
     - "functions.py" - a python script with user defined functions that the specific data source requires
 
-(3) __AGOL Dashboard__:
+(3) [__AGOL Dashboard__](https://github.com/SACOG/Regional-Monitoring/tree/main/Indicator_Gen/AGOL%20Dashboard):
 - This folder contains all code that is used to build the plots/charts used in the online public-facing AGOL dashboard
 - The _plotly_ library is used for all data visualizations
 - Each data source has their own script
@@ -54,11 +54,11 @@ Open the census_configuration_file2.xlsx workbook found in the config folder.  T
 Open the config_indicators.yaml file.  This helps organize indicators by project and where to export the file, what sample they come from, the number of variables, whether to calculate percentages by the user defined groups, and what the desired margin of error threshold is.  This config file also has parameters for each sample and geography level, like years available and which geography to use for importing.  The user needs to make sure this is configured properly if setting up a new indicator.
 
 After checking/configuring the data pipeline, run the Python script step01__request_census.py.  The code imports the configuration files to form the API request.  Here is an example:
-1.	Which project are you pulling data for? – Monitoring and Reporting
-2.	Which indicator do you need to rerun? – Commute_1
-3.	Which estimate do you want to pull data from? – ACS5
-4.	Which geography do you want to pull data for? – MSA
-5.	Do you want to pull data for all years?  Select Yes/No: - Yes
-6.	Do you want to pull the Margin of Error estimates?  Select Yes/No: - Yes
+1.	Which project are you pulling data for? – __Monitoring and Reporting__
+2.	Which indicator do you need to rerun? – __Commute_1__
+3.	Which estimate do you want to pull data from? – __ACS5__
+4.	Which geography do you want to pull data for? – __MSA__
+5.	Do you want to pull data for all years?  Select Yes/No: - __Yes__
+6.	Do you want to pull the Margin of Error estimates?  Select Yes/No: - __Yes__
 
-\textit{Note – This configuration will pull from the ACS sample all ACS 5-year estimate data and margin of errors for all input MSA’s for all variables that are linked to Commute_1 from the years 2009 to 2023.  Notice how the each question offers a list of input options provided  from the config_indicators.yaml file.  To see which variables are currently linked to the Commute_1 indicator, in the census_configuration_file2.xlsx workbook, navigate to the “ACS” tab and filter the “Indicator Name” to Commute_1.  To see which MSA’s are set to import, navigate to the “MSA” tab. These mappings can be updated as needed.}
+*Note – This configuration will pull from the ACS sample all ACS 5-year estimate data and margin of errors for all input MSA’s for all variables that are linked to Commute_1 from the years 2009 to 2023.  Notice how the each question offers a list of input options provided  from the config_indicators.yaml file.  To see which variables are currently linked to the Commute_1 indicator, in the census_configuration_file2.xlsx workbook, navigate to the “ACS” tab and filter the “Indicator Name” to Commute_1.  To see which MSA’s are set to import, navigate to the “MSA” tab. These mappings can be updated as needed.*
