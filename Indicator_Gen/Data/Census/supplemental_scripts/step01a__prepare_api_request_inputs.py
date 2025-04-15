@@ -18,30 +18,20 @@ if version == 2:
     except Exception as e:
         print(f"An error occurred: {e}")
 
-    print('---------------------------------------------------------------------------------------------------------------------------------------')
-    print()
-    print('Projects available: ')
-    display(dict_config['Project']); print()
-    print('Which project are you pulling data for?'); print()
-    project = input()
-    assert project in dict_config['Project'], 'Unacceptable input, please choose from options displayed above'
-    print()
-    print('---------------------------------------------------------------------------------------------------------------------------------------')
-
-    print()
-    print('Indicators available:'); print()
-    display(list(dict_config['Indicators'][project].keys())); print()
-    print('Which indicator do you need to rerun?'); print()
-    indicator = input()
-    assert indicator in list(dict_config['Indicators'][project].keys()), 'Unacceptable input, please choose from options displayed above'
-    print()
-    print('---------------------------------------------------------------------------------------------------------------------------------------')
-
-
+    
     if rerun:
-        file_txt = path_config / 'runs' / f'{indicator}.txt'
+        path_runs = path_config / 'runs'
+        list_files = [str(entry) for entry in path_runs.iterdir() if entry.is_file()]
+        dict_mod = {}
 
-        df_run = pd.read_csv(file_txt, sep=': ', names=['Parameter', 'Input'])
+        for file in list_files:
+            time_mod = os.path.getmtime(file)
+            time_mod = datetime.fromtimestamp(time_mod).strftime("%Y-%m-%d %H:%M:%S")
+            dict_mod[time_mod] = file
+
+        most_recent = sorted(list(dict_mod.keys()), reverse=True)[0]
+        file_run = dict_mod[most_recent]
+        df_run = pd.read_csv(file_run, sep=': ', names=['Parameter', 'Input'])
         print(); display(df_run); print()
 
         def remove_colon(x):
@@ -65,7 +55,29 @@ if version == 2:
         years_to_import = [int(year) for year in years_to_import]
         year_end   = np.max(years_to_import)
         year_start = np.min(years_to_import)
+
+
     else:
+
+        print('---------------------------------------------------------------------------------------------------------------------------------------')
+        print()
+        print('Projects available: ')
+        display(dict_config['Project']); print()
+        print('Which project are you pulling data for?'); print()
+        project = input()
+        assert project in dict_config['Project'], 'Unacceptable input, please choose from options displayed above'
+        print()
+        print('---------------------------------------------------------------------------------------------------------------------------------------')
+
+        print()
+        print('Indicators available:'); print()
+        display(list(dict_config['Indicators'][project].keys())); print()
+        print('Which indicator do you need to rerun?'); print()
+        indicator = input()
+        assert indicator in list(dict_config['Indicators'][project].keys()), 'Unacceptable input, please choose from options displayed above'
+        print()
+        print('---------------------------------------------------------------------------------------------------------------------------------------')
+
         export_loc  = dict_config['Indicators'][project][indicator]['sp_location'        ]
         folder      = dict_config['Indicators'][project][indicator]['folder'             ]
         MOE_thresh  = dict_config['Indicators'][project][indicator]['MOE_threshold'      ]
@@ -110,6 +122,7 @@ if version == 2:
         all_years = input()
         if all_years == 'Yes':
             years_to_import = dict_config['Samples'][sample_type][estimate]['years_available']
+            years = ', '.join([str(year) for year in years_to_import])
         elif all_years == 'No':
             print()
             print('Please type which years you want to pull data from, separated by commas:'); print()
@@ -118,7 +131,7 @@ if version == 2:
                 years_to_import = years.split(', ')
                 years_to_import = [int(year) for year in years_to_import]
             else:
-                years_to_import = [int(years_to_import)]
+                years_to_import = [int(years)]
         else:
             assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
 

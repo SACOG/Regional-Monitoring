@@ -19,6 +19,7 @@ import os
 import re
 from tqdm import tqdm
 from datetime import date
+from datetime import datetime
 import requests
 import ast
 import xlwt
@@ -68,7 +69,7 @@ with open(file_api, 'r') as file:
 
 ## Export setting ---
 
-rerun=True
+rerun=False
 export=True
 about=False
 update=False
@@ -83,7 +84,7 @@ with path_1a.open("r") as f:
 if geography == 'Counties':
     mpo = 'Yes'
 if geography == 'Places':
-    unincorporated = 'No'
+    unincorporated = 'Yes'
     
 display(df_vars.head(3))
 
