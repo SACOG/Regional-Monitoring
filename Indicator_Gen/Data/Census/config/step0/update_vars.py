@@ -162,6 +162,9 @@ if ACS:
     df_acs = df_acs.drop_duplicates()
     df_acs = df_acs.reset_index(drop=True)
 
+    df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['attributes']
+    df_acs = df_acs[['Table', 'ID', 'attributes', 'label', 'concept', 'Year', 'Indicator Name',	'Include', 'ID_Attributes',	'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
+
 
     ## Exporting to Git ---
 
@@ -498,7 +501,7 @@ if DEC:
     df_dec['Label_clean'] = df_dec['Label_clean'].str.replace('!!', ' ')
     df_dec['Label_clean'] = df_dec['Label_clean'].str.replace(':', '')
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='DEC')
+    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name='DEC')
     df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
     df_dec = df_dec.merge(df_config, on=['ID'], how='left')

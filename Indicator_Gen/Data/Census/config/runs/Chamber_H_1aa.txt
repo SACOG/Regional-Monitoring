@@ -5,6 +5,6 @@ Folder:
 Sample: ACS
 Estimate: ACS5
 Geography: Counties
-Years Imported: 2017, 2018, 2019, 2020, 2021, 2022, 2023
+Years Imported: 2018, 2023
 Import Tab: Counties
 Margin of Error: Yes

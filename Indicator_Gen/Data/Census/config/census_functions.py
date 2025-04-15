@@ -1354,7 +1354,7 @@ def pums_processing_4(df_census, indicator, weight, margin_of_error, MOE_thresh,
             if len(groups) == 1:
                 df_puma    ['Percentage'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
                 df_counties['Percentage'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
-                df_msa     ['Percentage'] = df_msa     ['Total'] / df_msa     .groupby(list(df_mpo     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')           
+                df_msa     ['Percentage'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')           
                 df_mpo     ['Percentage'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups      + ['Total'], axis = 1).columns))['Total'].transform('sum')
 
     df_puma    .reset_index(drop = True, inplace = True)
@@ -1777,7 +1777,8 @@ def rename_census(
             if mpo == 'Yes':
                 df_mpo = df_mpo.rename(columns = {'Total':'Median Household Income'})
 
-    if indicator in ['Cost_5', 'Income_2', 'Broadband_2', 'RHNA_HSG_2', 'RHNA_HSG_3', 'RHNA_HSG_7', 'RHNA_HSG_9', 'RHNA_OVER_7', 'RHNA_LGFEM_2', 'RHNA_POPEMP_19a', 'RHNA_POPEMP_19b', 'RHNA_POPEMP_24']:
+    if indicator in ['Cost_5', 'Income_2', 'Broadband_2', 'RHNA_HSG_2', 'RHNA_HSG_3', 'RHNA_HSG_7', 'RHNA_HSG_9', 'RHNA_OVER_7', 'RHNA_LGFEM_2', 'RHNA_POPEMP_18a', 'RHNA_POPEMP_18b', 'RHNA_POPEMP_19a', 
+                     'RHNA_POPEMP_19b', 'RHNA_POPEMP_20', 'RHNA_POPEMP_24']:
         df_census = df_census.rename(columns = {'Total':'Households'})
         if geography == 'Counties':
             if mpo == 'Yes':
@@ -1789,8 +1790,8 @@ def rename_census(
             if mpo == 'Yes':
                 df_mpo = df_mpo.rename(columns = {'Total':'Housing Units'})
 
-    if indicator in ['Pop_3', 'Pop_4', 'Pop_6', 'Pop_7', 'Pop_8', 'Pop_9', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1', 'RHNA_POPEMP_3', 'RHNA_POPEMP_5', 'RHNA_POPEMP_6', 'RHNA_POPEMP_7', 'RHNA_POPEMP_8'
-                          , 'RHNA_POPEMP_9', 'RHNA_POPEMP_10a', 'RHNA_POPEMP_10b', 'RHNA_POPEMP_16', 'RHNA_POPEMP_23', 'RHNA_DISAB_2', 'RHNA_AFFH_3', 'EJ_Analysis']:
+    if indicator in ['Pop_3', 'Pop_4', 'Pop_6', 'Pop_7', 'Pop_8', 'Pop_9', 'Edu_1', 'Labor_1', 'Health_2', 'Income_4', 'Commute_1', 'RHNA_POPEMP_3', 'RHNA_POPEMP_5', 'RHNA_POPEMP_6', 'RHNA_POPEMP_7', 
+                     'RHNA_POPEMP_8', 'RHNA_POPEMP_9', 'RHNA_POPEMP_10a', 'RHNA_POPEMP_10b', 'RHNA_POPEMP_16', 'RHNA_POPEMP_23', 'RHNA_DISAB_2', 'RHNA_AFFH_3', 'EJ_Analysis']:
         df_census = df_census.rename(columns = {'Total':'Population'})
         if geography == 'Counties':
             if mpo == 'Yes':
