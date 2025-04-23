@@ -1,0 +1,10 @@
+Project: Monitoring and Reporting
+Indicator Name: Accessibility_2
+Export Location: Safe Equitable Resilient Infrastructure\\Accessibility
+Folder: Travel Mode by Household Income
+Sample: PUMS
+Estimate: ACS5
+Geography: PUMA
+Years Imported: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+Import Tab: Counties
+Margin of Error: Yes

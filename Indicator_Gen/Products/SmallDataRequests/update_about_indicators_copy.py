@@ -1,5 +1,12 @@
 
 
+
+'''
+This script updates the "About Indicators.xlsx" file on the main Data folder of the MnR SP page with
+the working copy from the Process Map folder
+'''
+
+
 ## Packages ---
 
 import pandas as pd
@@ -26,7 +33,11 @@ path_out = path_sp / 'Data'
 
 ## Function ---
 
-def update_excel_copy(file_master, file_copy):
+def main():
+
+    # Define the file paths
+    file_master = path_in  / 'About Indicators.xlsx'
+    file_copy   = path_out / 'About Indicators.xlsx'
 
     # Load the master workbook
     # Create a writer object for the copy workbook
@@ -42,14 +53,13 @@ def update_excel_copy(file_master, file_copy):
             df = master_workbook.parse(sheet_name)
             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
+    print(); print()
     print(f"The copy of the excel workbook '{file_copy}' has been updated with the sheets from '{file_master}'.")
+    print(); print()
 
 
+## Run ---
 
-# Define the file paths
-file_master = path_in  / 'About Indicators.xlsx'
-file_copy   = path_out / 'About Indicators.xlsx'
-
-# Update the copy of the excel workbook
-update_excel_copy(file_master, file_copy)
+if __name__ == '__main__':
+    main()
 

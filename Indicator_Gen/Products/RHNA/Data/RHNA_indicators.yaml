@@ -338,6 +338,30 @@ ACS5:
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
+  OVER_3:
+    Indicator Title:
+    - Overcrowding by Race
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25014
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  OVER_6:
+    Indicator Title:
+    - Cost Burden by Tenure
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25070 and B25091
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
   OVER_7:
     Indicator Title:
     - Cost Burden Severity

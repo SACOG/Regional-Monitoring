@@ -12,6 +12,7 @@ Project:
   - 'Blueprint'
   - 'Chamber Study Missions'
   - 'Cap to Cap'
+  - 'Miscellaneous'
 
 
 Indicators:
@@ -23,6 +24,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Pop_4:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Age'
@@ -30,6 +33,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Pop_6:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Birth Rates'
@@ -37,6 +42,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
     Pop_7:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Marriage Rates'
@@ -44,6 +51,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
     Pop_8:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Marriage Status'
@@ -51,6 +60,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Pop_9:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Location 1 Year Ago'
@@ -58,6 +69,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Health_2:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Healthy Places'
       folder: 'Uninsured'
@@ -65,6 +78,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Broadband_2:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Healthy Places\\Broadband'
       folder: 'Access'
@@ -72,6 +87,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Cost_3:
       sp_location: 'Vibrant and Inclusive Places\\Development\\Housing Cost'
       folder: 'Residential Vacancy'
@@ -79,6 +96,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Cost_5:
       sp_location: 'Vibrant and Inclusive Places\\Development\\Housing Cost'
       folder: 'Home Ownership'
@@ -86,6 +105,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Income_1:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'HH Income'
@@ -93,6 +114,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
+      weighted_by: 'Households'
+      metric: 'Median Household Income'
     Income_3:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'By Race'
@@ -100,6 +123,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
+      weighted_by: 'Households'
+      metric: 'Median Household Income'
     Income_4:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'Poverty Rate'
@@ -107,6 +132,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Labor_1:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Labor Force'
       folder: 'Participation Rate'
@@ -114,6 +141,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Edu_1:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Education'
       folder: 'Attainment'
@@ -121,6 +150,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Commute_1:
       sp_location: 'Next Gen of Mobility Solutions\\Commute mode'
       folder: 'Modes of Commute'
@@ -128,6 +159,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Cost_6:
       sp_location: 'Vibrant and Inclusive Places\\Development\\Housing Cost'
       folder: 'Housing Cost Burden'
@@ -135,6 +168,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Income_2:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Income'
       folder: 'Income Categories'
@@ -142,6 +177,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Accessibility_1:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Travel Mode by Race'
@@ -149,6 +186,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Accessibility_2:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Travel Mode by Household Income'
@@ -156,6 +195,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Accessibility_3:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Auto Ownership'
@@ -163,6 +204,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Accessibility_4:
       sp_location: 'Safe Equitable Resilient Infrastructure\\Accessibility'
       folder: 'Commute Times'
@@ -170,6 +213,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
   
   StoryMaps:
     Housing_1:
@@ -179,6 +224,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 10
       percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
     Housing_2:
       sp_location: 'StoryMaps\\Housing\\original_export'
       folder: ''
@@ -186,6 +233,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
 
   Chamber Study Missions:
     Chamber_H_1aa:
@@ -195,6 +244,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Chamber_H_1ab:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -202,6 +253,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Chamber_H_2:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -209,6 +262,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
     Chamber_H_4:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -216,6 +271,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 24
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Chamber_H_5:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -223,6 +280,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
+      weighted_by: 'Households'
+      metric: 'Population'
     Chamber_H_6:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -230,6 +289,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Chamber_H_9:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -237,6 +298,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     Chamber_H_12:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -244,6 +307,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
 
   RHNA:
     RHNA_POPEMP_1:
@@ -253,6 +318,8 @@ Indicators:
       MOE_threshold: ''
       number_of_variables: ''
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Population by Race'
@@ -260,6 +327,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Race'
@@ -267,6 +336,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_4:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Age'
@@ -274,6 +345,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_5:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Location 1 Year Ago'
@@ -281,6 +354,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_6:
       sp_location: 'RHNA\\New Data Collected'
       folder: Employment by Industry'
@@ -288,6 +363,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8 
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_7:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Resident Employment by Occupation'
@@ -295,6 +372,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_8:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Class by Workers'
@@ -302,6 +381,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_9:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Class of Workers, by Place of Work'
@@ -309,6 +390,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_10a:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Earnings, by Jurisdiction as Place of Residence'
@@ -316,6 +399,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_10b:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Workers by Earnings, by Jurisdiction as Place of Work'
@@ -323,6 +408,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_11:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -330,6 +417,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_12:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -337,6 +426,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_13:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -344,6 +435,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_14:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -351,6 +444,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_15:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -358,6 +453,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_16:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Owners vs Renters'
@@ -365,6 +462,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2 
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_POPEMP_17:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -372,6 +471,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_18a:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Owners - Housing Tenure by Age'
@@ -379,6 +480,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 9
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_18b:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Renters - Housing Tenure by Age'
@@ -386,6 +489,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 9
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_19a:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Owners - Housing Tenure by Year Moved to Current Residence'
@@ -393,6 +498,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_19b:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Renters - Housing Tenure by Year Moved to Current Residence'
@@ -400,13 +507,17 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_20:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Housing Tenure by Race of Householder'
       sample: 'ACS'
       MOE_threshold: 0.05 
-      number_of_variables: 2 
+      number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_POPEMP_21:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -414,27 +525,35 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_POPEMP_22:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Housing Tenure by Housing Type'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_POPEMP_23:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Household Type'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 6 
+      number_of_variables: 6
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_POPEMP_24:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Households by Presence of Children'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 2 
+      number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -442,20 +561,26 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Occupancy'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 2 
+      number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Vacancies'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 8 
+      number_of_variables: 8
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_4:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Housing Units by Year Structure Built'
@@ -463,27 +588,44 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_5:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
-    RHNA_HSG_6:
+      folder: 'Housing Units by Number of Bedrooms'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
+    RHNA_HSG_6a:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Owners - Substandard Housing Issues'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
+    RHNA_HSG_6b:
+      sp_location: 'RHNA\\New Data Collected'
+      folder: 'Renters - Substandard Housing Issues'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_7:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Homes Values of Owner-Occupied Units'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 7 
+      number_of_variables: 7
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_HSG_8:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -491,13 +633,26 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_HSG_9:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Contract Rents for Renter-Occupied Units'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 7 
+      number_of_variables: 7
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
+    RHNA_HSG_10:
+      sp_location: 'RHNA\\New Data Collected'
+      folder: 'Median Contract Rent'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: 'No'
+      weighted_by: 'Households'
+      metric: 'Median Contract Rent'
     RHNA_OVER_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -505,6 +660,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_OVER_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -512,13 +669,17 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_OVER_3:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Overcrowding by Race'
+      sample: 'ACS'
+      MOE_threshold: 0.05 
+      number_of_variables: 2 
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_OVER_4:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -526,6 +687,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_OVER_5:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -533,20 +696,26 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_OVER_6:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Cost Burden by Tenure'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_OVER_7:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Cost Burden Severity'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 4 
+      number_of_variables: 4
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_LGFEM_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -554,13 +723,17 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_LGFEM_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Households by Household Size'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 4 
+      number_of_variables: 4
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     RHNA_LGFEM_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -568,6 +741,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_LGFEM_4:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -575,6 +750,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_LGFEM_5:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -582,6 +759,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_SEN_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -589,6 +768,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_SEN_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -596,6 +777,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_DISAB_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -603,6 +786,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_DISAB_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Population by Disability Status'
@@ -610,6 +795,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_DISAB_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -617,6 +804,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_ELI_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -624,6 +813,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_ELI_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -631,6 +822,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_ELI_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -638,6 +831,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_AFFH_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -645,6 +840,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_AFFH_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -652,13 +849,17 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 
       percentages: ''
+      weighted_by: 'No'
+      metric: 'Population'
     RHNA_AFFH_3:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Population with Limited English Proficiency'
       sample: 'ACS'
-      MOE_threshold: 0.05 
-      number_of_variables: 2 
+      MOE_threshold: 0.05
+      number_of_variables: 2
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
 
   Blueprint:
     EJ_Analysis:
@@ -726,6 +927,26 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
+
+  Miscellaneous:
+    Total_Population:
+      sp_location: 'Reference\\Weights'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
+    Total_Households:
+      sp_location: 'Reference\\Weights'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
 
 
 Samples:

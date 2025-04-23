@@ -19,6 +19,7 @@ import os
 import re
 from tqdm import tqdm
 from datetime import date
+from datetime import datetime
 import requests
 import ast
 import xlwt
@@ -28,6 +29,9 @@ import xlsxwriter
 import time
 import functools as ft
 from IPython.display import display
+import traceback
+import sys
+
 
 
 ## Setting file paths ---
@@ -45,10 +49,12 @@ path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
 
 
+
 ## User defined functions ---
 
 path_func = path_config0 / 'Functions.py'
 path_func_census = path_config / 'census_functions.py'
+path_func_censusbureau = path_config / 'censusbureau.py'
 
 with path_func.open("r") as f:
     exec(f.read())
@@ -56,6 +62,10 @@ with path_func.open("r") as f:
 with path_func_census.open("r") as f:
     exec(f.read())
         
+with path_func_censusbureau.open("r") as f:
+    exec(f.read())
+
+
 
 ## Setting API key ---
 

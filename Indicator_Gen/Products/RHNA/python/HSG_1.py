@@ -1,12 +1,12 @@
 
 
-indicator_name = 'RHNA_HSG_1'
+indicator = 'RHNA_HSG_1'
 
 
 # Set indicator
 source = 'DOF'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 values='Housing Units'
 columns='Year'
 
@@ -20,6 +20,7 @@ df_dof = pd.read_excel(file_in)
 ## Organizing ---
 
 df_dof = df_dof[df_dof['MPO'] == 'SACOG']
+df_dof['MPO'] = df_dof['MPO'] + ' Region'
 df_dof = df_dof[df_dof['Year'].isin([2010, 2024])]
 df_dof = df_dof.sort_values('Year')
 df_dof['Year'] = df_dof['Year'].astype(str)
@@ -76,5 +77,5 @@ for county in counties:
         if export:
             export_rhna(df_prod)
 
-list_indicators.append(indicator_name)
+list_indicators.append(indicator)
 
