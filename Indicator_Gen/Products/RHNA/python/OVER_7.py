@@ -1,19 +1,19 @@
 
 
-indicator_name = 'RHNA_OVER_7'
+indicator = 'RHNA_OVER_7'
 
 
 # Set indicator
 source = 'ACS5'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 values = 'Households'
 columns = 'Variable'
 
 
 ## Importing ---
 
-df_places, df_counties, df_mpo = import_rhna(path_raw, indicator_name)
+df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
 
 
 ## Organizing ---
@@ -36,14 +36,14 @@ for county in counties:
 
         tqdm.write(jurisdiction)
                 
-        df_prod, df_pct = pivot_rhna(indicator_name, df_places_sub, county, jurisdiction, columns, values, df_counties_sub, df_mpo)
+        df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub, df_mpo)
     
     
         ## Plotting ---
         
         df_plot = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_plot = df_plot.drop(values, axis=1)
-        df_plot['Percentage'] = round(df_plot['Percentage'], 1)
+        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map = {
                 "0%-30% of income used for housing":"#1F45FC",
@@ -68,5 +68,5 @@ for county in counties:
         if export:
             export_rhna(df_prod, df_pct)
             
-list_indicators.append(indicator_name)
+list_indicators.append(indicator)
 

@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: RHNA_OVER_6
+Export Location: RHNA\\New Data Collected
+Folder: Cost Burden by Tenure
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2023
+Import Tab: States
+Margin of Error: Yes

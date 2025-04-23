@@ -51,6 +51,8 @@ if version == 2:
         MOE_thresh  = dict_config['Indicators'][project][indicator]['MOE_threshold'      ]
         num_vars    = dict_config['Indicators'][project][indicator]['number_of_variables']
         percentages = dict_config['Indicators'][project][indicator]['percentages'        ]
+        weighted_by = dict_config['Indicators'][project][indicator]['weighted_by'        ]
+        metric      = dict_config['Indicators'][project][indicator]['metric'             ]
         years_to_import = years_to_import.split(', ')
         years_to_import = [int(year) for year in years_to_import]
         year_end   = np.max(years_to_import)
@@ -83,6 +85,8 @@ if version == 2:
         MOE_thresh  = dict_config['Indicators'][project][indicator]['MOE_threshold'      ]
         num_vars    = dict_config['Indicators'][project][indicator]['number_of_variables']
         percentages = dict_config['Indicators'][project][indicator]['percentages'        ]
+        weighted_by = dict_config['Indicators'][project][indicator]['weighted_by'        ]
+        metric      = dict_config['Indicators'][project][indicator]['metric'             ]
 
         print()
         display(dict_config['Indicators'][project][indicator])

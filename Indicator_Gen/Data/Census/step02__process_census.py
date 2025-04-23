@@ -46,6 +46,7 @@ path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
 path_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
+
 ## User defined functions ---
 
 path_func = path_config0 / 'Functions.py'
@@ -70,7 +71,7 @@ with open(file_api, 'r') as file:
 ## Export setting ---
 
 rerun=False
-export=True
+export=False
 about=False
 update=False
 server=False
@@ -214,9 +215,9 @@ print('Final Results: ')
 print()
 
 if geography not in ['Counties', 'PUMA']:
-    df_census = rename_census(df_census         = df_census
+    df_census = rename_census(df_census          = df_census
                                , geography       = geography
-                               , indicator  = indicator
+                               , indicator       = indicator
                                , margin_of_error = margin_of_error
                                , percentages     = percentages
                                , sample_type     = sample_type)
@@ -224,19 +225,19 @@ if geography not in ['Counties', 'PUMA']:
 if geography == 'Counties':
     if sample_type in ['ACS', 'SUBJECT']:
         if mpo == 'Yes':
-            df_census, df_mpo = rename_census(df_census             = df_census
+            df_census, df_mpo = rename_census(df_census           = df_census
                                                 , df_mpo          = df_mpo
                                                 , geography       = geography
-                                                , indicator  = indicator
+                                                , indicator       = indicator
                                                 , margin_of_error = margin_of_error
                                                 , percentages     = percentages
                                                 , sample_type     = sample_type
                                                 , df_vars         = df_vars)
             display(df_census, df_mpo)
         else:
-            df_census = rename_census(df_census         = df_census
+            df_census = rename_census(df_census       = df_census
                                     , geography       = geography
-                                    , indicator  = indicator
+                                    , indicator       = indicator
                                     , margin_of_error = margin_of_error
                                     , percentages     = percentages
                                     , sample_type     = sample_type)
@@ -247,7 +248,7 @@ if geography == 'PUMA':
                                                          , df_msa          = df_msa
                                                          , df_mpo          = df_mpo
                                                          , geography       = geography
-                                                         , indicator  = indicator
+                                                         , indicator       = indicator
                                                          , margin_of_error = margin_of_error
                                                          , percentages     = percentages
                                                          , sample_type     = sample_type
@@ -267,41 +268,42 @@ if geography == 'PUMA':
 
 if export:
     if about:
+        estimate = re.sub('PUMS', 'ACS', estimate)
         if update:
             path_about = path_sp / 'Process Revamp' / 'Task 6. Process Map'
             year_start = df_census_raw.Year.min()
             year_end   = df_census_raw.Year.max()
-            df_about = write_about(sample_type      = sample_type
-                                   , indicator = indicator
-                                   , year_start     = year_start
-                                   , year_end       = year_end
-                                   , path_config0   = path_config0
-                                   , MOE_thresh     = MOE_thresh
-                                   , estimate       = estimate)
+            df_about = write_about(  sample_type    = sample_type
+                                   , indicator    = indicator
+                                   , year_start   = year_start
+                                   , year_end     = year_end
+                                   , path_config0 = path_config0
+                                   , MOE_thresh   = MOE_thresh
+                                   , estimate     = estimate)
             file_about = path_about / 'About Indicators.xlsx'
-            with pd.ExcelWriter(file_about, mode = 'a', engine = 'openpyxl', if_sheet_exists = 'replace') as writer:
-                df_about.to_excel(writer, index = False, sheet_name = indicator, header = False)
+            with pd.ExcelWriter(file_about, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
+                df_about.to_excel(writer, index=False, sheet_name=indicator, header=False)
 
 
 if export:
     if about:
         if estimate not in ['LEHD', 'CPS']:
-            df_about = write_about(sample_type      = sample_type
-                                   , indicator = indicator
-                                   , year_start     = year_start
-                                   , year_end       = year_end
-                                   , path_config0   = path_config0
-                                   , geography      = geography
-                                   , MOE_thresh     = MOE_thresh
-                                   , estimate       = estimate)
+            df_about = write_about(sample_type    = sample_type
+                                   , indicator    = indicator
+                                   , year_start   = year_start
+                                   , year_end     = year_end
+                                   , path_config0 = path_config0
+                                   , geography    = geography
+                                   , MOE_thresh   = MOE_thresh
+                                   , estimate     = estimate)
         else:
-            df_about = write_about(sample_type      = sample_type
-                                   , indicator = indicator
-                                   , year_start     = year_start
-                                   , year_end       = year_end
-                                   , path_config0   = path_config0
-                                   , geography      = geography
-                                   , estimate       = estimate)
+            df_about = write_about(sample_type    = sample_type
+                                   , indicator    = indicator
+                                   , year_start   = year_start
+                                   , year_end     = year_end
+                                   , path_config0 = path_config0
+                                   , geography    = geography
+                                   , estimate     = estimate)
         
         print("About documentation of the output for:", indicator)
         display(df_about)
@@ -339,6 +341,9 @@ if export:
     if project != 'Monitoring and Reporting':
         path_out_sp = path_prod / export_loc
 
+    if project == 'Miscellaneous':
+        path_out_sp = path_main / export_loc
+
     if project == 'Monitoring and Reporting':
         if server:
             paths = [path_out_server, path_out_sp]
@@ -375,9 +380,9 @@ if export:
             if about:
                 df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'Counties'
             export_indicator(indicator, geography, df_counties, path_wb, about)
-            # path_wb = path_ / workbook_name3
-            # df_about.loc[df_about['Metadata'] == 'Geography', 'Description'] = 'MSA'
-            # export_indicator(indicator, geography, df_msa, path_wb, about)
+            path_wb = path_ / workbook_name3
+            df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MSA'
+            export_indicator(indicator, geography, df_msa, path_wb, about)
             path_wb = path_ / workbook_name4
             if about:
                 df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MPO'

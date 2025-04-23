@@ -1,12 +1,12 @@
 
 
-indicator_name = 'RHNA_POPEMP_1'
+indicator = 'RHNA_POPEMP_1'
 
 
 # Set indicator
 source = 'DOF'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 base_year = 2001
 
 # DOF E5 Population time-series, with growth rate relative to 1990
@@ -15,7 +15,7 @@ base_year = 2001
 
 ## Importing ---
 
-df_places, df_counties, df_mpo = import_rhna(path_raw, indicator_name)
+df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
 
 
 ## Organizing ---
@@ -40,11 +40,12 @@ for county in counties:
         ## Plotting ---
 
         df_plot1, df_plot2, df_plot3 = index_rhna(df_places_sub, df_counties_sub, df_mpo, jurisdiction)
-        df_prod = pivot_rhna(indicator_name, df_plot1, county, jurisdiction, df_plot2, df_plot3)
+        df_prod = pivot_rhna(indicator, df_plot1, county, jurisdiction, df_plot2, df_plot3)
 
         df_plot2['Geography'] = df_plot2['Geography'] + ' County'
         df_plot = pd.concat([df_plot1, df_plot2, df_plot3])
         df_plot = df_plot.drop(['County', 'Population'], axis=1).rename(columns = {'growth': 'Percent Difference'})
+        df_plot['Percentage Difference'] = round(df_plot['Percent Difference'], 1)
             
         color_map  = {
             'SACOG': '#9DC209'
@@ -86,5 +87,5 @@ for county in counties:
         if export:
             export_rhna(df_prod)
 
-list_indicators.append(indicator_name)
+list_indicators.append(indicator)
 

@@ -62,8 +62,8 @@ path_yaml = path_data / 'RHNA_indicators.yaml'
 path_func = path_data / 'RHNA_functions.py'
 path_py = path_prod / 'python'
 
-path_i = Path('I:\Projects\Josh\RHNA')
-path_out = path_i / 'Final Products'
+# path_out = Path(r'I:\Projects\Josh\RHNA\Final Products')
+path_out = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
 
 
 
@@ -89,9 +89,9 @@ indicators = [
     # , 'POPEMP_17'
     , 'POPEMP_18'
     , 'POPEMP_19'
-    # , 'POPEMP_20'
+    , 'POPEMP_20'
     , 'POPEMP_21'
-    # , 'POPEMP_22'
+    , 'POPEMP_22'
     , 'POPEMP_23'
     , 'POPEMP_24'
     # , 'POPEMP_25'
@@ -99,20 +99,20 @@ indicators = [
     , 'HSG_2'
     , 'HSG_3'
     , 'HSG_4'
-    # , 'HSG_5'
-    # , 'HSG_6'
+    , 'HSG_5'
+    , 'HSG_6'
     , 'HSG_7'
     # , 'HSG_8'
     , 'HSG_9'
-    # , 'HSG_10'
+    , 'HSG_10'
     # , 'HSG_11'
     # , 'RISK_1'
     , 'OVER_1'
     , 'OVER_2'
-    # , 'OVER_3'
+    , 'OVER_3'
     , 'OVER_4'
     , 'OVER_5'
-    # , 'OVER_6'
+    , 'OVER_6'
     , 'OVER_7'
     , 'OVER_8'
     , 'OVER_9'
@@ -144,11 +144,11 @@ indicators = [
     # , 'AFFH_2'
     , 'AFFH_3'
     # , 'HHPROJ_1'
-    ]
+]
 
 
-indicators = ['POPEMP_18', 'POPEMP_19']
-
+indicators = ['HSG_10', 'OVER_3', 'OVER_6']
+indicators = ['OVER_6']
 
 
 ## Main ---
@@ -175,7 +175,8 @@ print(); print()
 print('Finished!! Now go outside.')
 print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---')
 print(); print()
-# takes ~45 minutes
+# takes 15-20 min for local exporting
+# takes ~90 minutes for I drive exporting
 
 
 ## Check indicators ---

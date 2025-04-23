@@ -1,20 +1,20 @@
 
 
-indicator_name = 'RHNA_POPEMP_18'
+indicator = 'RHNA_POPEMP_18'
 
 
 # Set indicator
 source = 'ACS5'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 values = 'Households'
 columns = 'Category'
 
 
 ## Importing ---
 
-df_places_a = pd.read_excel(os.path.join(path_raw, f'{indicator_name}a Places ACS5.xlsx'))
-df_places_b = pd.read_excel(os.path.join(path_raw, f'{indicator_name}b Places ACS5.xlsx'))
+df_places_a = pd.read_excel(os.path.join(path_raw, f'{indicator}a Places ACS5.xlsx'))
+df_places_b = pd.read_excel(os.path.join(path_raw, f'{indicator}b Places ACS5.xlsx'))
 df_places = pd.concat([df_places_a, df_places_b])
 
 
@@ -66,7 +66,7 @@ for county in counties:
 
         tqdm.write(jurisdiction)
 
-        df_prod, df_pct = pivot_rhna(indicator_name, df_places_sub, county, jurisdiction, columns, values)
+        df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values)
 
         ## Plotting ---
 
@@ -93,5 +93,5 @@ for county in counties:
         if export:
             export_rhna(df_prod, df_pct)
 
-list_indicators.append(indicator_name)
+list_indicators.append(indicator)
 

@@ -71,7 +71,14 @@ for state in list(dict_fips.keys()):
             
             print('Success!')
             
-        except Exception as e: print(e)
+        except Exception as e:
+            # Get exception information
+            # Extract the line number from the traceback
+            # Print the error message and line number
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            line_number = traceback.extract_tb(exc_traceback)[-1][1]
+            print(f"Error: {e}")
+            print(f"Line number: {line_number}")
                             
 df_census_raw = pd.concat(list_df_years)
 

@@ -70,10 +70,28 @@ def re_remove_pre(x, exp = ' '):
 
 
 
+def move_column_after(df, col_to_move, after_col):
+    # Get a list of all column names
+    cols = list(df.columns)
+
+    # Find the index of the column to move and the index of the column to move it after
+    col_idx = cols.index(col_to_move)
+    after_col_idx = cols.index(after_col)
+
+    # Remove the column to move from its current position
+    cols.pop(col_idx)
+
+    # Insert the column at the new position
+    cols.insert(after_col_idx + 1, col_to_move)
+
+    # Reorder the DataFrame columns using the updated list
+    return df[cols]
+
+
 
    
 # Function to write about page for each indicator
-def write_about(sample_type, indicator_name, year_start, year_end, path_config0, geography=None, MOE_thresh=None, estimate=None):
+def write_about(sample_type, indicator, year_start, year_end, path_config0, geography=None, MOE_thresh=None, estimate=None):
 
     
     '''
@@ -96,16 +114,16 @@ def write_about(sample_type, indicator_name, year_start, year_end, path_config0,
         print(f"An error occurred: {e}")
 
     if estimate is None:
-        df = pd.DataFrame.from_dict(dict_about[sample_type][indicator_name]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator_name})
+        df = pd.DataFrame.from_dict(dict_about[sample_type][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
     else:
-        df = pd.DataFrame.from_dict(dict_about[estimate][sample_type][indicator_name]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator_name})
+        df = pd.DataFrame.from_dict(dict_about[estimate][sample_type][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
 
-    df.loc[df['Indicator'] == 'Last Updated', indicator_name] = date.today().strftime('%Y-%m-%d')
-    df.loc[df['Indicator'] == 'Year(s)'     , indicator_name] = f"{year_start}-{year_end}"
+    df.loc[df['Indicator'] == 'Last Updated', indicator] = date.today().strftime('%Y-%m-%d')
+    df.loc[df['Indicator'] == 'Year(s)'     , indicator] = f"{year_start}-{year_end}"
     if geography is not None:
-        df.loc[df['Indicator'] == 'Geography'   , indicator_name] = geography
+        df.loc[df['Indicator'] == 'Geography'   , indicator] = geography
     if MOE_thresh is not None:
-        df.loc[df['Indicator'] == 'Margin of Error Limit', indicator_name] = MOE_thresh
+        df.loc[df['Indicator'] == 'Margin of Error Limit', indicator] = MOE_thresh
 
 
     # Split notes into rows, for visual clarity in about
@@ -117,10 +135,10 @@ def write_about(sample_type, indicator_name, year_start, year_end, path_config0,
     # Finally, we split the notes
     def split_notes(df):
         row_notes = df[df['Indicator'] == 'Notes'].copy()
-        notes = row_notes[indicator_name].values[0]
+        notes = row_notes[indicator].values[0]
         
         lines = notes.split('\\n')
-        rows_new = [{'Indicator': 'Notes' if i == 0 else '', indicator_name: line} for i, line in enumerate(lines) if line]
+        rows_new = [{'Indicator': 'Notes' if i == 0 else '', indicator: line} for i, line in enumerate(lines) if line]
         
         df_new = pd.DataFrame(rows_new)
         df_filtered = df[df['Indicator'] != 'Notes']

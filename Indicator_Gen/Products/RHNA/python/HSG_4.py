@@ -1,18 +1,18 @@
 
 
-indicator_name = 'RHNA_HSG_4'
+indicator = 'RHNA_HSG_4'
 
 
 # Set indicator
 source = 'ACS5'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 values = 'Housing Units'
 
 
 ## Importing ---
 
-df_places, df_counties, df_mpo = import_rhna(path_raw, indicator_name)
+df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
 
 
 
@@ -67,5 +67,5 @@ for county in counties:
         if export:
             export_rhna(df_prod)
 
-# list_indicators.append(indicator_name)
+# list_indicators.append(indicator)
 

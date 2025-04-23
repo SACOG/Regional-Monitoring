@@ -1,12 +1,12 @@
 
 
-indicator_name = 'RHNA_ELI_1'
+indicator = 'RHNA_ELI_1'
 
 
 # Set indicator
 source = 'CHAS'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 values = 'Households'
 columns = 'Income Level'
 
@@ -52,11 +52,11 @@ df_chas['Income Level'] = np.select(conditions, choices, default='no')
 df_chas     = df_chas.groupby(['County Name', 'name', 'Income Level'], as_index=False)['Households'].sum()
 df_counties = df_chas.groupby(['County Name',         'Income Level'], as_index=False)['Households'].sum()
 df_mpo      = df_chas.groupby([                       'Income Level'], as_index=False)['Households'].sum()
-df_mpo['MPO'] = 'SACOG'
+df_mpo['MPO'] = 'SACOG Region'
 
-df_chas    ['Percentage'] = round(100 * (df_chas    ['Households'] / df_chas    .groupby(['County Name', 'name'])['Households'].transform('sum')), 1)
-df_counties['Percentage'] = round(100 * (df_counties['Households'] / df_counties.groupby(['County Name'        ])['Households'].transform('sum')), 1)
-df_mpo     ['Percentage'] = round(100 * (df_mpo     ['Households'] / df_mpo     .groupby(['MPO'                ])['Households'].transform('sum')), 1)
+df_chas    ['Percentage'] = df_chas    ['Households'] / df_chas    .groupby(['County Name', 'name'])['Households'].transform('sum')
+df_counties['Percentage'] = df_counties['Households'] / df_counties.groupby(['County Name'        ])['Households'].transform('sum')
+df_mpo     ['Percentage'] = df_mpo     ['Households'] / df_mpo     .groupby(['MPO'                ])['Households'].transform('sum')
 
 df_chas     = df_chas    .rename(columns = {'name':'Geography'})
 df_counties = df_counties.rename(columns = {'County Name':'Geography'})
@@ -98,6 +98,7 @@ for county in counties:
         ## Plotting ---
 
         df_plot = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
+        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
             '0%-30% of AMI': '#1F45FC'
@@ -123,4 +124,4 @@ for county in counties:
         if export:
             export_rhna(df_prod, df_pct)
 
-list_indicators.append(indicator_name)
+list_indicators.append(indicator)

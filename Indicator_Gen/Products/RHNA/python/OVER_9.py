@@ -1,12 +1,12 @@
 
 
-indicator_name = 'RHNA_OVER_9'
+indicator = 'RHNA_OVER_9'
 
 
 # Set indicator
 source = 'CHAS'
 with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator_name.replace('RHNA_', '')]['Indicator Title'][0]
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
 values = 'Households'
 columns = 'Cost Burden'
 
@@ -78,7 +78,7 @@ df_chas['Household Size'] = np.select(conditions, choices, default='no')
 
 df_chas = df_chas.groupby(['County Name', 'name', 'Household Size', 'Cost Burden'], as_index=False)['Households'].sum()
 
-df_chas['Percentage'] = round(100 * (df_chas['Households'] / df_chas.groupby(['County Name', 'name', 'Household Size'])['Households'].transform('sum')), 1)
+df_chas['Percentage'] = df_chas['Households'] / df_chas.groupby(['County Name', 'name', 'Household Size'])['Households'].transform('sum')
 df_chas = df_chas[df_chas['Cost Burden'] != 'Not computed']
 
 
@@ -111,6 +111,7 @@ for county in counties:
         ## Plotting ---
 
         df_plot = df_chas_sub[df_chas_sub['name'] == jurisdiction]
+        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
             '0%-30% of income used for housing': '#1F45FC'
@@ -135,5 +136,5 @@ for county in counties:
         if export:
             export_rhna(df_prod, df_pct)
 
-list_indicators.append(indicator_name)
+list_indicators.append(indicator)
 
