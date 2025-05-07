@@ -1,0 +1,10 @@
+Project: Chamber Study Missions
+Indicator Name: Chamber_H_20
+Export Location: Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: Counties
+Years Imported: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+Import Tab: Counties
+Margin of Error: Yes

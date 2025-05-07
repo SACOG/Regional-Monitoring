@@ -424,7 +424,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
     df_census = clean_fips(df_census)
 
     if geography == 'Places':
-        file_cdp = path_config0 / 'Area Codes.xlsx'
+        file_cdp = path_config0 / 'area_codes.xlsx'
         df_codes = pd.read_excel(file_cdp, sheet_name='CDPcodes')
         if unincorporated == 'Yes':
             df_codes = df_codes[(df_codes['MPO'].str.contains('SACOG')) & (df_codes['Incorporated'] == 'Yes')]
@@ -598,7 +598,9 @@ def acs_processing_4(df_census, estimate, indicator, geography, percentages, mar
                 path_server = r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data"
                 file_counties = path_server / f'{indicator} Counties {estimate}.xlsx'  
             if project in ['RHNA', 'Blueprint']:
-                file_counties = path_prod / export_loc / f'{indicator} Counties {estimate}.xlsx'     
+                file_counties = path_prod / export_loc / f'{indicator} Counties {estimate}.xlsx'
+            if project in ['Miscellaneous']:
+                file_counties = path_main / export_loc / f'{indicator} Counties {estimate}.xlsx'     
 
 
     # reorder columns
@@ -628,19 +630,20 @@ def acs_processing_4(df_census, estimate, indicator, geography, percentages, mar
 
         if weighted_by != 'No':
 
-            wm = lambda x: np.average(x, weights = df_census.loc[x.index, weighted_by]) # weighted average (or Population or Households)
+            wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight']) # weighted average (or Population or Households)
             df_census = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), ME=('ME', sqrtsumsq), Weight=('Weight', 'sum'))
             df_census = calculate_ME_ratio(df_census, MOE_thresh)
 
             if geography == 'Counties':
                 if mpo == 'Yes':
+                    wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight']) # weighted average (or Population or Households)
                     df_mpo = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), ME=('ME', sqrtsumsq), Weight=('Weight', 'sum'))
                     df_mpo = calculate_ME_ratio(df_mpo, MOE_thresh)
 
             if geography == 'Places':
 
                 if unincorporated == 'Yes':
-
+                    wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight']) # weighted average (or Population or Households)
                     df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), ME=('ME', sqrtsumsq), Weight=('Weight', 'sum'))
 
                     df_counties = pd.read_excel(file_counties, sheet_name='Counties')
@@ -721,17 +724,19 @@ def acs_processing_4(df_census, estimate, indicator, geography, percentages, mar
     if margin_of_error == 'No':
 
         if weighted_by != 'No':
-
+            wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight']) # weighted average (or Population or Households)
             df_census = df_census.groupby(geo_ID + ['Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), Weight=('Weight', 'sum'))
 
             if geography == 'Counties':
                 if mpo == 'Yes':
+                    wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight']) # weighted average (or Population or Households)
                     df_mpo = df_census.groupby(['State FIPS', 'MPO', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), Weight=('Weight', 'sum'))
 
             if geography == 'Places':
 
                 if unincorporated == 'Yes':
 
+                    wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight']) # weighted average (or Population or Households)
                     df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), Weight=('Weight', 'sum'))
 
                     df_counties = pd.read_excel(file_counties, sheet_name='Counties')
@@ -922,7 +927,7 @@ def pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_g
     df_census = df_census.rename(columns={'state':'State FIPS', 'county':'County FIPS'})
 
     if sample_type == 'PUMS':
-        file_puma_codes = path_config0 / 'Area Codes.xlsx'
+        file_puma_codes = path_config0 / 'area_codes.xlsx'
         df_fips_pums = pd.read_excel(file_puma_codes
                                         , sheet_name='PUMAcodes'
                                         , dtype={'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})

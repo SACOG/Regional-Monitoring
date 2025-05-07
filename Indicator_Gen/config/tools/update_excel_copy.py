@@ -5,6 +5,10 @@
 This script updates the "About Indicators.xlsx" file on the main Data folder of the MnR SP page with
 the working copy from the Process Map folder
 '''
+print(); print()
+
+
+## Setup ================================================================================================
 
 
 ## Packages ---
@@ -21,23 +25,10 @@ import shutil
 from tqdm import tqdm
 
 
-## File paths ---
-
-user = getpass.getuser()
-path_users = Path.home()
-
-path_sp = path_users / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
-path_in = path_sp  / 'Process Revamp' / 'Task 6. Process Map'
-path_out = path_sp / 'Data'
+## User defined functions ---
 
 
-## Function ---
-
-def main():
-
-    # Define the file paths
-    file_master = path_in  / 'About Indicators.xlsx'
-    file_copy   = path_out / 'About Indicators.xlsx'
+def update_excel_copy(file_master, file_copy):
 
     # Load the master workbook
     # Create a writer object for the copy workbook
@@ -45,12 +36,12 @@ def main():
             # Load the sheet into a DataFrame
             # Write the DataFrame to the copy workbook
 
-    master_workbook = pd.ExcelFile(file_master)
+    workbook_master = pd.ExcelFile(file_master)
     
     with pd.ExcelWriter(file_copy, engine='openpyxl') as writer:
 
-        for sheet_name in tqdm(master_workbook.sheet_names):
-            df = master_workbook.parse(sheet_name)
+        for sheet_name in tqdm(workbook_master.sheet_names):
+            df = workbook_master.parse(sheet_name)
             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
     print(); print()
@@ -58,8 +49,23 @@ def main():
     print(); print()
 
 
-## Run ---
+
+## Main ================================================================================================
+
 
 if __name__ == '__main__':
-    main()
+
+    ## File paths
+    user = getpass.getuser()
+    path_users = Path.home()
+
+    path_sp = path_users / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
+    path_in = path_sp  / 'Process Revamp' / 'Task 6. Process Map'
+    path_out = path_sp / 'Data'
+  
+    ## Function
+    file_master = path_in  / 'About Indicators.xlsx'
+    file_copy   = path_out / 'About Indicators.xlsx'
+
+    update_excel_copy(file_master, file_copy)
 

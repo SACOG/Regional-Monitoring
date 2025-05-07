@@ -59,6 +59,25 @@ for variables in list_variables:
                 )
             except Exception as e: print(e)
         df_years = pd.concat(list_df_years)
+
+    if import_tab == 'States':
+        for state in states_to_import:
+            print('State: ' + state)
+            for year in tqdm(years_to_import):
+                try:
+                    list_df_years.append(
+                        query_census(df_urls      = df_urls
+                                        , api_key   = api_key
+                                        , estimate  = estimate
+                                        , sample    = sample_type
+                                        , geography = geography
+                                        , variables = variables
+                                        , year      = year
+                                        , state     = state)
+                    )
+                except Exception as e: print(e)
+        df_years = pd.concat(list_df_years)
+
     list_df_vars.append(df_years)
 
 if geography == 'Tracts':
@@ -67,6 +86,8 @@ if geography == 'Counties':
     df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'county', 'Year'], how = 'outer'), list_df_vars)
 if geography == 'MSA':
     df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year'], how = 'outer'), list_df_vars)
+if geography == 'States':
+    df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'Year'], how = 'outer'), list_df_vars)
 list_df_census.append(df_vars_all)
 
 print()
@@ -90,4 +111,7 @@ if geography == 'Counties':
 if geography == 'MSA':
     df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year']), list_df_census)
     df_census_raw = df_census_raw.set_index(['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year']).reset_index()
+if geography == 'States':
+    df_census_raw = ft.reduce(lambda left, right: pd.merge(left, right, on = ['NAME', 'state', 'Year'], how = 'outer'), list_df_census)
+    df_census_raw = df_census_raw.set_index(['NAME', 'state','Year']).reset_index()
 

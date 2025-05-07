@@ -190,29 +190,39 @@ if source == 'ACS5':
 
     def pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub=None, df_mpo=None):
 
-        if indicator.replace('RHNA_', '') in ['POPEMP_10', 'POPEMP_18', 'POPEMP_19', 'POPEMP_20', 'POPEMP_21', 'POPEMP_22', 'POPEMP_25', 'HSG_1', 'HSG_5', 'HSG_6'
+        indicator_name = indicator.replace('RHNA_', '')
+
+        if indicator_name in ['POPEMP_10', 'POPEMP_18', 'POPEMP_19', 'POPEMP_20', 'POPEMP_21', 'POPEMP_22', 'POPEMP_25', 'HSG_1', 'HSG_5', 'HSG_6'
                             , 'OVER_4', 'OVER_5', 'OVER_6', 'OVER_8', 'OVER_9', 'FARM_2', 'LGFEM_1', 'LGFEM_3', 'LGFEM_4', 'LGFEM_5'
                             , 'SEN_1', 'SEN_2', 'SEN_3', 'DISAB_3', 'HOMELS_1', 'HOMELS_2', 'HOMELS_3', 'HOMELS_4', 'ELI_2', 'AFFH_1', 'AFFH_2']:
 
             df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
             df_prod = df_plot.pivot_table(index=['Geography', 'Variable'], columns=columns, values=values).reset_index()
 
-            if indicator.replace('RHNA_', '') == 'POPEMP_10':
+            if indicator_name == 'POPEMP_10':
                 vars_to_sort = ['Less than 10k', '10k to 25k', '25k to 50k', '50k to 75k', '75k or more']
-            if indicator.replace('RHNA_', '') == 'POPEMP_18':
+            if indicator_name == 'POPEMP_18':
                 vars_to_sort = ['Age 15-24', 'Age 25-34', 'Age 35-44', 'Age 45-54', 'Age 55-59', 'Age 60-64', 'Age 65-74', 'Age 75-84', 'Age 85+']
-            if indicator.replace('RHNA_', '') == 'POPEMP_19':
+            if indicator_name == 'POPEMP_19':
                 vars_to_sort = ['Moved in 1999 or earlier', 'Moved in 2000 to 2009', 'Moved in 2010 to 2017', 'Moved in 2018 to 2020', 'Moved in 2021 or later']
-            if indicator.replace('RHNA_', '') == 'POPEMP_20':
+            if indicator_name == 'POPEMP_20':
                 vars_to_sort = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or other Pacific Islander', 'Hispanic or Latino', 'Some other race', 'Two or more races', 'White (NH)']
-            if indicator.replace('RHNA_', '') == 'POPEMP_22':
+            if indicator_name == 'POPEMP_22':
                 vars_to_sort = ['Detached single-family homes', 'Attached single-family homes', 'Multi-family housing', 'Mobile homes', 'Boat, RV, van, or other']
-            if indicator.replace('RHNA_', '') == 'HSG_5':
+            if indicator_name == 'HSG_5':
                 vars_to_sort = ['0 bedrooms', '1 bedroom', '2 bedrooms', '3-4 bedrooms', '5 or more bedrooms']
-            if indicator.replace('RHNA_', '') == 'HSG_6':
+            if indicator_name == 'HSG_6':
                 vars_to_sort = ['Lacking kitchen facilities', 'Lacking plumbing facilities']
-            if indicator.replace('RHNA_', '') == 'OVER_6':
+            if indicator_name == 'OVER_6':
                 vars_to_sort = ['0%-30% of income used for housing', '30%-50% of income used for housing', '50% or more of income used for housing', 'Not computed']
+            if indicator_name == 'LGFEM_1':
+                vars_to_sort = ['1 person household', '2 person household', '3 person household', '4 person household', '5 or more person household']
+            if indicator_name == 'LGFEM_4':
+                vars_to_sort = ['Married-couple family', 'Female-headed family household', 'Male-headed family household', 'Householders living alone', 'Other non-family households']
+            if indicator_name == 'LGFEM_5':
+                vars_to_sort = ['Female-headed households without children', 'Female-headed households with children']
+            if indicator_name == 'SEN_2':
+                vars_to_sort = ['Age 0-17', 'Age 18-64', 'Age 65+']
 
 
             df_prod['Sort'] = pd.Categorical(df_prod['Variable'], vars_to_sort)
@@ -223,9 +233,9 @@ if source == 'ACS5':
             df_pct = df_pct.sort_values(['Sort'])
             df_pct = df_pct.drop(['Geography', 'Sort'], axis=1)
         
-        elif indicator.replace('RHNA_', '') in ['HSG_4', 'HSG_11', 'OVER_1', 'SEN_4', 'DISAB_1', 'DISAB_4', 'DISAB_5', 'ELI_3']:
+        elif indicator_name in ['HSG_4', 'HSG_11', 'OVER_1', 'SEN_4', 'DISAB_1', 'DISAB_4', 'DISAB_5', 'ELI_3']:
             pass
-        elif indicator.replace('RHNA_', '') in ['POPEMP_19']:
+        elif indicator_name in ['POPEMP_19']:
             pass
             
         else:

@@ -374,11 +374,83 @@ ACS5:
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
+  LGFEM_1:
+    Indicator Title:
+    - Household Size by Tenure
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25009
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
   LGFEM_2:
     Indicator Title:
     - Households by Household Size
     Source:
     - U.S. Census Bureau, American Community Survey 5-Year Data, Table B11016
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  LGFEM_4:
+    Indicator Title:
+    - Housing Tenure by Household Type
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25011
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  LGFEM_5:
+    Indicator Title:
+    - Female-Headed Households by Poverty Status
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Table B17012
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  SEN_2:
+    Indicator Title:
+    - Senior and Youth Population by Race
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Table B01001(B-I)
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  SEN_4:
+    Indicator Title:
+    - Disability by Type - Seniors (65 and Over)
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B18102, B18103, B18104, B18105, B18106, and B18107
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  DISAB_1:
+    Indicator Title:
+    - Disability by Type
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B18102, B18103, B18104, B18105, B18106, and B18107
     Website:
     - https://www.census.gov/programs-surveys/acs/data.html
     Year(s):
