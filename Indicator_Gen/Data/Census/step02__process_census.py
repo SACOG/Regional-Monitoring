@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ***************************************************************************
-# 
-# Preparing Workspace
-# 
-# ***************************************************************************
+
+## Preparing Workspace ===============================================================
 
 
 
-## Importing packages ---
+
+## Packages ---
 
 import numpy as np
 import pandas as pd
@@ -31,7 +29,7 @@ import functools as ft
 from IPython.display import display
 
 
-## Setting file paths ---
+## File paths ---
 
 user = getpass.getuser()
 path_users = Path.home()
@@ -59,7 +57,7 @@ with path_func_census.open("r") as f:
     exec(f.read())
 
 
-## Setting API key ---
+## API key ---
 
 # Obtain API Key from the following source 
 # https://api.census.gov/data/key_signup.html
@@ -68,10 +66,10 @@ with open(file_api, 'r') as file:
     api_key = file.read()
 
 
-## Export setting ---
+## Export params ---
 
-rerun=False
-export=False
+rerun=True
+export=True
 about=False
 update=False
 server=False
@@ -93,6 +91,8 @@ display(df_vars.head(3))
 
 if geography == 'PUMA':
     estimate = re.sub('ACS', 'PUMS', estimate)
+if sample_type == 'SUBJECT':
+    estimate = re.sub('ACS', 'SUBJECT', estimate)
 
 if margin_of_error == 'No':
     end = 'NoME_raw.csv'
@@ -106,11 +106,8 @@ display(df_census_raw.head())
 
 
 
-# ***************************************************************************
-# 
-# Processing
-# 
-# ***************************************************************************
+
+## Processing =================================================================
 
 
 
@@ -258,11 +255,9 @@ if geography == 'PUMA':
 
 
 
-# ***************************************************************************
-# 
-# Exporting
-# 
-# ***************************************************************************
+
+
+## Exporting =================================================================
 
 
 
@@ -313,6 +308,9 @@ if export:
 print(); print()
 
 if export:
+    if sample_type == 'SUBJECT':
+        estimate = re.sub('ACS', 'SUBJECT', estimate)
+
     if geography == 'PUMA':
         estimate = re.sub('ACS', 'PUMS', estimate)
         workbook_name1 = f"{indicator} PUMA {estimate}.xlsx"
@@ -374,14 +372,15 @@ if export:
                     export_indicator(indicator, geography, df_mpo, path_wb, about)
         
         if sample_type == 'PUMS':
-            # path_wb = path_ / workbook_name1
-            # export_indicator(indicator, geography, df_puma, path_wb, about)
+            path_wb = path_ / workbook_name1
+            export_indicator(indicator, geography, df_puma, path_wb, about)
             path_wb = path_ / workbook_name2
             if about:
                 df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'Counties'
             export_indicator(indicator, geography, df_counties, path_wb, about)
             path_wb = path_ / workbook_name3
-            df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MSA'
+            if about:
+                df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MSA'
             export_indicator(indicator, geography, df_msa, path_wb, about)
             path_wb = path_ / workbook_name4
             if about:

@@ -118,16 +118,16 @@ indicators = [
     , 'OVER_9'
     # , 'FARM_1'
     # , 'FARM_2'
-    # , 'LGFEM_1'
+    , 'LGFEM_1'
     , 'LGFEM_2'
     , 'LGFEM_3'
-    # , 'LGFEM_4'
-    # , 'LGFEM_5'
+    , 'LGFEM_4'
+    , 'LGFEM_5'
     , 'SEN_1'
-    # , 'SEN_2'
+    , 'SEN_2'
     , 'SEN_3'
-    # , 'SEN_4'
-    # , 'DISAB_1'
+    , 'SEN_4'
+    , 'DISAB_1'
     , 'DISAB_2'
     # , 'DISAB_3'
     # , 'DISAB_4'
@@ -147,8 +147,8 @@ indicators = [
 ]
 
 
-indicators = ['HSG_10', 'OVER_3', 'OVER_6']
-indicators = ['OVER_6']
+indicators = ['DISAB_1']
+
 
 
 ## Main ---

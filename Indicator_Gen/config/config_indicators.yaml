@@ -17,6 +17,16 @@ Project:
 
 Indicators:
   Monitoring and Reporting:
+    Pop_1:
+      sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
+      folder: 'Total Pop'
+      sample: 'DOF'
+      metric: 'Population'
+    Pop_2:
+      sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
+      folder: 'Growth Rate'
+      sample: 'DOF'
+      metric: 'Population'
     Pop_3:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
       folder: 'Race'
@@ -34,6 +44,11 @@ Indicators:
       number_of_variables: 3
       percentages: 'Yes'
       weighted_by: 'No'
+      metric: 'Population'
+    Pop_5:
+      sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
+      folder: 'CA Regions'
+      sample: 'DOF'
       metric: 'Population'
     Pop_6:
       sp_location: 'Vibrant and Inclusive Places\\People and Community\\Pop and Demographics'
@@ -300,6 +315,15 @@ Indicators:
       percentages: 'Yes'
       weighted_by: 'No'
       metric: 'Population'
+    Chamber_H_11:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
     Chamber_H_12:
       sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
       folder: ''
@@ -307,6 +331,78 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
+    Chamber_H_13:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
+    Chamber_H_14:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'SUBJECT'
+      MOE_threshold: 0.05
+      number_of_variables: 3
+      percentages: 'No'
+      weighted_by: 'Population'
+      metric: 'Unemployment Rate'
+    Chamber_H_16:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 0.05
+      number_of_variables: 3
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
+    Chamber_H_17:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 0.05
+      number_of_variables: 3
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Households'
+    Chamber_H_18:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'SUBJECT'
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
+    Chamber_H_19:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'SUBJECT'
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
+    Chamber_H_20:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: ['ACS', 'SUBJECT']
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
+    Chamber_H_21:
+      sp_location: 'Chamber Study Missions\\2025\\Hispanic Chamber of Commerce\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 3
+      percentages: 'No'
       weighted_by: 'No'
       metric: 'Population'
 
@@ -718,13 +814,13 @@ Indicators:
       metric: 'Households'
     RHNA_LGFEM_1:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Household Size by Tenure'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5 
+      percentages: 'No'
       weighted_by: 'No'
-      metric: 'Population'
+      metric: 'Households'
     RHNA_LGFEM_2:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Households by Household Size'
@@ -745,22 +841,22 @@ Indicators:
       metric: 'Population'
     RHNA_LGFEM_4:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Housing Tenure by Household Type'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: 'No'
       weighted_by: 'No'
-      metric: 'Population'
+      metric: 'Households'
     RHNA_LGFEM_5:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Female-Headed Households by Poverty Status'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'No'
       weighted_by: 'No'
-      metric: 'Population'
+      metric: 'Households'
     RHNA_SEN_1:
       sp_location: 'RHNA\\New Data Collected'
       folder: ''
@@ -772,20 +868,29 @@ Indicators:
       metric: 'Population'
     RHNA_SEN_2:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Senior and Youth Population by Race'
+      sample: 'ACS'
+      MOE_threshold: 0.05 
+      number_of_variables: 3
+      percentages: 'Yes'
+      weighted_by: 'No'
+      metric: 'Population'
+    RHNA_SEN_4:
+      sp_location: 'RHNA\\New Data Collected'
+      folder: 'Disability by Type - Senious (65 and Over)'
+      sample: 'ACS'
+      MOE_threshold: 0.05 
+      number_of_variables: 2
+      percentages: 'No'
       weighted_by: 'No'
       metric: 'Population'
     RHNA_DISAB_1:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Disability by Type'
+      sample: 'ACS'
+      MOE_threshold: 0.05 
+      number_of_variables: 2 
+      percentages: 'No'
       weighted_by: 'No'
       metric: 'Population'
     RHNA_DISAB_2:

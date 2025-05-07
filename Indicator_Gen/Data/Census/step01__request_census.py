@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ***************************************************************************
-# 
-# Preparing Workspace
-# 
-# ***************************************************************************
 
 
 
-## Importing packages ---
+## Preparing Workspace ===============================================================
+
+
+
+## Packages ---
 
 import numpy as np
 import pandas as pd
@@ -34,7 +33,7 @@ import sys
 
 
 
-## Setting file paths ---
+## File paths ---
 
 user = getpass.getuser()
 path_users = Path.home()
@@ -67,7 +66,7 @@ with path_func_censusbureau.open("r") as f:
 
 
 
-## Setting API key ---
+## API key ---
 
 # Obtain API Key from the following source 
 # https://api.census.gov/data/key_signup.html
@@ -76,16 +75,13 @@ with open(file_api, 'r') as file:
     api_key = file.read()
 
 
-## Export setting ---
+## Export params ---
 rerun=False
 export=True
 
 
-# ***************************************************************************
-# 
-# Preparing Import Parameters
-# 
-# ***************************************************************************
+
+## Preparing Import Parameters =================================================================
 
 
 
@@ -96,11 +92,9 @@ with path_1a.open("r") as f:
 
 
 
-# ***************************************************************************
-# 
-# Importing
-# 
-# ***************************************************************************
+
+
+## Importing ==============================================================================
 
 
 
@@ -110,11 +104,9 @@ with path_1b.open("r") as f:
     exec(f.read())
 
 
-# ***************************************************************************
-# 
-# Exporting
-# 
-# ***************************************************************************
+
+
+## Exporting ============================================================================
 
 
 
@@ -122,6 +114,8 @@ if export:
 
     if geography == 'PUMA':
         estimate = re.sub('ACS', 'PUMS', estimate)
+    if sample_type == 'SUBJECT':
+        estimate = re.sub('ACS', 'SUBJECT', estimate)
     
     if margin_of_error == 'No':
         end = 'NoME_raw.csv'
@@ -140,11 +134,9 @@ if export:
     print('Successfully exported!')
 
 
-# ***************************************************************************
-# 
-# Processing (optional)
-# 
-# ***************************************************************************
+
+
+# Processing (optional) ------------------------------------------------------------------------
 
 
 # if geography == 'Counties':
@@ -167,43 +159,4 @@ if sample_type in ['ACS', 'SUBJECT']:
     #     else:
     #         df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
     display(df_census.head(3))
-
-
-# if sample_type in ['PUMS', 'FOODSEC']:
-#     df_census, groups = pums_processing_1(df_census, df_vars, sample_type, weight)
-#     print('Groups: ' + ', '.join(groups))
-#     display(df_census)
-
-# ## LEHD processing steps are still a work in progress
-# percentages = 'Yes'
-# if estimate == 'LEHD':
-#     if geography == 'Counties':
-#         df_counties, df_mpo = lehd_processing(df_census, geography, indicator, percentages, df_fips)
-#         display(df_counties)
-#     if geography == 'MSA':
-#         df_msa = lehd_processing(df_census, geography, indicator, percentages)
-#         display(df_msa)
-
-
-
-# if export:
-
-#     if geography == 'PUMA':
-#         estimate = re.sub('ACS', 'PUMS', estimate)
-    
-#     if margin_of_error == 'No':
-#         end = 'NoME_raw.csv'
-#     else:
-#         end = 'raw.csv'
-#     export_title = f"{indicator}_{geography}_{estimate}_{end}"
-    
-#     print(); print()
-#     print(f"Exporting {export_title} to the following location: ")
-#     print(path_raw)
-    
-#     file_out = path_raw / export_title
-#     df_census.to_csv(file_out, index = False)
-    
-#     print()
-#     print('Successfully exported!')
 

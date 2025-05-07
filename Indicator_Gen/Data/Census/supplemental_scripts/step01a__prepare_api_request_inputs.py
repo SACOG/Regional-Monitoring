@@ -205,7 +205,7 @@ if version == 2:
             dict_vars[str(year)] = ['NAME'] + unique(df_vars[df_vars['Year'] == year]['ID'].to_list())
             
         if import_tab == 'Counties':
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[df_fips['State'].isin(df_inputs['states'].values)]
@@ -233,7 +233,7 @@ if version == 2:
             # Set MSAs to import
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
@@ -277,7 +277,7 @@ if version == 2:
             
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': str, 'County FIPS': str})
             df_fips = df_fips[
@@ -304,7 +304,7 @@ if version == 2:
         
             # Set MSAs to import
             msa_to_import = list(df_inputs['msa'].values)
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx'), sheet_name='MSAcodes', dtype = {'MSA_ID': object})
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx'), sheet_name='MSAcodes', dtype = {'MSA_ID': object})
             df_fips = df_fips[['Year', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates()
             df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
         
@@ -325,7 +325,7 @@ if version == 2:
             # Set MSAs to import
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
@@ -393,7 +393,7 @@ if version == 2:
         for year in years_to_import:
             dict_vars[str(year)] = unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
             
-        file_fips = path_git / 'config' / 'Area Codes.xlsx'
+        file_fips = path_git / 'config' / 'area_codes.xlsx'
         df_fips = pd.read_excel(file_fips
                                 , sheet_name = 'CountyFIPS'
                                 , dtype = {'State FIPS': str, 'County FIPS': str})
@@ -447,7 +447,7 @@ if version == 2:
         
         # Import County FIPS mapping
         # Convert to dictionary object for easy state-county combination importing
-        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                 , sheet_name = 'CountyFIPS'
                                 , dtype = {'State FIPS': object, 'County FIPS': object})
         
@@ -489,7 +489,7 @@ if version == 2:
             
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[
@@ -516,7 +516,7 @@ if version == 2:
             df_inputs['msa'] = df_inputs['msa'].astype("str")
             msa_to_import = list(df_inputs['msa'].values)
 
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'MSAcodes'
                                     , dtype = {'State FIPS': object, 'MSA_ID': object})
             df_fips = df_fips[df_fips['MSA_ID'].isin(msa_to_import)]
@@ -623,7 +623,7 @@ if version == 1:
         for year in years_to_import:
             dict_vars[str(year)] = ['NAME'] + unique(df_vars[df_vars['Year'] == year]['ID'].to_list())
             
-        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                 , sheet_name = 'CountyFIPS'
                                 , dtype = {'State FIPS': object, 'County FIPS': object})
         df_fips = df_fips[df_fips['State'].isin(df_inputs['states'].values)]
@@ -674,7 +674,7 @@ if version == 1:
             
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[
@@ -701,7 +701,7 @@ if version == 1:
         
             # Set MSAs to import
             msa_to_import = list(df_inputs['msa'].values)
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx'), sheet_name='MSAcodes', dtype = {'MSA_ID': object})
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx'), sheet_name='MSAcodes', dtype = {'MSA_ID': object})
             df_fips = df_fips[['Year', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates()
             df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
         
@@ -722,7 +722,7 @@ if version == 1:
             # Set MSAs to import
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
@@ -788,12 +788,12 @@ if version == 1:
         for year in years_to_import:
             dict_vars[str(year)] = unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
             
-        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                 , sheet_name = 'CountyFIPS'
                                 , dtype = {'State FIPS': object, 'County FIPS': object})
         # df_fips = df_fips[df_fips['Chamber Study'] == 'Yes']
         # df_fips = df_fips[df_fips['Peer MSA'     ] == 'Yes']
-        df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        df_fips_pums = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'PUMAcodes'
                                     , dtype = {'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
         df_fips_pums = df_fips_pums.rename(columns = {'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS'})
@@ -841,7 +841,7 @@ if version == 1:
         
         # Import County FIPS mapping
         # Convert to dictionary object for easy state-county combination importing
-        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+        df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                 , sheet_name = 'CountyFIPS'
                                 , dtype = {'State FIPS': object, 'County FIPS': object})
         
@@ -883,7 +883,7 @@ if version == 1:
             
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
                                     , dtype = {'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[
@@ -910,7 +910,7 @@ if version == 1:
             df_inputs['msa'] = df_inputs['msa'].astype("str")
             msa_to_import = list(df_inputs['msa'].values)
 
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'Area Codes.xlsx')
+            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'MSAcodes'
                                     , dtype = {'State FIPS': object, 'MSA_ID': object})
             df_fips = df_fips[df_fips['MSA_ID'].isin(msa_to_import)]
