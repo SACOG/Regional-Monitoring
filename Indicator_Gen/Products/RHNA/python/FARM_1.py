@@ -31,8 +31,10 @@ urls = [
 list_df_edu = []
 
 for url in tqdm(urls):
+
     df_edu = pd.read_csv(url, sep='\t', encoding='latin-1')
-    df_edu = df_edu.rename(columns={'ï»¿AcademicYear':'AcademicYear'})
+    # df_edu = df_edu.rename(columns={'ï»¿AcademicYear':'AcademicYear'})
+    df_edu.columns = ['AcademicYear'] + list(df_edu.columns[1:])
 
     df_edu = df_edu[df_edu['CountyName'].isin(['El Dorado', 'Placer', 'Sacramento', 'Sutter', 'Yolo', 'Yuba'])]
     df_edu = df_edu[df_edu['AggregateLevel'] == 'S']
@@ -41,8 +43,11 @@ for url in tqdm(urls):
     time.sleep(3)
 
 
+# import pdb; pdb.set_trace()
+
 df_edu = pd.concat(list_df_edu)
 
+ 
 category_desc = {
     'RB':'African American'
     , 'RI':'American Indian or Alaska Native'
@@ -73,6 +78,7 @@ df_edu_sm_no['ReportingCategory_desc'] = 'Migrant'
 df_edu_sm_no['CumulativeEnrollment'  ] = 0
 df_edu = pd.concat([df_edu_sm, df_edu_sm_no])
 df_edu = df_edu.reset_index(drop=True)
+
 
 
 
@@ -119,7 +125,7 @@ gdf_cdp = gpd.read_file(file_cdp)
 gdf_cdp = gdf_cdp[['GEOID', 'NAME', 'geometry']].rename(columns = {'GEOID':'place_id'})
 df_places = gpd.overlay(gdf_edu, gdf_cdp, how='intersection', keep_geom_type=False)
 
-file_in = path_config0 / 'Area Codes.xlsx'
+file_in = path_config0 / 'area_codes.xlsx'
 df_area = pd.read_excel(file_in, sheet_name='CDPcodes')
 df_area['place'] = df_area['place'].astype(str).apply('{:0>5}'.format)
 df_area = df_area[(df_area['MPO'].str.contains('SACOG')) & (df_area['Incorporated'] != 'Yes') & (df_area['Year'] == 2020)]
@@ -131,13 +137,14 @@ df_places = df_places.groupby(['AcademicYear', 'CountyName', 'NAME'], as_index=F
 df_places = df_places.rename(columns={'NAME':'Geography'})
 
 # Combine
-df_places   = df_places  .pivot_table(index = ['CountyName', 'Geography'], columns = 'AcademicYear', values = 'CumulativeEnrollment').reset_index()
-df_counties = df_counties.pivot_table(index = [              'Geography'], columns = 'AcademicYear', values = 'CumulativeEnrollment').reset_index()
-df_sacog    = df_sacog   .pivot_table(index = [              'Geography'], columns = 'AcademicYear', values = 'CumulativeEnrollment').reset_index()
+df_places   = df_places  .pivot_table(index = ['CountyName', 'Geography'], columns='AcademicYear', values='CumulativeEnrollment').reset_index()
+df_counties = df_counties.pivot_table(index = [              'Geography'], columns='AcademicYear', values='CumulativeEnrollment').reset_index()
+df_sacog    = df_sacog   .pivot_table(index = [              'Geography'], columns='AcademicYear', values='CumulativeEnrollment').reset_index()
 
 df_places   = df_places  .fillna(0)
 df_counties = df_counties.fillna(0)
 df_sacog    = df_sacog   .fillna(0)
+
 
 df_places   = clean_years(df_places  )
 df_counties = clean_years(df_counties)

@@ -41,14 +41,14 @@ if import_tab == 'MSA':
                                             , year      = 'timeseries'
                                             , state     = state
                                             , msa       = dict_fips[state])
-            df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'MSA_ID', 'MSA']]
-                                                , left_on = ['state', 'metropolitan statistical area/micropolitan statistical area']
-                                                , right_on = ['State FIPS', 'MSA_ID'])
+            df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'MSA_ID', 'MSA']], left_on=['state', 'metropolitan statistical area/micropolitan statistical area'], right_on=['State FIPS', 'MSA_ID'])
             df_census_raw = df_census_raw.drop(['state', 'metropolitan statistical area/micropolitan statistical area'], axis = 1)
             df_census_raw = df_census_raw.set_index(['State FIPS', 'MSA_ID', 'MSA', 'time']).reset_index()
             list_df_states.append(df_census_raw)
         except Exception as e: print(e)
 df_census_raw = pd.concat(list_df_states)
 df_census_raw = df_census_raw.rename(columns = {'year':'Year'})
+df_census_raw = df_census_raw.drop_duplicates(subset=['MSA_ID', 'time', 'Year', 'firmage', 'Emp'])
+df_census_raw = df_census_raw.reset_index(drop=True)
 
 

@@ -53,10 +53,11 @@ if version == 2:
         percentages = dict_config['Indicators'][project][indicator]['percentages'        ]
         weighted_by = dict_config['Indicators'][project][indicator]['weighted_by'        ]
         metric      = dict_config['Indicators'][project][indicator]['metric'             ]
-        years_to_import = years_to_import.split(', ')
-        years_to_import = [int(year) for year in years_to_import]
-        year_end   = np.max(years_to_import)
-        year_start = np.min(years_to_import)
+        if sample_type != 'LEHD':
+            years_to_import = years_to_import.split(', ')
+            years_to_import = [int(year) for year in years_to_import]
+            year_end   = np.max(years_to_import)
+            year_start = np.min(years_to_import)
 
 
     else:
@@ -120,36 +121,49 @@ if version == 2:
         print('---------------------------------------------------------------------------------------------------------------------------------------')
 
         print()
-        print('Years available:')
-        display(dict_config['Samples'][sample_type][estimate]['years_available']); print()
-        print('Do you want to pull data for all years available?  Select Yes/No: '); print()
-        all_years = input()
-        if all_years == 'Yes':
-            years_to_import = dict_config['Samples'][sample_type][estimate]['years_available']
-            years = ', '.join([str(year) for year in years_to_import])
-        elif all_years == 'No':
-            print()
-            print('Please type which years you want to pull data from, separated by commas:'); print()
-            years = input()
-            if ',' in years:
-                years_to_import = years.split(', ')
-                years_to_import = [int(year) for year in years_to_import]
+        if sample_type != 'LEHD':
+            print('Years available:')
+            display(dict_config['Samples'][sample_type][estimate]['years_available']); print()
+            print('Do you want to pull data for all years available?  Select Yes/No: '); print()
+            all_years = input()
+            if all_years == 'Yes':
+                years_to_import = dict_config['Samples'][sample_type][estimate]['years_available']
+                years = ', '.join([str(year) for year in years_to_import])
+            elif all_years == 'No':
+                print()
+                print('Please type which years you want to pull data from, separated by commas:'); print()
+                years = input()
+                if ',' in years:
+                    years_to_import = years.split(', ')
+                    years_to_import = [int(year) for year in years_to_import]
+                else:
+                    years_to_import = [int(years)]
             else:
-                years_to_import = [int(years)]
-        else:
-            assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
-
+                assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
             
-        print()
-        year_end   = np.max(years_to_import)
-        year_start = np.min(years_to_import)
+            print()
+            year_end   = np.max(years_to_import)
+            year_start = np.min(years_to_import)
+        else:
+            print()
+            print("LEHD organizes data quarterly and the API requires a 'timeseries' call.")
+            years_to_import = 'timeseries'
+            years = 'timeseries'
+            year = 'timeseries'
+            print()
+
+
         import_tab = dict_config['Import Geographies'][geography]
 
         print('---------------------------------------------------------------------------------------------------------------------------------------')
 
         print()
-        print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
-        margin_of_error = input()
+        if sample_type != 'LEHD':
+            print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
+            margin_of_error = input()
+        else:
+            print(); print('LEHD has Margins of Error available but not through API.')
+            margin_of_error = 'No'
         assert margin_of_error in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
 
         file_config_set = path_config / 'runs' / f'{indicator}.txt'
@@ -178,8 +192,9 @@ if version == 2:
     print()
 
 
-    ## Import Variable Mapping
-    df_inputs = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = import_tab)
+    ## Import Geography Mapping
+    file_inputs = path_config / 'census_configuration_file2.xlsx'
+    df_inputs = pd.read_excel(file_inputs, sheet_name=import_tab)
 
 
     ## For DEC data
@@ -253,9 +268,10 @@ if version == 2:
     ## For ACS1 or ACS5 data
     if sample_type in ['ACS', 'SUBJECT']:
 
-        df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name=sample_type)
+        file_vars = path_config / 'census_configuration_file2.xlsx'
+        df_vars = pd.read_excel(file_vars, sheet_name=sample_type)
         df_vars = df_vars[df_vars['Year'] == 2023]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
+        df_vars = df_vars[(df_vars['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False))]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         
         # Set tables and variables to import
@@ -372,8 +388,8 @@ if version == 2:
         print()
         print('PUMS table roll up: ' + table_type)
 
-        if margin_of_error == 'Yes':
-            df_vars.loc[(df_vars['ID'].str.contains('WGTP')) & (df_vars['Table Type'] == table_type), 'Include'] = 'Yes'
+        # if margin_of_error == 'Yes':
+        #     df_vars.loc[(df_vars['ID'].str.contains('WGTP')) & (df_vars['Table Type'] == table_type), 'Include'] = 'Yes'                
         
         df_vars = df_vars[df_vars['Include'] == 'Yes']
             
@@ -391,14 +407,15 @@ if version == 2:
                 
         dict_vars = {}
         for year in years_to_import:
-            dict_vars[str(year)] = unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
-            
+            if margin_of_error == 'Yes':
+                dict_vars[str(year)] = unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight] + [weight + str(num) for num in sequence(1, 80, 1)]
+            else:
+                dict_vars[str(year)] = unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
+
         file_fips = path_git / 'config' / 'area_codes.xlsx'
         df_fips = pd.read_excel(file_fips
                                 , sheet_name = 'CountyFIPS'
                                 , dtype = {'State FIPS': str, 'County FIPS': str})
-        # df_fips = df_fips[df_fips['Chamber Study'] == 'Yes']
-        # df_fips = df_fips[df_fips['Peer MSA'     ] == 'Yes']
         df_fips_pums = pd.read_excel(file_fips
                                     , sheet_name = 'PUMAcodes'
                                     , dtype = {'STATEFP': str, 'COUNTYFP': str, 'TRACTCE': str, 'PUMA5CE': str})
@@ -468,10 +485,11 @@ if version == 2:
 
 
     ## For LEHD data
-    if estimate == 'LEHD':
-        df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = estimate)
-        df_vars = df_vars[df_vars['Sample'] == sample_type]
-        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
+    if sample_type == 'LEHD':
+        file_config = path_config / 'census_configuration_file2.xlsx'
+        df_vars = pd.read_excel(file_config, sheet_name=sample_type)
+        df_vars = df_vars[df_vars['Sample'] == estimate]
+        df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator)]#df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)
         df_vars = df_vars[df_vars['Include'] == 'Yes']
         variables = df_vars['ID'].unique()
         variables = ','.join(variables)
@@ -489,9 +507,8 @@ if version == 2:
             
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
-                                    , sheet_name = 'CountyFIPS'
-                                    , dtype = {'State FIPS': object, 'County FIPS': object})
+            file_fips = path_git / 'config' / 'area_codes.xlsx'
+            df_fips = pd.read_excel(file_fips, sheet_name='CountyFIPS', dtype={'State FIPS': object, 'County FIPS': object})
             df_fips = df_fips[
                             (df_fips['State'].isin(df_inputs['states'].values))
                             & (df_fips['County Name'].isin(df_inputs['counties'].values))
@@ -515,14 +532,13 @@ if version == 2:
             # Set MSAs to import
             df_inputs['msa'] = df_inputs['msa'].astype("str")
             msa_to_import = list(df_inputs['msa'].values)
-
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
-                                    , sheet_name = 'MSAcodes'
-                                    , dtype = {'State FIPS': object, 'MSA_ID': object})
-            df_fips = df_fips[df_fips['MSA_ID'].isin(msa_to_import)]
+            file_fips = path_git / 'config' / 'area_codes.xlsx'
+            df_fips = pd.read_excel(file_fips, sheet_name='MSAcodes', dtype={'State FIPS': object, 'MSA_ID': object})
+            df_fips = df_fips[['Year', 'State FIPS', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates()
+            df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
 
             dict_fips = df_fips.copy()
-            dict_fips = dict_fips[['State FIPS', 'MSA_ID']]
+            dict_fips = dict_fips[['State FIPS', 'MSA_ID']].drop_duplicates()
             dict_fips = dict_fips.groupby('State FIPS')['MSA_ID'].apply(list).to_dict()
             
             for key in list(dict_fips.keys()):

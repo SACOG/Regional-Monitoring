@@ -46,26 +46,24 @@ for state in list(dict_fips.keys()):
             if (table_type == 'H') & ('SPORDER' in df_vars_years.columns):
                 df_vars_years = df_vars_years[df_vars_years['SPORDER'] == '1']
             df_vars_years = df_vars_years.drop('SPORDER', axis = 1)
+            # import pdb; pdb.set_trace()
             if margin_of_error == 'Yes':
                 print('Calculating margin of error using replicate weights...')
                 cols = [col for col in df_vars_years.columns if weight in col]
                 df_vars_years[cols] = df_vars_years[cols].replace('', np.nan)
                 df_vars_years[cols] = df_vars_years[cols].astype(int)
-                cols_to_drop = cols[:-1]
-                cols = list(df_vars_years.drop(cols_to_drop, axis = 1).columns)
-                df_me = pd.melt(df_vars_years
-                                    , id_vars    = cols
-                                    , var_name   = 'replicates'
-                                    , value_name = 'replicate_weights')
+                ME_weights = [weight + str(num) for num in sequence(1, 80, 1)]
+                cols = list(df_vars_years.drop(ME_weights, axis=1).columns)
+                df_me = pd.melt(df_vars_years, id_vars=cols, var_name='replicates', value_name='replicate_weights')
                 df_me['sq_diff'] = (df_me['replicate_weights'] - df_me[weight])**2
-                df_me = df_me.groupby(cols, as_index = False)['sq_diff'].agg('sum') # Change from sum to 'sum'
+                df_me = df_me.groupby(cols, as_index=False)['sq_diff'].agg('sum') # Change from sum to 'sum'
                 df_me['variance'] = df_me['sq_diff']*(4/80)
                 df_me['SE'] = np.sqrt(df_me['variance'])
                 df_me['ME'] = df_me['SE']*1.645
                 df_me = df_me[cols + ['ME']].drop_duplicates()
-                df_vars_years = df_vars_years.drop(cols_to_drop, axis = 1)
+                df_vars_years = df_vars_years.drop(ME_weights, axis = 1)
                 df_vars_years = df_vars_years.drop_duplicates()
-                df_vars_years = df_vars_years.merge(df_me, on = cols, how = 'left')
+                df_vars_years = df_vars_years.merge(df_me, on=cols, how='left')
                 df_vars_years = df_vars_years.drop_duplicates()
             list_df_years.append(df_vars_years)
             

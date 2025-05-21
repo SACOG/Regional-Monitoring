@@ -33,10 +33,29 @@ sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))                                    
 #     x = (x**2)*weight
 
 
-## Split attributes field in the "Census Configuration File.xlsx" ACS tab to get the ME estimate ID
-def ME_split(text):
-    return ",".join(text.split(',')[0:3:2])
+# ## Split attributes field in the "Census Configuration File.xlsx" ACS tab to get the ME estimate ID
+# def ME_split(text):
+#     return ",".join(text.split(',')[0:3:2])
 
+# ## Split attributes field in the "Census Configuration File.xlsx" ACS tab to get the ME estimate ID
+# def ME_split(text):
+#     if (text is None) or (text is pd.NA) or (text is np.nan):
+#         return text
+#     else:
+#         estimates = text.split(',')
+#         pattern = re.compile('.*E$|.*M$')
+#         text = ','.join([est for est in estimates if pattern.match(est)])
+#         return text
+
+
+def ME_split(text):
+    try:
+        estimates = text.split(',')
+        pattern = re.compile('.*E$|.*M$')
+        text = ','.join([est for est in estimates if pattern.match(est)])
+        return text
+    except:
+        return text
 
 
 def clean_fips(df):
@@ -84,8 +103,8 @@ def query_census(
     ):
         
     # Assert that inputs for estimate and geography are appropriate
-    assert estimate  in ['ACS5', 'ACS1', 'DEC', 'CPS' , 'LEHD']                                                                                                                                                   , "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
-    assert sample    in ['ACS', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'RH'  , 'SA', 'SE']                                                                                                                  , "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
+    assert estimate  in ['ACS5', 'ACS1', 'DEC', 'CPS' , 'RH', 'SA', 'SE'], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
+    assert sample    in ['ACS', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'LEHD'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
     assert geography in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA', 'ZIP Codes', 'Congressional Districts', 'State Legislative Upper Districts', 'State Legislative Lower Districts', 'States', 'National'], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
 
 
@@ -100,7 +119,7 @@ def query_census(
     root_ = df_url['c_url'].values[0]
     g_ = '?get='
 
-    if estimate == 'LEHD':
+    if sample == 'LEHD':
         root_ = re.sub('<NA>/', '', root_)
 
     # User inputs for user API key, desired variables and years to import
@@ -129,9 +148,9 @@ def query_census(
             location_ = '&for=county:' + county + '&in=state:' + state
             # location_ = '&for=county:*' + '&in=state:' + state
     if geography == 'MSA':
-        if estimate in ['LEHD']:
+        if sample in ['LEHD']:
             if year == 'timeseries':
-                location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state + '&time=from 2000-Q1 to 2023-Q4'
+                location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state + '&time=from 2000-Q1 to 2024-Q4'
             else:
                 location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state
         else:
@@ -158,7 +177,7 @@ def query_census(
     df_census = pd.DataFrame(response[1:], columns=response[0])
     
     # apply year tag
-    if estimate != 'LEHD':
+    if sample != 'LEHD':
         df_census['Year'] = year
 
     ## Return
@@ -275,7 +294,7 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
     df_census = df_census.dropna()
     
     df_census['Total'] = df_census['Total'].apply(pd.to_numeric)
-    df_census = df_census.merge(df_vars[['ID', 'Table', 'Table Name', 'Label']], on='ID', how='left')
+    df_census = df_census.merge(df_vars[['ID', 'Table', 'Table Name', 'Label', 'Year']], on=['Year', 'ID'], how='left')
 
     if margin_of_error == 'Yes':
         df_census_me = df_census.copy()
@@ -345,7 +364,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
         geo_ID = ['NAME']
     df_census['Year'] = df_census['Year'].astype(int)
 
-    df_census = df_census.merge(df_vars[['ID','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on='ID', how='left')
+    df_census = df_census.merge(df_vars[['Year', 'ID','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on=['Year', 'ID'], how='left')
 
     if margin_of_error == 'Yes':
         cols_to_keep = ['ID'] + geo_ID + ['Year', 'Variable', 'Race_Ethnicity', 'Sort', 'Total', 'ME']
@@ -353,8 +372,8 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
         cols_to_keep = ['ID'] + geo_ID + ['Year', 'Variable', 'Race_Ethnicity', 'Sort', 'Total']
     df_census = df_census[cols_to_keep]
 
-    if indicator in ['Income_1', 'Income_3']:
-        file_cpi = path_config0 / 'CPI Inflation Adjustment Factors.xlsx'
+    if indicator in ['Income_1', 'Income_3']:#, 'Chamber_H_5']:
+        file_cpi = path_config0 / 'CPI_IAF.xlsx'
         df_cpi = pd.read_excel(file_cpi, sheet_name='BLS_West')
         df_cpi = df_cpi[['Year', 'IAF_' + str(year_end)]]
         df_census = df_census.merge(df_cpi, on='Year', how='left')
@@ -401,13 +420,13 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
             cols_merge = ['NAME', 'Year', 'Race_Ethnicity']
         df_census = df_census.merge(df_weight, on=cols_merge, how='left')
 
-        if indicator == 'Chamber_H_5':
+        if indicator in ['Chamber_H_5', 'Chamber_H_7']:
             df_hisp = df_census[df_census['Race_Ethnicity'] == 'Hispanic or Latino']
-            df_hisp = df_hisp[geo_ID + ['Year', 'Population']]
-            df_hisp = df_hisp.rename(columns={'Population':'Hispanic Population'})
+            df_hisp = df_hisp[geo_ID + ['Year', 'Households']]
+            df_hisp = df_hisp.rename(columns={'Households':'Hispanic Households'})
             df_census = df_census.merge(df_hisp, on=geo_ID+['Year'], how='left')
-            df_census.loc[df_census['Race_Ethnicity'] == 'All', 'Population'] = df_census['Population'] - df_census['Hispanic Population']
-            df_census = df_census.drop('Hispanic Population', axis=1)
+            df_census.loc[df_census['Race_Ethnicity'] == 'All', 'Households'] = df_census['Households'] - df_census['Hispanic Households']
+            df_census = df_census.drop('Hispanic Households', axis=1)
     
     df_census = df_census.rename(columns={
         'ID':'Estimate ID'
@@ -432,10 +451,23 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
         CDP_to_keep = list(df_codes['place'].unique())
         df_census = df_census[df_census['Place ID'].isin(CDP_to_keep)]
         df_codes = df_codes.rename(columns={'place':'Place ID'})
-        df_census = df_census.merge(df_codes[['Place ID', 'County Name']], on='Place ID', how='left')
+
+        df_codes = df_codes[['Year', 'Place ID', 'County Name']]
+        df_codes2010 = df_codes[df_codes['Year'] == 2010]
+        df_codes2020 = df_codes[df_codes['Year'] == 2020]
+
+        df_census2010 = df_census[df_census['Year'] <  2020]
+        df_census2020 = df_census[df_census['Year'] >= 2020]
+
+        df_census2010 = df_census2010.merge(df_codes2010.drop('Year', axis=1), on='Place ID', how='left')
+        df_census2020 = df_census2020.merge(df_codes2020.drop('Year', axis=1), on='Place ID', how='left')
+
+        df_census = pd.concat([df_census2020, df_census2010])
+
         df_census['NAME'] = df_census['NAME'].str.replace(' CDP, California' , '', regex=True)
         df_census['NAME'] = df_census['NAME'].str.replace(' town, California', '', regex=True)
         df_census['NAME'] = df_census['NAME'].str.replace(' city, California', '', regex=True)
+        df_census = df_census.drop_duplicates()
 
     df_census = df_census.reset_index(drop=True)
 
@@ -916,7 +948,7 @@ Links PUMA codes to county FIPS codes by year
 Then maps the county FIPS codes to MSA IDs
 '''
 
-def pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_git):
+def pums_processing_2(df_census, estimate, sample_type, groups, df_fips, dict_fips):
     
     print()
     print('Processing Step 2:')
@@ -928,14 +960,16 @@ def pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_g
 
     if sample_type == 'PUMS':
         file_puma_codes = path_config0 / 'area_codes.xlsx'
-        df_fips_pums = pd.read_excel(file_puma_codes
-                                        , sheet_name='PUMAcodes'
-                                        , dtype={'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
+        df_fips_pums = pd.read_excel(file_puma_codes, sheet_name='PUMAcodes', dtype={'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
         df_fips_pums = df_fips_pums[df_fips_pums['STATEFP'].isin(list(dict_fips.keys()))]
         df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns={'PUMA5CE':'PUMA', 'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS'}).drop_duplicates()
 
-        df_census1 = df_census[df_census['Year'].isin(sequence(2012, 2021, 1))]
-        df_census2 = df_census[df_census['Year'].isin(sequence(2022, 2031, 1))]
+        if estimate in ['ACS5', 'PUMS5']:
+            df_census1 = df_census[df_census['Year'].isin(sequence(2012, 2021, 1))]
+            df_census2 = df_census[df_census['Year'].isin(sequence(2022, 2031, 1))]
+        else:
+            df_census1 = df_census[df_census['Year'].isin(sequence(2010, 2020, 1))]
+            df_census2 = df_census[df_census['Year'].isin(sequence(2021, 2030, 1))]           
 
         df_census1 = df_census1.merge(df_fips_pums[df_fips_pums['Years'] == '2012-2021'], on=['State FIPS', 'PUMA'], how='left')
         df_census2 = df_census2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on=['State FIPS', 'PUMA'], how='left')
@@ -943,8 +977,7 @@ def pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_g
         df_census = df_census.drop('Years', axis=1)
 
         df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
-        df_census = df_census.merge(df_fips[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'MSA_ID', 'MSA_acs']].drop_duplicates()
-                                            , on=['State FIPS', 'County FIPS'])
+        df_census = df_census.merge(df_fips[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'MSA_ID', 'MSA_acs']].drop_duplicates(), on=['State FIPS', 'County FIPS'])
         df_census = df_census.rename(columns={'MSA_acs':'MSA'})
         df_census = df_census.set_index(['State FIPS', 'MPO', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'Year']).reset_index()
         df_census = df_census.sort_values(['State FIPS', 'PUMA', 'Year'] + groups, ascending=[True, True, False] + [item in groups for item in groups])
@@ -1415,7 +1448,6 @@ def food_processing_4(df_census, weight, percentages, groups):
 
 def lehd_processing(df_census, geography, indicator, percentages, df_fips=None):
     if indicator == 'Jobs_4':
-
         df_census = df_census[df_census['Emp'] != 'null']
         df_census = df_census[~df_census['Emp'].isna()]
         df_census['Emp'    ] = df_census['Emp'    ].astype('int')
@@ -1666,10 +1698,16 @@ def rename_census(
 
         if sample_type == 'PUMS':
             groups.reverse()
-            df_puma     = df_puma    [group_puma     + ['Year'] + groups + ['Total', 'Percentage']]
-            df_counties = df_counties[group_counties + ['Year'] + groups + ['Total', 'Percentage']]
-            df_msa      = df_msa     [group_msa      + ['Year'] + groups + ['Total', 'Percentage']]
-            df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups + ['Total', 'Percentage']]
+            if percentages == 'Yes':
+                df_puma     = df_puma    [group_puma     + ['Year'] + groups + ['Total', 'Percentage']]
+                df_counties = df_counties[group_counties + ['Year'] + groups + ['Total', 'Percentage']]
+                df_msa      = df_msa     [group_msa      + ['Year'] + groups + ['Total', 'Percentage']]
+                df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups + ['Total', 'Percentage']]
+            else:
+                df_puma     = df_puma    [group_puma     + ['Year'] + groups + ['Total']]
+                df_counties = df_counties[group_counties + ['Year'] + groups + ['Total']]
+                df_msa      = df_msa     [group_msa      + ['Year'] + groups + ['Total']]
+                df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups + ['Total']]
         if sample_type == 'FOODSEC':
             df_counties = df_counties[group_counties + groups + ['Total', 'Percentage']]
             df_mpo      = df_mpo     [group_mpo      + groups + ['Total', 'Percentage']]
@@ -1858,7 +1896,7 @@ def rename_census(
 
     if geography == 'Counties':
         if mpo == 'Yes':
-            df_mpo = df_mpo.merge(df_vars[['Variable', 'Race_Ethnicity', 'Sort']], on=['Variable', 'Race_Ethnicity'], how='left')
+            df_mpo = df_mpo.merge(df_vars[['Variable', 'Race_Ethnicity', 'Sort']].drop_duplicates(), on=['Variable', 'Race_Ethnicity'], how='left')
             df_mpo['Race_Ethnicity_sort'] = pd.Categorical(df_mpo['Race_Ethnicity'], [
                                                                     'All'
                                                                     , 'American Indian or Alaska Native'

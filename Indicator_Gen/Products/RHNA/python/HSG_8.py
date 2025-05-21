@@ -1,0 +1,150 @@
+
+
+indicator = 'RHNA_HSG_8'
+
+
+# Set indicator
+source = 'Zillow'
+with path_func.open("r") as f: exec(f.read())
+title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
+
+
+## Importing ---
+
+file_area = path_config0 / 'area_codes.xlsx'
+df_codes = pd.read_excel(file_area, sheet_name='CDPcodes')
+
+
+file_in_cities   = path_raw / f'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
+file_in_counties = path_raw / f'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
+
+df_places   = pd.read_csv(file_in_cities)
+df_counties = pd.read_csv(file_in_counties)
+
+file_w_cities = path_sp / 'Data' / 'Reference' / 'Weights' / 'Total_Households Places ACS1.xlsx'
+file_w_counties = path_sp / 'Data' / 'Reference' / 'Weights' / 'Total_Households Counties ACS1.xlsx'
+
+df_w_cities   = pd.read_excel(file_w_cities  )
+df_w_counties = pd.read_excel(file_w_counties)
+
+
+
+## Organizing ---
+
+
+df_codes = df_codes[df_codes['MPO'] == 'SACOG']
+df_codes = df_codes[['NAME', 'Incorporated']].drop_duplicates()
+df_codes['NAME'] = df_codes['NAME'].str.replace(' city', '')
+df_codes['NAME'] = df_codes['NAME'].str.replace(' CDP' , '')
+df_codes['NAME'] = df_codes['NAME'].str.replace(' town', '')
+df_codes = df_codes.rename(columns={'NAME':'RegionName'})
+df_codes = df_codes.reset_index(drop=True)
+
+df_w_cities = df_w_cities[df_w_cities['Race_Ethnicity'] == 'All']
+df_w_cities = df_w_cities[['NAME', 'Year', 'Households']].rename(columns={'NAME':'RegionName'})
+
+
+
+df_places = df_places[df_places['CountyName'].isin(['El Dorado County', 'Placer County', 'Sacramento County', 'Sutter County', 'Yolo County', 'Yuba County'])]
+df_places = df_places.drop(['RegionID', 'SizeRank', 'RegionType', 'StateName', 'State', 'Metro'], axis=1)
+df_places = df_places.melt(id_vars=['RegionName', 'CountyName'], var_name='date_', value_name='ZHVI')
+df_places = df_places.merge(df_codes, on='RegionName', how='left')
+df_places['date_'] = pd.to_datetime(df_places['date_'])
+df_places['Year'] = df_places['date_'].dt.year
+df_places = df_places.drop('date_', axis=1)
+
+
+df_places = df_places.merge(df_w_cities, on=['RegionName', 'Year'], how='left')
+df_places = df_places[~df_places['Households'].isna()]
+
+df_places.loc[df_places['Incorporated'] != 'Yes', 'RegionName'] = 'Unincorporated'
+
+wm = lambda x: np.average(x, weights = df_places.loc[x.index, "Households"])
+df_places = df_places.groupby(['CountyName', 'RegionName', 'Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
+df_places = df_places.sort_values(['CountyName', 'RegionName', 'Year'], ascending=[True, True, True])
+df_places = df_places.reset_index(drop=True)
+
+
+
+df_w_counties = df_w_counties[df_w_counties['Race_Ethnicity'] == 'All']
+df_w_counties = df_w_counties[['County Name', 'Year', 'Households']].rename(columns={'County Name':'RegionName'})
+df_w_counties['RegionName'] = df_w_counties['RegionName'] + ' County'
+
+
+df_counties = df_counties[df_counties['RegionName'].isin(['El Dorado County', 'Placer County', 'Sacramento County', 'Sutter County', 'Yolo County', 'Yuba County'])]
+df_counties = df_counties.drop(['RegionID', 'SizeRank', 'RegionType', 'StateName', 'State', 'Metro', 'StateCodeFIPS', 'MunicipalCodeFIPS'], axis=1)
+df_counties = df_counties.melt(id_vars=['RegionName'], var_name='date_', value_name='ZHVI')
+df_counties['date_'] = pd.to_datetime(df_counties['date_'])
+df_counties['Year'] = df_counties['date_'].dt.year
+df_counties = df_counties.drop('date_', axis=1)
+
+
+df_counties = df_counties.merge(df_w_counties, on=['RegionName', 'Year'], how='left')
+df_counties = df_counties[~df_counties['Households'].isna()]
+df_mpo = df_counties.copy()
+
+
+wm = lambda x: np.average(x, weights = df_counties.loc[x.index, "Households"])
+df_counties = df_counties.groupby(['RegionName', 'Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
+df_counties = df_counties.sort_values(['RegionName', 'Year'], ascending=[True, True])
+df_counties = df_counties.reset_index(drop=True)
+
+wm = lambda x: np.average(x, weights = df_mpo.loc[x.index, "Households"])
+df_mpo = df_mpo.groupby(['Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
+df_mpo = df_mpo.sort_values(['Year'], ascending=[True])
+df_mpo['RegionName'] = 'SACOG Region'
+
+
+
+counties = list(df_places['CountyName'].unique())
+
+
+for county in counties:
+    
+    print();print()
+    print(county)
+    time.sleep(2)
+
+    df_counties_sub = df_counties.copy()
+    df_counties_sub = df_counties_sub[df_counties_sub['RegionName'] == county]
+
+    df_places_sub = df_places.copy()
+    df_places_sub = df_places_sub[df_places_sub['CountyName'] == county]
+    df_places_sub = df_places_sub.drop('CountyName', axis=1)
+    jurisdictions = df_places_sub['RegionName'].unique()
+    
+    for jurisdiction in tqdm(jurisdictions, position=0):
+
+        tqdm.write(jurisdiction)
+
+        ## Plotting ---
+
+        df_prod = pd.concat([df_places_sub[df_places_sub['RegionName'] == jurisdiction], df_counties_sub, df_mpo])
+        df_prod = df_prod.pivot_table(index=['Year'], columns='RegionName', values='ZHVI').reset_index()
+        df_prod = df_prod[['Year', jurisdiction, county, 'SACOG Region']]
+        if jurisdiction == 'Sacramento':
+            display(df_prod.head())
+        df_plot = pd.concat([df_places_sub[df_places_sub['RegionName'] == jurisdiction], df_counties_sub, df_mpo])
+        
+        color_map = {
+                f"{jurisdiction}":"#9DC209",
+                f"{county}":"#1E90FF",
+                "SACOG Region":"#1F45FC"
+        }
+
+        fig = px.line(df_plot, x='Year', y='ZHVI'
+                     , color='RegionName'
+                     , color_discrete_map=color_map
+                     , markers=True)
+        
+        fig.update_traces(hovertemplate="%{y}")
+            
+        path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
+        plot_rhna(export=export)
+    
+        ## Exporting ---
+        if export:
+            export_rhna(df_prod)
+
+list_indicators.append(indicator)
+

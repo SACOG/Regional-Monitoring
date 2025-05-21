@@ -1,13 +1,17 @@
 
 
-## Importing packages ---
+## Packages ----
 
 import numpy as np
 import pandas as pd
+import geopandas as gpd
 import getpass
 from pathlib import Path
 import os
 from tqdm import tqdm
+import requests
+import gzip
+import io
 import re
 from datetime import date
 import xlwt
@@ -36,13 +40,12 @@ import plotly.io as pio
 from plotly.offline import plot
 import plotly.subplots as sp
 from plotly.subplots import make_subplots
-pd.options.display.float_format = '{:.2f}'.format
 
 import warnings
 warnings.filterwarnings('ignore')
+# import pdb; pdb.set_trace()
 
-
-## Setting file paths ---
+## File paths ---
 
 user = getpass.getuser()
 path_users = Path.home()
@@ -57,14 +60,16 @@ path_config0 = path_git  / 'config'
 path_config  = path_census / 'config'
 
 path_prod = path_git / 'Products' / 'RHNA'
-path_data = path_prod / 'Data'
-path_yaml = path_data / 'RHNA_indicators.yaml'
-path_func = path_data / 'RHNA_functions.py'
+path_config = path_prod / 'config'
+path_yaml = path_config / 'RHNA_indicators.yaml'
+path_func = path_config / 'RHNA_functions.py'
 path_py = path_prod / 'python'
 
 # path_out = Path(r'I:\Projects\Josh\RHNA\Final Products')
 path_out = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
 
+path_geo = Path(r'I:\Projects\Josh\Geospatial Data\crosswalks')
+path_lodes = Path(r'I:\Projects\Josh\Regional Monitoring')
 
 
 ## Indicators ---
@@ -80,11 +85,11 @@ indicators = [
     , 'POPEMP_8'
     , 'POPEMP_9'
     , 'POPEMP_10'
-    # , 'POPEMP_11'
-    # , 'POPEMP_12'
-    # , 'POPEMP_13'
-    # , 'POPEMP_14'
-    # , 'POPEMP_15'
+    , 'POPEMP_11'
+    , 'POPEMP_12'
+    , 'POPEMP_13'
+    , 'POPEMP_14'
+    , 'POPEMP_15'
     , 'POPEMP_16'
     # , 'POPEMP_17'
     , 'POPEMP_18'
@@ -102,8 +107,8 @@ indicators = [
     , 'HSG_5'
     , 'HSG_6'
     , 'HSG_7'
-    # , 'HSG_8'
-    , 'HSG_9'
+    , 'HSG_8'
+    , 'HSG_9' 
     , 'HSG_10'
     # , 'HSG_11'
     # , 'RISK_1'
@@ -116,7 +121,7 @@ indicators = [
     , 'OVER_7'
     , 'OVER_8'
     , 'OVER_9'
-    # , 'FARM_1'
+    , 'FARM_1'
     # , 'FARM_2'
     , 'LGFEM_1'
     , 'LGFEM_2'
@@ -129,17 +134,17 @@ indicators = [
     , 'SEN_4'
     , 'DISAB_1'
     , 'DISAB_2'
-    # , 'DISAB_3'
-    # , 'DISAB_4'
+    , 'DISAB_3'
+    , 'DISAB_4'
     # , 'DISAB_5'
     # , 'HOMELS_1'
     # , 'HOMELS_2'
     # , 'HOMELS_3'
     # , 'HOMELS_4'
-    # , 'HOMELS_5'
+    , 'HOMELS_5'
     , 'ELI_1'
     , 'ELI_2'
-    # , 'ELI_3'
+    , 'ELI_3'
     # , 'AFFH_1'
     # , 'AFFH_2'
     , 'AFFH_3'
@@ -147,7 +152,7 @@ indicators = [
 ]
 
 
-indicators = ['DISAB_1']
+indicators = ['DISAB_4']
 
 
 
@@ -175,8 +180,8 @@ print(); print()
 print('Finished!! Now go outside.')
 print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---')
 print(); print()
-# takes 15-20 min for local exporting
-# takes ~90 minutes for I drive exporting
+# takes 30 min for local exporting
+# takes ~120 minutes for I drive or SharePoint exporting
 
 
 ## Check indicators ---
