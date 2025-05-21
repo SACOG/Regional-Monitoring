@@ -30,7 +30,7 @@ import functools as ft
 from IPython.display import display
 import traceback
 import sys
-
+# import pdb; pdb.set_trace()
 
 
 ## File paths ---
@@ -76,7 +76,7 @@ with open(file_api, 'r') as file:
 
 
 ## Export params ---
-rerun=False
+rerun=True
 export=True
 
 
@@ -121,13 +121,18 @@ if export:
         end = 'NoME_raw.csv'
     else:
         end = 'raw.csv'
-    export_title = f"{indicator}_{geography}_{estimate}_{end}"
+
+    if sample_type == 'LEHD':
+        export_title = f"{indicator}_{geography}_{sample_type}_{end}"
+    else:
+        export_title = f"{indicator}_{geography}_{estimate}_{end}"
     
     print(); print()
     print(f"Exporting {export_title} to the following location: ")
     print(path_raw)
     
     file_out = path_raw / export_title
+    df_census_raw = df_census_raw.drop_duplicates()
     df_census_raw.to_csv(file_out, index = False)
     
     print()
@@ -158,5 +163,6 @@ if sample_type in ['ACS', 'SUBJECT']:
     #         df_census, df_mpo = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
     #     else:
     #         df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-    display(df_census.head(3))
+    print(df_census.Year.unique())
+    display(df_census.head(25))
 

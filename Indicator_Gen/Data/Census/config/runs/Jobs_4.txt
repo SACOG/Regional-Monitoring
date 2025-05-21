@@ -1,0 +1,10 @@
+Project: Monitoring and Reporting
+Indicator Name: Jobs_4
+Export Location: Vibrant and Inclusive Places\\Economy\\Jobs
+Folder: New Firms
+Sample: LEHD
+Estimate: SA
+Geography: MSA
+Years Imported: timeseries
+Import Tab: MSA
+Margin of Error: No

@@ -98,7 +98,10 @@ if margin_of_error == 'No':
     end = 'NoME_raw.csv'
 else:
     end = 'raw.csv'
-export_title = f"{indicator}_{geography}_{estimate}_{end}"
+if sample_type == 'LEHD':
+    export_title = f"{indicator}_{geography}_{sample_type}_{end}"
+else:
+    export_title = f"{indicator}_{geography}_{estimate}_{end}"
 
 file_out = path_raw / export_title
 df_census_raw = pd.read_csv(file_out)
@@ -117,6 +120,8 @@ df_census = df_census_raw.copy()
 print(); print()
 
 if sample_type in ['ACS', 'SUBJECT']:
+    if sample_type == 'SUBJECT':
+        estimate = re.sub('SUBJECT', 'ACS', estimate)
 
     # Replace weird missing values with np.nan
     # Melt data from wide to long
@@ -142,6 +147,7 @@ if sample_type in ['ACS', 'SUBJECT']:
     # Link various FIPS codes
     # Roll up population/households/SE's to the desired geography and variable groupings
     # Calculate percentages by geography, race/ethnicity, and variables
+
     if geography != 'Counties':
         df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
         display(df_census.head(3))
@@ -166,9 +172,10 @@ if sample_type in ['PUMS', 'FOODSEC']:
     print('Groups: ' + ', '.join(groups))
     display(df_census.head(3))
 
+
     # Remove rows with missing values
     # Only keep description mappings, remove the original PUMS values
-    df_census = pums_processing_2(df_census, sample_type, groups, df_fips, dict_fips, path_git)
+    df_census = pums_processing_2(df_census, estimate, sample_type, groups, df_fips, dict_fips)
     display(df_census.head(3))
 
     # Cleans race/ethnicity fields
@@ -192,13 +199,13 @@ if sample_type in ['PUMS', 'FOODSEC']:
         display(df_counties.head(3), df_mpo.head(3))
 
 
-if estimate == 'LEHD':
+if sample_type == 'LEHD':
     if geography == 'Counties':
-        df_counties, df_mpo = lehd_processing(df_census, geography, indicator, percentages, df_fips)
-        display(df_counties.head(3), df_mpo.head(3))
+        df_census, df_mpo = lehd_processing(df_census, geography, indicator, percentages, df_fips)
+        display(df_census.head(3), df_mpo.head(3))
     if geography == 'MSA':
-        df_msa = lehd_processing(df_census, geography, indicator, percentages)
-        display(df_msa.head(3))
+        df_census = lehd_processing(df_census, geography, indicator, percentages)
+        display(df_census.head(3))
 
 
 
@@ -268,7 +275,7 @@ if export:
             path_about = path_sp / 'Process Revamp' / 'Task 6. Process Map'
             year_start = df_census_raw.Year.min()
             year_end   = df_census_raw.Year.max()
-            df_about = write_about(  sample_type    = sample_type
+            df_about = write_about(  sample_type  = sample_type
                                    , indicator    = indicator
                                    , year_start   = year_start
                                    , year_end     = year_end
@@ -329,7 +336,10 @@ if export:
             workbook_name2 = f"{indicator} MPO {estimate}.xlsx"
             print(workbook_name2)
     else:
-        workbook_name = f"{indicator} {geography} {estimate}.xlsx"
+        if sample_type == 'LEHD':
+            workbook_name = f"{indicator} {geography} {sample_type}.xlsx"
+        else:
+            workbook_name = f"{indicator} {geography} {estimate}_Unincorporated.xlsx"
         print(workbook_name)
         print()
     
@@ -397,7 +407,7 @@ if export:
                 df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MPO'
             export_indicator(indicator, geography, df_mpo, path_wb, about)
         
-        if estimate == 'LEHD':
+        if sample_type == 'LEHD':
             if geography == 'Counties':
                 path_wb = path_ / workbook_name1
                 if about:

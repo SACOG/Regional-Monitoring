@@ -115,8 +115,11 @@ def write_about(sample_type, indicator, year_start, year_end, path_config0, geog
 
     if estimate is None:
         df = pd.DataFrame.from_dict(dict_about[sample_type][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
+    elif sample_type == 'LEHD':
+        df = pd.DataFrame.from_dict(dict_about[sample_type][estimate][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
     else:
         df = pd.DataFrame.from_dict(dict_about[estimate][sample_type][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
+
 
     df.loc[df['Indicator'] == 'Last Updated', indicator] = date.today().strftime('%Y-%m-%d')
     df.loc[df['Indicator'] == 'Year(s)'     , indicator] = f"{year_start}-{year_end}"
@@ -358,6 +361,7 @@ peer_msa_labels = {
     , 'Austin-Round Rock, TX'                                                  : 'Austin, TX'
     , 'Austin-Round Rock-Georgetown'                                           : 'Austin, TX'
     , 'Austin-Round Rock-Georgetown, TX'                                       : 'Austin, TX'
+    , 'Austin-Round Rock, TX Metro Area'                                       : 'Austin, TX'
     , 'Austin-Round Rock-Georgetown, TX Metro Area'                            : 'Austin, TX'
     , 'Austin-Round Rock-San Marcos, TX Metro Area'                            : 'Austin, TX'
     , 'Austin-Round Rock, TX Metropolitan Statistical Area'                    : 'Austin, TX'

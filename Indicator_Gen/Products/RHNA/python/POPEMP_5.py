@@ -37,7 +37,9 @@ for county in counties:
         tqdm.write(jurisdiction)
                 
         df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub, df_mpo)
-    
+        df_prod = df_prod[['Abroad', 'Elsewhere in U.S.', 'Elsewhere in CA', 'Same County', 'Same city or town', 'Same house']] # this reordering is new but should work
+        df_pct  = df_pct [['Abroad', 'Elsewhere in U.S.', 'Elsewhere in CA', 'Same County', 'Same city or town', 'Same house']]
+
     
         ## Plotting ---
         

@@ -32,7 +32,7 @@ if estimate == 'CPS':
     path_request = path_request / 'CPS.py'
 
 # For LEHD Tables
-if estimate == 'LEHD':
+if sample_type == 'LEHD':
     path_request = path_request / 'LEHD.py'
 
 with path_request.open("r") as f:

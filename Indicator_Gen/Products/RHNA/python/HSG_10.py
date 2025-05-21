@@ -16,7 +16,7 @@ df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
 df_places['Place ID'] = df_places['Place ID'].astype(str).apply('{:0>5}'.format)
 
 
-file_cdp = path_config0 / 'Area Codes.xlsx'
+file_cdp = path_config0 / 'area_codes.xlsx'
 df_codes = pd.read_excel(file_cdp, sheet_name='CDPcodes')
 df_codes = df_codes[(df_codes['MPO'].str.contains('SACOG')) & (df_codes['Incorporated'] == 'Yes')]
 df_codes['place'] = df_codes['place'].astype(str).apply('{:0>5}'.format)
@@ -50,7 +50,7 @@ df_counties['NAME'] = df_counties['NAME'].str.replace(', California'     , '', r
 df_places   = df_places  .rename(columns={'NAME':'Geography'})
 df_counties = df_counties.rename(columns={'NAME':'Geography'})
 df_mpo      = df_mpo     .rename(columns={'MPO' :'Geography'})
-df_mpo['MPO'] = df_mpo['MPO'] + ' Region'
+df_mpo['Geography'] = df_mpo['Geography'] + ' Region'
 df_mpo = df_mpo.drop_duplicates()
 
 df_places   = df_places  [['County Name', 'Geography', 'Year', 'Median Contract Rent']]
@@ -79,12 +79,12 @@ for county in counties:
 
         df_plot = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_prod = df_plot.pivot_table(index=['Year'], columns='Geography', values='Median Contract Rent').reset_index()
-        df_prod = df_prod[['Year', jurisdiction, county, 'SACOG']]
+        df_prod = df_prod[['Year', jurisdiction, county, 'SACOG Region']]
         df_prod = df_prod.sort_values('Year', ascending=False)
         df_prod = df_prod.reset_index(drop=True)
             
         color_map  = {
-            'SACOG': '#9DC209'
+            'SACOG Region': '#9DC209'
             , county: '#1E90FF'
             , jurisdiction: '#FBB117'
         }

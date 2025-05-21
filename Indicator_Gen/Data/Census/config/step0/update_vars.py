@@ -67,12 +67,12 @@ with open(file_api, 'r') as file:
 
 
 
-ACS=True
+ACS=False
 PUMS=False
 DEC=False
 LEHD=False
 CPS=False
-SUBJECT=False
+SUBJECT=True
 
 
 export=True
@@ -153,8 +153,7 @@ if ACS:
     df_acs = df_acs.reset_index(drop=True)
 
 
-    file_acs = path_config / 'census_configuration_file2.xlsx'
-    sheet_name='ACS'
+    file_acs = path_config / 'census_configuration_file2.xlsx'; sheet_name='ACS'
     df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
     df_config = df_config[['Table', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
@@ -423,8 +422,7 @@ if PUMS:
     display(df_pums.head())
 
 
-    file_config = path_config / 'census_configuration_file2.xlsx'
-    sheet_name='PUMS'
+    file_config = path_config / 'census_configuration_file2.xlsx'; sheet_name='PUMS'
     df_config = pd.read_excel(file_config, sheet_name=sheet_name, dtype={'Value1':'str'})
     df_config = df_config[['ID', 'Value1', 'Indicator Name', 'Include', 'ID2', 'Description2', 'Data Type', 'Table Type']]
 
@@ -501,7 +499,8 @@ if DEC:
     df_dec['Label_clean'] = df_dec['Label_clean'].str.replace('!!', ' ')
     df_dec['Label_clean'] = df_dec['Label_clean'].str.replace(':', '')
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name='DEC')
+    file_config = path_config / 'census_configuration_file2.xlsx'; sheet_name='DEC'
+    df_config = pd.read_excel(file_config, sheet_name=sheet_name)
     df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
     df_dec = df_dec.merge(df_config, on=['ID'], how='left')
@@ -551,7 +550,9 @@ if LEHD:
 
     ## Combining ---
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='LEHD')
+    file_config = path_config / 'census_configuration_file2.xlsx'
+    sheet_name='LEHD'
+    df_config = pd.read_excel(file_config, sheet_name=sheet_name)
     df_config = df_config[['Table', 'ID', 'Indicator Name', 'Include', 'Sample']]
 
     df_vars = df_vars.merge(df_config, on=['Table', 'ID'], how='left')
@@ -712,8 +713,9 @@ if CPS:
     ## Combining ---
 
 
-
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file.xlsm'), sheet_name='FOODSEC')
+    file_config = path_config / 'census_configuration_file2.xlsx'
+    sheet_name='FOODSEC'
+    df_config = pd.read_excel(file_config, sheet_name=sheet_name)
     df_config = df_config[['ID', 'Indicator Name', 'Include', 'ID2', 'Description2', 'Data Type', 'Table Type']]
 
     df_cps = df_cps.merge(df_config, on=['ID'], how='left')
@@ -807,15 +809,32 @@ if SUBJECT:
 
     df_acs = pd.concat([df_acs1, df_acs5])
     df_acs = df_acs.sort_values(['Year', 'ID'], ascending = [False, True])
+    df_acs = df_acs.rename(columns={'attributes':'Attributes', 'label':'Label', 'concept':'Table Name'})
     df_acs = df_acs.reset_index(drop=True)
+
+    df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['Attributes']
+    df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(ME_split)
 
     display(df_acs.head())
 
+    file_config = path_config / 'census_configuration_file2.xlsx'; sheet_name='SUBJECT'
+    df_config = pd.read_excel(file_config, sheet_name=sheet_name)
+    df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
-    df_config = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name='SUBJECT')
-    df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
+    df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
+    df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]
 
-    df_acs = df_acs.merge(df_config, on=['ID'], how='left')
+    df_acs1 = df_acs1.merge(df_config[df_config['Year'] == df_config['Year'].max()].drop('Year', axis=1), on=['ID'], how='left')
+    df_acs2 = df_acs2.merge(df_config, on=['Year', 'ID'], how='left')
+
+    df_acs = pd.concat([df_acs1, df_acs2])
+
+    df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes']]
+    df_acs = df_acs.drop_duplicates()
+    df_acs = df_acs.sort_values(['Table', 'Year', 'ID'], ascending = [True, False, True])
+    df_acs = df_acs.reset_index(drop=True)
+    
+
     display(df_acs.head())
 
 
