@@ -104,8 +104,8 @@ for county in counties:
             '0%-30% of AMI': '#1F45FC'
             , '31%-50% of AMI': '#1E90FF'
             , '51%-80% of AMI': '#9DC209'
-            , '81%-100% of AMI': '#7E587E'
-            , 'Greater than 100% of AMI': '#FBB117'
+            , '81%-100% of AMI': '#FBB117'
+            , 'Greater than 100% of AMI': '#7E587E'
         }
 
         fig = px.bar(df_plot, x='Geography', y='Percentage'
@@ -114,7 +114,7 @@ for county in counties:
         
         fig.update_traces(hovertemplate="%{y}")
         fig.update_yaxes(dtick=10, ticksuffix='%', range = [0,102])
-
+        fig.update_layout(legend={'traceorder': 'reversed'})
     
         path_plots = path_out / county / jurisdiction / 'Supplemental'
         plot_rhna(export=export)

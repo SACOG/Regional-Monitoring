@@ -81,7 +81,8 @@ for county in counties:
                      , color_discrete_map=color_map)
         
         fig.update_traces(hovertemplate="%{y}")
-            
+        fig.update_layout(legend={'traceorder': 'reversed'})
+        
         path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
         plot_rhna(export=export)
     

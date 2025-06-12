@@ -94,7 +94,7 @@ for county in counties:
         
         fig.update_traces(hovertemplate="%{y}")
         fig.update_yaxes(ticksuffix='%')
-        # fig.update_layout(legend={'traceorder': 'reversed'})
+        fig.update_layout(legend={'traceorder': 'reversed'})
 
         path_plots = path_out / county / jurisdiction / 'Supplemental'
         plot_rhna(export=export)

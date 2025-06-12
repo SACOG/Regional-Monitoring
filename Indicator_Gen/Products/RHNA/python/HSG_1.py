@@ -21,7 +21,7 @@ df_dof = pd.read_excel(file_in)
 
 df_dof = df_dof[df_dof['MPO'] == 'SACOG']
 df_dof['MPO'] = df_dof['MPO'] + ' Region'
-df_dof = df_dof[df_dof['Year'].isin([2010, 2024])]
+df_dof = df_dof[df_dof['Year'].isin([2010, 2020, 2024])]
 df_dof = df_dof.sort_values('Year')
 df_dof['Year'] = df_dof['Year'].astype(str)
 
@@ -31,6 +31,18 @@ df_dof = df_dof.melt(id_vars=['County', 'Jurisdiction', 'Year'], var_name='Housi
 df_dof = df_dof.reset_index(drop=True)
 
 
+
+conditions = [
+      df_dof['Housing Type'] == 'Single Attached'
+    , df_dof['Housing Type'] == 'Single Detached'
+    , df_dof['Housing Type'] == 'Two to Four'    
+    , df_dof['Housing Type'] == 'Five Plus'      
+    , df_dof['Housing Type'] == 'Mobile Homes'   
+]
+
+choices = ['Single Family Attached', 'Single Family Detached', 'Multifamily: Two to Four Units', 'Multifamily: 5+ Units', 'Mobile Homes']
+
+df_dof['Housing Type'] = np.select(conditions, choices, default='no')
 
 counties = list(df_dof['County'].unique())
 
@@ -58,6 +70,7 @@ for county in counties:
         
         color_map = {
                  "2010":"#1F45FC",
+                 "2020":"#1E90FF",
                  "2024": "#9DC209",
         }
 

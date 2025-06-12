@@ -10,6 +10,7 @@ Project:
   - 'StoryMaps'
   - 'RHNA'
   - 'Blueprint'
+  - 'SACSIM'
   - 'Chamber Study Missions'
   - 'Cap to Cap'
   - 'Miscellaneous'
@@ -424,6 +425,62 @@ Indicators:
       weighted_by: 'No'
       metric: 'Population'
 
+  SACSIM:
+    SACSIM_1:
+      sp_location: 'Small Data Requests\\2025\\SACSIM\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Population'
+    SACSIM_2:
+      sp_location: 'Small Data Requests\\2025\\SACSIM\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
+    SACSIM_3:
+      sp_location: 'Small Data Requests\\2025\\SACSIM\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
+    SACSIM_4:
+      sp_location: 'Small Data Requests\\2025\\SACSIM\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
+    SACSIM_5:
+      sp_location: 'Small Data Requests\\2025\\SACSIM\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
+    SACSIM_6:
+      sp_location: 'Small Data Requests\\2025\\SACSIM\\original_exports'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'No'
+      weighted_by: 'No'
+      metric: 'Households'
+
   RHNA:
     RHNA_POPEMP_1:
       sp_location: 'RHNA\\New Data Collected'
@@ -574,19 +631,19 @@ Indicators:
       folder: 'Owners vs Renters'
       sample: 'ACS'
       MOE_threshold: 0.05
-      number_of_variables: 2 
+      number_of_variables: 2
       percentages: 'Yes'
       weighted_by: 'No'
       metric: 'Households'
     RHNA_POPEMP_17:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Housing Tenure'
+      sample: ['ACS', 'DEC']
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: 'Yes'
       weighted_by: 'No'
-      metric: 'Population'
+      metric: 'Households'
     RHNA_POPEMP_18a:
       sp_location: 'RHNA\\New Data Collected'
       folder: 'Owners - Housing Tenure by Age'
@@ -967,11 +1024,11 @@ Indicators:
       metric: 'Population'
     RHNA_AFFH_2:
       sp_location: 'RHNA\\New Data Collected'
-      folder: ''
-      sample: ''
-      MOE_threshold: 
-      number_of_variables: 
-      percentages: ''
+      folder: 'Population Living in High Resource Areas by Race'
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: 'No'
       weighted_by: 'No'
       metric: 'Population'
     RHNA_AFFH_3:

@@ -68,16 +68,27 @@ for county in counties:
 
         df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
+
+        df_plot['Sort_eth'] = pd.Categorical(df_plot['Race_Ethnicity'], [
+            'American Indian or Alaska Native'
+            , 'Native Hawaiian or other Pacific Islander'
+            , 'Other race or multiple races'
+            , 'Black or African American'
+            , 'Asian'
+            , 'Hispanic or Latino'
+            , 'White (NH)'
+        ])
+        df_plot = df_plot.sort_values(['Variable', 'Sort_eth'], ascending=[True, False])
+        df_plot = df_plot.drop(['Sort_eth'], axis=1)
             
         color_map  = {
-            'American Indian or Alaska Native': '#A97142'
+            'American Indian or Alaska Native': '#E56717'
             , 'Native Hawaiian or other Pacific Islander': '#006A4E'
-            , 'Some other race': '#7E587E'
-            , 'Two or more races': '#1F45FC'
+            , 'Other race or multiple races': '#7E587E'
+            , 'Black or African American': '#FBB117'
             , 'Asian': '#9DC209'
-            , 'Black or African American': '#1E90FF'
-            , 'Hispanic or Latino': '#FBB117'
-            , 'White (NH)': '#DC381F'
+            , 'Hispanic or Latino': '#1E90FF'
+            , 'White (NH)': '#1F45FC'
         }
 
         fig = px.bar(df_plot, x='Variable', y='Percentage'

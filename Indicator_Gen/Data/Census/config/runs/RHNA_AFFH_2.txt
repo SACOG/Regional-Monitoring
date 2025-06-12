@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: RHNA_AFFH_2
+Export Location: RHNA\\New Data Collected
+Folder: Population Living in High Resource Areas by Race
+Sample: ACS
+Estimate: ACS5
+Geography: Tracts
+Years Imported: 2023
+Import Tab: Counties
+Margin of Error: Yes

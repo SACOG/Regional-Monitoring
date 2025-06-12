@@ -68,7 +68,7 @@ with path_func_censusbureau.open("r") as f:
 
 ## API key ---
 
-# Obtain API Key from the following source 
+# Obtain API Key from the following source
 # https://api.census.gov/data/key_signup.html
 file_api = path_config / 'api_key.txt'
 with open(file_api, 'r') as file:
@@ -76,7 +76,7 @@ with open(file_api, 'r') as file:
 
 
 ## Export params ---
-rerun=True
+rerun=False
 export=True
 
 
@@ -89,8 +89,6 @@ export=True
 path_1a = path_code / 'supplemental_scripts' / 'step01a__prepare_api_request_inputs.py'
 with path_1a.open("r") as f:
     exec(f.read())
-
-
 
 
 
@@ -133,7 +131,7 @@ if export:
     
     file_out = path_raw / export_title
     df_census_raw = df_census_raw.drop_duplicates()
-    df_census_raw.to_csv(file_out, index = False)
+    df_census_raw.to_csv(file_out, index=False)
     
     print()
     print('Successfully exported!')

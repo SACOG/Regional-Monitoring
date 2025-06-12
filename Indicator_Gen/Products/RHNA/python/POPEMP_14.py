@@ -66,7 +66,7 @@ for year in tqdm(years):
         , df_wac['Desc'].isin(['Number of jobs with earnings greater than $3333/month'])
     ]
 
-    choices = ['Earnings $1250/month or less', 'Earnings $1251/month to $3333/month', 'Earnings greater than $3333/month']
+    choices = ['Earnings &#36;1250/month or less', 'Earnings &#36;1251/month to &#36;3333/month', 'Earnings greater than &#36;3333/month']
 
     df_wac['Desc_final'] = np.select(conditions, choices, default='No')
 
@@ -111,7 +111,7 @@ for year in tqdm(years):
         , df_rac['Desc'].isin(['Number of jobs with earnings greater than $3333/month'])
     ]
 
-    choices = ['Earnings $1250/month or less', 'Earnings $1251/month to $3333/month', 'Earnings greater than $3333/month']
+    choices = ['Earnings &#36;1250/month or less', 'Earnings &#36;1251/month to &#36;3333/month', 'Earnings greater than &#36;3333/month']
 
     df_rac['Desc_final'] = np.select(conditions, choices, default='No')
 
@@ -128,6 +128,8 @@ df_rac = df_rac.reset_index(drop=True)
 df = df_wac.merge(df_rac, on=['Year', 'COUNTY', 'JURIS', 'Desc_final'], how='left')
 df['Ratio'] = df['num_jobs_wac'] / df['num_jobs_rac']
 
+
+
 df = df.drop(['num_jobs_wac', 'num_jobs_rac'], axis=1)
 
 
@@ -138,7 +140,6 @@ display(df)
 counties = df['COUNTY'].unique()
 
 
-# import pdb; pdb.set_trace()
 
 
 
@@ -160,15 +161,16 @@ for county in counties:
         df_prod = df_prod[df_prod['JURIS'] == jurisdiction]
         df_prod = df_prod.drop('COUNTY', axis=1)
         df_prod = df_prod.pivot_table(index='Year', columns='Desc_final', values='Ratio').reset_index()
+        df_prod.columns = ['Year', 'Earnings $1250/month or less', 'Earnings $1251/month to $3333/month', 'Earnings greater than $3333/month']
 
         df_plot = df_sub.copy()
         df_plot = df_plot[df_plot['JURIS'] == jurisdiction]
 
 
         color_map = {
-            'Earnings $1250/month or less': '#1E90FF'
-            , 'Earnings $1251/month to $3333/month': '#1F45FC'
-            , 'Earnings greater than $3333/month': '#9DC209'
+            'Earnings &#36;1250/month or less': '#1F45FC'
+            , 'Earnings &#36;1251/month to &#36;3333/month': '#1E90FF'
+            , 'Earnings greater than &#36;3333/month': '#9DC209'
         }
 
         fig = px.line(df_plot, x='Year', y='Ratio'
@@ -187,6 +189,8 @@ for county in counties:
         if export:
             export_rhna(df_prod)
 
+
+list_indicators.append(indicator)
 
 
 

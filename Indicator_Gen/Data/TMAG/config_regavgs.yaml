@@ -34,6 +34,7 @@ access_data:
     asian: 'asian_test.tif'
     black: 'black_test.tif'
     white: 'white_test.tif'
+    hispanic: 'hispanic_test.tif'
   acc_lyrs:
     emp:
       transit: transit_jobs_2020.tif

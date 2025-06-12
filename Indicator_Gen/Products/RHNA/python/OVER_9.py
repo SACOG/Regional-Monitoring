@@ -79,7 +79,7 @@ df_chas['Household Size'] = np.select(conditions, choices, default='no')
 df_chas = df_chas.groupby(['County Name', 'name', 'Household Size', 'Cost Burden'], as_index=False)['Households'].sum()
 
 df_chas['Percentage'] = df_chas['Households'] / df_chas.groupby(['County Name', 'name', 'Household Size'])['Households'].transform('sum')
-df_chas = df_chas[df_chas['Cost Burden'] != 'Not computed']
+# df_chas = df_chas[df_chas['Cost Burden'] != 'Not computed']
 
 
 df_chas = df_chas.reset_index(drop=True)
@@ -114,7 +114,8 @@ for county in counties:
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
-            '0%-30% of income used for housing': '#1F45FC'
+            'Not computed': '#9B9A96'
+            , '0%-30% of income used for housing': '#1F45FC'
             , '30%-50% of income used for housing': '#1E90FF'
             , '50%+ of income used for housing': '#9DC209'
         }

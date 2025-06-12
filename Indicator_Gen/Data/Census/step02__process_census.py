@@ -106,7 +106,7 @@ else:
 file_out = path_raw / export_title
 df_census_raw = pd.read_csv(file_out)
 display(df_census_raw.head())
-
+print(df_census_raw.Year.unique())
 
 
 
@@ -119,7 +119,8 @@ df_census = df_census_raw.copy()
 
 print(); print()
 
-if sample_type in ['ACS', 'SUBJECT']:
+
+if sample_type in ['ACS', 'SUBJECT', 'DEC']:
     if sample_type == 'SUBJECT':
         estimate = re.sub('SUBJECT', 'ACS', estimate)
 
@@ -131,17 +132,20 @@ if sample_type in ['ACS', 'SUBJECT']:
     # Reorganize margin of error fields
     df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error)
     display(df_census.head(3))
+    print(df_census.Year.unique())
 
     # Merge cleam label field, variable mapping, race/ethnicity, and sorting field
     # Remove unneeded columns
     df_census = acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_git)
     display(df_census.head(3))
+    print(df_census.Year.unique())
 
     # Create "Categorical" race/ethnicity field for sorting
     # Sort by geography, variable mapping, and race/ethnicity
     # sort and then remove categorical field
     df_census = acs_processing_3(df_census, geography)
     display(df_census.head(3))
+    print(df_census.Year.unique())
 
     # Final processing step for ACS data
     # Link various FIPS codes
@@ -158,6 +162,8 @@ if sample_type in ['ACS', 'SUBJECT']:
         else:
             df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
             display(df_census.head(3))
+    print(df_census.Year.unique())
+
 
 
 
@@ -210,7 +216,6 @@ if sample_type == 'LEHD':
 
 
 
-
 # Final organization of tables for cleanliness
 # Renaming columns, subsetting to only desired columns, ...
 
@@ -227,7 +232,7 @@ if geography not in ['Counties', 'PUMA']:
                                , sample_type     = sample_type)
     display(df_census)
 if geography == 'Counties':
-    if sample_type in ['ACS', 'SUBJECT']:
+    if sample_type in ['ACS', 'SUBJECT', 'DEC']:
         if mpo == 'Yes':
             df_census, df_mpo = rename_census(df_census           = df_census
                                                 , df_mpo          = df_mpo
@@ -339,7 +344,7 @@ if export:
         if sample_type == 'LEHD':
             workbook_name = f"{indicator} {geography} {sample_type}.xlsx"
         else:
-            workbook_name = f"{indicator} {geography} {estimate}_Unincorporated.xlsx"
+            workbook_name = f"{indicator} {geography} {estimate}.xlsx"
         print(workbook_name)
         print()
     
@@ -364,7 +369,7 @@ if export:
             path_wb = path_ / workbook_name
         except: pass
         
-        if sample_type in ['ACS', 'SUBJECT']:
+        if sample_type in ['ACS', 'SUBJECT', 'DEC']:
             if geography == 'Places':
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Census Designated Places (Jurisdictions)'
@@ -386,15 +391,15 @@ if export:
             export_indicator(indicator, geography, df_puma, path_wb, about)
             path_wb = path_ / workbook_name2
             if about:
-                df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'Counties'
+                df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Counties'
             export_indicator(indicator, geography, df_counties, path_wb, about)
             path_wb = path_ / workbook_name3
             if about:
-                df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MSA'
+                df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MSA'
             export_indicator(indicator, geography, df_msa, path_wb, about)
             path_wb = path_ / workbook_name4
             if about:
-                df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MPO'
+                df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
             export_indicator(indicator, geography, df_mpo, path_wb, about)
         
         if sample_type == 'FOODSEC':
@@ -404,7 +409,7 @@ if export:
             export_indicator(indicator, geography, df_counties, path_wb, about)
             path_wb = path_ / workbook_name2
             if about:
-                df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MPO'
+                df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
             export_indicator(indicator, geography, df_mpo, path_wb, about)
         
         if sample_type == 'LEHD':
@@ -415,7 +420,7 @@ if export:
                 export_indicator(indicator, geography, df_census, path_wb, about)
                 path_wb = path_ / workbook_name2
                 if about:
-                    df_about.loc[df_about['Indicator'] == 'Geography', 'Description'] = 'MPO'
+                    df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
                 export_indicator(indicator, geography, df_mpo, path_wb, about)
             if geography == 'MSA':
                 path_wb = path_ / workbook_name

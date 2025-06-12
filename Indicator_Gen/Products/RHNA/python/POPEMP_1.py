@@ -48,7 +48,7 @@ for county in counties:
         df_plot['Percentage Difference'] = round(df_plot['Percent Difference'], 1)
             
         color_map  = {
-            'SACOG': '#9DC209'
+            'SACOG Region': '#9DC209'
             , f'{county} County': '#1E90FF'
             , jurisdiction: '#FBB117'
         }
@@ -76,7 +76,6 @@ for county in counties:
         year_min = df_plot['Year'].min()-0.5
         year_max = df_plot['Year'].max()+0.5
         fig.update_xaxes(dtick=1, range = [year_min, year_max])
-        fig.update_layout(legend={'traceorder': 'reversed'})
         fig.update_traces(hovertemplate="%{y}")
     
         path_plots = path_out / county / jurisdiction / 'Supplemental'

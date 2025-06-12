@@ -2483,27 +2483,6 @@ Zillow:
 
 EPA:
 
-  # Health_3:
-  #   Indicator Title:
-  #   - Air Quality Index levels of concern
-  #   Source:
-  #   - US Environmental Protection Agency
-  #   Year(s):
-  #   - 1999-2023
-  #   Description:
-  #   - Number of days within each Air Quality Index levels of concern category each year (Ozone and/or PM2.5)
-  #   Geography:
-  #   - MSA
-  #   Website:
-  #   - https://www.epa.gov/
-  #   Last Updated:
-  #   - 
-  #   Next Update:
-  #   - '2025-06-01'
-  #   Notes: 'Number of days violating national ambient air quality standards each year (Ozone and/or PM2.5).\n
-  #    In California, PM2.5 monitors were installed in 1998.\n
-  #    Data on Ozone AQI can be collected started in 1980.'
-
   Health_3:
     Indicator Title:
     - Days violating national ambient air quality standards

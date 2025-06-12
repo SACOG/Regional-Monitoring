@@ -20,6 +20,8 @@ df_places = pd.concat([df_places_a, df_places_b])
 
 ## Organizing ---
 
+
+
 def re_remove_post(x, exp = ':'):
     if x == 'nan':
         return 'nan'
@@ -39,9 +41,10 @@ df_places = df_places[df_places['Year'] == df_places['Year'].max()]
 df_places = df_places.reset_index(drop=True)
 df_places['Category'] = df_places['Variable'].apply(re_remove_post)
 df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
-df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
+
 
 df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
+df_places['Percentage'] = df_places[values] / df_places.groupby(['County Name', 'Geography', 'Variable'])[values].transform('sum')
 
 df_places['Sort'] = pd.Categorical(df_places['Variable'], ['Age 15-24', 'Age 25-34', 'Age 35-44', 'Age 45-54', 'Age 55-59', 'Age 60-64', 'Age 65-74', 'Age 75-84', 'Age 85+'])
 df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, True])
@@ -74,8 +77,8 @@ for county in counties:
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
-            'Owner occupied': '#9DC209'
-            , 'Renter occupied': '#1F45FC'
+            'Owner occupied': '#1F45FC'
+            , 'Renter occupied': '#9DC209'
         }
 
         fig = px.bar(df_plot, x='Variable', y='Percentage'

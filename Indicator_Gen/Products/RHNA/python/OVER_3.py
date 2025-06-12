@@ -52,28 +52,25 @@ for county in counties:
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         df_plot['Sort'] = pd.Categorical(df_plot['Geography'], [jurisdiction, county, 'SACOG'])
         df_plot['Sort_eth'] = pd.Categorical(df_plot['Race_Ethnicity'], [
-            'American Indian or Alaska Native (NH)'
-            , 'Native Hawaiian or other Pacific Islander (NH)'
-            , 'Some other race (NH)'
-            , 'Two or more races (NH)'
-            , 'Black or African American (NH)'
-            , 'Asian (NH)'
+            'American Indian or Alaska Native'
+            , 'Native Hawaiian or other Pacific Islander'
+            , 'Other race or multiple races'
+            , 'Black or African American'
+            , 'Asian'
             , 'Hispanic or Latino'
             , 'White (NH)'
         ])
-        df_plot = df_plot.sort_values(['Sort', 'Sort_eth'], ascending=[True, True])
+        df_plot = df_plot.sort_values(['Sort', 'Sort_eth'], ascending=[True, False])
         df_plot = df_plot.drop(['Sort', 'Sort_eth'], axis=1)
-        df_plot = df_plot.reset_index(drop=True)
-            
+
         color_map  = {
-            'American Indian or Alaska Native (NH)': '#A97142'
-            , 'Native Hawaiian or other Pacific Islander (NH)': '#006A4E'
-            , 'Some other race (NH)': '#7E587E'
-            , 'Two or more races (NH)': '#1F45FC'
-            , 'Asian (NH)': '#9DC209'
-            , 'Black or African American (NH)': '#1E90FF'
-            , 'Hispanic or Latino': '#FBB117'
-            , 'White (NH)': '#DC381F'
+            'American Indian or Alaska Native': '#E56717'
+            , 'Native Hawaiian or other Pacific Islander': '#006A4E'
+            , 'Other race or multiple races': '#7E587E'
+            , 'Black or African American': '#FBB117'
+            , 'Asian': '#9DC209'
+            , 'Hispanic or Latino': '#1E90FF'
+            , 'White (NH)': '#1F45FC'
         }
     
         fig = px.bar(
@@ -86,10 +83,8 @@ for county in counties:
             # , barmode='group'
         )
         
-        # title = f'<b>{plot_title}</b>'
-        # fig.update_yaxes(dtick=10, ticksuffix='%', range = [0,102])
         fig.update_yaxes(ticksuffix='%')
-        # fig.update_layout(legend={'traceorder': 'reversed'})
+        fig.update_layout(legend={'traceorder': 'reversed'})
         fig.update_traces(hovertemplate="%{y}")
         fig.update_layout(xaxis={'showticklabels': False})
         fig.update_layout(bargap=0, bargroupgap=0)

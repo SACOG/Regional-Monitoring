@@ -45,6 +45,20 @@ df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 
 df_places['Sort'] = pd.Categorical(df_places['Variable'], ['75k or more', '50k to 75k', '25k to 50k', '10k to 25k', 'Less than 10k'])
 df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, False])
 df_places = df_places.drop(['Sort'], axis = 1)
+df_places = df_places.reset_index(drop=True)
+
+conditions = [
+    df_places['Variable'] == 'Less than 10k'
+    , df_places['Variable'] == '10k to 25k'
+    , df_places['Variable'] == '25k to 50k'
+    , df_places['Variable'] == '50k to 75k'
+    , df_places['Variable'] == '75k or more'
+]
+
+choices = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
+
+df_places['Variable'] = np.select(conditions, choices, default = 'no')
+
 
 counties = list(df_places['County Name'].unique())
 
@@ -80,6 +94,8 @@ for county in counties:
                      , color_discrete_map=color_map)
         
         fig.update_traces(hovertemplate="%{y}")
+        fig.update_yaxes(tickprefix='$')
+        fig.update_xaxes(tickvals=[0, 1, 2, 3, 4], ticktext=['Less than &#36;10k', '&#36;10k to &#36;25k', '&#36;25k to &#36;50k', '&#36;50k to &#36;75k', '&#36;75k or more'])
     
         path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
         plot_rhna(export=export)

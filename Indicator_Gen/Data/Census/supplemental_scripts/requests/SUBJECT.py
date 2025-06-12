@@ -39,14 +39,6 @@ if version == 2:
             df_vars2 = df_vars2[df_vars2['Year'] == year]
             df_vars2 = df_vars2[(df_vars2['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars2['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False))]
             df_vars2 = df_vars2[df_vars2['Include'] == 'Yes']
-        
-            # Set tables and variables to import
-
-            # if margin_of_error == 'Yes':
-            #     df_vars2['ID_Attributes'] = df_vars2['ID_Attributes'].apply(ME_split)
-            #     list_vars = ['NAME'] + df_vars2['ID_Attributes'].to_list()
-            # else:
-            #     list_vars = ['NAME'] + df_vars2['ID'].to_list()
 
             if margin_of_error == 'Yes':
                 list_table_vars  = [['NAME'] + df_vars2['ID_Attributes' ].to_list()[x:x+20] for x in range(0, len(df_vars2['ID_Attributes' ].to_list()), 20)]
@@ -59,22 +51,13 @@ if version == 2:
             list_variables  = []
             list_variables2 = []
             for x, y in zip(list_table_vars, list_table_vars2):
-                list_variables .append(",".join(x))
+                list_variables.append(",".join(x))
                 y.remove('NAME')
                 y2 = []
                 for ii in y:
                     ii = ii.split(',')
                     y2 = y2 + ii
                 list_variables2.append(y2)
-
-            # if year == 2023:
-            #     import pdb; pdb.set_trace()
-
-            # if year == np.max(years_to_import):
-            #     list_table_vars_final = list_table_vars.copy()
-            #     list_variables_final = []
-            #     for x in list_table_vars_final:
-            #         list_variables_final.append(",".join(x))
 
 
             list_df_vars = []
@@ -134,8 +117,6 @@ if version == 2:
                 df_states = pd.concat(list_df_states)
                 df_states = df_states.set_index(geo_id + ['Year']).reset_index()
                 df_states.columns = geo_id + ['Year'] + variables2
-                # if year == 2023:
-                #     import pdb; pdb.set_trace()
                 list_df_vars.append(df_states)
 
             df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = geo_id + ['Year'], how='outer'), list_df_vars)
@@ -153,13 +134,13 @@ if version == 2:
         df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
                                                 , left_on = ['state', 'county']
                                                 , right_on = ['State FIPS', 'County FIPS'])
-        df_census_raw.drop(['State FIPS', 'County FIPS'], axis = 1, inplace = True)
+        df_census_raw = df_census_raw.drop(['State FIPS', 'County FIPS'], axis=1)
         df_census_raw = df_census_raw.set_index(['NAME', 'state', 'county', 'County Name', 'tract', 'Year']).reset_index()
     if geography == 'Counties':
         df_census_raw = df_census_raw.merge(df_fips[['State FIPS', 'County FIPS', 'County Name']]
                                                 , left_on = ['state', 'county']
                                                 , right_on = ['State FIPS', 'County FIPS'])
-        df_census_raw.drop(['State FIPS', 'County FIPS'], axis = 1, inplace = True)
+        df_census_raw = df_census_raw.drop(['State FIPS', 'County FIPS'], axis=1)
         df_census_raw = df_census_raw.set_index(['NAME', 'state', 'county', 'County Name', 'Year']).reset_index()
     if geography == 'MSA':
         df_census_raw = df_census_raw.set_index(['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year']).reset_index()

@@ -48,8 +48,9 @@ for county in counties:
 
         tqdm.write(jurisdiction)
 
-        df_prod = df_places_sub[df_places_sub['Geography'] == jurisdiction]
-        df_prod = df_prod[['Variable', 'Housing Units', 'Percentage']].drop_duplicates()
+        df_prod0 = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+        df_prod = df_prod0[['Variable', 'Housing Units']].drop_duplicates()
+        df_pct  = df_prod0[['Variable', 'Percentage'   ]].drop_duplicates()
         df_plot = df_prod.copy()
 
         ## Plotting ---
@@ -65,7 +66,8 @@ for county in counties:
         ## Exporting ---
         
         if export:
-            export_rhna(df_prod)
+            export_rhna(df_prod, df_pct)
 
-# list_indicators.append(indicator)
+
+list_indicators.append(indicator)
 

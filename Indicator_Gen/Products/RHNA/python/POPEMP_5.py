@@ -37,8 +37,8 @@ for county in counties:
         tqdm.write(jurisdiction)
                 
         df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub, df_mpo)
-        df_prod = df_prod[['Abroad', 'Elsewhere in U.S.', 'Elsewhere in CA', 'Same County', 'Same city or town', 'Same house']] # this reordering is new but should work
-        df_pct  = df_pct [['Abroad', 'Elsewhere in U.S.', 'Elsewhere in CA', 'Same County', 'Same city or town', 'Same house']]
+        df_prod = df_prod[['Geography', 'Abroad', 'Elsewhere in U.S.', 'Elsewhere in CA', 'Same county', 'Same city or town', 'Same house']] # this reordering is new but should work
+        df_pct  = df_pct [['Geography', 'Abroad', 'Elsewhere in U.S.', 'Elsewhere in CA', 'Same county', 'Same city or town', 'Same house']]
 
     
         ## Plotting ---
@@ -48,11 +48,11 @@ for county in counties:
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
             
         color_map  = {
-            'Same house': '#1E90FF'
-            , 'Same city or town': '#1F45FC'
+            'Same house': '#1F45FC'
+            , 'Same city or town': '#1E90FF'
             , 'Same county': '#9DC209'
-            , 'Elsewhere in CA': '#7E587E'
-            , 'Elsewhere in U.S.': '#FBB117'
+            , 'Elsewhere in CA': '#FBB117'
+            , 'Elsewhere in U.S.': '#7E587E'
             , 'Abroad': '#DC381F'
         }
     
@@ -68,7 +68,7 @@ for county in counties:
         plot_rhna(export=export)
     
         ## Exporting ---
-        
+        # import pdb; pdb.set_trace()
         if export:
             export_rhna(df_prod, df_pct)
 
