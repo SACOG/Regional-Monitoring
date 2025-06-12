@@ -78,8 +78,8 @@ for county in counties:
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
-            'Owner occupied': '#9DC209'
-            , 'Renter occupied': '#1F45FC'
+            'Owner occupied': '#1F45FC'
+            , 'Renter occupied': '#9DC209'
         }
 
         fig = px.bar(df_plot, x='Variable', y='Percentage'

@@ -21,6 +21,7 @@ df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
 df_places, df_counties, df_mpo = clean_rhna(df_places, df_counties, df_mpo, path_config0, columns, values)
 
 
+
 counties = df_counties['Geography'].unique()
 
 for county in counties:
@@ -44,15 +45,27 @@ for county in counties:
         df_plot = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_plot = df_plot.drop(values, axis=1)
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
+        conditions = [
+            df_plot[columns] == 'Units valued less than 250k'
+            , df_plot[columns] == 'Units valued 250k-500k'
+            , df_plot[columns] == 'Units valued 500k-750k'
+            , df_plot[columns] == 'Units valued 750k-1M'
+            , df_plot[columns] == 'Units valued 1M-1.5M'
+            , df_plot[columns] == 'Units valued 1.5M-2M'
+            , df_plot[columns] == 'Units valued 2M+'
+        ]
+
+        choices = ['Units valued less than &#36;250k', 'Units valued &#36;250k-&#36;500k', 'Units valued &#36;500k-&#36;750k', 'Units valued &#36;750k-&#36;1M', 'Units valued &#36;1M-&#36;1.5M', 'Units valued &#36;1.5M-&#36;2M', 'Units valued &#36;2M+']
+        df_plot[columns] = np.select(conditions, choices, default='no')
         
         color_map = {
-                "Units valued less than 250k":"#1F45FC",
-                "Units valued 250k-500k":"#1E90FF",
-                "Units valued 500k-750k":"#9DC209",
-                "Units valued 750k-1M":"#FBB117",
-                "Units valued 1M-1.5M":"#7E587E",
-                "Units valued 1.5M-2M":"#DC381F",
-                "Units valued 2M+":"#006A4E"
+                "Units valued less than &#36;250k":"#1F45FC",
+                "Units valued &#36;250k-&#36;500k":"#1E90FF",
+                "Units valued &#36;500k-&#36;750k":"#9DC209",
+                "Units valued &#36;750k-&#36;1M":"#FBB117",
+                "Units valued &#36;1M-&#36;1.5M":"#7E587E",
+                "Units valued &#36;1.5M-&#36;2M":"#DC381F",
+                "Units valued &#36;2M+":"#006A4E"
         }
         
         fig = px.bar(df_plot, x='Geography', y='Percentage'

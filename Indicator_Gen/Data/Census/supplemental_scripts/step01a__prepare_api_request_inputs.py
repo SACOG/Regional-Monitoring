@@ -158,11 +158,11 @@ if version == 2:
         print('---------------------------------------------------------------------------------------------------------------------------------------')
 
         print()
-        if sample_type != 'LEHD':
+        if sample_type not in ['LEHD', 'DEC']:
             print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
             margin_of_error = input()
         else:
-            print(); print('LEHD has Margins of Error available but not through API.')
+            print(); print('LEHD has margin of error terms available but not through API.  DEC has no margin of error terms available')
             margin_of_error = 'No'
         assert margin_of_error in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
 
@@ -208,29 +208,23 @@ if version == 2:
         df_vars = pd.read_excel(os.path.join(path_config, 'census_configuration_file2.xlsx'), sheet_name = estimate)
         df_vars = df_vars[df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
-
-        if margin_of_error == 'Yes':
-            df_vars['ID_Attributes'] = df_vars['ID_Attributes'].apply(ME_split)
-            list_vars = ['NAME'] + df_vars['ID_Attributes'].to_list()
-        else:
-            list_vars = ['NAME'] + df_vars['ID'].to_list()
-                
-        dict_vars = {}
+               
+        dict_vars  = {}
+        dict_vars2 = {}
         for year in years_to_import:
-            dict_vars[str(year)] = ['NAME'] + unique(df_vars[df_vars['Year'] == year]['ID'].to_list())
+            dict_vars [str(year)] = ['NAME'] + unique(df_vars[df_vars['Year'] == year]['ID' ].to_list())
+            dict_vars2[str(year)] = ['NAME'] + unique(df_vars[df_vars['Year'] == year]['ID2'].to_list())
+
             
         if import_tab == 'Counties':
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
-                                    , sheet_name = 'CountyFIPS'
-                                    , dtype = {'State FIPS': object, 'County FIPS': object})
+            file_area = path_git / 'config' / 'area_codes.xlsx'
+            df_fips = pd.read_excel(file_area, sheet_name='CountyFIPS', dtype = {'State FIPS': str, 'County FIPS': str})
             df_fips = df_fips[df_fips['State'].isin(df_inputs['states'].values)]
-            dict_fips = df_fips[
-                            (df_fips['State'].isin(df_inputs['states'].values))
-                            & (df_fips['County Name'].isin(df_inputs['counties'].values))
-            ]
+            dict_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values)) & (df_fips['County Name'].isin(df_inputs['counties'].values))]
             dict_fips = dict_fips[['State FIPS', 'County FIPS']]
             dict_fips = dict_fips.groupby('State FIPS')['County FIPS'].apply(list).to_dict()
             
+           
             for key in list(dict_fips.keys()):
                 dict_fips[key] = ",".join(dict_fips[key])
             
@@ -250,7 +244,7 @@ if version == 2:
             # Convert to dictionary object for easy state-county combination importing
             df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
                                     , sheet_name = 'CountyFIPS'
-                                    , dtype = {'State FIPS': object, 'County FIPS': object})
+                                    , dtype = {'State FIPS': str, 'County FIPS': str})
             df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values))]
             states_to_import = list(df_fips['State FIPS'].unique())
             states_to_import = [str(state) for state in states_to_import]
@@ -261,7 +255,7 @@ if version == 2:
             print(states_to_import)
             print()
             print("List of variables to import:")
-            print(list_vars)
+            print(dict_vars)
 
 
 
@@ -270,17 +264,17 @@ if version == 2:
 
         file_vars = path_config / 'census_configuration_file2.xlsx'
         df_vars = pd.read_excel(file_vars, sheet_name=sample_type)
-        df_vars = df_vars[df_vars['Year'] == 2023]
         df_vars = df_vars[(df_vars['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False))]
         df_vars = df_vars[df_vars['Include'] == 'Yes']
-        
+        # df_vars = df_vars[df_vars['Year'] == 2023]
+
         # Set tables and variables to import
 
         if margin_of_error == 'Yes':
-            df_vars['ID_Attributes'] = df_vars['ID_Attributes'].apply(ME_split)
-            list_vars = ['NAME'] + df_vars['ID_Attributes'].to_list()
+            df_vars['ID_Attributes2'] = df_vars['ID_Attributes2'].apply(ME_split)
+            list_vars = ['NAME'] + list(set(df_vars['ID_Attributes2'].to_list()))
         else:
-            list_vars = ['NAME'] + df_vars['ID'].to_list()
+            list_vars = ['NAME'] + list(set(df_vars['ID2'].to_list()))
 
         if sample_type == 'ACS':
             tables = df_vars['Table'].unique()
@@ -293,15 +287,14 @@ if version == 2:
             
             # Import County FIPS mapping
             # Convert to dictionary object for easy state-county combination importing
-            df_fips = pd.read_excel(os.path.join(path_git, 'config', 'area_codes.xlsx')
-                                    , sheet_name = 'CountyFIPS'
-                                    , dtype = {'State FIPS': str, 'County FIPS': str})
+            file_area = path_git / 'config' / 'area_codes.xlsx'
+            df_fips = pd.read_excel(file_area, sheet_name = 'CountyFIPS', dtype = {'State FIPS': str, 'County FIPS': str})
             df_fips = df_fips[
                             (df_fips['State'].isin(df_inputs['states'].values))
                             & (df_fips['County Name'].isin(df_inputs['counties'].values))
             ]
             dict_fips = df_fips.copy()
-            dict_fips = dict_fips[['State FIPS', 'County FIPS']]
+            dict_fips = dict_fips[['State FIPS', 'County FIPS']].drop_duplicates()
             dict_fips = dict_fips.groupby('State FIPS')['County FIPS'].apply(list).to_dict()
             
             for key in list(dict_fips.keys()):

@@ -18,11 +18,35 @@ df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
 
 ## Organizing ---
 
+
+race_ethcnitiy_map = {
+'American Indian or Alaska Native (NH)': 'American Indian or Alaska Native (NH)'
+, 'Asian (NH)': 'Asian (NH)'
+, 'Black or African American (NH)': 'Black or African American (NH)'
+, 'Hispanic or Latino': 'Hispanic or Latino'
+, 'Native Hawaiian or other Pacific Islander (NH)': 'Native Hawaiian or other Pacific Islander (NH)'
+, 'White (NH)': 'White (NH)'
+, 'Some other race (NH)': 'Other race or multiple races (NH)'
+, 'Two or more races (NH)': 'Other race or multiple races (NH)'
+}
+
 df_places   = df_places  [df_places  ['Race_Ethnicity'] != 'All']
 df_counties = df_counties[df_counties['Race_Ethnicity'] != 'All']
 df_mpo      = df_mpo     [df_mpo     ['Race_Ethnicity'] != 'All']
 
 df_places, df_counties, df_mpo = clean_rhna(df_places, df_counties, df_mpo, path_config0, columns, values)
+
+df_places  [columns] = df_places  [columns].replace(race_ethcnitiy_map)
+df_counties[columns] = df_counties[columns].replace(race_ethcnitiy_map)# trying to role up to new race/ethnicity mapping, it's new so may not run properly, double check
+df_mpo     [columns] = df_mpo     [columns].replace(race_ethcnitiy_map)
+
+df_places   = df_places  .groupby(['County Name', 'Geography', columns], as_index=False)['Population'].sum()
+df_counties = df_counties.groupby([               'Geography', columns], as_index=False)['Population'].sum()
+df_mpo      = df_mpo     .groupby([               'Geography', columns], as_index=False)['Population'].sum()
+
+df_places  ['Percentage'] = df_places  ['Population'] / df_places  .groupby(['County Name', 'Geography'])['Population'].transform('sum')
+df_counties['Percentage'] = df_counties['Population'] / df_counties.groupby([               'Geography'])['Population'].transform('sum')
+df_mpo     ['Percentage'] = df_mpo     ['Population'] / df_mpo     .groupby([               'Geography'])['Population'].transform('sum')
 
 
 counties = df_counties['Geography'].unique()
@@ -51,8 +75,7 @@ for county in counties:
         df_plot['Sort_eth'] = pd.Categorical(df_plot['Race_Ethnicity'], [
             'American Indian or Alaska Native (NH)'
             , 'Native Hawaiian or other Pacific Islander (NH)'
-            , 'Some other race (NH)'
-            , 'Two or more races (NH)'
+            , 'Other race or multiple races (NH)'
             , 'Black or African American (NH)'
             , 'Asian (NH)'
             , 'Hispanic or Latino'
@@ -62,14 +85,13 @@ for county in counties:
         df_plot = df_plot.drop(['Sort', 'Sort_eth'], axis=1)
             
         color_map  = {
-            'American Indian or Alaska Native (NH)': '#A97142'
+            'American Indian or Alaska Native (NH)': '#E56717'
             , 'Native Hawaiian or other Pacific Islander (NH)': '#006A4E'
-            , 'Some other race (NH)': '#7E587E'
-            , 'Two or more races (NH)': '#1F45FC'
+            , 'Other race or multiple races (NH)': '#7E587E'
+            , 'Black or African American (NH)': '#FBB117'
             , 'Asian (NH)': '#9DC209'
-            , 'Black or African American (NH)': '#1E90FF'
-            , 'Hispanic or Latino': '#FBB117'
-            , 'White (NH)': '#DC381F'
+            , 'Hispanic or Latino': '#1E90FF'
+            , 'White (NH)': '#1F45FC'
         }
     
         fig = px.bar(df_plot, x='Geography', y='Percentage'

@@ -124,7 +124,7 @@ def write_about(sample_type, indicator, year_start, year_end, path_config0, geog
     df.loc[df['Indicator'] == 'Last Updated', indicator] = date.today().strftime('%Y-%m-%d')
     df.loc[df['Indicator'] == 'Year(s)'     , indicator] = f"{year_start}-{year_end}"
     if geography is not None:
-        df.loc[df['Indicator'] == 'Geography'   , indicator] = geography
+        df.loc[df['Indicator'] == 'Geography', indicator] = geography
     if MOE_thresh is not None:
         df.loc[df['Indicator'] == 'Margin of Error Limit', indicator] = MOE_thresh
 

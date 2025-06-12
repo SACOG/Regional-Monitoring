@@ -49,7 +49,7 @@ for county in counties:
                 "0%-30% of income used for housing":"#1F45FC",
                 "30%-50% of income used for housing":"#1E90FF",
                 "50% or more of income used for housing":"#9DC209",
-                "Not computed":"#FBB117"
+                "Not computed":"#9B9A96"
         }
         
         fig = px.bar(df_plot, x='Geography', y='Percentage'

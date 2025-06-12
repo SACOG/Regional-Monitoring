@@ -168,3 +168,4 @@ for county in counties:
             export_rhna(df_prod)
 
 
+list_indicators.append(indicator)

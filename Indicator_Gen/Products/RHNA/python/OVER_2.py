@@ -41,7 +41,7 @@ conditions = [
     , df_chas['Severity'] == ' AND persons per room is greater than 1.5'
 ]
 
-choices = ['Less than or equal to 1 person per room', 'More than 1 occupants per room', 'More than 1 occupants per room']
+choices = ['Less than or equal to 1 person per room', '1.01 to 1.5 occupants per room', '1.5 occupants per room or more']
 
 df_chas['Severity'] = np.select(conditions, choices, default='no')
 df_chas = df_chas.reset_index(drop=True)
@@ -62,6 +62,8 @@ df_mpo      = df_mpo     .rename(columns = {'MPO':'Geography'})
 df_chas    = df_chas    .reset_index(drop=True)
 df_counties= df_counties.reset_index(drop=True)
 df_mpo     = df_mpo     .reset_index(drop=True)
+
+
 
 
 counties = list(df_chas['County Name'].unique())
@@ -86,19 +88,25 @@ for county in counties:
         df_prod = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_prod = df_prod.drop('Percentage', axis=1)
         df_prod = df_prod.pivot_table(index=['Geography'], columns=columns, values=values).reset_index()
+        df_prod = df_prod[['Geography', 'Less than or equal to 1 person per room', '1.01 to 1.5 occupants per room', '1.5 occupants per room or more']]
 
         df_pct = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_pct = df_pct.drop('Households', axis=1)
         df_pct = df_pct.pivot_table(index=['Geography'], columns=columns, values='Percentage').reset_index()
-        
+        df_pct = df_pct[['Geography', 'Less than or equal to 1 person per room', '1.01 to 1.5 occupants per room', '1.5 occupants per room or more']]
+
         ## Plotting ---
 
         df_plot = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
+        df_plot['sort'] = pd.Categorical(df_plot[columns], ['Less than or equal to 1 person per room', '1.01 to 1.5 occupants per room', '1.5 occupants per room or more'])
+        df_plot = df_plot.sort_values('sort')
+        df_plot = df_plot.drop('sort', axis=1)
         
         color_map  = {
-            'Less than or equal to 1 person per room': '#9DC209'
-            , 'More than 1 occupants per room': '#1F45FC'
+            'Less than or equal to 1 person per room': '#1F45FC'
+            , '1.01 to 1.5 occupants per room': '#1E90FF'
+            , '1.5 occupants per room or more': '#9DC209'
         }
 
         fig = px.bar(df_plot, x='Geography', y='Percentage'
@@ -106,7 +114,8 @@ for county in counties:
                      , color_discrete_map=color_map)
         
         fig.update_traces(hovertemplate="%{y}")
-    
+        fig.update_layout(legend={'traceorder': 'reversed'})
+
         path_plots = path_out / county / jurisdiction / 'Supplemental'
         plot_rhna(export=export)
     

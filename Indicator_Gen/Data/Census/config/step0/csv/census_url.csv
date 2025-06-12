@@ -1053,7 +1053,7 @@ Decennial Census of Island Areas: Commonwealth of the Northern Mariana Islands D
 Decennial Census of Island Areas: U.S. Virgin Islands Detailed Crosstabulations,2020,dec/crosstabvi,https://api.census.gov/data/2020/dec/crosstabvi,,
 Decennial Census: Detailed Demographic and Housing Characteristics File A,2020,dec/ddhca,https://api.census.gov/data/2020/dec/ddhca,,
 2020 Detailed Demographic and Housing Characteristics File B,2020,dec/ddhcb,https://api.census.gov/data/2020/dec/ddhcb,,
-Decennial Census: Demographic and Housing Characteristics,2020,dec/dhc,https://api.census.gov/data/2020/dec/dhc,,
+Decennial Census: Demographic and Housing Characteristics,2020,dec/dhc,https://api.census.gov/data/2020/dec/dhc,DEC,DEC
 Decennial Census of Island Areas: American Samoa Demographic and Housing Characteristics,2020,dec/dhcas,https://api.census.gov/data/2020/dec/dhcas,,
 Decennial Census of Island Areas: Guam Demographic and Housing Characteristics,2020,dec/dhcgu,https://api.census.gov/data/2020/dec/dhcgu,,
 Decennial Census of Island Areas: Commonwealth of the Northern Mariana Islands Demographic and Housing Characteristics,2020,dec/dhcmp,https://api.census.gov/data/2020/dec/dhcmp,,
@@ -1078,8 +1078,8 @@ Decennial Census: Decennial Self-Response Rate,2020,dec/responserate,https://api
 Decennial Census: Decennial Self-Reponse Rate,2010,dec/responserate,https://api.census.gov/data/2010/dec/responserate,,
 2020 Supplemental Demographic and Housing Characteristics File (S-DHC),2020,dec/sdhc,https://api.census.gov/data/2020/dec/sdhc,,
 2020 Census Final Self-Response and Return Rates,2020,dec/selfresponserate,https://api.census.gov/data/2020/dec/selfresponserate,,
-Decennial SF1,2010,dec/sf1,https://api.census.gov/data/2010/dec/sf1,,
-Decennial Census: Summary File 1,2000,dec/sf1,https://api.census.gov/data/2000/dec/sf1,,
+Decennial SF1,2010,dec/sf1,https://api.census.gov/data/2010/dec/sf1,DEC,DEC
+Decennial Census: Summary File 1,2000,dec/sf1,https://api.census.gov/data/2000/dec/sf1,DEC,DEC
 Decennial SF2,2010,dec/sf2,https://api.census.gov/data/2010/dec/sf2,,
 Decennial Census: Summary File 2,2000,dec/sf2,https://api.census.gov/data/2000/dec/sf2,,
 Decennial Census: Summary File 2 Demographic Profile,2000,dec/sf2profile,https://api.census.gov/data/2000/dec/sf2profile,,

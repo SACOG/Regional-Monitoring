@@ -294,7 +294,8 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error):
     df_census = df_census.dropna()
     
     df_census['Total'] = df_census['Total'].apply(pd.to_numeric)
-    df_census = df_census.merge(df_vars[['ID', 'Table', 'Table Name', 'Label', 'Year']], on=['Year', 'ID'], how='left')
+    df_census = df_census.merge(df_vars[['ID2', 'Table', 'Table Name', 'Label', 'Year']].rename(columns={'ID2':'ID'}), on=['Year', 'ID'], how='left')
+    df_census = df_census.drop_duplicates()
 
     if margin_of_error == 'Yes':
         df_census_me = df_census.copy()
@@ -364,7 +365,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
         geo_ID = ['NAME']
     df_census['Year'] = df_census['Year'].astype(int)
 
-    df_census = df_census.merge(df_vars[['Year', 'ID','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']], on=['Year', 'ID'], how='left')
+    df_census = df_census.merge(df_vars[['Year', 'ID2','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']].rename(columns={'ID2':'ID'}), on=['Year', 'ID'], how='left')
 
     if margin_of_error == 'Yes':
         cols_to_keep = ['ID'] + geo_ID + ['Year', 'Variable', 'Race_Ethnicity', 'Sort', 'Total', 'ME']
@@ -1644,7 +1645,7 @@ def rename_census(
 
 
     if margin_of_error == 'Yes':
-        if sample_type in ['ACS', 'SUBJECT']:
+        if sample_type in ['ACS', 'SUBJECT', 'DEC']:
             if percentages == 'No':
                 df_census = df_census[geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
                 if geography == 'Counties':
@@ -1684,7 +1685,7 @@ def rename_census(
             df_mpo      = df_mpo     .rename(columns={'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
 
     if margin_of_error == 'No':
-        if sample_type  in ['ACS', 'SUBJECT']:
+        if sample_type  in ['ACS', 'SUBJECT', 'DEC']:
             if percentages == 'No':
                 df_census = df_census[geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Total']]
                 if geography == 'Counties':
@@ -1944,7 +1945,7 @@ def rename_census(
                 df_mpo = clean_pop_7(df_mpo, 'MPO')
 
     if geography == 'Counties':
-        if sample_type in ['ACS', 'SUBJECT']:
+        if sample_type in ['ACS', 'SUBJECT', 'DEC']:
             if mpo == 'Yes':
                 return df_census, df_mpo
             else:

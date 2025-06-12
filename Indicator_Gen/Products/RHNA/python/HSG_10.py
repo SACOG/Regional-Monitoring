@@ -80,7 +80,7 @@ for county in counties:
         df_plot = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_prod = df_plot.pivot_table(index=['Year'], columns='Geography', values='Median Contract Rent').reset_index()
         df_prod = df_prod[['Year', jurisdiction, county, 'SACOG Region']]
-        df_prod = df_prod.sort_values('Year', ascending=False)
+        df_prod = df_prod.sort_values('Year', ascending=True)
         df_prod = df_prod.reset_index(drop=True)
             
         color_map  = {
@@ -98,7 +98,6 @@ for county in counties:
         year_min = df_plot['Year'].min()-0.5
         year_max = df_plot['Year'].max()+0.5
         fig.update_xaxes(dtick=1, range = [year_min, year_max])
-        fig.update_layout(legend={'traceorder': 'reversed'})
         fig.update_traces(hovertemplate="%{y}")
     
         path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'

@@ -118,8 +118,8 @@ for county in counties:
             '0%-30% of AMI': '#1F45FC'
             , '31%-50% of AMI': '#1E90FF'
             , '51%-80% of AMI': '#9DC209'
-            , '81%-100% of AMI': '#7E587E'
-            , 'Greater than 100% of AMI': '#FBB117'
+            , '81%-100% of AMI': '#FBB117'
+            , 'Greater than 100% of AMI': '#7E587E'
         }
 
         fig = px.bar(df_plot, x='Race Ethnicity', y='Percentage'

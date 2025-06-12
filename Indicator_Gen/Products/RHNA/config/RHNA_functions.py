@@ -120,10 +120,10 @@ if source == 'DOF':
 
         if indicator.replace('RHNA_', '') in ['POPEMP_1']:
 
-            df_counties_sub = df_counties_sub.rename(columns = {'Population': f'{county} County', 'growth': f'Percent Difference {county} County'})
+            df_counties_sub = df_counties_sub.rename(columns = {'Population': f'{county} County', 'growth': f'Percent Difference from 2000: {county} County'})
             df_counties_sub = df_counties_sub.drop('Geography', axis=1)
 
-            df_mpo = df_mpo.rename(columns={'Population': 'SACOG', 'growth': f'Percent Difference SACOG'})
+            df_mpo = df_mpo.rename(columns={'Population': 'SACOG', 'growth': f'Percent Difference from 2000: SACOG Region'})
             df_mpo = df_mpo.drop('Geography', axis=1)
 
             df_prod = df_places_sub[df_places_sub['Geography'] == jurisdiction]
@@ -132,7 +132,8 @@ if source == 'DOF':
             df_prod = df_prod.rename(columns = {'Population': jurisdiction, 'growth': f'Percent Difference from 2000: {jurisdiction}'})
             df_prod = df_prod.merge(df_counties_sub, on='Year')
             df_prod = df_prod.merge(df_mpo         , on='Year')
-            df_prod = df_prod[['Year', jurisdiction, f'{county} County', 'SACOG', f'Percent Difference from 2000: {jurisdiction}', f'Percent Difference from 2000: {county} County', 'Percent Difference from 2000 SACOG Region']]
+            df_prod = df_prod[['Year', jurisdiction, f'{county} County', 'SACOG', f'Percent Difference from 2000: {jurisdiction}', f'Percent Difference from 2000: {county} County', 'Percent Difference from 2000: SACOG Region']]
+            df_prod = df_prod.sort_values('Year', ascending=True).reset_index(drop=True)
 
         if jurisdiction == 'Sacramento':
             print()
@@ -216,7 +217,7 @@ if source == 'ACS5':
             df_prod = df_plot.pivot_table(index=['Geography', 'Variable'], columns=columns, values=values).reset_index()
 
             if indicator_name == 'POPEMP_10':
-                vars_to_sort = ['Less than 10k', '10k to 25k', '25k to 50k', '50k to 75k', '75k or more']
+                vars_to_sort = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
             if indicator_name == 'POPEMP_18':
                 vars_to_sort = ['Age 15-24', 'Age 25-34', 'Age 35-44', 'Age 45-54', 'Age 55-59', 'Age 60-64', 'Age 65-74', 'Age 75-84', 'Age 85+']
             if indicator_name == 'POPEMP_19':
@@ -266,6 +267,26 @@ if source == 'ACS5':
             df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, county, 'SACOG'])
             df_prod = df_prod.sort_values(['Sort'])
             df_prod = df_prod.drop(['Sort'], axis=1)
+            if indicator_name == 'HSG_7':
+                df_prod = df_prod[['Geography', 'Units valued less than 250k', 'Units valued 250k-500k', 'Units valued 500k-750k', 'Units valued 750k-1M', 'Units valued 1M-1.5M', 'Units valued 1.5M-2M', 'Units valued 2M+']]
+                df_prod = df_prod.rename(columns = {  'Units valued less than 250k': 'Units valued less than $250k'
+                                                    , 'Units valued 250k-500k': 'Units valued $250k-$500k'
+                                                    , 'Units valued 500k-750k': 'Units valued $500k-$750k'
+                                                    , 'Units valued 750k-1M': 'Units valued $750k-$1M'
+                                                    , 'Units valued 1M-1.5M': 'Units valued $1M-$1.5M'
+                                                    , 'Units valued 1.5M-2M': 'Units valued $1.5M-$2M'
+                                                    , 'Units valued 2M+': 'Units valued $2M+'
+                                                    })
+            if indicator_name == 'HSG_9':
+                df_prod = df_prod[['Geography', 'Rent less than 500', 'Rent 500-1,000', 'Rent 1,000-1,500', 'Rent 1,500-2,000', 'Rent 2,000-2,500', 'Rent 2,500-3,000', 'Rent 3,000 or more']]
+                df_prod = df_prod.rename(columns = {'Rent less than 500': 'Rent less than $500'
+                                                , 'Rent 500-1,000': 'Rent $500-$1,000'
+                                                , 'Rent 1,000-1,500': 'Rent $1,000-$1,500'
+                                                , 'Rent 1,500-2,000': 'Rent $1,500-$2,000'
+                                                , 'Rent 2,000-2,500': 'Rent $2,000-$2,500'
+                                                , 'Rent 2,500-3,000': 'Rent $2,500-$3,000'
+                                                , 'Rent 3,000 or more': 'Rent $3,000 or more'
+                                                })
 
             if 'Percentage' in df_places_sub.columns:
                 df_pct = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
@@ -275,6 +296,26 @@ if source == 'ACS5':
                 df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, county, 'SACOG'])
                 df_pct = df_pct.sort_values(['Sort'])
                 df_pct = df_pct.drop(['Sort'], axis=1)
+                if indicator_name == 'HSG_7':
+                    df_pct = df_pct[['Geography', 'Units valued less than 250k', 'Units valued 250k-500k', 'Units valued 500k-750k', 'Units valued 750k-1M', 'Units valued 1M-1.5M', 'Units valued 1.5M-2M', 'Units valued 2M+']]
+                    df_pct = df_pct.rename(columns = {'Units valued less than 250k': 'Units valued less than $250k'
+                                                    , 'Units valued 250k-500k': 'Units valued $250k-$500k'
+                                                    , 'Units valued 500k-750k': 'Units valued $500k-$750k'
+                                                    , 'Units valued 750k-1M': 'Units valued $750k-$1M'
+                                                    , 'Units valued 1M-1.5M': 'Units valued $1M-$1.5M'
+                                                    , 'Units valued 1.5M-2M': 'Units valued $1.5M-$2M'
+                                                    , 'Units valued 2M+': 'Units valued $2M+'
+                                                    })
+                if indicator_name == 'HSG_9':
+                    df_pct = df_pct[['Geography', 'Rent less than 500', 'Rent 500-1,000', 'Rent 1,000-1,500', 'Rent 1,500-2,000', 'Rent 2,000-2,500', 'Rent 2,500-3,000', 'Rent 3,000 or more']]
+                    df_pct = df_pct.rename(columns = {'Rent less than 500': 'Rent less than $500'
+                                                    , 'Rent 500-1,000': 'Rent $500-$1,000'
+                                                    , 'Rent 1,000-1,500': 'Rent $1,000-$1,500'
+                                                    , 'Rent 1,500-2,000': 'Rent $1,500-$2,000'
+                                                    , 'Rent 2,000-2,500': 'Rent $2,000-$2,500'
+                                                    , 'Rent 2,500-3,000': 'Rent $2,500-$3,000'
+                                                    , 'Rent 3,000 or more': 'Rent $3,000 or more'
+                                                    })
             
         if jurisdiction == 'Sacramento':
             print()
@@ -379,7 +420,7 @@ if source == 'CHAS':
             if 'Percentage' in df_places_sub.columns:
                 df_prod = df_prod.drop('Percentage', axis=1)
             df_prod = df_prod.pivot_table(index='Geography', columns=columns, values=values).reset_index()
-            df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, county, 'SACOG'])
+            df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, county, 'SACOG Region'])
             df_prod = df_prod.sort_values(['Sort'])
             df_prod = df_prod.drop(['Sort'], axis=1)
 
@@ -388,7 +429,7 @@ if source == 'CHAS':
                 df_pct = df_pct.drop(values, axis=1)
                 
                 df_pct = df_pct.pivot_table(index='Geography', columns=columns, values='Percentage').reset_index()
-                df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, county, 'SACOG'])
+                df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, county, 'SACOG Region'])
                 df_pct = df_pct.sort_values(['Sort'])
                 df_pct = df_pct.drop(['Sort'], axis=1)
             
@@ -420,6 +461,8 @@ def plot_rhna(export):
         , yaxis=dict(tickfont=dict(size=14))
         , xaxis=dict(tickfont=dict(size=14))
         )
+    if indicator == 'RHNA_POPEMP_21':
+        fig.update_layout(yaxis_title="Households")
     
     if jurisdiction == 'Sacramento':
         fig.show(config=config)
@@ -533,11 +576,11 @@ def export_rhna(df_prod, df_pct=None):
                         cell_num = cell_num.group(1)
                         cell_num = cell_num[1:]
                         row_num = 3 + df_prod.shape[0]
-                        if int(cell_num) > row_num or indicator2 in ['POPEMP_15']:
+                        if int(cell_num) > row_num or indicator2 in ['POPEMP_15']:# or (indicator2 in ['HSG_4'] and column == 'C'): # trying to get Percentage column to show up properly
                             cell.value = float(cell.value)
                             cell.number_format = format_percent
                         else:
-                            if indicator2 in ['POPEMP_1', 'POPEMP_13']:
+                            if indicator2 in ['POPEMP_13', 'POPEMP_14']:
                                 cell.number_format = format_ratio
                             else:
                                 cell.value = int(cell.value)

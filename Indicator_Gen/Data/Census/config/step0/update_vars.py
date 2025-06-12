@@ -69,10 +69,10 @@ with open(file_api, 'r') as file:
 
 ACS=False
 PUMS=False
-DEC=False
+DEC=True
 LEHD=False
 CPS=False
-SUBJECT=True
+SUBJECT=False
 
 
 export=True
@@ -122,6 +122,7 @@ if ACS:
     # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
     years_to_import = sequence(2005, 2023, 1)
+    # years_to_import = sequence(2019, 2021, 1)
     years_to_import.remove(2020)
     list_df = []
 
@@ -150,19 +151,33 @@ if ACS:
 
     df_acs = pd.concat([df_acs1, df_acs5])
     df_acs = df_acs.sort_values(['Table', 'Year', 'ID'], ascending = [True, False, True])
+    df_acs = df_acs.rename(columns={'attributes':'Attributes', 'label':'Label', 'concept':'Table Name'})
     df_acs = df_acs.reset_index(drop=True)
+
+    df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['Attributes']
+    df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(ME_split)
+
+    display(df_acs.head())
 
 
     file_acs = path_config / 'census_configuration_file2.xlsx'; sheet_name='ACS'
     df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
-    df_config = df_config[['Table', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
+    df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
 
-    df_acs = df_acs.merge(df_config, on=['Table', 'ID'], how='left')
+    df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
+    df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]
+
+    df_acs1 = df_acs1.merge(df_config[df_config['Year'] == df_config['Year'].max()].drop('Year', axis=1), on=['ID'], how='left')
+    df_acs2 = df_acs2.merge(df_config, on=['Year', 'ID'], how='left')
+
+    df_acs = pd.concat([df_acs1, df_acs2])
+
+    df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes', 'ID_Attributes2', 'ID2']]
     df_acs = df_acs.drop_duplicates()
+    df_acs = df_acs.sort_values(['Table', 'Indicator Name', 'Year', 'ID'], ascending = [True, True, False, True])
     df_acs = df_acs.reset_index(drop=True)
 
-    df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['attributes']
-    df_acs = df_acs[['Table', 'ID', 'attributes', 'label', 'concept', 'Year', 'Indicator Name',	'Include', 'ID_Attributes',	'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
+    display(df_acs.head())
 
 
     ## Exporting to Git ---
@@ -504,7 +519,8 @@ if DEC:
     df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
     df_dec = df_dec.merge(df_config, on=['ID'], how='left')
-    df_dec = df_dec[['Year', 'ID', 'label', 'concept', 'predicateType', 'group', 'Indicator Name', 'Include', 'estimate', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
+    df_dec = df_dec.rename(columns={'label':'Label', 'concept':'Table Name', 'group':'Table'})
+    df_dec = df_dec[['Year', 'Table', 'ID', 'Label', 'Table Name', 'predicateType', 'Indicator Name', 'Include', 'estimate', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
 
 
     ## Exporting to Git ---
@@ -819,7 +835,7 @@ if SUBJECT:
 
     file_config = path_config / 'census_configuration_file2.xlsx'; sheet_name='SUBJECT'
     df_config = pd.read_excel(file_config, sheet_name=sheet_name)
-    df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
+    df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
 
     df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
     df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]

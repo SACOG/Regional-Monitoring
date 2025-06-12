@@ -1,0 +1,10 @@
+Project: SACSIM
+Indicator Name: SACSIM_3
+Export Location: Small Data Requests\\2025\\SACSIM\\original_exports
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: Block Groups
+Years Imported: 2020
+Import Tab: Counties
+Margin of Error: Yes

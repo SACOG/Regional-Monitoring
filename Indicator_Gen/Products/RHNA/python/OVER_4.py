@@ -46,7 +46,7 @@ conditions = [
     , df_chas['Severity'] == ' AND persons per room is greater than 1.5'
 ]
 
-choices = ['Less than or equal to 1 person per room', '1 to 1.5 occupants per room', 'More than 1.5 occupants per room']
+choices = ['Less than or equal to 1 person per room', '1.01 to 1.5 occupants per room', 'More than 1.5 occupants per room']
 
 df_chas['Severity'] = np.select(conditions, choices, default='no')
 
@@ -102,7 +102,7 @@ for county in counties:
         df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
-            '1 to 1.5 occupants per room': '#9DC209'
+            '1.01 to 1.5 occupants per room': '#9DC209'
             , 'More than 1.5 occupants per room': '#1F45FC'
         }
 

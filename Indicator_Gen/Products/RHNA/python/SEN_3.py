@@ -98,7 +98,7 @@ for county in counties:
         ## Plotting ---
 
         df_plot = df_chas_sub[df_chas_sub['name'] == jurisdiction]
-        df_plot['Percentage'] = round(df_plot['Percentage'], 1)
+        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map  = {
             '0%-30% of income used for housing': '#1F45FC'
@@ -112,7 +112,7 @@ for county in counties:
                      , color_discrete_map=color_map)
         
         fig.update_traces(hovertemplate="%{y}")
-        fig.update_yaxes(ticksuffix='%')
+        fig.update_yaxes(ticksuffix='%', range=[0, 102])
         fig.update_layout(legend={'traceorder': 'reversed'})
 
         path_plots = path_out / county / jurisdiction / 'Supplemental'

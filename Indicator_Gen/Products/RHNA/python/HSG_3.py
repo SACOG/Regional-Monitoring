@@ -47,11 +47,11 @@ for county in counties:
         
         color_map = {
                 "For rent":"#1F45FC",
-                "For sale only":"#9DC209",
+                "For sale only":"#DC381F",
                 "For seasonal, recreational, or occasional use":"#1E90FF",
-                "Other vacant":"#FBB117",
+                "Other vacant":"#9DC209",
                 "Rented, not occupied":"#7E587E",
-                "Sold, not occupied":"#DC381F",
+                "Sold, not occupied":"#FBB117",
                 "For migrant workers":"#006A4E"
         }
         

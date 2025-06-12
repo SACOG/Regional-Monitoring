@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: RHNA_POPEMP_17
+Export Location: RHNA\\New Data Collected
+Folder: Housing Tenure
+Sample: DEC
+Estimate: DEC
+Geography: Places
+Years Imported: 2000, 2010, 2020
+Import Tab: States
+Margin of Error: No

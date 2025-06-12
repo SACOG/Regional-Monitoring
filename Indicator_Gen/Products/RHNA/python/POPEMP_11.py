@@ -154,4 +154,5 @@ for county in counties:
         if export:
             export_rhna(df_prod)
 
+list_indicators.append(indicator)
 

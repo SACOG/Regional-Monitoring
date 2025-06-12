@@ -3,7 +3,112 @@
 # To help write the Source, Year, and Notes about each indicator used in RHAN products
 
 
+
+HCD:
+
+  HSG_11:
+    Indicator Title:
+    - Housing Permitting
+    Source:
+    - California Department of Housing and Community Development (HCD), 5th Cycle Annual Progress Report Permit Summary (2020) (soon to be 6th or 7th?)
+    Website:
+    - https://www.hcd.ca.gov/planning-and-community-development/housing-elements
+    Year(s):
+    - '2015-2019'
+    Notes: 'HCD uses the following definitions for the four income categories:\n
+      - Very Low Income: units affordable to households making less than 50% of the Area Median Income for the county in which the jurisdiction is located.\n
+      = Low Income: units affordable to households making between 50% and 80% of the Area Median Income for the county in which the jurisdiction is located.\n
+      - Moderate Income: units affordable to households making between 80% and 120% of the Area Median Income for the county in which the jurisdiction is located.\n
+      - Above Moderate Income: units affordable to households making above 120% of the Area Median Income for the county in which the jurisdiction is located.'
+
+
+
+USDA:
+
+  FARM_2:
+    Indicator Title:
+    - Farm Operations and Farm Labor by County
+    Source:
+    - U.S. Department of Agriculture, Census of Agriculture (Table 7, Hired Farm Labor)
+    Website:
+    - https://www.nass.usda.gov/Publications/AgCensus/2022/index.php, https://agcensus.library.cornell.edu/census_year/2012-census/
+    Year(s):
+    - '2002-2022'
+    Notes: 'Farm workers are considered seasonal if they work on a farm less than 150 days in a year,\n
+      while farm workers who work on a farm more than 150 days are considered to be permanent workers for that farm.'
+
+
+
+FFIEC:
+
+  AFFH_1:
+    Indicator Title:
+    - Mortgage Applications and Acceptance by Race
+    Source:
+    - Federal Financial Institutions Examination Council's (FFIEC) Home Mortgage Disclosure Act loan/application register (LAR) files
+    Website:
+    - https://ffiec.cfpb.gov/data-publication/modified-lar/2024
+    Year(s):
+    - '2024-'
+    Notes: '“Loan originated” means that the application was accepted a loan was made by a financial institution to the applicant.\n
+     “File incomplete or withdrawn” means a loan was not originated because the application was withdrawn before a credit decision was made or the file was closed for incompleteness.\n
+     “Application denied” means a loan was not originated because the financial institution did not approve the mortgage application.\n
+     “Application approved but not accepted” means the financial institution approved the loan application but the applicant did not complete the transaction and a loan was not originated.'
+
+
+HUD:
+
+  HOMELS_1:
+    Indicator Title:
+    - Homelessness by Household Type and Shelter Status
+    Source:
+    - U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
+    Website:
+    - https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
+    Year(s):
+    - '2024-'
+    Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
+     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
+     Each Sacramento region county is its own CoC except for combining Yuba/Sutter, and so the data for this table is provided at the county-level'
+      
+  HOMELS_2:
+    Indicator Title:
+    - Racial Group Share of General and Homeless Populations
+    Source:
+    - U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
+    Website:
+    - https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
+    Year(s):
+    - '2024-'
+    Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
+     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
+     Each Sacramento region county is its own CoC except for combining Yuba/Sutter, and so the data for this table is provided at the county-level.\n
+     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.\n
+     HUD does not disaggregate racial demographic data by Hispanic ethnicity for people experiencing homelessness. \n
+     Instead, HUD reports data on Hispanic ethnicity for people experiencing homelessness in a separate table. \n
+     Accordingly, the racial group data listed here includes both Hispanic and non-Hispanic individuals.'
+      
+  HOMELS_4:
+    Indicator Title:
+    - Characteristics for the Population Experiencing Homelessness
+    Source:
+    - U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
+    Website:
+    - https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
+    Year(s):
+    - '2024-'
+    Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
+     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
+     Each Sacramento region county is its own CoC except for combining Yuba/Sutter, and so the data for this table is provided at the county-level.\n
+     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.\n
+     These challenges/characteristics are counted separately and are not mutually exclusive, as an individual may report more than one challenge/characteristic.\n
+     These counts should not be summed.'
+
+
+
+
 DDS:
+
   DISAB_4:
     Indicator Title:
     - Population with Developmental Disabilities by Age
@@ -18,8 +123,23 @@ DDS:
       The California Department of Developmental Services provides ZIP code level counts.  To get to jurisdiction-level estimates, ZIP code counts were crosswalked to\n
       jurisdictions using census block group population counts from the 2023 ACS 1 year estimates to determine the share of a ZIP code to assign to a given jurisdiction.'
 
+  DISAB_5:
+    Indicator Title:
+    - Population with Developmental Disabilities by Residence
+    Source:
+    - California Department of Developmental Services, Quarterly Consumer Report by age group and residence type
+    Website:
+    - https://www.dds.ca.gov/transparency/facts-stats/
+    Year(s):
+    - 2022-2024
+    Notes: 'The California Department of Developmental Services is responsible for overseeing the coordination and delivery of services to more than 330,000 Californias with\n
+      developmental disabilities including cerebral palsy, intellectual disability, Down syndrome, autism, epilepsy, and related conditions.\n
+      The California Department of Developmental Services provides ZIP code level counts.  To get to jurisdiction-level estimates, ZIP code counts were crosswalked to\n
+      jurisdictions using census block group population counts from the 2023 ACS 1 year estimates to determine the share of a ZIP code to assign to a given jurisdiction.'
+
 
 EDD:
+
   POPEMP_15:
     Indicator Title:
     - Unemployment Rate
@@ -33,6 +153,7 @@ EDD:
 
 
 Zillow:
+
   HSG_8:
     Indicator Title:
     - Zillow Home Value Index (ZHVI)
@@ -99,13 +220,62 @@ DOF:
     Website:
     - https://dof.ca.gov/forecasting/demographics/
     Year(s):
-    - 2001-2023
-    Notes: 'This indicator shows the total population estimate by year.\n
-      The data shown on the graph represents the population for the jurisdiction, county, and region indexed to the population in the year 2000 (or the first year of incorporation).\n
-      The data points represent the relative population growth in each of these geographies relative to their populations in 2000 (or the first year of incorporation)'
+    - 2010, 2020, and 2024
+    Notes: 'The data shown on the graph represents the housing type breakout for the jurisdiction in the years 2010, 2020, and 2024.\n'
+
+
+DEC:
+
+  POPEMP_2:
+    Indicator Title:
+    - Population by Race/Ethnicity, 2000-2023
+    Source:
+    - U.S. Census Bureau, Decennial Census 2000-2020, Table P004, American Community Survey 5-Year Data 2023, Table B03002
+    Website:
+    - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2000-2020, 2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  POPEMP_4:
+    Indicator Title:
+    - Population by Age, 2000-2023
+    Source:
+    - U.S. Census Bureau, Decennial Census 2000-2020, Table P12, American Community Survey 5-Year Data 2023, Table B01001
+    Website:
+    - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2000-2020, 2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  POPEMP_17:
+    Indicator Title:
+    - Housing Tenure, 2000-2023
+    Source:
+    - U.S. Census Bureau, Decennial Census 2000-2020, Table H04, American Community Survey 5-Year Data 2023, Table B25003
+    Website:
+    - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2000-2020, 2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
 
 ACS5:
+
+  POPEMP_2:
+    Indicator Title:
+    - Population by Race/Ethnicity, 2000-2023
+    Source:
+    - U.S. Census Bureau, Decennial Census 2000-2020, Table P004, American Community Survey 5-Year Data 2023, Table B03002
+    Website:
+    - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2000-2020, 2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
   POPEMP_3:
     Indicator Title:
@@ -118,6 +288,18 @@ ACS5:
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  POPEMP_4:
+    Indicator Title:
+    - Population by Age, 2000-2023
+    Source:
+    - U.S. Census Bureau, Decennial Census 2000-2020, Table P12, American Community Survey 5-Year Data 2023, Table B01001
+    Website:
+    - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2000-2020, 2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
   POPEMP_4:
     Indicator Title:
@@ -202,7 +384,7 @@ ACS5:
     - https://www.census.gov/programs-surveys/acs/data.html
     Year(s):
     - 2019-2023
-    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+    Notes: 'This indicator shows the total population estimate for workers 16 years of age and over with earnings, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
       
   POPEMP_16:
@@ -216,6 +398,18 @@ ACS5:
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+  POPEMP_17:
+    Indicator Title:
+    - Housing Tenure, 2000-2023
+    Source:
+    - U.S. Census Bureau, Decennial Census 2000-2020, Table H04, American Community Survey 5-Year Data 2023, Table B25003
+    Website:
+    - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2000-2020, 2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
   POPEMP_18:
     Indicator Title:
@@ -431,7 +625,9 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
+      For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
   LGFEM_1:
     Indicator Title:
@@ -526,7 +722,7 @@ ACS5:
     - https://www.census.gov/programs-surveys/acs/data.html
     Year(s):
     - 2019-2023
-    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
   DISAB_3:
@@ -553,6 +749,32 @@ ACS5:
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
+  AFFH_2:
+    Indicator Title:
+    - Population Living in High Resource Areas by Race
+    Source:
+    - California Tax Credit Allocation Committee (TCAC)/California Housing and Community Development (HCD), Opportunity Maps (2020); U.S. Census Bureau, American Community Survey 5-Year Data, Table B03002
+    Website:
+    - https://www.treasurer.ca.gov/ctcac/opportunity.asp, https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      The TCAC and HCD created the Opportunity Map using reliable and publicly available data sources to identify areas in the state whose characteristics have been shown by research to support\n
+      positive economic, educational, and health outcomes for low-income families and their children.  The TCAC/HCD Opportunity Map uses 21 indicators to calculate opportunity index scores for\n
+      census tracts in each region in California.  For more information on these indicators, see the Opportunity Map methodology document.\n
+      The TCAC/HCD Opportunity Map categorizes census tracts into five groups based on opportunity index scores:
+      - Highest Resource\n
+      - High Resource\n
+      - Moderate Resource/Moderate Resource (Rapidly Changing)\n
+      - Low Resource\n
+      - High Segregation & Poverty\n
+      Before an area receives an opportunity index score, census tracts are filtered into the High Segregation & Poverty category.  The filter identifies census tracts where at least 30% of population is\n
+      below the federal poverty line and there is a disproportionate share of households of color.  After filtering out High Segregation and Poverty areas, the TCAC/HCD Opportunity Map allocates the 20% of\n
+      tracts in each region with the highest relative opportunity index scores to the Highest Resource designation and the next 20% to the High Resource designation.  The remaining non-filtered tracts are\n
+      then evenly divided into Low Resource and Moderat Resource categories.\n
+      HRA data is available at the census tract level.  Staff aggregated tracts up to jurisdiction level using census 2020 population weights, assigning a tract to jurisdiction in proportion to block level population weights.'
+
   AFFH_3:
     Indicator Title:
     - Population with Limited English Proficiency
@@ -562,7 +784,7 @@ ACS5:
     - https://www.census.gov/programs-surveys/acs/data.html
     Year(s):
     - 2019-2023
-    Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
 
@@ -591,7 +813,9 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
+      The Census Bureau defines a severely overcrowded housing unit as 1.5 or more persons per room (excluding bathrooms and kitchens).'
 
   OVER_2:
     Indicator Title:
@@ -603,7 +827,8 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).'
 
   OVER_4:
     Indicator Title:
@@ -615,7 +840,9 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
+      The Census Bureau defines a severely overcrowded housing unit as 1.5 or more persons per room (excluding bathrooms and kitchens).'
 
   OVER_5:
     Indicator Title:
@@ -627,7 +854,9 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
+      For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
   OVER_8:
     Indicator Title:
@@ -639,7 +868,9 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
+      For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
   OVER_9:
     Indicator Title:
@@ -651,7 +882,9 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
+      For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
   LGFEM_3:
     Indicator Title:
@@ -675,7 +908,8 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      For this indicators, senior households are those with a householder who is aged 62 or older.'
 
   SEN_3:
     Indicator Title:
@@ -687,7 +921,10 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      For this indicator, senior households are those with a householder who is aged 62 or older.\n
+      HUD defined cost burden households as those who monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
+      For renters, housing cost is gross rent (contract rent plus utilities).  For owners, housing cost is "select monthly owner costs", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
   ELI_1:
     Indicator Title:

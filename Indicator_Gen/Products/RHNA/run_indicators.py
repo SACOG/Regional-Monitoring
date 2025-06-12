@@ -14,6 +14,7 @@ import gzip
 import io
 import re
 from datetime import date
+from datetime import datetime
 import xlwt
 from xlwt.Workbook import *
 from pandas import ExcelWriter
@@ -45,6 +46,7 @@ import warnings
 warnings.filterwarnings('ignore')
 # import pdb; pdb.set_trace()
 
+
 ## File paths ---
 
 user = getpass.getuser()
@@ -57,15 +59,16 @@ path_raw  = path_prod  / 'New Data Collected'
 path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
 path_census = path_git  / 'Data' / 'Census'
 path_config0 = path_git  / 'config'
-path_config  = path_census / 'config'
 
 path_prod = path_git / 'Products' / 'RHNA'
 path_config = path_prod / 'config'
 path_yaml = path_config / 'RHNA_indicators.yaml'
 path_func = path_config / 'RHNA_functions.py'
 path_py = path_prod / 'python'
+path_i = Path(r'I:\Projects\Josh\RHNA')
 
 # path_out = Path(r'I:\Projects\Josh\RHNA\Final Products')
+# path_out = path_prod / 'Cycle7' / 'Final Products'
 path_out = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
 
 path_geo = Path(r'I:\Projects\Josh\Geospatial Data\crosswalks')
@@ -76,9 +79,9 @@ path_lodes = Path(r'I:\Projects\Josh\Regional Monitoring')
 
 indicators = [
     'POPEMP_1'
-    # , 'POPEMP_2'
+    , 'POPEMP_2'
     , 'POPEMP_3'
-    # , 'POPEMP_4'
+    , 'POPEMP_4'
     , 'POPEMP_5'
     , 'POPEMP_6'
     , 'POPEMP_7'
@@ -91,7 +94,7 @@ indicators = [
     , 'POPEMP_14'
     , 'POPEMP_15'
     , 'POPEMP_16'
-    # , 'POPEMP_17'
+    , 'POPEMP_17'
     , 'POPEMP_18'
     , 'POPEMP_19'
     , 'POPEMP_20'
@@ -110,7 +113,7 @@ indicators = [
     , 'HSG_8'
     , 'HSG_9' 
     , 'HSG_10'
-    # , 'HSG_11'
+    , 'HSG_11'
     # , 'RISK_1'
     , 'OVER_1'
     , 'OVER_2'
@@ -122,7 +125,7 @@ indicators = [
     , 'OVER_8'
     , 'OVER_9'
     , 'FARM_1'
-    # , 'FARM_2'
+    , 'FARM_2'
     , 'LGFEM_1'
     , 'LGFEM_2'
     , 'LGFEM_3'
@@ -136,23 +139,24 @@ indicators = [
     , 'DISAB_2'
     , 'DISAB_3'
     , 'DISAB_4'
-    # , 'DISAB_5'
-    # , 'HOMELS_1'
-    # , 'HOMELS_2'
-    # , 'HOMELS_3'
-    # , 'HOMELS_4'
+    , 'DISAB_5'
+    , 'HOMELS_1'
+    , 'HOMELS_2'
+    # , 'HOMELS_3' # Can remove
+    , 'HOMELS_4'
     , 'HOMELS_5'
     , 'ELI_1'
     , 'ELI_2'
     , 'ELI_3'
-    # , 'AFFH_1'
-    # , 'AFFH_2'
+    , 'AFFH_1'
+    , 'AFFH_2'
     , 'AFFH_3'
     # , 'HHPROJ_1'
 ]
 
 
-indicators = ['DISAB_4']
+
+# indicators=['ELI_3']
 
 
 
@@ -162,7 +166,7 @@ indicators = ['DISAB_4']
 export=True
 list_indicators = []
 
-with open(path_yaml, 'r') as yaml_file:
+with open(path_yaml, 'r', encoding='utf-8') as yaml_file:
     dict_about = yaml.load(yaml_file, Loader=yaml.SafeLoader)
 
 
@@ -180,8 +184,8 @@ print(); print()
 print('Finished!! Now go outside.')
 print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---')
 print(); print()
-# takes 30 min for local exporting
-# takes ~120 minutes for I drive or SharePoint exporting
+# takes 45 min for local exporting
+# takes ~150 minutes for I drive or SharePoint exporting
 
 
 ## Check indicators ---
