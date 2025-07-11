@@ -190,7 +190,7 @@ def count_log_geography(file_in):
 if __name__ == '__main__':
 
     file_theme = path_main / 'Indicator_Theme_Mapping.csv'
-    file_in = path_log / 'download_log_files' / '_DownloadedFiles_202505.txt'
+    file_in = path_log / 'download_log_files' / '_DownloadedFiles.txt'
     file_out = path_log / 'download_duplicate_counts' / f'MnR_logging__{date.today().strftime("%Y-%m-%d")}.xlsx'
 
     df_theme     = count_log_theme(file_in, file_theme)

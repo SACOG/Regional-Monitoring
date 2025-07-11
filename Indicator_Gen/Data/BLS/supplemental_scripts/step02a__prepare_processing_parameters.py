@@ -2,7 +2,7 @@
 # Import objects
 file_config = path_config / 'bls_configuration_file.xlsm'
 df_indicators = pd.read_excel(file_config, sheet_name = 'Indicators')
-df_indicators = df_indicators[df_indicators['Indicator Name'] == indicator_name]
+df_indicators = df_indicators[df_indicators['Indicator Name'] == indicator]
 
 
 percentages = df_indicators['Percentages'    ].values[0]

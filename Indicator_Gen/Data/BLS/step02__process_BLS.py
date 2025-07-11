@@ -19,6 +19,7 @@ import os
 import re
 from tqdm import tqdm
 from datetime import date
+from datetime import datetime
 import requests
 import ast
 import xlwt
@@ -68,8 +69,8 @@ url = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
 
 ## Export setting ---
 
-export=False
-
+rerun=False
+export=True
 
 
 
@@ -95,7 +96,7 @@ with path_2a.open("r") as f:
 
 print('Display data imported from BLS: ')
 
-export_title = f"{indicator_name}_{geography}_BLS_raw.csv"
+export_title = f"{indicator}_{geography}_BLS_ChamberStudy2026_raw.csv"
 file_raw = path_raw / export_title
 df_bls = pd.read_csv(file_raw)
 
@@ -123,27 +124,28 @@ with path_2b.open("r") as f:
 estimate = 'BLS'
 sample_type = survey
 df_about = write_about(sample_type      = sample_type
-                       , indicator_name = indicator_name
+                       , indicator      = indicator
                        , year_start     = year_start
                        , year_end       = year_end
                        , path_config0   = path_config0
                        , estimate       = estimate)
 display(df_about)
 # with pd.ExcelWriter(os.path.join(path_main, 'About Indicators.xlsx'), mode = 'a', engine = 'openpyxl', if_sheet_exists = 'replace') as writer:
-#     df_about.to_excel(writer, index = False, sheet_name = indicator_name, header = False)
+#     df_about.to_excel(writer, index = False, sheet_name = indicator, header = False)
 
 
 
 
 # Set file path for exporting
-paths = [path_main / export_loc / f'{indicator_name} {folder}', Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")]
-workbook_name = f"{indicator_name} {geography} BLS {survey}.xlsx"
+paths = [path_main / export_loc / f'{indicator} {folder}', Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")]
+paths = [path_main / export_loc / f'{indicator} {folder}']
+workbook_name = f"{indicator} {geography} BLS {survey}_ChamberStudy2026.xlsx"
 
 
 estimate = 'BLS'
 sample_type = survey
 df_about = write_about(sample_type      = sample_type
-                       , indicator_name = indicator_name
+                       , indicator = indicator
                        , year_start     = year_start
                        , year_end       = year_end
                        , path_config0   = path_config0
@@ -161,7 +163,7 @@ if export:
         print(f"Excel files exported here:  {path_}");print()
         print(f"Name of workbook:  {workbook_name}");print()
     
-        if indicator_name == 'Jobs_1':
+        if indicator == 'Jobs_1':
             if geography == 'MSA':
                 with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
                     df_about.to_excel(writer, index = False, sheet_name = 'About', header = False)
@@ -172,29 +174,29 @@ if export:
                     df_about.to_excel(writer, index = False, sheet_name = 'About', header = False)
                     df_bls1 .to_excel(writer, index = False, sheet_name = 'National')
         
-        if indicator_name == 'Jobs_2':
+        if indicator == 'Jobs_2':
             if geography == 'MSA':
                 with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
                     df_about  .to_excel(writer, index = False, sheet_name = 'About', header = False)
                     df_bls_msa.to_excel(writer, index = False, sheet_name = 'MSA')
-                workbook_name = f"{indicator_name} 'MPO' BLS {survey}.xlsx"
-                df_about.loc[df_about['Indicator'] == 'Geography', indicator_name] = 'MPO'
-                with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
-                    df_about  .to_excel(writer, index = False, sheet_name = 'About', header = False)
-                    df_bls_mpo.to_excel(writer, index = False, sheet_name = 'MPO')
+                # workbook_name = f"{indicator} 'MPO' BLS {survey}.xlsx"
+                # df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
+                # with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
+                #     df_about  .to_excel(writer, index = False, sheet_name = 'About', header = False)
+                #     df_bls_mpo.to_excel(writer, index = False, sheet_name = 'MPO')
             if geography == 'National':
                 with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
                     df_about.to_excel(writer, index = False, sheet_name = 'About', header = False)
                     df_bls1 .to_excel(writer, index = False, sheet_name = 'National')
         
-        if indicator_name == 'Jobs_3':
+        if indicator == 'Jobs_3':
             if geography == 'MSA':
                 with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
                     df_about .to_excel(writer, index = False, sheet_name = 'About', header = False)
                     df_bls1_1.to_excel(writer, index = False, sheet_name = 'Government and Private')
                     df_bls1_2.to_excel(writer, index = False, sheet_name = 'Goods and Services'    )
         
-        if indicator_name == 'Labor_2':
+        if indicator == 'Labor_2':
             if geography == 'MSA':
                 with pd.ExcelWriter(path_, engine='xlsxwriter') as writer:
                     df_about.to_excel(writer, index = False, sheet_name = 'About', header = False)

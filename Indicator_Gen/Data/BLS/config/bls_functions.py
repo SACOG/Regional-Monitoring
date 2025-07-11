@@ -38,7 +38,7 @@ def dict_maker(survey, geography, seasonal, df=None, list_sectors=None, data_typ
     keys = []
     vals = []
 
-    if geography == 'MSA': 
+    if geography == 'MSA':
         
         # Loop through each MSA code
         # Construct the Series ID
@@ -75,6 +75,7 @@ def dict_maker(survey, geography, seasonal, df=None, list_sectors=None, data_typ
 
     # Convert list of keys and values to dictionary
     result = {k: v for k, v in zip(keys, vals)}
+    
     return result
 
         

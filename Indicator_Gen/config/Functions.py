@@ -46,12 +46,9 @@ def unique(list1):
 
 
 
-
 # Function to create list of values inbetween range
 def sequence(r1, r2, step):
     return [item for item in range(r1, r2+1, step)]
-
-
 
 
 
@@ -89,7 +86,7 @@ def move_column_after(df, col_to_move, after_col):
 
 
 
-   
+
 # Function to write about page for each indicator
 def write_about(sample_type, indicator, year_start, year_end, path_config0, geography=None, MOE_thresh=None, estimate=None):
 
@@ -240,9 +237,8 @@ def plot_agol(export):
     fig.show(config=config)
     
     if export:
-        fig.write_html( file=os.path.join(path_plots, f'{indicator_name}_{plot_name}.html'), config=config)
+        fig.write_html( file=os.path.join(path_plots, f'{indicator}_{plot_name}.html'), config=config)
         
-
 
 
 
@@ -317,6 +313,17 @@ color_map_nat_peermsa = {
 }
 
 
+
+color_map_comp = {
+                "SACOG": "#000000",
+                 "California":"#9DC209",
+                 "National": "#DC381F",
+                 "Peer MSA": "#1E90FF"
+}
+
+
+
+
 color_map_nat_peers = {
     'Sacramento, CA': "#9DC209"
     , 'Yuba City, CA': "#9DC209"
@@ -352,6 +359,8 @@ peer_msa_labels = {
     , 'Sacramento-Roseville-Folsom, CA'                                        : 'Sacramento, CA'
     , 'Sacramento--Roseville--Arden-Arcade, CA'                                : 'Sacramento, CA'
     , 'Sacramento-Roseville-Folsom, CA Metro Area'                             : 'Sacramento, CA'
+    , 'Sacramento--Roseville--Arden-Arcade, CA Metro Area'                     : 'Sacramento, CA'
+    , 'Sacramento--Arden-Arcade--Roseville, CA Metro Area'                     : 'Sacramento, CA'
     , 'Sacramento--Roseville--Arden-Arcade, CA Metropolitan Statistical Area'  : 'Sacramento, CA'
     , 'Yuba City'                                                              : 'Yuba City, CA'
     , 'Yuba City, CA'                                                          : 'Yuba City, CA'
@@ -398,6 +407,7 @@ peer_msa_labels = {
     , 'Kansas City, MO-KS'                                                     : 'Kansas City, MO'
     , 'Kansas City, MO-KS Metro Area'                                          : 'Kansas City, MO'
     , 'Kansas City, MO-KS Metropolitan Statistical Area'                       : 'Kansas City, MO'
+    , 'Kansas City, MO-KS (Metropolitan Statistical Area)'                     : 'Kansas City, MO'
     , 'Miami'                                                                  : 'Miami, FL'
     , 'Miami-Fort Lauderdale-Pompano Beach'                                    : 'Miami, FL'
     , 'Miami-Fort Lauderdale-Pompano Beach, FL'                                : 'Miami, FL'
@@ -424,6 +434,7 @@ peer_msa_labels = {
     , 'Portland-Vancouver-Hillsboro'                                           : 'Portland, OR'
     , 'Portland-Vancouver-Hillsboro, OR-WA'                                    : 'Portland, OR'
     , 'Portland-Vancouver-Hillsboro, OR-WA Metro Area'                         : 'Portland, OR'
+    , 'Portland-Vancouver-Beaverton, OR-WA Metro Area'                         : 'Portland, OR'
     , 'Portland-Vancouver-Hillsboro, OR-WA Metropolitan Statistical Area'      : 'Portland, OR'
     , 'Riverside'                                                              : 'Riverside, CA'
     , 'Riverside-San Bernardino-Ontario'                                       : 'Riverside, CA'
@@ -467,4 +478,18 @@ peer_msa_labels = {
     , 'Tampa-St. Petersburg-Clearwater, FL'                                    : 'Tampa, FL'
     , 'Tampa-St. Petersburg-Clearwater, FL Metro Area'                         : 'Tampa, FL'
     , 'Tampa-St. Petersburg-Clearwater, FL Metropolitan Statistical Area'      : 'Tampa, FL'
+
+    ## Other comparisons
+    , 'Atlanta-Sandy Springs-Alpharetta, GA'                                   : 'Atlanta, GA'
+    , 'Atlanta-Sandy Springs-Roswell, GA Metro Area'                           : 'Atlanta, GA'
+    , 'Atlanta-Sandy Springs-Marietta, GA Metro Area'                          : 'Atlanta, GA'
+    , 'Atlanta-Sandy Springs-Alpharetta, GA Metro Area'                        : 'Atlanta, GA'
+    , 'Atlanta-Sandy Springs-Alpharetta, GA (Metropolitan Statistical Area)'   : 'Atlanta, GA'
+    , 'Minneapolis-St. Paul-Bloomington, MN-WI'                                : 'Minneapolis, MN'
+    , 'Minneapolis-St. Paul-Bloomington, MN-WI Metro Area'                     : 'Minneapolis, MN'
+    , 'Minneapolis-St. Paul-Bloomington, MN-WI (Metropolitan Statistical Area)': 'Minneapolis, MN'
+    , 'Seattle-Tacoma-Bellevue, WA'                                            : 'Seattle, WA'
+    , 'Seattle-Tacoma-Bellevue, WA Metro Area'                                 : 'Seattle, WA'
+    , 'Seattle-Tacoma-Bellevue, WA (Metropolitan Statistical Area)'            : 'Seattle, WA'
+
 }

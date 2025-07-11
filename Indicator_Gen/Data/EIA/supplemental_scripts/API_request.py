@@ -1,3 +1,7 @@
+
+
+
+
 cat         = df_api['category'   ].values[0]
 route1      = df_api['route1'     ].values[0]
 route2      = df_api['route2'     ].values[0]
@@ -6,10 +10,10 @@ facet       = df_api['facet'      ].values[0]
 freq        = freq.lower()
 
 
-print('')
-print('')
+print()
+print()
 print('API request: ')
-print('')
+print()
 print(cat)
 print(route1)
 try:
@@ -29,7 +33,7 @@ try:
 except:
     pass
 print(freq)
-print('')
+print()
 
 
 if (cat in categories_no_data_api) & (route1 in route1_no_data_api):
@@ -78,8 +82,10 @@ url = f"{root_}{route_}{data_}"
 response = requests.get(url, params=params)
 response = response.json()
 
-print('')
+print()
 print('API response: ')
-print('')
+print()
 
 display(response)
+
+

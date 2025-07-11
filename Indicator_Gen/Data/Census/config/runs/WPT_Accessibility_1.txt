@@ -1,0 +1,10 @@
+Project: CERF
+Indicator Name: WPT_Accessibility_1
+Export Location: CERF\\We Prosper Together\\Transportation Measures
+Folder: 
+Sample: PUMS
+Estimate: ACS5
+Geography: PUMA
+Years Imported: 2019, 2020, 2021, 2023
+Import Tab: Counties
+Margin of Error: Yes

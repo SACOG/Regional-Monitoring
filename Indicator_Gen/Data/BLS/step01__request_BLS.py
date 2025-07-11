@@ -1,15 +1,12 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# ***************************************************************************
-# 
-# Preparing Workspace
-# 
-# ***************************************************************************
 
 
 
-## Importing packages ---
+
+## Preparing Workspace ===============================================================
+
+
+
+## Packages ---
 
 import numpy as np
 import pandas as pd
@@ -19,6 +16,7 @@ import os
 import re
 from tqdm import tqdm
 from datetime import date
+from datetime import datetime
 import requests
 import ast
 import xlwt
@@ -28,9 +26,13 @@ import xlsxwriter
 import time
 import functools as ft
 from IPython.display import display
+# import pdb; pdb.set_trace()
 
 
-## Setting file paths ---
+## File paths ---
+
+rerun=False
+export=True
 
 user = getpass.getuser()
 path_users = Path.home()
@@ -57,26 +59,19 @@ with path_func_census.open("r") as f:
     exec(f.read())
         
 
-## Setting the API key ---
+## API key ---
 
-# Obtain API Key from the following source 
+# Obtain API Key from the following source
 # https://api.census.gov/data/key_signup.html
 # Copy retrieved API key to .txt file for safe keeping
 exec(open(os.path.join(path_config, 'api_key.txt')).read())
 api_key = dict_api[user]
 
 
-## Export setting ---
-
-export=False
 
 
 
-# ***************************************************************************
-# 
-# Preparing Imports
-# 
-# ***************************************************************************
+## Prepare API Request ===========================================================================
 
 
 
@@ -87,11 +82,10 @@ with path_1a.open("r") as f:
 
 
 
-# ***************************************************************************
-# 
-# Importing
-# 
-# ***************************************************************************
+
+
+## Sending API Requests ===========================================================================
+
 
 # Version 2 (registered API key) allows us to pull:  50 Series ID's per request, 20 years of data per request, 500 requests per day
 
@@ -104,45 +98,41 @@ with path_1b.open("r") as f:
 
 
 
-# ***************************************************************************
-# 
-# Exporting
-# 
-# ***************************************************************************
+
+## Exporting ===============================================================================
 
 
 
 if export:
-    export_title = '_'.join([indicator_name, geography, 'BLS']) + '_raw.csv'
+    export_title = '_'.join([indicator, geography, 'BLS']) + '_ChamberStudy2026_raw.csv'
     print("Exporting " + export_title + " to the following location: ")
     print(path_raw)
     
     file_out = path_raw / export_title
-    df_bls_raw.to_csv(file_out, index = False)
+    df_bls_raw.to_csv(file_out, index=False)
     
     print()
     print('Successfully exported!')
 
 
 
-# ***************************************************************************
-# 
-# Processing (optional)
-# 
-# ***************************************************************************
+
+
+# Processing (optional) ------------------------------------------------------------------------
 
 
 
-df_bls = df_bls_raw.copy()
+if indicator == 'Jobs_1':
+    df_bls = df_bls_raw.copy()
 
-df_bls = pd.melt(df_bls, id_vars = ['year', 'periodName'], var_name = 'seriesID', value_name = 'value')    
-df_bls['date_'] = df_bls['year'].astype('str') + '-' + df_bls['periodName'].astype('str')
-df_bls['date_'] = pd.to_datetime(df_bls['date_'])
-df_bls['value'] = df_bls['value'].astype('float32').apply(lambda x: x*1000)
-df_bls = df_bls.merge(df_series_area, on = 'seriesID')
+    df_bls = pd.melt(df_bls, id_vars = ['year', 'periodName'], var_name='seriesID', value_name='value')
+    df_bls['date_'] = df_bls['year'].astype('str') + '-' + df_bls['periodName'].astype('str')
+    df_bls['date_'] = pd.to_datetime(df_bls['date_'])
+    df_bls['value'] = df_bls['value'].astype('float32').apply(lambda x: x*1000)
+    df_bls = df_bls.merge(df_series_area, on='seriesID')
+    df_bls = df_bls.drop_duplicates()
+    df_bls = df_bls.reset_index(drop=True)
 
-display(df_bls)
-
-
+    display(df_bls)
 
 
