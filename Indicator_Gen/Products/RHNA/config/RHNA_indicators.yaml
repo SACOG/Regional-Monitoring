@@ -4,6 +4,27 @@
 
 
 
+# RISK_1
+# https://chpc.net/resources/2023-subsidized-affordable-housing-at-risk-report/#:~:text=According%20to%20the%20Affordable%20Homes,as%20soon%20as%20this%20year.
+# https://chpc.net/wp-content/uploads/2025/04/CHP_2025-Subsidized-At-Risk-Report.pdf
+# To contact data team: https://chpc.net/datatools/affordablehomes/
+
+
+UDP:
+  POPEMP_25:
+    Indicator Title:
+    - Households by Displacement Risk and Tenure
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25003
+    Website:
+    - https://www.census.gov/programs-surveys/acs/data.html
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+
+
+
 HCD:
 
   HSG_11:
@@ -476,18 +497,6 @@ ACS5:
     - Households by Presence of Children
     Source:
     - U.S. Census Bureau, American Community Survey 5-Year Data, Table B11005
-    Website:
-    - https://www.census.gov/programs-surveys/acs/data.html
-    Year(s):
-    - 2019-2023
-    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
-
-  POPEMP_25:
-    Indicator Title:
-    - Households by Displacement Risk and Tenure
-    Source:
-    - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25003
     Website:
     - https://www.census.gov/programs-surveys/acs/data.html
     Year(s):

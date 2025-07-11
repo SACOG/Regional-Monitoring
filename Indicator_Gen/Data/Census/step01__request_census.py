@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
 
 
 
 
-## Preparing Workspace ===============================================================
+## Preparing Workspace ========================================================================================================================
 
 
 
@@ -53,15 +51,11 @@ path_config  = path_code / 'config'
 
 path_func = path_config0 / 'Functions.py'
 path_func_census = path_config / 'census_functions.py'
-path_func_censusbureau = path_config / 'censusbureau.py'
 
 with path_func.open("r") as f:
     exec(f.read())
 
 with path_func_census.open("r") as f:
-    exec(f.read())
-        
-with path_func_censusbureau.open("r") as f:
     exec(f.read())
 
 
@@ -81,7 +75,7 @@ export=True
 
 
 
-## Preparing Import Parameters =================================================================
+## Prepare API Request ========================================================================================================================
 
 
 
@@ -92,7 +86,7 @@ with path_1a.open("r") as f:
 
 
 
-## Importing ==============================================================================
+## Sending API Requests ========================================================================================================================
 
 
 
@@ -104,7 +98,7 @@ with path_1b.open("r") as f:
 
 
 
-## Exporting ============================================================================
+## Exporting ========================================================================================================================
 
 
 
@@ -118,7 +112,7 @@ if export:
     if margin_of_error == 'No':
         end = 'NoME_raw.csv'
     else:
-        end = 'raw.csv'
+        end = 'ChamberStudy2026_raw.csv'
 
     if sample_type == 'LEHD':
         export_title = f"{indicator}_{geography}_{sample_type}_{end}"

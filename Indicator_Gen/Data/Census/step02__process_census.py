@@ -1,8 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
 
 
-## Preparing Workspace ===============================================================
+
+
+## Preparing Workspace ======================================================================================================
 
 
 
@@ -45,6 +45,7 @@ path_config  = path_code / 'config'
 path_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
 
+
 ## User defined functions ---
 
 path_func = path_config0 / 'Functions.py'
@@ -69,22 +70,19 @@ with open(file_api, 'r') as file:
 ## Export params ---
 
 rerun=True
-export=True
+export=False
 about=False
 update=False
 server=False
-
+mpo = 'Yes'
+unincorporated = 'Yes'
 
 # Execute script to prepare API request inputs
 path_1a = path_code / 'supplemental_scripts' / 'step01a__prepare_api_request_inputs.py'
 with path_1a.open("r") as f:
     exec(f.read())
 
-if geography == 'Counties':
-    mpo = 'Yes'
-if geography == 'Places':
-    unincorporated = 'Yes'
-    
+
 display(df_vars.head(3))
 
 
@@ -110,7 +108,7 @@ print(df_census_raw.Year.unique())
 
 
 
-## Processing =================================================================
+## Processing ===========================================================================================================
 
 
 
@@ -130,39 +128,39 @@ if sample_type in ['ACS', 'SUBJECT', 'DEC']:
     # Manually check column names and clean as needed
     # Adjust dollars for inflation, if needed
     # Reorganize margin of error fields
-    df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error)
-    display(df_census.head(3))
+    if geography == 'Counties':
+        df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo, df_fips)
+    else:
+        df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo)
     print(df_census.Year.unique())
+    display(df_census.head(3))
 
     # Merge cleam label field, variable mapping, race/ethnicity, and sorting field
     # Remove unneeded columns
-    df_census = acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_git)
-    display(df_census.head(3))
-    print(df_census.Year.unique())
-
-    # Create "Categorical" race/ethnicity field for sorting
     # Sort by geography, variable mapping, and race/ethnicity
-    # sort and then remove categorical field
-    df_census = acs_processing_3(df_census, geography)
-    display(df_census.head(3))
+    df_census = acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, 
+                                    path_main, path_config0, weighted_by, dt_geoid_clean, dt_geo_sheets, unincorporated)
     print(df_census.Year.unique())
+    display(df_census.head(3))
+
 
     # Final processing step for ACS data
     # Link various FIPS codes
     # Roll up population/households/SE's to the desired geography and variable groupings
     # Calculate percentages by geography, race/ethnicity, and variables
 
-    if geography != 'Counties':
-        df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-        display(df_census.head(3))
     if geography == 'Counties':
         if mpo == 'Yes':
-            df_census, df_mpo = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
-            display(df_mpo.head(3))
+            df_census, df_mpo = acs_processing_3(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, 
+                                                    dt_geoid_clean, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
         else:
-            df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-            display(df_census.head(3))
+            df_census = acs_processing_3(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, 
+                                            dt_geoid_clean, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
+    else:
+        df_census = acs_processing_3(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, 
+                                        dt_geoid_clean, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
     print(df_census.Year.unique())
+    display(df_census.head(3))
 
 
 
@@ -178,7 +176,6 @@ if sample_type in ['PUMS', 'FOODSEC']:
     print('Groups: ' + ', '.join(groups))
     display(df_census.head(3))
 
-
     # Remove rows with missing values
     # Only keep description mappings, remove the original PUMS values
     df_census = pums_processing_2(df_census, estimate, sample_type, groups, df_fips, dict_fips)
@@ -190,7 +187,6 @@ if sample_type in ['PUMS', 'FOODSEC']:
     df_census, groups = pums_processing_3(df_census, groups, indicator, path_config0)
     print('Groups: ' + ', '.join(groups))
     display(df_census.head(3))
-
 
     # Roll up using suggested weight field
     # Roll up to PUMA, counties, MSA, and MPO
@@ -226,6 +222,7 @@ print()
 if geography not in ['Counties', 'PUMA']:
     df_census = rename_census(df_census          = df_census
                                , geography       = geography
+                               , dt_geoid_clean  = dt_geoid_clean
                                , indicator       = indicator
                                , margin_of_error = margin_of_error
                                , percentages     = percentages
@@ -237,6 +234,7 @@ if geography == 'Counties':
             df_census, df_mpo = rename_census(df_census           = df_census
                                                 , df_mpo          = df_mpo
                                                 , geography       = geography
+                                                , dt_geoid_clean  = dt_geoid_clean
                                                 , indicator       = indicator
                                                 , margin_of_error = margin_of_error
                                                 , percentages     = percentages
@@ -244,12 +242,13 @@ if geography == 'Counties':
                                                 , df_vars         = df_vars)
             display(df_census, df_mpo)
         else:
-            df_census = rename_census(df_census       = df_census
-                                    , geography       = geography
-                                    , indicator       = indicator
-                                    , margin_of_error = margin_of_error
-                                    , percentages     = percentages
-                                    , sample_type     = sample_type)
+            df_census = rename_census(df_census         = df_census
+                                      , geography       = geography
+                                      , dt_geoid_clean  = dt_geoid_clean
+                                      , indicator       = indicator
+                                      , margin_of_error = margin_of_error
+                                      , percentages     = percentages
+                                      , sample_type     = sample_type)
             display(df_census)
 if geography == 'PUMA':
     df_puma, df_counties, df_msa, df_mpo = rename_census(df_puma           = df_puma
@@ -257,6 +256,7 @@ if geography == 'PUMA':
                                                          , df_msa          = df_msa
                                                          , df_mpo          = df_mpo
                                                          , geography       = geography
+                                                         , dt_geoid_clean  = dt_geoid_clean
                                                          , indicator       = indicator
                                                          , margin_of_error = margin_of_error
                                                          , percentages     = percentages
@@ -269,7 +269,7 @@ if geography == 'PUMA':
 
 
 
-## Exporting =================================================================
+## Exporting ===============================================================================================================
 
 
 
@@ -349,13 +349,10 @@ if export:
         print()
     
     path_out_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
-    path_out_sp = path_main / export_loc / f"{indicator} {folder}"
+    path_out_sp = export_loc / f"{indicator} {folder}"
     
     if project != 'Monitoring and Reporting':
         path_out_sp = path_prod / export_loc
-
-    if project == 'Miscellaneous':
-        path_out_sp = path_main / export_loc
 
     if project == 'Monitoring and Reporting':
         if server:

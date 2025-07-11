@@ -1,4 +1,4 @@
-Indicator Name: Road_1
+Indicator: Road_1
 Category: Petroleum
 Route 1: Prices
 Route 2: Weekly Retail Gasoline and Diesel Prices

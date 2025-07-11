@@ -1,0 +1,16 @@
+
+
+# EIA Indicators metadata
+
+
+Project:
+  - 'Monitoring and Reporting'
+
+
+Indicators:
+  Monitoring and Reporting:
+    Road_1:
+      sp_location: 'Next Gen of Mobility Solutions\\Road'
+      folder: 'Gas Prices'
+
+

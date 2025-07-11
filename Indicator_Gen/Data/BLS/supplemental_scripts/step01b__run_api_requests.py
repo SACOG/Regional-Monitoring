@@ -11,6 +11,10 @@ list_df_years = []
 year_step = 20
 
 
+
+
+
+
 # Loop through the specified range of years in step intervals
 for year_range_start in range(year_start, year_end + 1, year_step):
     year_range_end = min(year_range_start + year_step - 1, year_end)
@@ -28,12 +32,15 @@ for year_range_start in range(year_start, year_end + 1, year_step):
         url = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
         url_key = '?registrationkey={}'.format(api_key)
         headers = {'Content-type': 'application/json'}
-        data = json.dumps({
-                    "seriesid": list_series,
-                    "startyear": year_range_start,
-                    "endyear": year_range_end,
-                    "registrationkey": api_key
-                    })
+
+        # print(); print()
+        # print(list_series); print(type(list_df_series))
+        # print(year_range_start); print(type(year_range_start))
+        # print(year_range_end); print(type(year_range_end))
+        # print(api_key); print(type(api_key))
+        # print(); print()
+
+        data = json.dumps({"seriesid": list_series,"startyear": int(year_range_start),"endyear": int(year_range_end),"registrationkey": api_key})
 
         # API request
         response = requests.post('{}{}'.format(url, url_key), headers=headers, data=data).json()

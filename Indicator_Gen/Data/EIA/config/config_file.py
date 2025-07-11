@@ -1,7 +1,8 @@
 
+print(); print(); print()
 
 try:
-    indicator_name
+    indicator
 except NameError:
     var_exists = False
 else:
@@ -10,21 +11,19 @@ else:
 if var_exists:
     pass
 else:
-    indicator_name = input("Indicator Name: ")
+    indicator = input("Indicator: ")
 
-print()
-print()
+print(); print()
 
 print('Importing API routes to help with preparing API request...')
 print('(it takes a few minutes)')
 
-path_routes = r"I:/Projects/Josh/Regional Monitoring"
-df_api = pd.read_excel(os.path.join(path_routes, 'Routes.xlsx'))
-# display(df_api.head())
+path_routes = Path(r"I:\Projects\Josh\Regional Monitoring")
+file_routes = path_routes / 'Routes.xlsx'
+df_api = pd.read_excel(file_routes)
 print('View this link as needed to help with choosing routes: ', 'https://www.eia.gov/opendata/browser/')
 
-print()
-print()
+print(); print()
 
 
 ## Subsets ---
@@ -71,14 +70,26 @@ route2_no_data_api     = list(df_sub['route2'  ].unique())
 ## Inputs ---
 
 
+
 ## Category
+
+try:
+    cat
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
+
 categories = list(df_api['category_name'].unique())
 print("Categories: ");print(categories)
 
 while True:
     try:
         print()
-        cat = input("Enter your choice: ")
+        if var_exists:
+            pass
+        else:
+            cat = input("Enter your choice: ")
         if cat in categories:
             print()
             break
@@ -92,6 +103,14 @@ while True:
 
 
 ## Route 1
+
+try:
+    route1
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
+
 df_api = df_api[df_api['category_name'] == cat]
 routes1 = list(df_api['route1_name'].unique())
 
@@ -101,7 +120,10 @@ print("Routes 1: ");print(routes1)
 while True:
     try:
         print()
-        route1 = input("Enter your choice: ")
+        if var_exists:
+            pass
+        else:
+            route1 = input("Enter your choice: ")
         if route1 in routes1:
             print()
             break
@@ -115,6 +137,14 @@ while True:
 
 
 ## Route 2
+
+try:
+    route2
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
+
 df_api = df_api[df_api['route1_name'] == route1]
 
 if (cat in categories_no_route2) & (route1 in route1_no_route2):
@@ -127,7 +157,10 @@ else:
     while True:
         try:
             print()
-            route2 = input("Enter your choice: ")
+            if var_exists:
+                pass
+            else:
+                route2 = input("Enter your choice: ")
             if route2 in routes2:
                 print()
                 break
@@ -143,7 +176,17 @@ if (cat in categories_no_route2) & (route1 in route1_no_route2):
 else:
     df_api = df_api[df_api['route2_name'] == route2]
 
+
+
+
 ## Facet Options
+
+try:
+    facetOption
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
 
 if (cat in categories_no_facets) & (route1 in route1_no_facets):
     pass
@@ -156,7 +199,10 @@ else:
     while True:
         try:
             print()
-            facetOption = input("Enter your choice: ")
+            if var_exists:
+                pass
+            else:
+                facetOption = input("Enter your choice: ")
             if facetOption in facetOptions:
                 print()
                 break
@@ -171,6 +217,15 @@ else:
 
 
 ## Facets
+
+try:
+    facet
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
+
+
 if (cat in categories_no_facets) & (route1 in route1_no_facets):
     pass
 else:
@@ -183,7 +238,10 @@ else:
     while True:
         try:
             print()
-            facet = input("Enter your choice: ")
+            if var_exists:
+                pass
+            else:
+                facet = input("Enter your choice: ")
             if facet in facets:
                 print()
                 break
@@ -234,6 +292,15 @@ else:
 
 
 ## Frequency
+
+try:
+    freq
+except NameError:
+    var_exists = False
+else:
+    var_exists = True
+
+
 freqs = ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annual']
 print()
 print("Frequency Options: ");print(freqs)
@@ -241,7 +308,10 @@ print("Frequency Options: ");print(freqs)
 while True:
     try:
         print()
-        freq = input("Enter your choice: ")
+        if var_exists:
+            pass
+        else:
+            freq = input("Enter your choice: ")
         if freq in freqs:
             print()
             break
@@ -282,8 +352,9 @@ display(df_api)
 
 
 ## Export to text file
-with open(os.path.join(path_config, 'Configurations', f'{indicator_name}.txt'), 'w') as f:
-    f.write(f"Indicator Name: {indicator_name}\n")
+file_config = path_config / path_config / 'Configurations' / f'{indicator}.txt'
+with open(file_config, 'w') as f:
+    f.write(f"Indicator: {indicator}\n")
     f.write(f"Category: {cat}\n")
     f.write(f"Route 1: {route1}\n")
     try:

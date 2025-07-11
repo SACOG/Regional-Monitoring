@@ -705,11 +705,11 @@ ACS5:
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
-        Rolling Average: The data are reported in 5 year rolling averages. For example, 
-        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Rolling Average: The data are reported in 5 year rolling averages. For example,
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022.
         Users looking for single year results should use the separate 1 year ACS series.\n
-        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
-        the margin of error statistics. Users should pay particular to the margin of error, 
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes
+        the margin of error statistics. Users should pay particular to the margin of error,
         especially for smaller geographies and race/ethnicity groups with relatively less population.'
     
 
@@ -736,12 +736,13 @@ ACS5:
       - 5
       Notes: 'The indicator is measured at the person level\n
         Key terms\n
-        Rolling Average: The data are reported in 5 year rolling averages. For example, 
-        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Rolling Average: The data are reported in 5 year rolling averages. For example,
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022.
         Users looking for single year results should use the separate 1 year ACS series.\n
-        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
-        the margin of error statistics. Users should pay particular to the margin of error, 
-        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes
+        the margin of error statistics. Users should pay particular to the margin of error,
+        especially for smaller geographies and race/ethnicity groups with relatively less population./n
+        PUMS 5-Year estimates for 2022 not available.'
 
     Accessibility_2:
       Indicator Title:
@@ -767,12 +768,13 @@ ACS5:
         The income brackets (Low, Moderate, and High) are organized uniquely to each county, using the state guidelines\n
         https://www.hcd.ca.gov/sites/default/files/docs/grants-and-funding/income-limits-2023.pdf \n
         Key terms\n
-        Rolling Average: The data are reported in 5 year rolling averages. For example, 
-        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Rolling Average: The data are reported in 5 year rolling averages. For example,
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022.
         Users looking for single year results should use the separate 1 year ACS series.\n
-        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
-        the margin of error statistics. Users should pay particular to the margin of error, 
-        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes
+        the margin of error statistics. Users should pay particular to the margin of error,
+        especially for smaller geographies and race/ethnicity groups with relatively less population./n
+        PUMS 5-Year estimates for 2022 not available.'
 
     Accessibility_3:
       Indicator Title:
@@ -794,12 +796,13 @@ ACS5:
       Margin of Error Limit:
       - 5
       Notes: 'Key terms\n
-        Rolling Average: The data are reported in 5 year rolling averages. For example, 
-        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022. 
+        Rolling Average: The data are reported in 5 year rolling averages. For example,
+        the 2022 output is not the individual year of 2022, but the  year average of 2018-2022.
         Users looking for single year results should use the separate 1 year ACS series.\n
-        Margin of Error: all ACS outputs are estimates. The downloadable data includes 
-        the margin of error statistics. Users should pay particular to the margin of error, 
-        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+        Margin of Error: all ACS outputs are estimates. The downloadable data includes
+        the margin of error statistics. Users should pay particular to the margin of error,
+        especially for smaller geographies and race/ethnicity groups with relatively less population./n
+        PUMS 5-Year estimates for 2022 not available.'
 
     Accessibility_4:
       Indicator Title:
@@ -830,7 +833,8 @@ ACS5:
         Users looking for single year results should use the separate 1 year ACS series.\n
         Margin of Error: all ACS outputs are estimates. The downloadable data includes 
         the margin of error statistics. Users should pay particular to the margin of error, 
-        especially for smaller geographies and race/ethnicity groups with relatively less population.'
+        especially for smaller geographies and race/ethnicity groups with relatively less population./n
+        PUMS 5-Year estimates for 2022 not available.'
 
     Income_2:
       Indicator Title:
@@ -861,7 +865,8 @@ ACS5:
         for single-year results should use the separate 1-year ACS series.\n
         Margin of Error: All ACS outputs are estimates. The downloadable data includes the margin of 
         error statistics. Users should pay particular attention to the margin of error, especially for smaller 
-        geographies and race/ethnicity groups with relatively smaller populations.'
+        geographies and race/ethnicity groups with relatively smaller populations./n
+        PUMS 5-Year estimates for 2022 not available.'
 
     Cost_6:
       Indicator Title:
@@ -890,7 +895,8 @@ ACS5:
         includes the margin of error statistics. Users should pay particular to the margin
         of error, especially for smaller geographies and race/ethnicity groups with relatively
         less population. Given that this indicator uses 1 year ACS, it will have a higher
-        margin of error compared to the 5 year rolling average'
+        margin of error compared to the 5 year rolling average./n
+        PUMS 5-Year estimates for 2022 not available.'
 
 
 
@@ -1605,7 +1611,7 @@ BLS:
       Last Updated:
       -
       Next Update:
-      - '2025-03-01'
+      - '2026-04-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.\n
         Employment data refer to persons on establishment payrolls who receive pay for
         any part of the pay period that includes the 12th of the month.'
@@ -1648,7 +1654,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - '2025-03-01'
+      - '2026-04-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.'
     
     Jobs_3: 
@@ -1667,7 +1673,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - '2025-03-01'
+      - '2026-04-01'
       Notes: 'Employment data refer to persons on establishment payrolls 
         who receive pay for any part of the pay period that includes the 
         12th of the month.'
@@ -1689,7 +1695,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - '2025-03-01'
+      - '2026-04-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.\n
         Employment data refer to persons on establishment payrolls who receive pay 
         for any part of the pay period that includes the 12th of the month.'
@@ -1710,7 +1716,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - '2025-03-01'
+      - '2026-04-01'
       Notes: 'The survey is updated on a monthly basis on the first of every month.'
     
     Jobs_3: 
@@ -1729,7 +1735,7 @@ BLS:
       Last Updated:
       - 
       Next Update:
-      - '2025-03-01'
+      - '2026-04-01'
       Notes: 'Employment data refer to persons on establishment payrolls 
         who receive pay for any part of the pay period that includes the 
         12th of the month.'
@@ -1742,7 +1748,7 @@ SACOG Housing:
     Indicator Title:
     - Total Dwelling Units
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2001-2023
     Description:
@@ -1898,7 +1904,7 @@ SACOG Housing:
     Indicator Title:
     - Pop Growth compared to Housing Growth
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2001-2024
     Description:
@@ -1921,7 +1927,7 @@ SACOG Housing:
     Indicator Title:
     - Map of unit growth at jurisdiction level
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2001-2023
     Description:
@@ -1973,7 +1979,7 @@ SACOG Housing:
     Indicator Title:
     - Housing production by product type
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2001-2024
     Description:
@@ -1994,7 +2000,7 @@ SACOG Housing:
     Indicator Title:
     - New housing permits by community type
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2008-2023
     Description:
@@ -2046,7 +2052,7 @@ SACOG Housing:
     Indicator Title:
     - Share of housing built within Green Zones
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2001-2023
     Description:
@@ -2098,7 +2104,7 @@ SACOG Housing:
     Indicator Title:
     - Share of housing built within Green Zones
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2001-2023
     Description:
@@ -2150,7 +2156,7 @@ SACOG Housing:
     Indicator Title:
     - Housing built on ag land
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2018-2023
     Description:
@@ -2202,7 +2208,7 @@ SACOG Housing:
     Indicator Title:
     - Housing units built in floodplain, high fire risk zones
     Source:
-    - SACOG Housing Permit Data
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2018-2023
     Description:
@@ -2306,7 +2312,7 @@ SACOG Housing:
     Indicator Title:
     - New permits issued by RHNA income category
     Source:
-    - HCD housing series
+    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
     - 2018-2023
     Description:
@@ -2447,7 +2453,7 @@ Zillow:
     Last Updated:
     - 
     Next Update:
-    - '2025-06-01'
+    - '2026-06-01'
     Notes: 'Home sale prices are approximated with the Zillow Home Value Index. In their own words,\n
       this index is "a measure of the typical home value and market changes across a given region\n
       and housing type. It reflects the typical value for homes in the 3th to 6th percentile range.\n
@@ -2469,7 +2475,7 @@ Zillow:
     Last Updated:
     - 
     Next Update:
-    - '2025-06-01'
+    - '2026-06-01'
     Notes: 'This data uses the Zillow Observed Rent Index. In their own words,\n
       this is "a smoothed measure of the typical observed market rate rent across\n
       a given region. ZORI is a repeat-rent index that is weighted to the rental\n
@@ -2499,7 +2505,7 @@ EPA:
     Last Updated:
     - 
     Next Update:
-    - '2025-06-01'
+    - '2025-12-01'
     Notes: 'Number of days violating national ambient air quality standards each year (Ozone and/or PM2.5)\n
      In California, PM2.5 monitors were installed in 1998.\n
      Data on Ozone AQI can be collected started in 1980.'
@@ -2584,22 +2590,24 @@ BEA:
 
   Output_1:
     Indicator Title:
-    - GRP
+    - Gross Regional Product
     Source:
-    - BEA
+    - Bureau of Economic Analysis (BEA), table CAGDP9
     Year(s):
-    - 
+    - 2001-2023
     Description:
-    - 
+    - Gross Regional Product (GRP) and Annual Percent Change over time
     Geography:
-    - 
+    - MSA
     Website:
-    -
+    - https://www.bea.gov/
     Last Updated:
     - 
     Next Update:
-    - '2025-06-01'
-    Notes: 'Test'
+    - '2026-06-01'
+    Notes: 'The value of final goods and services produced in the United States is the gross domestic product.\n
+     The percentage that GDP grew (or shrank) from one period to another is an important way for a region to gauge how their economy is doing.\n
+     This indicator uses Real GDP in Chained Dollars, which is an inflation-adjusted measure.'
 
 
 TIMS:
@@ -2715,6 +2723,58 @@ NTD:
       The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
       The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
 
+
+
+
+TMAG:
+
+  TravelAccess_1:
+    Indicator Title:
+    - Travel Accessibility by Mode
+    Source:
+    - Conveyal, Overture, California Department of Education, SACOG Transportation Modeling and Analysis Group
+    Year(s):
+    - 2024 Overture POI data, 2023-2024 California Department of Education, 2023 ACS5-year population data
+    Description:
+    - Number of jobs, schools, and neighborhood services accessible by travel mode
+    Geography:
+    - Community Type, Counties, MPO
+    Website:
+    - https://conveyal.com/
+    Last Updated:
+    - 
+    Next Update:
+    - '2026-06-01'
+    Notes: 'This indicator estimates the number of jobs, schools, or neighborhood services accessible by various transit modes.\n
+      Conveyal applies a decay curve rather than a fixed time cutoff to estimate the sum all opportunities in the region, with each opportunity weighted by the population in that region.\n
+      The number of jobs, schools, and neighborhood services is estimated using a point of interest dataset prepared by SACOG (sourced from Overture and CDE).\n
+      The measure defines educational facilities as public and private K-12 schools, pre-schools, and universities, including vocational and technical schools.\n
+      The measure defines neighborhood services as public parks, healthcare facilities, retail stores, banks, grocery stores, and libraries.\n
+      The population is estimated using ACS 2023 5-year estimates at the block group level.'
+
+  TravelAccess_2:
+    Indicator Title:
+    - Travel Accessibility by Race/Ethnicity
+    Source:
+    - Conveyal, Overture, California Department of Education, SACOG Transportation Modeling and Analysis Group
+    Year(s):
+    - 2024 Overture POI data, 2023-2024 California Department of Education, 2023 ACS5-year population data
+    Description:
+    - Number of jobs, schools, and neighborhood services accessible by travel mode by race/ethnicity
+    Geography:
+    - Community Type, Counties, MPO
+    Website:
+    - https://conveyal.com/
+    Last Updated:
+    - 
+    Next Update:
+    - '2026-06-01'
+    Notes: 'This indicator estimates the number of jobs, schools, or neighborhood services accessible by various transit modes.\n
+      Conveyal applies a decay curve rather than a fixed time cutoff to estimate the sum all opportunities in the region, with each opportunity weighted by the population in that region.\n
+      The number of jobs, schools, and neighborhood services is estimated using a point of interest dataset prepared by SACOG (sourced from Overture and CDE).\n
+      The measure defines educational facilities as public and private K-12 schools, pre-schools, and universities, including vocational and technical schools.\n
+      The measure defines neighborhood services as public parks, healthcare facilities, retail stores, banks, grocery stores, and libraries.\n
+      The population is estimated using ACS 2023 5-year estimates at the block group level.'
 
 
 

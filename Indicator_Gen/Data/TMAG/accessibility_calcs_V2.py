@@ -45,6 +45,8 @@ with open(yaml_file, 'r') as y:
 from IPython.display import display
 
 
+from osgeo import gdal
+gdal.SetConfigOption("GDAL_MEM_ENABLE_OPEN", "YES")
 
 
 ## User defined functions ---
@@ -151,10 +153,10 @@ if __name__ == '__main__':
     arcpy.env.workspace = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
     file_gdb = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
 
-    fc_name = 'tl_2020_sacog_county' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024, City_County, SACOG_MPO
+    fc_name = 'Community_Type_2024_dissolve' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024_dissolve, City_County, SACOG_MPO
     fc_main = file_gdb + '\\' + fc_name
     str_project_type = 'AreaAvg'
-    destination = 'emp'
+    destination = 'nonwork'
     wgt = 'white'
 
     tif_main = Path(acc_cfg['tifdir']).joinpath(acc_cfg['wts'][wgt]) # r"I:\Projects\Darren\PPA3_GIS\AccessibilityAnalyses\tif\workers2020.tif"
@@ -236,3 +238,4 @@ if __name__ == '__main__':
 
 ## transit_emp
 # The average worker can reach this many jobs by transit
+
