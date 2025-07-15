@@ -2,7 +2,7 @@
 
 
 
-## Preparing Workspace ===============================================================
+## Preparing Workspace =============================================================================================================
 
 
 
@@ -70,8 +70,7 @@ api_key = dict_api[user]
 
 
 
-
-## Prepare API Request ===========================================================================
+## Prepare API Request =============================================================================================================
 
 
 
@@ -84,7 +83,7 @@ with path_1a.open("r") as f:
 
 
 
-## Sending API Requests ===========================================================================
+## Sending API Requests =============================================================================================================
 
 
 # Version 2 (registered API key) allows us to pull:  50 Series ID's per request, 20 years of data per request, 500 requests per day
@@ -99,12 +98,16 @@ with path_1b.open("r") as f:
 
 
 
-## Exporting ===============================================================================
+## Exporting =============================================================================================================
 
 
 
 if export:
-    export_title = '_'.join([indicator, geography, 'BLS']) + '_ChamberStudy2026_raw.csv'
+    end = f'{size_code}_{owner_code}_raw.csv'
+    # end = 'ChamberStudy2026_raw'
+
+    export_title = f"{indicator}_{geography}_BLS_{end}.csv"
+
     print("Exporting " + export_title + " to the following location: ")
     print(path_raw)
     

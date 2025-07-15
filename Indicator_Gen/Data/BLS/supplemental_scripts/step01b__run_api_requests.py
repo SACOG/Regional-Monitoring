@@ -33,13 +33,6 @@ for year_range_start in range(year_start, year_end + 1, year_step):
         url_key = '?registrationkey={}'.format(api_key)
         headers = {'Content-type': 'application/json'}
 
-        # print(); print()
-        # print(list_series); print(type(list_df_series))
-        # print(year_range_start); print(type(year_range_start))
-        # print(year_range_end); print(type(year_range_end))
-        # print(api_key); print(type(api_key))
-        # print(); print()
-
         data = json.dumps({"seriesid": list_series,"startyear": int(year_range_start),"endyear": int(year_range_end),"registrationkey": api_key})
 
         # API request

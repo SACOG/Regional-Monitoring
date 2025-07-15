@@ -24,6 +24,7 @@ Python Version: 3.x
 
 from pathlib import Path
 import shutil
+import numpy as np
 import pandas as pd
 import csv
 import zipfile
@@ -39,9 +40,54 @@ import plotly.io as pio
 from plotly.offline import plot
 import plotly.subplots as sp
 from plotly.subplots import make_subplots
+# import pdb; pdb.set_trace()
 
 
 ## User defined functions ---
+
+
+# updates by josh
+def check_gtfs_dates(op_dir, file_name, start_date_field, end_date_field, transit_agency_field):
+
+    list_df_calendars = []
+    for src_dir_zip in Path(op_dir).glob('*.zip'):
+
+        try:
+            with zipfile.ZipFile(src_dir_zip, 'r') as zf:
+                with zf.open(file_name, 'r') as txt_file:
+                    df = pd.read_csv(txt_file, sep=',')
+
+            df = df[[start_date_field, end_date_field]].drop_duplicates()
+            df[transit_agency_field] = src_dir_zip.stem
+            df = df.set_index(transit_agency_field).reset_index()
+            list_df_calendars.append(df)
+        except:
+            pass
+
+    df = pd.concat(list_df_calendars)
+    df = df.reset_index(drop=True)
+
+    df[start_date_field] = pd.to_datetime(df[start_date_field], format='%Y%m%d')
+    df[end_date_field  ] = pd.to_datetime(df[end_date_field  ], format='%Y%m%d')
+    df.loc[df[end_date_field] > datetime.today().strftime("%Y-%m-%d"), end_date_field] = datetime.today().strftime("%Y-%m-%d")
+
+    fig_starts = px.histogram(df, x=start_date_field, histfunc='count', nbins=30, 
+                                color=transit_agency_field, template='plotly_white', color_discrete_sequence=px.colors.qualitative.Vivid, 
+                                title='Start Date Frequency by Transit Agency')
+    fig_ends   = px.histogram(df, x=end_date_field  , histfunc='count', nbins=30, 
+                                color=transit_agency_field, template='plotly_white', color_discrete_sequence=px.colors.qualitative.Vivid, 
+                                title='End Date Frequency by Transit Agency'  )
+
+    fig_starts.show()
+    fig_ends  .show()
+
+    print('A sample of start/end dates:')
+    display(df.head(10))
+    display(df.tail(10))
+    print(); print('Check histograms in browser to observe all start/end dates')
+
+
+
 
 def extract_zip(zfile_in, output_folder=None, overwrite_ok=True):
     if not output_folder:
@@ -54,6 +100,7 @@ def extract_zip(zfile_in, output_folder=None, overwrite_ok=True):
         zfo.extractall(path=output_folder)
 
     return output_folder
+
 
 
 def update_calendar_dates_txt(op_dir, dummy_date_str):
@@ -76,6 +123,75 @@ def update_calendar_dates_txt(op_dir, dummy_date_str):
             row = ','.join([str(i) for i in row])
             fo.write(f"{row}\n")
             
+
+
+
+# updates by josh
+def yolobus(op_dir, new_start_date, new_end_date, start_date_field, end_date_field):
+
+    '''
+    Function to convert calendar_dates.txt file to calendar.txt
+    Only needed for transit agencies that do not have a calendar.txt file but do have a calendar_dates.txt file (looking at you yolobus)
+    Reads in calendar_dates.txt, counts number of occurences by day of the week for each service_id, ...
+    Filters to weekly occuring service_ids, removes non-recurring service_ids
+    Each df is reshaped to create the calendar.txt and update the calendar_dates.txt files
+    '''
+
+    dt_dow = {
+        0:'monday',
+        1:'tuesday',
+        2:'wednesday',
+        3:'thursday',
+        4:'friday',
+        5:'saturday',
+        6:'sunday'
+    }
+
+    txt_calendar_dates = Path(op_dir).joinpath('calendar_dates.txt')
+    df_cal = pd.read_csv(txt_calendar_dates, sep=',')
+
+    df = df_cal.copy()
+    df['date_'] = pd.to_datetime(df['date'], format='%Y%m%d')
+
+    df['dow'] = df['date_'].dt.dayofweek
+    df = df.groupby(['service_id', 'dow'], as_index=False)['date'].count()
+    df.columns = ['service_id', 'dow', 'count']
+
+    df['is_weekly'] = df['count'].eq(df.groupby('dow')['count'].transform('max'))
+
+    df_weekly  = df[df['is_weekly'] == True ]
+    df_special = df[df['is_weekly'] == False]
+
+    df_weekly['weekday'] = df_weekly['dow'].map(dt_dow)
+    df_weekly = df_weekly.sort_values('dow')
+    df_weekly = df_weekly.drop(['is_weekly', 'dow'], axis=1)
+
+    df_weekly['count'] = df_weekly['count'].astype(int)
+    df_weekly = df_weekly.pivot_table(index=['service_id'], columns='weekday', values='count').reset_index()
+
+    df_weekly = df_weekly.fillna(0)
+    integer_cols = df_weekly.select_dtypes(include=np.number).columns
+    for col in integer_cols:
+        df_weekly.loc[df_weekly[col] > 0, col] = 1
+
+    df_weekly[start_date_field] = new_start_date
+    df_weekly[end_date_field  ] = new_end_date
+
+    for dow in dt_dow.keys():
+        col = dt_dow[dow]
+        df_weekly[col] = df_weekly[col].astype(int)
+
+    col_order = ['service_id', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'start_date', 'end_date']
+    df_weekly = df_weekly[col_order]
+
+    df_special = df_cal[df_cal['service_id'].isin(df_special['service_id'].unique())]
+    df_special['date'] = newstart
+    df_special = df_special.drop_duplicates()
+
+    return df_weekly, df_special
+
+
+
 
 
 def update_start_end_dates(op_dir, file_name, new_start_date, new_end_date,
@@ -106,9 +222,18 @@ def update_start_end_dates(op_dir, file_name, new_start_date, new_end_date,
         
         update_calendar_dates_txt(op_dir, dummy_date_str=dummy_date)
     else:
-        if file_name == 'calendar.txt':
-            print(f"\tWARNING: {txt_file_in} not found. You may need to manually update dates in calendar_dates.txt")
-        pass
+        # updates by josh
+        try:
+            print(f"\tWARNING: {txt_file_in} not found. Creating calendar.txt file from calendar_dates.txt file...")
+            df_weekly, df_special = yolobus(op_dir, new_start_date, new_end_date, start_date_field, end_date_field)
+            df_weekly.to_csv(txt_file_in, index=False, sep=',')
+
+            txt_calendar_dates = Path(op_dir).joinpath('calendar_dates.txt')
+            df_special.to_csv(txt_calendar_dates, index=False, sep=',')
+
+        except: 
+            print(f"\tWARNING: Just kidding. {txt_file_in} not found and the yolobus function failed to resolve. You may need to manually update dates in calendar_dates.txt")
+
 
 
 def create_zip(dir_to_zip, zip_parent_dir):
@@ -121,49 +246,12 @@ def create_zip(dir_to_zip, zip_parent_dir):
             zo.write(f, arcname=f.name)
 
 
-def check_gtfs_dates(op_dir, file_name, start_date_field, end_date_field, transit_agency_field):
-
-    list_df_calendars = []
-    for src_dir_zip in Path(op_dir).glob('*.zip'):
-
-        try:
-            with zipfile.ZipFile(src_dir_zip, 'r') as zf:
-                with zf.open(file_name, 'r') as txt_file:
-                    df_cal = pd.read_csv(txt_file, sep=',')
-
-            df_cal = df_cal[[start_date_field, end_date_field]].drop_duplicates()
-            df_cal[transit_agency_field] = src_dir_zip.stem
-            df_cal = df_cal.set_index(transit_agency_field).reset_index()
-            list_df_calendars.append(df_cal)
-        except:
-            pass
-
-    df_cal = pd.concat(list_df_calendars)
-    df_cal = df_cal.reset_index(drop=True)
-
-    df_cal[start_date_field] = pd.to_datetime(df_cal[start_date_field], format='%Y%m%d')
-    df_cal[end_date_field  ] = pd.to_datetime(df_cal[end_date_field  ], format='%Y%m%d')
-    df_cal.loc[df_cal[end_date_field] > datetime.today().strftime("%Y-%m-%d"), end_date_field] = datetime.today().strftime("%Y-%m-%d")
-
-    fig_starts = px.histogram(df_cal, x=start_date_field, histfunc='count', nbins=30, 
-                                color=transit_agency_field, template='plotly_white', color_discrete_sequence=px.colors.qualitative.Vivid, 
-                                title='Start Date Frequency by Transit Agency')
-    fig_ends   = px.histogram(df_cal, x=end_date_field  , histfunc='count', nbins=30, 
-                                color=transit_agency_field, template='plotly_white', color_discrete_sequence=px.colors.qualitative.Vivid, 
-                                title='End Date Frequency by Transit Agency'  )
-
-    fig_starts.show()
-    fig_ends  .show()
-
-    print('A sample of start/end dates:')
-    display(df_cal.head(10))
-    display(df_cal.tail(10))
-    print(); print('Check histograms in browser to observe all start/end dates')
-
 
 
 
 ## Run main ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -177,7 +265,7 @@ if __name__ == '__main__':
 
     ## Check calendars ---
 
-
+    # updates by josh
     print('Concatenating all start/end dates together...'); print()
     check_gtfs_dates(op_dir                  = source_gtfs_parent_dir
                       , file_name            = 'calendar.txt'
@@ -188,11 +276,11 @@ if __name__ == '__main__':
     print(); print()
     print('Please input a start and end date that seems appropriate (use "YYYYMMDD" format):')
     print('Start date: ')
-    newstart = input() #'20240101' # How do I know which start/end dates I need to use?
+    newstart = input()
     print('End date: ')
-    newend = input() # '20240801'
+    newend = input()
 
-    dummy = newend # '20240801' # set to some holiday value
+    dummy = newend
 
 
 
