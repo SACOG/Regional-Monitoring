@@ -33,10 +33,29 @@ Using the workbook "BLS Configuration File.xlsx", we create a dictionary of all 
 structure of the Series ID depends on the survey we want data from https://www.bls.gov/help/hlpforma.htm#EN.
 """
 
-def dict_maker(survey, geography, seasonal, df=None, list_sectors=None, data_type=None, measure_code=None):
+def dict_maker(survey, geography, seasonal, df=None, list_sectors=None, data_type=None, size_code=None, owner_code=None, measure_code=None):
 
     keys = []
     vals = []
+
+    if geography == 'Counties':
+        
+        # Loop through each County code
+        # Construct the Series ID
+        # Add Series ID and County label to lists
+        
+        for i in range(len(df)):
+            
+            area_code = str(df.loc[i, 'area_code'])
+    
+            if survey in ['LA']:
+                series_id = [str(survey) + str(seasonal) + str(area_code)  + str(measure_code)]
+
+            if survey in ['EN']:
+                series_id =  list(map(lambda sector: str(survey) + str(seasonal) + str(area_code) + str(data_type) + str(size_code) + str(owner_code) + str(sector), list_sectors))
+                
+            keys.append(str(df.loc[i, 'area_text']))
+            vals.append(series_id)
 
     if geography == 'MSA':
         
@@ -50,6 +69,9 @@ def dict_maker(survey, geography, seasonal, df=None, list_sectors=None, data_typ
     
             if survey in ['LA']:
                 series_id = [str(survey) + str(seasonal) + str(area_code)  + str(measure_code)]
+
+            if survey in ['EN']:
+                series_id =  list(map(lambda sector: str(survey) + str(seasonal) + str(area_code) + str(data_type) + str(size_code) + str(owner_code) + str(sector), list_sectors))
 
             if survey in ['SM', 'CE']:
                 state     = str(df.loc[i, 'State FIPS'])

@@ -1,6 +1,6 @@
 
 # Import objects
-file_config = path_config / 'bls_configuration_file.xlsm'
+file_config = path_config / 'bls_configuration_file.xlsx'
 df_indicators = pd.read_excel(file_config, sheet_name = 'Indicators')
 df_indicators = df_indicators[df_indicators['Indicator Name'] == indicator]
 

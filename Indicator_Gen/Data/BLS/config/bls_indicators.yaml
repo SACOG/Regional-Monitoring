@@ -21,22 +21,31 @@ Indicators:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
       folder: 'Total'
       survey: ['SM', 'CE']
+      percentages: 'Yes'
       weighted_by: 'No'
     Jobs_2:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
       folder: 'Sector'
       survey: ['SM', 'CE']
+      percentages: 'Yes'
       weighted_by: 'No'
-      seasonal_adj: 'U'
     Jobs_3:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
-      folder: 'Race'
+      folder: 'Type'
       survey: ['SM', 'CE']
+      percentages: 'Yes'
+      weighted_by: 'No'
+    Jobs_5:
+      sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
+      folder: 'Employer Size'
+      survey: 'EN'
+      percentages: 'Yes'
       weighted_by: 'No'
     Labor_2:
       sp_location: 'Vibrant and Inclusive Places\\Economy\\Labor Force'
-      folder: 'Unemployment Rate'
+      folder: 'Unemployment'
       survey: 'LA'
+      percentages: 'No'
       weighted_by: 'Employees'
 
 
@@ -59,6 +68,8 @@ Surveys:
     - 'Average Weekly Hours of Production Employees'
     - 'Average Hourly Earnings of Production Employees, in Dollars'
     - 'Average Weekly Earnings of All Employees, in Dollars'
+    size_code: No
+    owner_code: No
     measure_code: No
     years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
   CE: # National Employment, Hours, and Earnings (Current Employment Statistics (CES))
@@ -77,6 +88,48 @@ Surveys:
     - 'Average Weekly Hours of Production Employees'
     - 'Average Hourly Earnings of Production Employees, in Dollars'
     - 'Average Weekly Earnings of All Employees, in Dollars'
+    size_code: No
+    owner_code: No
+    measure_code: No
+    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+  EN: # State and County Employment and Wages from Quarterly Census of Employment and Wages (Quarterly Census of Employment and Wages (QCEW))
+    geographies_available:
+    - Counties
+    - MSA
+    seasonal_code: Yes
+    state_code: No
+    area_code: Yes
+    industry_code: Yes
+    data_type_code: Yes
+    data_type:
+    - 'All Employees'
+    - 'Number of Establishments'
+    - 'Total Wages (in thousands)'
+    - 'Average Weekly Wage'
+    - 'Average Annual Pay'
+    - '(Archaic -- formerly used for quarterly average monthly employment)'
+    size_code: Yes
+    size_type:
+    - All establishment sizes
+    - Fewer than 5 employees per establishment
+    - 5 to 9 employees per establishment
+    - 10 to 19 employees per establishment
+    - 20 to 49 employees per establishment
+    - 50 to 99 employees per establishment
+    - 100 to 249 employees per establishment
+    - 250 to 499 employees per establishment
+    - 500 to 999 employees per establishment
+    - 1000 or more employees per establishment
+    owner_code: Yes
+    owner_type:
+    - Total Covered
+    - Private
+    - International Government
+    - Local Government
+    - State Government
+    - Federal Government
+    - Total Government
+    - Total U.I. Covered (Excludes Federal Government)
     measure_code: No
     years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
   LA: # Local Area Unemployment Statistics (LAUS)
@@ -88,6 +141,8 @@ Surveys:
     area_code: Yes
     industry_code: No
     data_type_code: No
+    size_code: No
+    owner_code: No
     measure_code: Yes
     measure_type:
     - 'Unemployment Rate'
@@ -97,17 +152,6 @@ Surveys:
     - 'Employment-Population Ratio'
     - 'Labor Force Participation Rate'
     - 'Civilian Noninstitutional Population'
-    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
-  EN: # State and County Employment and Wages from Quarterly Census of Employment and Wages (Quarterly Census of Employment and Wages (CES))
-    geographies_available:
-    - Counties
-    - MSA
-    seasonal_code: Yes
-    state_code: Yes
-    area_code: Yes
-    industry_code: Yes
-    data_type_code: Yes
-    measure_code: No
     years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
 
 

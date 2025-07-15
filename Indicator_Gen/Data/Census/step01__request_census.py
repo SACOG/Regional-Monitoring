@@ -70,9 +70,12 @@ with open(file_api, 'r') as file:
 
 
 ## Export params ---
-rerun=False
-export=True
+rerun=True
+export=False
 
+
+mpo='Yes'
+unincorporated='Yes'
 
 
 ## Prepare API Request ========================================================================================================================
@@ -112,7 +115,7 @@ if export:
     if margin_of_error == 'No':
         end = 'NoME_raw.csv'
     else:
-        end = 'ChamberStudy2026_raw.csv'
+        end = 'raw.csv'
 
     if sample_type == 'LEHD':
         export_title = f"{indicator}_{geography}_{sample_type}_{end}"
@@ -145,16 +148,10 @@ if export:
 df_census = df_census_raw.copy()
 
 if sample_type in ['ACS', 'SUBJECT']:
-    df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error)
-    # df_census = acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_git)
-    # df_census = acs_processing_3(df_census, geography)
-    # if geography != 'Counties':
-    #     df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
-    # if geography == 'Counties':
-    #     if mpo == 'Yes':
-    #         df_census, df_mpo = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, df_fips)
-    #     else:
-    #         df_census = acs_processing_4(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars)
+    if geography == 'Counties':
+        df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo, df_fips)
+    else:
+        df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo)
     print(df_census.Year.unique())
     display(df_census.head(25))
 
