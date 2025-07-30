@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: RHNA_HSG_12
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected
+Folder: Households by Income Bracket
+Sample: DP
+Estimate: ACS5
+Geography: Places
+Years Imported: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+Import Tab: States
+Margin of Error: Yes

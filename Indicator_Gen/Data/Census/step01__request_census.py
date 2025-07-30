@@ -70,8 +70,8 @@ with open(file_api, 'r') as file:
 
 
 ## Export params ---
-rerun=True
-export=False
+rerun=False
+export=True
 
 
 mpo='Yes'
@@ -111,6 +111,8 @@ if export:
         estimate = re.sub('ACS', 'PUMS', estimate)
     if sample_type == 'SUBJECT':
         estimate = re.sub('ACS', 'SUBJECT', estimate)
+    if sample_type == 'DP':
+        estimate = re.sub('ACS', 'DP', estimate)
     
     if margin_of_error == 'No':
         end = 'NoME_raw.csv'
@@ -147,11 +149,13 @@ if export:
 
 df_census = df_census_raw.copy()
 
-if sample_type in ['ACS', 'SUBJECT']:
+if sample_type in ['ACS', 'DP', 'SUBJECT']:
     if geography == 'Counties':
         df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo, df_fips)
     else:
         df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo)
     print(df_census.Year.unique())
     display(df_census.head(25))
+
+
 

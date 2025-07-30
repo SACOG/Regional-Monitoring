@@ -600,6 +600,28 @@ ACS5:
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
       The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
 
+  HSG_12:
+    Indicator Title:
+    - Households by HCD Designated Income Brackets
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Data Profile, Table DP03
+    Website:
+    - https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      This indicator is estimated by allocating the number of households broken out by ACS income brackets (found in table DP03) into the corresponding HCD income brackets using the AMI of the county the jurisdiction resides in.\n
+      This estimate relies on the assumption that households are uniformly distributed throughout all income brackets.\n
+      (For example, if 500 households fall in the income bracket $100,000 to $149,999, then 250 households are assumed to have a household income between $125,000 and $149,999).\n
+      HCD Income Brackets:\n
+      Acutely low income: 0-15% of AMI\n
+      Exretemely low income: 15-30% of AMI\n
+      Very low income: 30-50% of AMI\n
+      Lower income: 50-80% of AMI\n
+      Moderate income: 80-120% of AMI\n
+      High income: >120% of AMI'
+
   OVER_3:
     Indicator Title:
     - Overcrowding by Race

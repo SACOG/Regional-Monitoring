@@ -258,13 +258,12 @@ if estimate == 'DEC':
 
 
 ## For ACS1 or ACS5 data
-if sample_type in ['ACS', 'SUBJECT']:
+if sample_type in ['ACS', 'DP', 'SUBJECT']:
 
     file_vars = path_config / 'census_configuration_file2.xlsx'
     df_vars = pd.read_excel(file_vars, sheet_name=sample_type)
     df_vars = df_vars[(df_vars['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False))]
     df_vars = df_vars[df_vars['Include'] == 'Yes']
-    # df_vars = df_vars[df_vars['Year'] == 2023]
 
     # Set tables and variables to import
 
@@ -274,7 +273,7 @@ if sample_type in ['ACS', 'SUBJECT']:
     else:
         list_vars = ['NAME'] + list(set(df_vars['ID2'].to_list()))
 
-    if sample_type == 'ACS':
+    if sample_type in ['ACS', 'DP']:
         tables = df_vars['Table'].unique()
         print()
         print("Tables set to import:")

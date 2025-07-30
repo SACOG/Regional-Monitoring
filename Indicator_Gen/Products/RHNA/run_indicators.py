@@ -114,6 +114,7 @@ indicators = [
     , 'HSG_9' 
     , 'HSG_10'
     , 'HSG_11'
+    , 'HSG_12'
     # , 'RISK_1'
     , 'OVER_1'
     , 'OVER_2'
@@ -156,7 +157,7 @@ indicators = [
 
 
 
-indicators=['POPEMP_11']
+# indicators=['HSG_12']
 
 
 

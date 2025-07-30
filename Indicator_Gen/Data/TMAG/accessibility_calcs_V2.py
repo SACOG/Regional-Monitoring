@@ -15,6 +15,8 @@ print(); print()
 ## Setup ================================================================================================
 
 
+export=True
+
 ## Packages ---
 
 from pathlib import Path
@@ -153,10 +155,10 @@ if __name__ == '__main__':
     arcpy.env.workspace = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
     file_gdb = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
 
-    fc_name = 'Community_Type_2024_dissolve' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024_dissolve, City_County, SACOG_MPO
+    fc_name = 'tl_2020_valleyvision' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024_dissolve, City_County, SACOG_MPO, tl_2020_valleyvision_county, tl_2020_valleyvision
     fc_main = file_gdb + '\\' + fc_name
     str_project_type = 'AreaAvg'
-    destination = 'nonwork'
+    destination = 'emp'
     wgt = 'white'
 
     tif_main = Path(acc_cfg['tifdir']).joinpath(acc_cfg['wts'][wgt]) # r"I:\Projects\Darren\PPA3_GIS\AccessibilityAnalyses\tif\workers2020.tif"
@@ -201,21 +203,23 @@ if __name__ == '__main__':
 
         ## Exporting ---
 
-        # Feature class to file gdb
-        fc_name_out = f'{fc_name}__access_{wgt}_{destination}'
-        file_fc_out = Path(file_gdb) / fc_name_out
-        print(f'Exporting feature class {fc_name_out} to the file geodatabase {file_gdb}...'); print()
-        sdf_data = GeoAccessor.from_geodataframe(gdf_fc, column_name='geometry')
-        sdf_data.spatial.to_featureclass(location=file_fc_out)
-        print(); print(f'Successfully exported to the following location: {file_gdb}'); print(); print()
+        if export:
 
-        # csv
-        path_out = Path(r'I:\Projects\Josh\Regional Monitoring\Accessibility') # Temp
-        df_fc = gdf_fc.drop('geometry', axis=1)
-        wb_name = f'{fc_name}__access_{wgt}_{destination}.csv'
-        file_out = path_out / wb_name
-        print(f'Exporting {wb_name} to csv here {path_out}...'); print(); print()
-        df_fc.to_csv(file_out, index=False)
+            # Feature class to file gdb
+            fc_name_out = f'{fc_name}__access_{wgt}_{destination}'
+            file_fc_out = Path(file_gdb) / fc_name_out
+            print(f'Exporting feature class {fc_name_out} to the file geodatabase {file_gdb}...'); print()
+            sdf_data = GeoAccessor.from_geodataframe(gdf_fc, column_name='geometry')
+            sdf_data.spatial.to_featureclass(location=file_fc_out)
+            print(); print(f'Successfully exported to the following location: {file_gdb}'); print(); print()
+
+            # csv
+            path_out = Path(r'I:\Projects\Josh\Regional Monitoring\Accessibility') # Temp
+            df_fc = gdf_fc.drop('geometry', axis=1)
+            wb_name = f'{fc_name}__access_{wgt}_{destination}.csv'
+            file_out = path_out / wb_name
+            print(f'Exporting {wb_name} to csv here {path_out}...'); print(); print()
+            df_fc.to_csv(file_out, index=False)
 
 
         ## Calculate time amounted while requesting data
@@ -226,16 +230,4 @@ if __name__ == '__main__':
 
 
 
-## TODO:
-
-## how to do this by race/ethnicity
-# pop by race/ethnicity tifs?
-# composite scoring based on total employment/population by geography by race/ethnicity
-
-## do this by blocks?  takes long time but can run over night
-
-## how to best scale accessibility scores for plotly charts and other data visualizations
-
-## transit_emp
-# The average worker can reach this many jobs by transit
 

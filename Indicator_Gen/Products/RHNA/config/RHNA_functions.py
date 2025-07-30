@@ -154,9 +154,14 @@ if source == 'ACS5':
         print(); print()
         print('Workbooks to import: ', workbooks)
 
-        path_places   = path_raw / f'{indicator} Places ACS5.xlsx'  
-        path_counties = path_raw / f'{indicator} Counties ACS5.xlsx'
-        path_mpo      = path_raw / f'{indicator} MPO ACS5.xlsx'     
+        if indicator == 'RHNA_HSG_12':
+            path_places   = path_raw / f'{indicator} Places DP5.xlsx'
+            path_counties = path_raw / f'{indicator} Counties DP5.xlsx'
+            path_mpo      = path_raw / f'{indicator} MPO DP5.xlsx'
+        else:
+            path_places   = path_raw / f'{indicator} Places ACS5.xlsx'  
+            path_counties = path_raw / f'{indicator} Counties ACS5.xlsx'
+            path_mpo      = path_raw / f'{indicator} MPO ACS5.xlsx'     
         
         df_places   = pd.read_excel(path_places  , sheet_name='Places'  )
         df_counties = pd.read_excel(path_counties, sheet_name='Counties')
