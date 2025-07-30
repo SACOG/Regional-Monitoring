@@ -45,7 +45,7 @@ def query_census(
         
     # Assert that inputs for estimate and geography are appropriate
     assert estimate  in ['ACS5', 'ACS1', 'DEC', 'CPS' , 'RH', 'SA', 'SE'], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
-    assert sample    in ['ACS', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'LEHD'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
+    assert sample    in ['ACS', 'DP', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'LEHD'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
     assert geography in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA', 'ZIP Codes', 'Congressional Districts', 'State Legislative Upper Districts', 'State Legislative Lower Districts', 'States', 'National'], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
 
 
@@ -299,6 +299,8 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_co
 
     df_census = df_census.rename(columns=dt_clean_cols)
     geo_ID = dt_geoid_clean[geography]
+    if geography == 'Places':
+        df_census['County Name'] = 'placeholder'
     
     if geography == 'Counties':
         if mpo == 'Yes':
@@ -427,6 +429,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
     df_census = clean_fips(df_census)
 
     if geography == 'Places':
+        df_census = df_census.drop('County Name', axis=1)
         file_cdp = path_config0 / 'area_codes.xlsx'
         df_codes = pd.read_excel(file_cdp, sheet_name='CDPcodes')
         if unincorporated == 'Yes':
@@ -541,11 +544,19 @@ def acs_processing_3(df_census, estimate, indicator, geography, percentages, mar
 
 
     if geography == 'Places':
+        if sample_type == 'SUBJECT':
+            estimate = re.sub('ACS', 'SUBJECT', estimate)
+        if sample_type == 'DP':
+            estimate = re.sub('ACS', 'DP', estimate)
         if unincorporated == 'Yes':
             if project == 'Monitoring and Reporting':
                 file_counties = path_server / f'{indicator} Counties {estimate}.xlsx'  
             else:
-                file_counties = export_loc / f'{indicator} Counties {estimate}.xlsx'  
+                file_counties = Path(export_loc) / f'{indicator} Counties {estimate}.xlsx'
+        if sample_type == 'SUBJECT':
+            estimate = re.sub('SUBJECT', 'ACS', estimate)
+        if sample_type == 'DP':
+            estimate = re.sub('DP', 'ACS', estimate)
 
 
     # reorder columns
@@ -1483,7 +1494,7 @@ def rename_census(
     geo_ID = dt_geoid_clean[geography]
 
     if margin_of_error == 'Yes':
-        if sample_type in ['ACS', 'SUBJECT', 'DEC']:
+        if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC']:
             if percentages == 'No':
                 df_census = df_census[geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Total', 'ME', 'ME_ratio', 'Use for Reporting']]
                 if geography == 'Counties':
@@ -1523,7 +1534,7 @@ def rename_census(
             df_mpo      = df_mpo     .rename(columns={'ME':'Margin of Error', 'ME_ratio':'Margin of Error Ratio'})
 
     if margin_of_error == 'No':
-        if sample_type  in ['ACS', 'SUBJECT', 'DEC']:
+        if sample_type  in ['ACS', 'DP', 'SUBJECT', 'DEC']:
             if percentages == 'No':
                 df_census = df_census[geo_ID + ['Year', 'Race_Ethnicity', 'Variable', 'Total']]
                 if geography == 'Counties':
@@ -1783,7 +1794,7 @@ def rename_census(
                 df_mpo = clean_pop_7(df_mpo, 'MPO')
 
     if geography == 'Counties':
-        if sample_type in ['ACS', 'SUBJECT', 'DEC']:
+        if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC']:
             if mpo == 'Yes':
                 return df_census, df_mpo
             else:

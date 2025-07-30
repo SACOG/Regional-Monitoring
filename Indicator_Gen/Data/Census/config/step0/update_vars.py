@@ -69,10 +69,12 @@ with open(file_api, 'r') as file:
 
 ACS=False
 PUMS=False
-DEC=True
+DEC=False
 LEHD=False
 CPS=False
 SUBJECT=False
+DP=True
+
 
 
 export=True
@@ -860,4 +862,118 @@ if SUBJECT:
     if export:
         file_out = path_csv / 'SUBJECT.csv'
         df_acs.to_csv(file_out, index=False)
+
+
+
+
+
+
+
+
+if DP:
+
+    print()
+    print('DP ------------------------------------------------------------------------------------------------------------------------')
+    print()
+
+    ## ACS5 ---
+    ## Organize list of all variables from all years into one nice table
+    # Set which years to import
+    # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
+    # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
+
+    years_to_import = sequence(2020, 2020, 1)
+    list_df = []
+
+    for year in tqdm(years_to_import):
+        with urllib.request.urlopen(f"https://api.census.gov/data/{year}/acs/acs5/profile/variables.json") as url:
+            dict_acs = json.load(url)
+        
+        df_vars = pd.DataFrame.from_dict(dict_acs['variables']).T.reset_index().rename(columns = {'index':'ID'})
+        
+        df_vars = df_vars[['group', 'ID', 'attributes', 'label', 'concept']].rename(columns = {'group':'Table'})
+        df_vars['Label_clean'] = df_vars['label'].str.replace('Estimate!!', '')
+        df_vars['Label_clean'] = df_vars['Label_clean'].str.replace('!!', ' ')
+        df_vars['Label_clean'] = df_vars['Label_clean'].str.replace(':', '')
+        df_vars['Year'] = year
+
+        list_df.append(df_vars)
+
+    df_acs5 = pd.concat(list_df)
+    df_acs5 = df_acs5.sort_values(['Year', 'Table', 'ID'], ascending = [False, True, True])
+    df_acs5 = df_acs5.reset_index(drop=True)
+
+
+
+    ## ACS1 ---
+    ## Organize list of all variables from all years into one nice table
+    # Set which years to import
+    # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
+    # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
+
+    years_to_import = sequence(2005, 2023, 1)
+    # years_to_import = sequence(2019, 2021, 1)
+    years_to_import.remove(2020)
+    list_df = []
+
+    for year in tqdm(years_to_import):
+        with urllib.request.urlopen(f"https://api.census.gov/data/{year}/acs/acs1/profile/variables.json") as url:
+            dict_acs = json.load(url)
+        
+        df_vars = pd.DataFrame.from_dict(dict_acs['variables']).T.reset_index().rename(columns = {'index':'ID'})
+        
+        df_vars = df_vars[['group', 'ID', 'attributes', 'label', 'concept']].rename(columns = {'group':'Table'})
+        df_vars['Label_clean'] = df_vars['label'].str.replace('Estimate!!', '')
+        df_vars['Label_clean'] = df_vars['Label_clean'].str.replace('!!', ' ')
+        df_vars['Label_clean'] = df_vars['Label_clean'].str.replace(':', '')
+        df_vars['Year'] = year
+
+        list_df.append(df_vars)
+
+    df_acs1 = pd.concat(list_df)
+    df_acs1 = df_acs1.sort_values(['Year', 'Table', 'ID'], ascending = [False, True, True])
+    df_acs1 = df_acs1.reset_index(drop=True)
+
+
+    ## Combine all ACS variables
+    df_acs1 = df_acs1[df_acs1['Year'] != 2020]
+    df_acs5 = df_acs5[df_acs5['Year'] == 2020]
+
+    df_acs = pd.concat([df_acs1, df_acs5])
+    df_acs = df_acs.sort_values(['Table', 'Year', 'ID'], ascending = [True, False, True])
+    df_acs = df_acs.rename(columns={'attributes':'Attributes', 'label':'Label', 'concept':'Table Name'})
+    df_acs = df_acs.reset_index(drop=True)
+
+    df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['Attributes']
+    df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(ME_split)
+
+    display(df_acs.head())
+
+
+    file_acs = path_config / 'census_configuration_file2.xlsx'; sheet_name='ACS'
+    df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
+    df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
+
+    df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
+    df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]
+
+    df_acs1 = df_acs1.merge(df_config[df_config['Year'] == df_config['Year'].max()].drop('Year', axis=1), on=['ID'], how='left')
+    df_acs2 = df_acs2.merge(df_config, on=['Year', 'ID'], how='left')
+
+    df_acs = pd.concat([df_acs1, df_acs2])
+
+    df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes', 'ID_Attributes2', 'ID2']]
+    df_acs = df_acs.drop_duplicates()
+    df_acs = df_acs.sort_values(['Table', 'Indicator Name', 'Year', 'ID'], ascending = [True, True, False, True])
+    df_acs = df_acs.reset_index(drop=True)
+
+    display(df_acs.head())
+
+
+    ## Exporting to Git ---
+
+    if export:
+        file_out = path_csv / 'DP.csv'
+        df_acs.to_csv(file_out, index=False)
+
 

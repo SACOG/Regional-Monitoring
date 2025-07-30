@@ -63,11 +63,11 @@ def export_to_csv(path_in, workbook_in, sheet_name, path_out, workbook_out):
 if __name__ == '__main__':
 
     export=True
-    path_in  = path_config0
-    workbook_in = 'area_codes.xlsx'
-    sheet_name = 'ZIPcodes'
-    workbook_out = 'zip_codes.txt'
-    path_out = path_cw
+    path_in  = Path(r'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\CERF\We Prosper Together\Population')
+    workbook_in = 'Pop_3 Block Groups ACS5_ValleyVision.xlsx'
+    sheet_name = 'Block Groups'
+    workbook_out = 'pop3_bg_valleyvision.csv'
+    path_out = Path(r'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\CERF\We Prosper Together\Population')
 
     if export:
         export_to_csv(path_in, workbook_in, sheet_name, path_out, workbook_out)

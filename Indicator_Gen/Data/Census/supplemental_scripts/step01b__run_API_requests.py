@@ -16,6 +16,10 @@ path_request = path_code / 'supplemental_scripts' / 'requests'
 # For ACS tables
 if sample_type == 'ACS':
     path_request = path_request / 'ACS.py'
+
+# For DP Tables
+if sample_type == 'DP':
+    path_request = path_request / 'DP.py'
     
 # For SUBJECT tables
 if sample_type == 'SUBJECT':
@@ -36,6 +40,7 @@ if estimate == 'CPS':
 # For LEHD Tables
 if sample_type == 'LEHD':
     path_request = path_request / 'LEHD.py'
+
 
 with path_request.open("r") as f:
     exec(f.read())

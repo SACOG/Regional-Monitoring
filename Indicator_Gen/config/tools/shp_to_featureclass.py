@@ -51,7 +51,9 @@ def fc_convert(file_to_convert, file_gdb, crs):
 
 if __name__ == '__main__':
 
-    file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_counties_sacog\tl_2020_sacog_county.shp')
+    # file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_counties_sacog\tl_2020_sacog_county.shp')
+    # file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_valleyvision_bg\tl_2020_valleyvision_bg.shp')
+    file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_valleyvision_county\tl_2020_valleyvision_county.shp')
     # file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_cdp_06\tl_2020_cdp_06.shp')
     # file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_tracts_sacog\tl_2020_sacog_tracts.shp')
     # file_to_convert = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\shp\2020_bg_sacog\tl_2020_sacog_bg.shp')

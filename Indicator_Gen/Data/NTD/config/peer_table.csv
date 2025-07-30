@@ -1,0 +1,49 @@
+ntdid,agency,acronym,peer_assign
+90019,Sacramento Regional Transit District,SacRT,self
+50027,Metro Transit,METRO,sacrt_peer
+80006,Denver Regional Transportation District,RTD,sacrt_peer
+90026,San Diego Metropolitan Transit System,MTS,sacrt_peer
+8,Tri-County Metropolitan Transportation District of Oregon,Trimet,sacrt_peer
+90013,Santa Clara Valley Transportation Authority,VTA,sacrt_peer
+90142,"University of California, Davis",Unitrans,self
+70019,University of Iowa,CAMBUS,unitrans_peer
+30036,City of Charlottesville,CAT,unitrans_peer
+47,City of Corvallis,CTS,unitrans_peer
+50158,University of Michigan Parking and Transportation Services,UM,unitrans_peer
+20145,Tompkins Consolidated Area Transit,TCAT,unitrans_peer
+90090,Yolo County Transportation District,YoloTD,self
+90162,The Eastern Contra Costa Transit Authority,ECCTA,yolotd_peer
+90159,Western Contra Costa Transit Authority,WestCAT,yolotd_peer
+50146,Madison County Transit District,MCT,yolotd_peer
+90089,County of Sonoma,SCT,yolotd_peer
+90232,Solano County Transit,SolTrans,yolotd_peer
+90061,Yuba-Sutter Transit Authority,YST,self
+90208,Butte County Association of Governments,B-Line,ysta_peer
+90233,Yuma County Intergovernmental Public Transportation Authority,YCAT,ysta_peer
+90173,Transit Joint Powers Authority for Merced County,TheBus,ysta_peer
+57,Central Oregon Intergovernmental Council,CET,ysta_peer
+90088,Napa Valley Transportation Authority,NVTA,ysta_peer
+90216,County of Sacramento Municipal Services Agency,SCTLink,self
+65,Benton County,BAT,sctlink_peer
+40192,Martin County,MARTY,sctlink_peer
+20176,Kaser Bus Service,Kaser,sctlink_peer
+91005,Madera County,MCC,sctlink_peer
+363,Clackamas County,ClackCo,sctlink_peer
+90168,City of Roseville,Roseville Transit,self
+90161,City of Union City,UCT,roseville_peer
+90131,City of Scottsdale,Scottsdale Trolley,roseville_peer
+46,City of Wilsonville,SMART,roseville_peer
+90159,Western Contra Costa Transit Authority,WestCAT,roseville_peer
+90164,Ventura County Transportation Commission,VCTC,roseville_peer
+90196,County of Placer,PCT,self
+11,Valley Regional Transit,VRT,pct_peer
+50146,Madison County Transit District,MCT,pct_peer
+90017,City of Santa Rosa,CityBus,pct_peer
+90078,Central Contra Costa Transit Authority,CCCTA,pct_peer
+90159,Western Contra Costa Transit Authority,WestCAT,pct_peer
+90229,El Dorado County Transit Authority,EDT,self
+46,City of Wilsonville,SMART,edt_peer
+90034,City of Glendale,Beeline,edt_peer
+50157,Butler County Regional Transit Authority,BCRTA,edt_peer
+90043,City of Commerce,Commerce Transit,edt_peer
+90161,City of Union City,UCT,edt_peer

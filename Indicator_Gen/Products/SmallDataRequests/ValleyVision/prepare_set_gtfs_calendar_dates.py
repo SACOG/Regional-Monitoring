@@ -26,6 +26,9 @@ from pathlib import Path
 import shutil
 import numpy as np
 import pandas as pd
+import geopandas as gpd
+import gtfs_kit as gk
+from shapely import wkt
 import csv
 import zipfile
 from datetime import date
@@ -193,7 +196,6 @@ def yolobus(op_dir, new_start_date, new_end_date, start_date_field, end_date_fie
 
 
 
-
 def update_start_end_dates(op_dir, file_name, new_start_date, new_end_date,
                            start_date_field, end_date_field, dummy_date):
 
@@ -224,13 +226,15 @@ def update_start_end_dates(op_dir, file_name, new_start_date, new_end_date,
     else:
         # updates by josh
         try:
-            print(f"\tWARNING: {txt_file_in} not found. Creating calendar.txt file from calendar_dates.txt file...")
-            df_weekly, df_special = yolobus(op_dir, new_start_date, new_end_date, start_date_field, end_date_field)
-            df_weekly.to_csv(txt_file_in, index=False, sep=',')
+            if 'calendar' in str(txt_file_in):
+                print(f"\tWARNING: {txt_file_in} not found. Creating calendar.txt file from calendar_dates.txt file...")
+                df_weekly, df_special = yolobus(op_dir, new_start_date, new_end_date, start_date_field, end_date_field)
+                df_weekly.to_csv(txt_file_in, index=False, sep=',')
 
-            txt_calendar_dates = Path(op_dir).joinpath('calendar_dates.txt')
-            df_special.to_csv(txt_calendar_dates, index=False, sep=',')
-
+                txt_calendar_dates = Path(op_dir).joinpath('calendar_dates.txt')
+                df_special.to_csv(txt_calendar_dates, index=False, sep=',')
+            else:
+                pass
         except: 
             print(f"\tWARNING: Just kidding. {txt_file_in} not found and the yolobus function failed to resolve. You may need to manually update dates in calendar_dates.txt")
 
@@ -258,7 +262,7 @@ def create_zip(dir_to_zip, zip_parent_dir):
 if __name__ == '__main__':
 
     print(); print()
-    source_gtfs_parent_dir = r'I:\Transit\GTFS\original_gtfs' # a folder containing only the ZIPs of GTFS feeds
+    source_gtfs_parent_dir = r'I:\Projects\Josh\Geospatial Data\GTFS\original_gtfs' # a folder containing only the ZIPs of GTFS feeds
     dest_gtfs_parent_dir = r'I:\Projects\Josh\Geospatial Data\GTFS\datemod_versions'
 
 
@@ -292,6 +296,11 @@ if __name__ == '__main__':
     #     raise Exception("Script aborted by user.")
     # import pdb; pdb.set_trace()
     for src_dir_zip in Path(source_gtfs_parent_dir).glob('*.zip'):
+
+        # if 'amtrak' in str(src_dir_zip):
+        #     print('Restricting amtrak to ValleyVision bounding box...')
+        #     amtrak(op_dir=src_dir_zip)
+        #     print('Successfully cleaned amtrak zip file!')
 
         # set up destination directory; deleting if already exists
         dest_dir = Path(dest_gtfs_parent_dir).joinpath(src_dir_zip.stem)
