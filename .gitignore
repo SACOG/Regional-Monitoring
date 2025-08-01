@@ -8,11 +8,20 @@
 # API keys
 api_key.txt
 
+# Large files
+csv/
+# ACS.csv
+# SUBJECT.csv
+# PUMS.csv
+
+
+# Imported scripts/packages
+__pycache__/
+
 
 ## Hytham's ---
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
 
