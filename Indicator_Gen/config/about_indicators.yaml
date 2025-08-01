@@ -2924,6 +2924,28 @@ TMAG:
 
 
 
+CDE:
+  Edu_3: 
+    Indicator Title:
+    - A-G Completion by race/ethnicity and socioeconomic status
+    Source:
+    - California Department of Education
+    Year(s):
+    - 
+    Description:
+    - Total count and percent of students who complete the A-G requirements set by the UC and CSU systems (minimum course requirements to enter UC or CSU with grade C or better)
+    Geography:
+    - SACOG MPOs
+    Website:
+    - https://www.cde.ca.gov/ds/ad/filesacgr.asp
+    Last Updated:
+    - 
+    Notes:
+    - ''
+
+
+
+
 # IPEDS:
 #   Edu_2:
 #     Indicator Title:
@@ -2942,23 +2964,3 @@ TMAG:
 #     - 
 #     Definitions:
 #     - 'This indicator combines different degrees into seven categores: 1. STEM (Science, Technology, Engineering, Math); 2. Education; 3. Health related fields; 4. Business/Management/Marketing; .  AHSS (Arts, Humanities, Social Sciences and other fields);  6. Trades; and 7. Multi-field/interdisciplinary, using the classification below. There is no single way to combine fields. A user can create their own categories based on the provided CIP codes.'
-
-# EDD:
-#   Edu_3: 
-#     Indicator Title:
-#     - A-G Completion by race/ethnicity and socioeconomic status
-#     Source:
-#     - California Department of Ed
-#     Year(s):
-#     - 
-#     Description:
-#     - 
-#     Geography:
-#     - SACOG MPOs
-#     Website:
-#     - 
-#     Last Updated:
-#     - 
-#     Notes:
-#     - ''
-

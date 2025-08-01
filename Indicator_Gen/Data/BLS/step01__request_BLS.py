@@ -32,7 +32,7 @@ from IPython.display import display
 ## File paths ---
 
 rerun=False
-export=True
+export=False
 
 user = getpass.getuser()
 path_users = Path.home()

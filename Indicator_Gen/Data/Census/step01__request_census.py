@@ -71,7 +71,7 @@ with open(file_api, 'r') as file:
 
 ## Export params ---
 rerun=False
-export=True
+export=False
 
 
 mpo='Yes'

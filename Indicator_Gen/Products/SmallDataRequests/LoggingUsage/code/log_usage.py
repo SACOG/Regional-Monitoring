@@ -146,8 +146,6 @@ def count_log_indicator(file_in):
 
 def count_log_geography(file_in):
     
-    try:
-
         # Read in txt file
         df = pd.read_csv(file_in, sep=' ', names=['date_', 'file_'])
         
@@ -161,14 +159,16 @@ def count_log_geography(file_in):
         path_geo = Path(r'\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data')
 
         for file_name in tqdm(df['file_name'].unique()):
-            tqdm.write(file_name)
-            path_file = path_geo / file_name
-            df_excel = pd.ExcelFile(path_file)
-            sheet_name = df_excel.sheet_names[0]
-            df_about = pd.read_excel(path_file, sheet_name=sheet_name)
-            df_about.columns = ['Indicator', 'Description']
-            geography = df_about[df_about['Indicator'] == 'Geography']['Description'].values[0]
-            df.loc[df['file_name'] == file_name, 'Geography'] = geography
+            try:
+                tqdm.write(file_name)
+                path_file = path_geo / file_name
+                df_excel = pd.ExcelFile(path_file)
+                sheet_name = df_excel.sheet_names[0]
+                df_about = pd.read_excel(path_file, sheet_name=sheet_name)
+                df_about.columns = ['Indicator', 'Description']
+                geography = df_about[df_about['Indicator'] == 'Geography']['Description'].values[0]
+                df.loc[df['file_name'] == file_name, 'Geography'] = geography
+            except Exception as e: print(e)
 
 
         # Counts by geography
@@ -178,8 +178,6 @@ def count_log_geography(file_in):
         df_geo = df_geo.reset_index(drop=True)
 
         return df_geo
-
-    except Exception as e: print(e)
 
 
 
@@ -197,6 +195,7 @@ if __name__ == '__main__':
     df_page      = count_log_page(file_in, file_theme)
     df_indicator = count_log_indicator(file_in)
     df_geo       = count_log_geography(file_in)
+
 
     
     # Write out to excel
