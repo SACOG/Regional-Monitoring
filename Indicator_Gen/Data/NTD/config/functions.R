@@ -20,6 +20,9 @@ ntd_indicators <- c(
 )
 
 
+
+
+
 read_pop <- function(file){
   
   df <- read_excel(file)

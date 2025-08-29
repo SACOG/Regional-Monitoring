@@ -16,20 +16,11 @@ Project:
   - 'Cap to Cap'
   - 'CERF'
   - 'Miscellaneous'
+  - 'Small Data Requests'
 
 
 Indicators:
   Monitoring and Reporting:
-    Pop_1:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Total Pop'
-      sample: 'DOF'
-      metric: 'Population'
-    Pop_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Growth Rate'
-      sample: 'DOF'
-      metric: 'Population'
     Pop_3:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
       folder: 'Race'
@@ -47,11 +38,6 @@ Indicators:
       number_of_variables: 3
       percentages: 'Yes'
       weighted_by: ''
-      metric: 'Population'
-    Pop_5:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'CA Regions'
-      sample: 'DOF'
       metric: 'Population'
     Pop_6:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
@@ -1005,6 +991,28 @@ Indicators:
       percentages: 'Yes'
       weighted_by: ''
       metric: 'Population'
+
+  Small Data Requests:
+    Telework_1:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 0.05
+      number_of_variables: 8
+      percentages: 'Yes'
+      weighted_by: ''
+      metric: 'Population'
+      requested_by: 'Shengyi'
+    HouseholdIncome_1:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 0.05
+      number_of_variables: 8
+      percentages: 'Yes'
+      weighted_by: ''
+      metric: 'Population'
+      requested_by: 'Shengyi'
 
 
 Samples:

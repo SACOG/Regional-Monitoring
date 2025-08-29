@@ -2,110 +2,49 @@
 
 
 
-## Preparing Workspace ========================================================================================================================
+
+'''
+
+This script is the first step in the pipeline to update indicators organized from data at the Census Bureau
+Obtain API Key from the following source
+https://api.census.gov/data/key_signup.html
+
+'''
 
 
 
-## Packages ---
 
-import numpy as np
-import pandas as pd
-import getpass
+rerun=False
+export=True
+mpo='Yes'
+unincorporated='Yes'
+
+
+
+
+# Workspace ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 from pathlib import Path
-import os
 import re
-from tqdm import tqdm
-from datetime import date
-from datetime import datetime
-import requests
-import ast
-import xlwt
 from xlwt.Workbook import *
-from pandas import ExcelWriter
-import xlsxwriter
-import time
-import functools as ft
 from IPython.display import display
-import traceback
 import sys
-# import pdb; pdb.set_trace()
 
-
-## File paths ---
-
-user = getpass.getuser()
-path_users = Path.home()
-
-path_sp = path_users / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-path_raw = path_sp / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
-path_main = path_sp / 'Data'
-path_prod = path_sp / 'Products'
-path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
+path_git = Path(__file__).parent.parent.parent
 path_code    = path_git / 'Data' / 'Census'
 path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
 
 
-
-## User defined functions ---
-
-path_func = path_config0 / 'Functions.py'
-path_func_census = path_config / 'census_functions.py'
-
-with path_func.open("r") as f:
-    exec(f.read())
-
-with path_func_census.open("r") as f:
-    exec(f.read())
+sys.path.append(str(path_config))
+import pre
+import get
 
 
 
-## API key ---
-
-# Obtain API Key from the following source
-# https://api.census.gov/data/key_signup.html
-file_api = path_config / 'api_key.txt'
-with open(file_api, 'r') as file:
-    api_key = file.read()
-
-
-## Export params ---
-rerun=False
-export=False
-
-
-mpo='Yes'
-unincorporated='Yes'
-
-
-## Prepare API Request ========================================================================================================================
-
-
-
-# Execute script to prepare API request inputs
-path_1a = path_code / 'supplemental_scripts' / 'step01a__prepare_api_request_inputs.py'
-with path_1a.open("r") as f:
-    exec(f.read())
-
-
-
-## Sending API Requests ========================================================================================================================
-
-
-
-# Execute script to send API requests
-path_1b = path_code / 'supplemental_scripts' / 'step01b__run_API_requests.py'
-with path_1b.open("r") as f:
-    exec(f.read())
-
-
-
-
-## Exporting ========================================================================================================================
-
-
-
-if export:
+def set_workbook_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig):
 
     if geography == 'PUMA':
         estimate = re.sub('ACS', 'PUMS', estimate)
@@ -120,42 +59,56 @@ if export:
         end = 'raw.csv'
 
     if sample_type == 'LEHD':
-        export_title = f"{indicator}_{geography}_{sample_type}_{end}"
+        export_name = f"{indicator}_{geography}_{sample_type}_{end}"
     else:
-        export_title = f"{indicator}_{geography}_{estimate}_{end}"
+        export_name = f"{indicator}_{geography}_{estimate}_{end}"
     
     print(); print()
-    print(f"Exporting {export_title} to the following location: ")
-    print(path_raw)
-    
-    file_out = path_raw / export_title
-    df_census_raw = df_census_raw.drop_duplicates()
-    df_census_raw.to_csv(file_out, index=False)
-    
+    print(f"Exporting {export_name} to the following location: ")
+    print(path_orig)
     print()
-    print('Successfully exported!')
+
+    return export_name
 
 
 
 
-# Processing (optional) ------------------------------------------------------------------------
 
 
-# if geography == 'Counties':
-#     mpo = 'No'
-# if geography == 'Places':
-#     unincorporated = 'No'
+# SharePoint OneDrive paths
+path_sp = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+path_orig = path_sp / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
+path_main = path_sp / 'Data'
+path_prod = path_sp / 'Products'
 
 
-df_census = df_census_raw.copy()
+    
 
-if sample_type in ['ACS', 'DP', 'SUBJECT']:
-    if geography == 'Counties':
-        df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo, df_fips)
-    else:
-        df_census = acs_processing_1(df_census, df_vars, geography, margin_of_error, dt_clean_cols, dt_geoid_clean, mpo)
-    print(df_census.Year.unique())
-    display(df_census.head(25))
 
+# Main -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+if __name__ == '__main__':
+
+    # Read API key from ignored txt file
+    file_api = path_config / 'api_key.txt'
+    with open(file_api, 'r') as file:
+        api_key = file.read()
+
+    # Prepare API request inputs
+    yaml_census = pre.load_yaml(path_config)
+    project, indicator, sample_type, estimate, geography, years_to_import, year_start, year_end, import_tab, margin_of_error, export_loc, folder, MOE_thresh, num_vars, percentages, weighted_by, metric = pre.api_request_params(yaml_census, rerun)
+
+    # Send API requests
+    df_census = get.get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
+    display(df_census)
+
+
+    # Export
+    if export:
+
+        file_out = path_orig / set_workbook_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig)
+        df_census.to_csv(file_out, index=False)
+        print('Successfully exported!')
 
 

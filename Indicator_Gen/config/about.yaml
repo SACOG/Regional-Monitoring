@@ -902,9 +902,9 @@ ACS5:
       Year(s):
       - 2009-2023
       Description:
-      - 'Yearly estimate of head of household spending on housing in three ranges: below
-        30% of income, 30 to 0% and above 0%, by race/ethnicity and ownership type.
-        Above 30% termed as housing cost burdened'
+      - '5 year rolling average estimate of household income used to cover housing costs: below
+        30% of income towards housing, 30% to 50% of income towards housing, and above 50% of income towards housing
+        Data is tracked by race/ethnicity and includes estimates for renters, owners, and combined renters/owners.'
       Geography:
       - Block groups, census tracts, counties, MSA's, and MPO's
       Website:
@@ -1775,11 +1775,11 @@ SACOG Housing:
     Indicator Title:
     - Total Dwelling Units
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permit Inventory
     Year(s):
-    - 2001-2023
+    - 2001-2024
     Description:
-    - 'The number of housing permits in the region alloted each year'
+    - 'The number of completed housing units by year'
     Geography:
     - SACOG region
     Website:
@@ -1787,41 +1787,22 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
+    - '2026-09-01'
+    Notes: 'The SACOG Housing Permit Inventory is a custom dataset.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
       \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
       \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.'
 
   Production_2:
     Indicator Title:
@@ -1829,111 +1810,51 @@ SACOG Housing:
     Source:
     - DOF Housing Series
     Year(s):
-    - 2001-2024
+    - 2001-2025
     Description:
-    - 'The number of housing permits alloted each year, broken out by single family vs multi-family units'
+    - 'The number of permitted units per year, broken out by single family vs multi family units'
     Geography:
     - California regions
     Website:
-    - https://data.sacog.org/
+    - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
-      \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
-      \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+    - '2026-09-01'
+    Notes: 'The dataset uses a custom definition for California regions:\n
+      The Metropolitan Planning Organization boundaries for the Bay Area (MTC), Los Angeles (SCAG), San Diego (SANDAG), and Sacramento (SACOG) regions.\n
+      It includes a multi-county Central Valley region that consists of each valley county south of Sacramento and north of Los Angeles.\n
+      It then includes a category (Rest of State) for any county in the state not covered by these categories.'
   
   Production_3:
     Indicator Title:
-    - Total new dwelling units per 1000 people (and SF/MF per 1000 people)
+    - Housing growth rate (per 1,000 residents)
     Source:
     - DOF Housing Series
     Year(s):
-    - 2001-2024
+    - 2001-2025
     Description:
-    - Housing growth rate per 1,000 residents
+    - The estimated number of new housing units each year per 1,000 residents
     Geography:
     - California regions
     Website:
-    - https://data.sacog.org/
+    - https://dof.ca.gov/forecasting/demographics/estimates/
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
-      \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
-      \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+    - '2026-09-01'
+    Notes: 'The dataset uses a custom definition for California regions:\n
+      The Metropolitan Planning Organization boundaries for the Bay Area (MTC), Los Angeles (SCAG), San Diego (SANDAG), and Sacramento (SACOG) regions.\n
+      It includes a multi-county Central Valley region that consists of each valley county south of Sacramento and north of Los Angeles.\n
+      It then includes a category (Rest of State) for any county in the state not covered by these categories.'
 
   Production_4:
     Indicator Title:
     - Pop Growth compared to Housing Growth
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permits Inventory for units, CA Department of Finance for population
     Year(s):
-    - 2001-2024
+    - 2001-2025
     Description:
     - Actual housing production compared with healthy housing market needs (1/2 of population growth)
     Geography:
@@ -1943,7 +1864,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
+    - '2026-09-01'
     Notes: 'This indicator compares housing production to population growth in the Sacramento region.\n
       The measure tracks new housing units built each year compared to the estimated number of new households formed (estimated as 1 new household for every 2.5 residents added).\n
       As the indicator uses the simplistic assumption of a need of 0.4 new units per new resident and does not account for an existing housing shortage,\n
@@ -1956,7 +1877,7 @@ SACOG Housing:
     Source:
     - Housing Community Development (HCD), supplemented by SACOG jurisdictions
     Year(s):
-    - 2001-2023
+    - 2001-2024
     Description:
     - 
     Geography:
@@ -1966,7 +1887,7 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
+    - '2026-09-01'
     Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
       From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
       The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
@@ -1998,7 +1919,7 @@ SACOG Housing:
       The following time period is used to defined that Community Type for that record year:\n
       2001-2007: No Community Type\n
       2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
+      2012-2015: 2012 to 2015 Commuinity Types\n
       2016-2019: 2016-2019 Community Types\n
       2020 to Current: 2020-2040 (MTP/SCS)\n'
 
@@ -2006,11 +1927,11 @@ SACOG Housing:
     Indicator Title:
     - Housing production by product type
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permit Inventory
     Year(s):
-    - 2001-2024
+    - 2001-2025
     Description:
-    - New housing unit permits broken out by product type (Single family large lot, single family small lot, and attached multi-family)
+    - Completed housing units by housing product type include Single Family (with sub categories of large lot, small lot, and rural residential) and Multifamily (with sub categories of 2 to 4 units and 5+ units)
     Geography:
     - SACOG region
     Website:
@@ -2018,20 +1939,52 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Not only the total number of new units, but the type of housing being built matters for regional goals.\n
-      This indicator looks deeper at what housing types are being built in the Sacramento region using three different categories:\n
-      large lot single family homes (including rural residential), small lot single family homes, and multi-family developments.'
+    - '2026-09-01'
+    Notes:  'The SACOG Housing Permit Inventory is a custom dataset.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
+      \n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
+      \n
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.'
+
+  Production_7:
+    Indicator Title:
+    - Accessory Dwelling Unit Housing Production
+    Source:
+    - SACOG Housing Permit Inventory
+    Year(s):
+    - 2018-2024
+    Description:
+    - Completed Accessory Dwelling Units (ADUs) by year
+    Geography:
+    - SACOG region
+    Website:
+    - https://data.sacog.org/
+    Last Updated:
+    - 
+    Next Update:
+    - '2026-09-01'
+    Notes: 'The database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+     then supplements this base with information from SACOG jurisdictions and a quality control check.'
 
   Location_1:
     Indicator Title:
-    - New housing permits by community type
+    - Completed housing units by community type
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permits Inventory
     Year(s):
-    - 2008-2023
+    - 2008-2024
     Description:
-    - New housing permits by community type (Agriculture land, rural residential, centers/corridors, developing communities, and existing communities)
+    - Completed housing units by community type (Centers and Corridors, Established Communities, Developing Communities, Rural Residential, and Agricultural/Natural Resources land)
     Geography:
     - SACOG region
     Website:
@@ -2039,51 +1992,33 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
+    - '2026-09-01'
+    Notes:  'The SACOG Housing Permit Inventory is a custom dataset.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
       \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
       \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.\n
+      The indicator uses the community type that was active when the unit was completed- 2001-2007 (No community type data), 2008-2011, 2012-2015, 2016-2019, and 2020-2024.'
 
   Location_2a:
     Indicator Title:
     - Share of housing built within Green Zones
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permit Inventory
     Year(s):
-    - 2001-2023
+    - 2001-2024
     Description:
-    - Share of housing built within Green Zones
+    - Percentage of new housing units per year that occur within Green Zones
     Geography:
     - SACOG region
     Website:
@@ -2091,51 +2026,34 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
+    - '2026-09-01'
+    Notes: 'Green Zones are locally adopted areas with the regional Green Means Go program.\n
+      The measure tracks back to 2001, even though Green Zones did not become adopted until starting in 2019.\n
+      The SACOG Housing Permit Inventory is a custom dataset.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
       \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
       \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.'
 
   Location_2b:
     Indicator Title:
-    - Share of housing built within Green Zones
+    - Type of housing built in Green Zones
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permits Inventory
     Year(s):
-    - 2001-2023
+    - 2001-2024
     Description:
-    - Share of housing built within Green Zones (and by type, small lot and attached)
+    - Type of new housing (Multi Family, Single Family Small Lot, and Single Family Large Lot) in Green Zones compared to Non-Green Zones.
     Geography:
     - SACOG region
     Website:
@@ -2143,49 +2061,33 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
+    - '2026-09-01'
+    Notes: 'Green Zones are locally adopted areas with the regional Green Means Go program.\n
+      The measure tracks back to 2001, even though Green Zones did not become adopted until starting in 2019.\n
+      The measure combines rural residential and large lot into a single family large lot category.\n
+      The SACOG Housing Permit Inventory is a custom dataset.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
       \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
       \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.'
 
   Location_3:
     Indicator Title:
-    - Housing built on ag land
+    - New housing on agricultural lands
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permits Inventory
     Year(s):
-    - 2018-2023
+    - 2018-2024
     Description:
     - 
     Geography:
@@ -2195,47 +2097,29 @@ SACOG Housing:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
+    - '2026-09-01'
+    Notes:  'The SACOG Housing Permit Inventory is a custom dataset.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
       \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
       \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.\n
+      The indicator uses the community type that was active when the unit was completed- 2001-2007 (No community type data), 2008-2011, 2012-2015, 2016-2019, and 2020-2024.'
   
   Location_4:
     Indicator Title:
     - Housing units built in floodplain, high fire risk zones
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - SACOG Housing Permit Inventory for units, FEMA 100 year flodplain for flood and Office of the Fire Marshall Fire Hazard Severity Zones for fire risk zone.
     Year(s):
     - 2018-2023
     Description:
@@ -2248,40 +2132,22 @@ SACOG Housing:
     - 
     Next Update:
     - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
+    Notes: 'This indicator uses the SACOG Housing Permit Inventory for unit growth.\n
+      From 2000-2017, SACOG collected completed housing unit numbers directly from each jurisdiction with the SACOG region.\n
+      Starting in 2018, the database uses the Housing and Community Development (HCD) Annual Progress Report (APR) data as the starting point,\n
+      then supplements this base with information from SACOG jurisdictions and a quality control check.
       \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
+      As of July 9, 2025, the following jurisdictions have missing data:\n
+      2018: Wheatland\n
+      2019: Isleton, Marysville, Wheatland\n
+      2020: Colfax, Isleton, Wheatland\n
+      2021: Isleton, Marysville\n
+      2022: Isleton, Marysville\n
+      2023: Colfax, Isleton\n
+      2024: Winters, Live Oak, Isleton\n
       \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+      Missing data results from jurisdictions that did not submit completed housing data through either HCD APR or supplemental SACOG data collection efforts.\n
+      The indicator uses the community type that was active when the unit was completed- 2001-2007 (No community type data), 2008-2011, 2012-2015, 2016-2019, and 2020-2024.'
   
   Policy_5:
     Indicator Title:
@@ -2337,55 +2203,22 @@ SACOG Housing:
 
   Cost_4:
     Indicator Title:
-    - New permits issued by RHNA income category
+    - New housing units by RHNA income category
     Source:
-    - Housing Community Development (HCD), supplemented by SACOG jurisdictions
+    - CA Department of Housing and Community Development (HCD) Annual Progress Report (APR) database
     Year(s):
-    - 2018-2023
+    - 2018-2024
     Description:
-    - 
+    - New housing units based on income category served, using RHNA cycle 6 definitions
     Geography:
     - SACOG region
     Website:
-    - https://data.sacog.org/
+    - https://www.hcd.ca.gov/planning-and-community-development/housing-element-implementation-and-apr-dashboard
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
-    Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
-      From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
-      The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
-      Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
-      plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
-      area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
-      developing communities; developing communities to established communities; and established communities to centers and corridors.\n
-      Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
-      infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
-      housing, increase mobility, and reduce vehicle emissions.\n
-      \n
-      As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
-      2018: WHEATLAND\n
-      2019: ISLETON, MARYSVILLE, WHEATLAND\n
-      2020: COLFAX, ISLETON, WHEATLAND\n
-      2021: ISLETON, MARYSVILLE\n
-      2022: ISLETON, MARYSVILLE\n
-      2023: COLFAX, ISLETON\n
-      \n
-      Added COMM _TYPE or Community types:\n
-      No Community Type and South Lake Tahoe\n
-      No Community Type refers to the period of 2001 to 2007 Housing permit records\n
-      Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
-      \n
-      South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
-      SACOG planning boundary do not fall within SLT\n
-      \n
-      There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
-      The following time period is used to defined that Community Type for that record year:\n
-      2001-2007: No Community Type\n
-      2008-2011: 2008 to 2011 Community Types\n
-      2012-201: 2012 to 201 Commuinity Types\n
-      2016-2019: 2016-2019 Community Types\n
-      2020 to Current: 2020-2040 (MTP/SCS)\n'
+    - '2026-09-01'
+    Notes: 'The current RHNA tracks across four income categories: Very low income, low income, moderate income, and above moderate income.'
   
 
 
@@ -2466,15 +2299,15 @@ Zillow:
 
   Cost_1:
     Indicator Title:
-    - Average Sale Price of Homes
+    - Average home values
     Source:
     - Zillow
     Year(s):
-    - 2000-2023
+    - Monthly from year 2015 to present day
     Description:
     - Average sale price of homes in raw USD (not adjusted for inflation)
     Geography:
-    - MPO
+    - MSAs (national peer midsized regions and other CA regions), Counties (in California), Cities (in California) and Zip codes (SACOG region only)
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
@@ -2496,7 +2329,7 @@ Zillow:
     Description:
     - Average rent price of units in raw USD (not adjusted for inflation)
     Geography:
-    - MPO
+    - MSAs (national peer midsized regions and other CA regions), Counties (in California), Cities (in California) and Zip codes (SACOG region only)
     Website:
     - https://www.zillow.com/research/data/
     Last Updated:
@@ -2964,3 +2797,40 @@ CDE:
 #     - 
 #     Definitions:
 #     - 'This indicator combines different degrees into seven categores: 1. STEM (Science, Technology, Engineering, Math); 2. Education; 3. Health related fields; 4. Business/Management/Marketing; .  AHSS (Arts, Humanities, Social Sciences and other fields);  6. Trades; and 7. Multi-field/interdisciplinary, using the classification below. There is no single way to combine fields. A user can create their own categories based on the provided CIP codes.'
+
+
+# Previous housing indicators notes:
+    # Notes: 'Detailed yearly permit data for the SACOG region. This is derived from SACOG housing permit inventory database.\n
+    #   From 2000-2019, it was compiled using a direct request for completed housing units from individual jurisdictions within the SACOG region.\n
+    #   The period of 2020 to present uses the Housing Community and Development (HCD) Annual Progress Report (APR) template used for the Regional 
+    #   Housing Needs Allocation program (RHNA). Community type (COMTYP) areas are local land use plans (adopted and proposed general plans, specific 
+    #   plans, master plans, corridor plans, etc.) translated into one of five Community Types based on the location and development pattern of the 
+    #   area. As housing and job growth occurs over time, specific geographic areas evolve, such as from lands not identified for development, to 
+    #   developing communities; developing communities to established communities; and established communities to centers and corridors.\n
+    #   Green Means Go (GRZ) areas is a multi-year pilot that aims to lower greenhouse gas emissions in the six-county Sacramento region by accelerating 
+    #   infill development, and reducing and electrifying vehicle trips. Green Means Go allocates state funding to projects that create more infill 
+    #   housing, increase mobility, and reduce vehicle emissions.\n
+    #   \n
+    #   As of 09/8/24 the following years have data missing from the following jurisdictions for the HCD period:\n
+    #   2018: WHEATLAND\n
+    #   2019: ISLETON, MARYSVILLE, WHEATLAND\n
+    #   2020: COLFAX, ISLETON, WHEATLAND\n
+    #   2021: ISLETON, MARYSVILLE\n
+    #   2022: ISLETON, MARYSVILLE\n
+    #   2023: COLFAX, ISLETON\n
+    #   \n
+    #   Added COMM _TYPE or Community types:\n
+    #   No Community Type and South Lake Tahoe\n
+    #   No Community Type refers to the period of 2001 to 2007 Housing permit records\n
+    #   Community types land use were not defined yet thus no community types were not assigned from 2001-2007\n
+    #   \n
+    #   South Lake Tahoe (SLT) community type are just designation of housing units that fall within the SLT boundaries\n
+    #   SACOG planning boundary do not fall within SLT\n
+    #   \n
+    #   There are differing community types by time period. Housing permits that were FINALED during a certain year will be defined by that period Community Types\n
+    #   The following time period is used to defined that Community Type for that record year:\n
+    #   2001-2007: No Community Type\n
+    #   2008-2011: 2008 to 2011 Community Types\n
+    #   2012-2015: 2012 to 2015 Commuinity Types\n
+    #   2016-2019: 2016-2019 Community Types\n
+    #   2020 to Current: 2020-2040 (MTP/SCS)\n'

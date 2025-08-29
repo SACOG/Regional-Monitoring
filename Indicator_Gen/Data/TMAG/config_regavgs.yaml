@@ -59,13 +59,13 @@ access_data:
   tifdir: \\data-svr\GIS\Projects\Josh\Regional Monitoring\Accessibility\tif_from_conveyal\ValleyVision
   wts:
     pop: pop3_ValleyVision_all.tif
-    asian: 'pop3_ValleyVision_asian_nh.tif'
-    black: 'pop3_ValleyVision_black_nh.tif'
-    white: 'pop3_ValleyVision_white_nh.tif'
-    hispanic: 'pop3_ValleyVision_hispanic.tif'
+    asian: pop3_ValleyVision_asian_nh.tif
+    black: pop3_ValleyVision_black_nh.tif
+    white: pop3_ValleyVision_white_nh.tif
+    hispanic: pop3_ValleyVision_hispanic.tif
   acc_lyrs:
     emp:
-      transit: transit_jobs_2022_33.tif
-      bike: bike_jobs_2022.tif
-      walk: walk_jobs_2022.tif
-      drive: drive_jobs_2022.tif
+      transit: transit_jobs_2022_log_30.tif
+      bike: bike_jobs_2022_exp_10.tif
+      walk: walk_jobs_2022_exp_10.tif
+      drive: drive_workers_2022_exp_11.tif

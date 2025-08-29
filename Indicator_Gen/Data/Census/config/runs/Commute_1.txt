@@ -1,6 +1,6 @@
 Project: Monitoring and Reporting
 Indicator Name: Commute_1
-Export Location: Sacramento Area Council of Governments\\Regional Monitoring and Reporting - Documents\\Data\\Next Gen of Mobility Solutions\\Commute mode
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Next Gen of Mobility Solutions\Commute mode
 Folder: Modes of Commute
 Sample: ACS
 Estimate: ACS5

@@ -68,12 +68,12 @@ with open(file_api, 'r') as file:
 
 
 ACS=False
-PUMS=False
+PUMS=True
 DEC=False
 LEHD=False
 CPS=False
 SUBJECT=False
-DP=True
+DP=False
 
 
 
@@ -421,7 +421,6 @@ if PUMS:
     df_pums5 = pd.concat(list_df_years)
     df_pums5 = df_pums5.sort_values(['ID', 'Value1', 'Year'], ascending = [True, True, False])
     df_pums5 = df_pums5.reset_index(drop=True)
-    display(df_pums5.head())
 
 
 
@@ -436,8 +435,6 @@ if PUMS:
     df_pums = df_pums.sort_values(['Year', 'ID', 'Value1'], ascending = [False, True, True])
     df_pums = df_pums.reset_index(drop=True)
 
-    display(df_pums.head())
-
 
     file_config = path_config / 'census_configuration_file2.xlsx'; sheet_name='PUMS'
     df_config = pd.read_excel(file_config, sheet_name=sheet_name, dtype={'Value1':'str'})
@@ -447,7 +444,6 @@ if PUMS:
     df_pums = df_pums.drop_duplicates()
     df_pums = df_pums.set_index('Year').reset_index()
     display(df_pums.head())
-
 
 
     ## Exporting to Git ---

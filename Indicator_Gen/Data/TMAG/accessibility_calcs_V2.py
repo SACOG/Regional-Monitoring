@@ -155,11 +155,11 @@ if __name__ == '__main__':
     arcpy.env.workspace = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
     file_gdb = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
 
-    fc_name = 'tl_2020_valleyvision' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024_dissolve, City_County, SACOG_MPO, tl_2020_valleyvision_county, tl_2020_valleyvision
+    fc_name = 'tl_2020_valleyvision_county' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024_dissolve, City_County, SACOG_MPO, tl_2020_valleyvision_county, tl_2020_valleyvision
     fc_main = file_gdb + '\\' + fc_name
     str_project_type = 'AreaAvg'
     destination = 'emp'
-    wgt = 'white'
+    wgt = 'white' # pop, asian, black, hispanic, white
 
     tif_main = Path(acc_cfg['tifdir']).joinpath(acc_cfg['wts'][wgt]) # r"I:\Projects\Darren\PPA3_GIS\AccessibilityAnalyses\tif\workers2020.tif"
 
