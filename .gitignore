@@ -9,6 +9,13 @@
 api_key.txt
 
 
+# csv files
+ACS.csv
+PUMS.csv
+SUBJECT.csv
+
+
+
 ## Hytham's ---
 
 # Byte-compiled / optimized / DLL files
