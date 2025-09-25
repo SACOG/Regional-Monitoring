@@ -21,11 +21,44 @@ file_in_counties = path_raw / f'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_mon
 df_places   = pd.read_csv(file_in_cities)
 df_counties = pd.read_csv(file_in_counties)
 
-file_w_cities = path_sp / 'Data' / 'Reference' / 'Weights' / 'Total_Households Places ACS1.xlsx'
-file_w_counties = path_sp / 'Data' / 'Reference' / 'Weights' / 'Total_Households Counties ACS1.xlsx'
+file_w_cities = path_sp / 'Data' / 'Reference' / 'Weights' / 'Total_Households Places ACS5.xlsx'
+file_w_counties = path_sp / 'Data' / 'Reference' / 'Weights' / 'Total_Households Counties ACS5.xlsx'
 
 df_w_cities   = pd.read_excel(file_w_cities  )
 df_w_counties = pd.read_excel(file_w_counties)
+
+def extrapolate_weights(df):
+    df_temp  = df[df['Year'] == 2023]
+    df_temp2 = df[df['Year'] == 2023]
+    df_temp ['Year'] = 2024
+    df_temp2['Year'] = 2025
+    df_temp3  = df[df['Year'] == 2009]
+    df_temp4  = df[df['Year'] == 2009]
+    df_temp5  = df[df['Year'] == 2009]
+    df_temp6  = df[df['Year'] == 2009]
+    df_temp7  = df[df['Year'] == 2009]
+    df_temp8  = df[df['Year'] == 2009]
+    df_temp9  = df[df['Year'] == 2009]
+    df_temp10 = df[df['Year'] == 2009]
+    df_temp11 = df[df['Year'] == 2009]
+    df_temp3['Year'] = 2008
+    df_temp4['Year'] = 2007
+    df_temp5['Year'] = 2006
+    df_temp6['Year'] = 2005
+    df_temp7['Year'] = 2004
+    df_temp8['Year'] = 2003
+    df_temp9['Year'] = 2002
+    df_temp10['Year'] = 2001
+    df_temp11['Year'] = 2000
+    df = pd.concat([df, df_temp, df_temp2, df_temp3, df_temp4, df_temp5, df_temp6, df_temp7, df_temp8, df_temp9, df_temp10, df_temp11])
+    return df
+
+df_w_cities   = extrapolate_weights(df_w_cities  )
+df_w_counties = extrapolate_weights(df_w_counties)
+
+
+# df_w_cities  ['Households'] = df_w_cities  ['Households'].fillna(0)
+# df_w_counties['Households'] = df_w_counties['Households'].fillna(0)
 
 
 
@@ -56,6 +89,9 @@ df_places = df_places.drop('date_', axis=1)
 
 df_places = df_places.merge(df_w_cities, on=['RegionName', 'Year'], how='left')
 df_places = df_places[~df_places['Households'].isna()]
+df_places = df_places.dropna(subset=['Households'])
+df_places = df_places.dropna(subset=['ZHVI'])
+df_places = df_places.reset_index(drop=True)
 
 df_places.loc[df_places['Incorporated'] != 'Yes', 'RegionName'] = 'Unincorporated'
 
@@ -80,18 +116,19 @@ df_counties = df_counties.drop('date_', axis=1)
 
 
 df_counties = df_counties.merge(df_w_counties, on=['RegionName', 'Year'], how='left')
-df_counties = df_counties[~df_counties['Households'].isna()]
+df_counties = df_counties.dropna(subset=['Households'])
+df_counties = df_counties.dropna(subset=['ZHVI'])
+df_counties = df_counties.reset_index(drop=True)
 df_mpo = df_counties.copy()
 
 
 wm = lambda x: np.average(x, weights = df_counties.loc[x.index, "Households"])
 df_counties = df_counties.groupby(['RegionName', 'Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
-df_counties = df_counties.sort_values(['RegionName', 'Year'], ascending=[True, True])
-df_counties = df_counties.reset_index(drop=True)
+df_counties = df_counties.sort_values(['RegionName', 'Year'], ascending=[True, True]).reset_index(drop=True)
 
 wm = lambda x: np.average(x, weights = df_mpo.loc[x.index, "Households"])
 df_mpo = df_mpo.groupby(['Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
-df_mpo = df_mpo.sort_values(['Year'], ascending=[True])
+df_mpo = df_mpo.sort_values(['Year'], ascending=[True]).reset_index(drop=True)
 df_mpo['RegionName'] = 'SACOG Region'
 
 

@@ -7,7 +7,7 @@ indicator = 'RHNA_HSG_4'
 source = 'ACS5'
 with path_func.open("r") as f: exec(f.read())
 title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
-values = 'Housing Units'
+values = 'Households'
 
 
 ## Importing ---
@@ -49,7 +49,7 @@ for county in counties:
         tqdm.write(jurisdiction)
 
         df_prod0 = df_places_sub[df_places_sub['Geography'] == jurisdiction]
-        df_prod = df_prod0[['Variable', 'Housing Units']].drop_duplicates()
+        df_prod = df_prod0[['Variable', values         ]].drop_duplicates()
         df_pct  = df_prod0[['Variable', 'Percentage'   ]].drop_duplicates()
         df_plot = df_prod.copy()
 

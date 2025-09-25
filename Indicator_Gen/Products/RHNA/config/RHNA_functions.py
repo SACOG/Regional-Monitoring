@@ -154,7 +154,7 @@ if source == 'ACS5':
         print(); print()
         print('Workbooks to import: ', workbooks)
 
-        if indicator == 'RHNA_HSG_12':
+        if indicator == 'RHNA_ELI_4':
             path_places   = path_raw / f'{indicator} Places DP5.xlsx'
             path_counties = path_raw / f'{indicator} Counties DP5.xlsx'
             path_mpo      = path_raw / f'{indicator} MPO DP5.xlsx'
@@ -269,7 +269,7 @@ if source == 'ACS5':
             if 'Percentage' in df_places_sub.columns:
                 df_prod = df_prod.drop('Percentage', axis=1)
             df_prod = df_prod.pivot_table(index='Geography', columns=columns, values=values).reset_index()
-            df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, county, 'SACOG'])
+            df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, county, 'SACOG Region'])
             df_prod = df_prod.sort_values(['Sort'])
             df_prod = df_prod.drop(['Sort'], axis=1)
             if indicator_name == 'HSG_7':
@@ -298,7 +298,7 @@ if source == 'ACS5':
                 df_pct = df_pct.drop(values, axis=1)
                 
                 df_pct = df_pct.pivot_table(index='Geography', columns=columns, values='Percentage').reset_index()
-                df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, county, 'SACOG'])
+                df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, county, 'SACOG Region'])
                 df_pct = df_pct.sort_values(['Sort'])
                 df_pct = df_pct.drop(['Sort'], axis=1)
                 if indicator_name == 'HSG_7':
@@ -482,6 +482,7 @@ def plot_rhna(export):
 
 
 
+
 def export_rhna(df_prod, df_pct=None):
 
     try:
@@ -515,7 +516,10 @@ def export_rhna(df_prod, df_pct=None):
         df_title = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
         df_title.iloc[0, 0] = f'{indicator2}: {title}'
         df_subtitle1 = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
-        df_subtitle1.iloc[0, 0] = 'Total'
+        if indicator2 in ['FARM_2']:
+            df_subtitle1.iloc[0, 0] = f'Total: {county} County'
+        else:
+            df_subtitle1.iloc[0, 0] = 'Total'
         if df_pct is not None:
             df_subtitle2 = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
             df_subtitle2.iloc[0, 0] = 'Percentage'
@@ -610,9 +614,42 @@ def export_rhna(df_prod, df_pct=None):
             ws.add_image(img, f'B{row_num}') # 21 (style 1)
         except: pass
         wb.save(path_juris)
-    except: pass
+    except:
+        pass
 
 
 
 
 
+
+def export_rhna_temp():
+
+    indicator2 = indicator.replace('RHNA_', '')
+
+    workbook_name = f'RHNA_{jurisdiction}.xlsx'
+    path_juris = path_out / county.replace(' County', '') / jurisdiction / workbook_name
+
+    if os.path.isfile(path_juris):
+        wb = openpyxl.load_workbook(path_juris)
+    else:
+        wb = openpyxl.Workbook()
+    if indicator2 not in wb.sheetnames:
+        wb.create_sheet(indicator2)
+    if indicator2 in wb.sheetnames:
+        sheet_index = wb.sheetnames.index(indicator2)
+        wb.remove(wb[indicator2])
+        wb.create_sheet(indicator2, sheet_index)
+    ws = wb[indicator2]
+
+    if indicator2 == 'POPEMP_25':
+        df_out = pd.DataFrame({'Test': ['Households by Displacement Risk and Tenure', 'This indicator is still a work in progress']})
+    if indicator2 == 'RISK_1':
+        df_out = pd.DataFrame({'Test': ['Assisted Units at Risk of Conversion', 'This indicator is still a work in progress']})
+
+
+    for r in dataframe_to_rows(df_out, index=False, header=False):
+        ws.append(r)
+    ws['A1'].font = Font(bold=True, size=14)
+
+
+    wb.save(path_juris)

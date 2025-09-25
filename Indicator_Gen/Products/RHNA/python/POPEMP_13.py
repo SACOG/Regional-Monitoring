@@ -14,7 +14,7 @@ end_year = 2022
 ## Mappings ---
 
 # Block Group to Census Designated Places mapping
-file_map = path_geo / 'Census_2020_BG_Jurisdiction.csv'
+file_map = path_geo / 'crosswalks' / 'Census_2020_BG_Jurisdiction.csv'
 df_map = pd.read_csv(file_map)
 df_map = df_map[['Geographic_Code_Identifier', 'JURIS', 'COUNTY']]
 df_map['Geographic_Code_Identifier'] = df_map['Geographic_Code_Identifier'].astype('str')

@@ -66,27 +66,36 @@ def process_nonmpo(df):
         df_temp2 = df_weights[df_weights['Year'] == 2023]
         df_temp ['Year'] = 2024
         df_temp2['Year'] = 2025
-        df_temp3 = df_weights[df_weights['Year'] == 2005]
-        df_temp4 = df_weights[df_weights['Year'] == 2005]
-        df_temp5 = df_weights[df_weights['Year'] == 2005]
-        df_temp6 = df_weights[df_weights['Year'] == 2005]
-        df_temp7 = df_weights[df_weights['Year'] == 2005]
-        df_temp3['Year'] = 2004
-        df_temp4['Year'] = 2003
-        df_temp5['Year'] = 2002
-        df_temp6['Year'] = 2001
-        df_temp7['Year'] = 2000
-        df_weights = pd.concat([df_weights, df_temp, df_temp2, df_temp3, df_temp4, df_temp5, df_temp6, df_temp7])
+        df_temp3 = df_weights[df_weights['Year'] == 2009]
+        df_temp4 = df_weights[df_weights['Year'] == 2009]
+        df_temp5 = df_weights[df_weights['Year'] == 2009]
+        df_temp6 = df_weights[df_weights['Year'] == 2009]
+        df_temp7 = df_weights[df_weights['Year'] == 2009]
+        df_temp8 = df_weights[df_weights['Year'] == 2009]
+        df_temp9 = df_weights[df_weights['Year'] == 2009]
+        df_temp10 = df_weights[df_weights['Year'] == 2009]
+        df_temp11 = df_weights[df_weights['Year'] == 2009]
+        df_temp3['Year'] = 2008
+        df_temp4['Year'] = 2007
+        df_temp5['Year'] = 2006
+        df_temp6['Year'] = 2005
+        df_temp7['Year'] = 2004
+        df_temp8['Year'] = 2003
+        df_temp9['Year'] = 2002
+        df_temp10['Year'] = 2001
+        df_temp11['Year'] = 2000
+        df_weights = pd.concat([df_weights, df_temp, df_temp2, df_temp3, df_temp4, df_temp5, df_temp6, df_temp7, df_temp8, df_temp9, df_temp10, df_temp11])
         df = df.merge(df_weights, on=['Cities', 'Year'], how='left')
         incorporated = ['Auburn', 'Citrus Heights', 'Colfax', 'Davis', 'Elk Grove', 'Folsom', 'Galt', 'Isleton', 'Lincoln', 'Live Oak', 'Loomis town', 'Marysville', 'Placerville'
                         , 'Rancho Cordova', 'Rocklin', 'Roseville', 'Sacramento', 'South Lake Tahoe', 'West Sacramento', 'Wheatland', 'Winters', 'Woodland', 'Yuba City']
         df.loc[~df['Cities'].isin(incorporated), 'Cities'] = 'Unincorporated'
-        df = df.dropna(subset=['Households']).drop_duplicates().reset_index(drop=True)
 
-        wm = lambda x: np.average(x, weights = df.loc[x.index, "Households"])
-        df_yr = df.groupby(['Metro', geography, 'Year' ], as_index=False).agg(Price=('Price', wm))
-        df    = df.groupby(['Metro', geography, 'date_'], as_index=False).agg(Price=('Price', wm))
+        df_no_na = df.dropna().drop_duplicates().reset_index(drop=True)
+        wm = lambda x: np.average(x, weights = df_no_na.loc[x.index, "Households"])
+        df_yr = df_no_na.groupby(['Metro', geography, 'Year' ], as_index=False).agg(Price=('Price', wm))
+        df    = df_no_na.groupby(['Metro', geography, 'date_'], as_index=False).agg(Price=('Price', wm))
 
+    df = df.drop_duplicates()
     df    = df   .sort_values(['Metro', geography, 'date_'], ascending=[True, True, False]).reset_index(drop=True)
     df_yr = df_yr.sort_values(['Metro', geography, 'Year' ], ascending=[True, True, False]).reset_index(drop=True)
 
@@ -109,7 +118,7 @@ def process_mpo(df):
 
     other_peers = ["Austin, TX", "Charlotte, NC", "Cincinnati, OH",
                     "Cleveland, OH", "Columbus, OH", "Detroit, MI",
-                    "Indianapolis, IN", "Kansas City, KS", "Miami, FL",
+                    "Indianapolis, IN", "Kansas City, MO", "Miami, FL", # Kansas City, KS or MO?
                     "Orlando, FL", "Phoenix, AZ", "Pittsburg, PA",
                     "Portland, OR", "Salt Lake City, UT", "San Antonio, TX",
                     "St. Louis, MO", "Tampa, FL"]
@@ -160,7 +169,9 @@ def process_mpo(df):
     df_temp5['Year'] = 2002
     df_temp6['Year'] = 2001
     df_temp7['Year'] = 2000
-    df_weights = pd.concat([df_weights, df_temp, df_temp2, df_temp3, df_temp4, df_temp5, df_temp6, df_temp7])
+    df_temp8 = df_weights[df_weights['Year'] == 2021]
+    df_temp8['Year'] = 2020
+    df_weights = pd.concat([df_weights, df_temp, df_temp2, df_temp3, df_temp4, df_temp5, df_temp6, df_temp7, df_temp8])
     df_weights['Region'] = df_weights['MSA'].map(pt.peer_msa_labels)
     df_weights = df_weights.dropna(subset=['Region'])
     list_regions = sacog_state + ca_peers + other_peers
@@ -170,27 +181,28 @@ def process_mpo(df):
     df = df.merge(df_weights, on=['Region', 'Year'], how='left')
     df = df.dropna(subset=['Households']).drop_duplicates().reset_index(drop=True)
 
-    wm = lambda x: np.average(x, weights = df.loc[x.index, "Households"])
-    sacog_mn = df[df['MSA'] == 'SACOG'].groupby(['MSA', 'date_'], as_index=False).agg(Price=('Price', wm))
+    df_no_na = df.dropna().drop_duplicates().reset_index(drop=True)
+    wm = lambda x: np.average(x, weights = df_no_na.loc[x.index, "Households"])
+    sacog_mn = df_no_na[df_no_na['MSA'] == 'SACOG'].groupby(['MSA', 'date_'], as_index=False).agg(Price=('Price', wm))
     sacog_mn['State'] = 'CA'
     sacog_mn['Region'] = 'SACOG Weighted Average'
     sacog_mn.columns = ['MSA', 'date_', 'Price', 'State', 'Region']
 
-    mtc_mn = df[df['MSA'] == 'MTC'].groupby(['MSA', 'date_'], as_index=False).agg(Price=('Price', wm))
+    mtc_mn = df_no_na[df_no_na['MSA'] == 'MTC'].groupby(['MSA', 'date_'], as_index=False).agg(Price=('Price', wm))
     mtc_mn['State'] = 'CA'
     mtc_mn['Region'] = 'MTC Weighted Average'
     mtc_mn.columns = ['MSA', 'date_', 'Price', 'State', 'Region']
 
-    scag_mn = df[df['MSA'] == 'SCAG'].groupby(['MSA', 'date_'], as_index=False).agg(Price=('Price', wm))
+    scag_mn = df_no_na[df_no_na['MSA'] == 'SCAG'].groupby(['MSA', 'date_'], as_index=False).agg(Price=('Price', wm))
     scag_mn['State'] = 'CA'
     scag_mn['Region'] = 'SCAG Weighted Average'
     scag_mn.columns = ['MSA', 'date_', 'Price', 'State', 'Region']
 
     df = pd.concat([df, sacog_mn, mtc_mn, scag_mn])
-    df = df.sort_values(by=['State', 'Region', 'date_'], ascending=[True, True, False])
     df = df[['State', 'Region', 'date_', 'Price']]
-    df = df.reset_index(drop=True)
     df['date_'] = df['date_'].astype('str')
+    df = df.drop_duplicates()
+    df = df.sort_values(by=['State', 'Region', 'date_'], ascending=[True, True, False]).reset_index(drop=True)
 
     df_yr = df.copy()
 
@@ -289,8 +301,6 @@ if __name__ == '__main__':
                                             , geography    = geography)
                 print("About page documentation table:")
                 display(df_about)
-
-
 
                 if indicator == 'Cost_1':
                     path_sp = path_out / 'Cost_1 Sales Price'

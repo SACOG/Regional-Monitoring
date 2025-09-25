@@ -4,10 +4,36 @@
 
 
 
+
+
+CHP:
+  RISK_1:
+    Indicator Title:
+    - Assisted Units at Risk of Conversion
+    Source:
+    - California Housing Partnership (CHP)
+    Website:
+    - https://chpc.net/
+    Year(s):
+    - 'May 2025'
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      Includes subsidized, affordable developments financed and/or assisted by HUD, CalHFA, LIHTC, HCD, and USDA. A subset of locally financed and/or assisted development are included based on availability of data.\n
+      - While California Housing Partnership’s Preservation Database is the state’s most comprehensive source of information on subsidized affordable housing at risk of losing\n
+      its affordable status and converting to market-rate housing, this database does not include all deed-restricted affordable units in the state. Consequently, there may be\n
+      at-risk assisted units in a jurisdiction that are not captured in this data table.\n
+      - Per HCD guidance, local jurisdictions must also list the specific affordable housing developments at-risk of converting to market rate uses. This document provides\n
+      aggregate numbers of at-risk units for each jurisdiction, but local planning staff should contact Danielle Mazzella with the California Housing Partnership at dmazzella@chpc.net\n
+      to obtain a list of affordable properties that fall under this designation.\n
+      - California Housing Partnership uses the following categories for assisted housing developments in its database:\n
+      --- Very-High Risk: affordable homes that are at-risk of converting to market rate within the next year that do not have a known overlapping subsidy that would extend affordability and are not owned by a large/stable non-profit, mission-driven developer.\n
+      --- High Risk: affordable homes that are at-risk of converting to market rate in the next 1-5 years that do not have a known overlapping subsidy that would extend affordability and are not owned by a large/stable non-profit, mission-driven developer.\n
+      --- Moderate Risk: affordable homes that are at-risk of converting to market rate in the next 5-10 years that do not have a known overlapping subsidy that would extend affordability and are not owned by a large/stable non-profit, mission-driven developer.\n
+      --- Low Risk: affordable homes that are at-risk of converting to market rate in 10+ years and/or are owned by a large/stable non-profit, mission-driven developer.'
 # RISK_1
 # https://chpc.net/resources/2023-subsidized-affordable-housing-at-risk-report/#:~:text=According%20to%20the%20Affordable%20Homes,as%20soon%20as%20this%20year.
 # https://chpc.net/wp-content/uploads/2025/04/CHP_2025-Subsidized-At-Risk-Report.pdf
 # To contact data team: https://chpc.net/datatools/affordablehomes/
+
 
 
 UDP:
@@ -21,7 +47,7 @@ UDP:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 
 
@@ -31,12 +57,13 @@ HCD:
     Indicator Title:
     - Housing Permitting
     Source:
-    - California Department of Housing and Community Development (HCD), 5th Cycle Annual Progress Report Permit Summary (2020) (soon to be 6th or 7th?)
+    - California Department of Housing and Community Development (HCD), 5th Cycle Annual Progress Report Permit Summary (2020) - This indicator will be updated with the latest RHNA Cycle data at a future date
     Website:
     - https://www.hcd.ca.gov/planning-and-community-development/housing-elements
     Year(s):
     - '2015-2019'
-    Notes: 'HCD uses the following definitions for the four income categories:\n
+    Notes: 'This indicator will be updated with the latest RHNA Cycle data at a future date.\n\n
+      HCD uses the following definitions for the four income categories:\n
       - Very Low Income: units affordable to households making less than 50% of the Area Median Income for the county in which the jurisdiction is located.\n
       = Low Income: units affordable to households making between 50% and 80% of the Area Median Income for the county in which the jurisdiction is located.\n
       - Moderate Income: units affordable to households making between 80% and 120% of the Area Median Income for the county in which the jurisdiction is located.\n
@@ -90,7 +117,8 @@ HUD:
     - '2024-'
     Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
      The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
-     Each Sacramento region county is its own CoC except for combining Yuba/Sutter, and so the data for this table is provided at the county-level'
+     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
+     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.'
       
   HOMELS_2:
     Indicator Title:
@@ -103,13 +131,13 @@ HUD:
     - '2024-'
     Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
      The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
-     Each Sacramento region county is its own CoC except for combining Yuba/Sutter, and so the data for this table is provided at the county-level.\n
-     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.\n
+     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
+     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.
      HUD does not disaggregate racial demographic data by Hispanic ethnicity for people experiencing homelessness. \n
      Instead, HUD reports data on Hispanic ethnicity for people experiencing homelessness in a separate table. \n
      Accordingly, the racial group data listed here includes both Hispanic and non-Hispanic individuals.'
       
-  HOMELS_4:
+  HOMELS_3:
     Indicator Title:
     - Characteristics for the Population Experiencing Homelessness
     Source:
@@ -120,8 +148,8 @@ HUD:
     - '2024-'
     Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
      The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
-     Each Sacramento region county is its own CoC except for combining Yuba/Sutter, and so the data for this table is provided at the county-level.\n
-     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.\n
+     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
+     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.
      These challenges/characteristics are counted separately and are not mutually exclusive, as an individual may report more than one challenge/characteristic.\n
      These counts should not be summed.'
 
@@ -187,7 +215,7 @@ Zillow:
     Notes: 'Zillow describes the ZHVI as a smoothed, seasonally adjusted measure of the typical home value and market changes across a given region and housing type.\n
       The ZHVI reflects the typical value for homes in the 35th to 65th percentile range.\n
       Includes all owner-occpied housing units, including both single-family homes and condominiums.\n
-      The regional estimate is a household-weighted average of county-level ZHVI files, using yearly household count estimates from DOF E5 series.
+      The regional estimate is a household-weighted average of county-level ZHVI files, using yearly household count estimates from DOF E5 series\n.
       For unincorporated communities, the value is a population weighted average of unincorporated communities in the county matched to census-designated population counts.'
 
 
@@ -205,7 +233,7 @@ CALPADS:
     Notes: 'This indicator shows the total population of students from migrant workers.\n
       The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
 
-  HOMELS_5:
+  HOMELS_4:
     Indicator Title:
     - Students in Local Public Schools Experiencing Homelessness
     Source:
@@ -214,8 +242,7 @@ CALPADS:
     - https://www.cde.ca.gov/ds/ad/fileshse.asp
     Year(s):
     - 2020-2024
-    Notes: 'This indicator shows the total population of students from migrant workers.\n
-      The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
+    Notes: 'The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
 
 
 DOF:
@@ -228,7 +255,7 @@ DOF:
     Website:
     - https://dof.ca.gov/forecasting/demographics/
     Year(s):
-    - 2001-2023
+    - 2000-2024
     Notes: 'This indicator shows the total population estimate by year.\n
       The data shown on the graph represents the population for the jurisdiction, county, and region indexed to the population in the year 2000 (or the first year of incorporation).\n
       The data points represent the relative population growth in each of these geographies relative to their populations in 2000 (or the first year of incorporation)'
@@ -257,7 +284,9 @@ DEC:
     Year(s):
     - 2000-2020, 2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The 2000, 2010, and 2020 outputs derive from the decennial census in those respsective years.\n
+      The other years are reported using a 5-year rolling average.\n
+      For example, the 2023 output is not the individual year of 2023, but the 5-year average of 2019-2023.'
 
   POPEMP_4:
     Indicator Title:
@@ -269,7 +298,9 @@ DEC:
     Year(s):
     - 2000-2020, 2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The 2000, 2010, and 2020 outputs derive from the decennial census in those respsective years.\n
+      The other years are reported using a 5-year rolling average.\n
+      For example, the 2023 output is not the individual year of 2023, but the 5-year average of 2019-2023.'
 
   POPEMP_17:
     Indicator Title:
@@ -281,7 +312,9 @@ DEC:
     Year(s):
     - 2000-2020, 2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The 2000, 2010, and 2020 outputs derive from the decennial census in those respsective years.\n
+      The other years are reported using a 5-year rolling average.\n
+      For example, the 2023 output is not the individual year of 2023, but the 5-year average of 2019-2023.'
 
 
 ACS5:
@@ -296,7 +329,7 @@ ACS5:
     Year(s):
     - 2000-2020, 2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_3:
     Indicator Title:
@@ -308,7 +341,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_4:
     Indicator Title:
@@ -320,7 +353,7 @@ ACS5:
     Year(s):
     - 2000-2020, 2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_4:
     Indicator Title:
@@ -332,7 +365,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_5:
     Indicator Title:
@@ -344,7 +377,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_6:
     Indicator Title:
@@ -355,8 +388,8 @@ ACS5:
     - https://www.census.gov/programs-surveys/acs/data.html
     Year(s):
     - 2019-2023
-    Notes: 'This indicator shows the industries in which jurisidiction residents work (whether within the jurisdiction or not).\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+    Notes: 'This indicator shows the industries in which residents of the jurisdiction work (whether the job is within the jurisdiction or not).\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
   
   POPEMP_7:
     Indicator Title:
@@ -368,11 +401,11 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the occupations in which jurisidiction residents work (whether within the jurisdiction or not).\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_8:
     Indicator Title:
-    - Workers by Class of Worker
+    - Resident Employment by Class of Worker
     Source:
     - U.S. Census Bureau, American Community Survey 5-Year Data, Table B08128
     Website:
@@ -380,7 +413,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
       Data is reported for jurisdiction of residence.'
 
   POPEMP_9:
@@ -393,8 +426,8 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
-      Data is reported for jurisdiction of work.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
+      Data is reported for the jurisdiction where the job is located (regardless of if the employee also lives in that jurisdiction).'
 
   POPEMP_10:
     Indicator Title:
@@ -406,7 +439,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate for workers 16 years of age and over with earnings, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
       
   POPEMP_16:
     Indicator Title:
@@ -418,7 +451,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_17:
     Indicator Title:
@@ -430,7 +463,7 @@ ACS5:
     Year(s):
     - 2000-2020, 2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_18:
     Indicator Title:
@@ -442,7 +475,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_19:
     Indicator Title:
@@ -454,7 +487,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_20:
     Indicator Title:
@@ -466,7 +499,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_22:
     Indicator Title:
@@ -478,7 +511,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_23:
     Indicator Title:
@@ -490,7 +523,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   POPEMP_24:
     Indicator Title:
@@ -502,7 +535,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_2:
     Indicator Title:
@@ -514,7 +547,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_3:
     Indicator Title:
@@ -526,7 +559,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_4:
     Indicator Title:
@@ -538,7 +571,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_5:
     Indicator Title:
@@ -550,7 +583,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_6:
     Indicator Title:
@@ -562,7 +595,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_7:
     Indicator Title:
@@ -574,7 +607,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_9:
     Indicator Title:
@@ -586,7 +619,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   HSG_10:
     Indicator Title:
@@ -598,29 +631,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
-
-  HSG_12:
-    Indicator Title:
-    - Households by HCD Designated Income Brackets
-    Source:
-    - U.S. Census Bureau, American Community Survey 5-Year Data, Data Profile, Table DP03
-    Website:
-    - https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/
-    Year(s):
-    - 2019-2023
-    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
-      This indicator is estimated by allocating the number of households broken out by ACS income brackets (found in table DP03) into the corresponding HCD income brackets using the AMI of the county the jurisdiction resides in.\n
-      This estimate relies on the assumption that households are uniformly distributed throughout all income brackets.\n
-      (For example, if 500 households fall in the income bracket $100,000 to $149,999, then 250 households are assumed to have a household income between $125,000 and $149,999).\n
-      HCD Income Brackets:\n
-      Acutely low income: 0-15% of AMI\n
-      Exretemely low income: 15-30% of AMI\n
-      Very low income: 30-50% of AMI\n
-      Lower income: 50-80% of AMI\n
-      Moderate income: 80-120% of AMI\n
-      High income: >120% of AMI'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   OVER_3:
     Indicator Title:
@@ -632,7 +643,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   OVER_6:
     Indicator Title:
@@ -644,7 +655,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   OVER_7:
     Indicator Title:
@@ -656,7 +667,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
       HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
       For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
@@ -670,7 +681,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   LGFEM_2:
     Indicator Title:
@@ -682,7 +693,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   LGFEM_4:
     Indicator Title:
@@ -694,7 +705,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   LGFEM_5:
     Indicator Title:
@@ -706,7 +717,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   SEN_2:
     Indicator Title:
@@ -718,7 +729,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   SEN_4:
     Indicator Title:
@@ -730,7 +741,8 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
+      These disabilities are counted separately and are not mutually exclusive, as an individual may report more than one disability.'
 
   DISAB_1:
     Indicator Title:
@@ -742,7 +754,8 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
+      These disabilities are counted separately and are not mutually exclusive, as an individual may report more than one disability.'
 
   DISAB_2:
     Indicator Title:
@@ -754,7 +767,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   DISAB_3:
     Indicator Title:
@@ -766,7 +779,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   ELI_3:
     Indicator Title:
@@ -778,7 +791,29 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
+
+  ELI_4:
+    Indicator Title:
+    - Households by HCD Designated Income Brackets
+    Source:
+    - U.S. Census Bureau, American Community Survey 5-Year Data, Data Profile, Table DP03
+    Website:
+    - https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/
+    Year(s):
+    - 2019-2023
+    Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
+      This indicator is estimated by allocating the number of households broken out by ACS income brackets (found in table DP03) into the corresponding HCD income brackets using the AMI of the county the jurisdiction resides in.\n
+      This estimate relies on the assumption that households are uniformly distributed throughout all income brackets.\n
+      (For example, if 500 households fall in the income bracket $100,000 to $149,999, then 250 households are assumed to have a household income between $125,000 and $149,999).\n
+      HCD Income Brackets:\n
+      Acutely low income: 0-15% of AMI\n
+      Exretemely low income: 15-30% of AMI\n
+      Very low income: 30-50% of AMI\n
+      Lower income: 50-80% of AMI\n
+      Moderate income: 80-120% of AMI\n
+      High income: >120% of AMI'
 
   AFFH_2:
     Indicator Title:
@@ -790,7 +825,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
       The TCAC and HCD created the Opportunity Map using reliable and publicly available data sources to identify areas in the state whose characteristics have been shown by research to support\n
       positive economic, educational, and health outcomes for low-income families and their children.  The TCAC/HCD Opportunity Map uses 21 indicators to calculate opportunity index scores for\n
       census tracts in each region in California.  For more information on these indicators, see the Opportunity Map methodology document.\n
@@ -803,8 +838,10 @@ ACS5:
       Before an area receives an opportunity index score, census tracts are filtered into the High Segregation & Poverty category.  The filter identifies census tracts where at least 30% of population is\n
       below the federal poverty line and there is a disproportionate share of households of color.  After filtering out High Segregation and Poverty areas, the TCAC/HCD Opportunity Map allocates the 20% of\n
       tracts in each region with the highest relative opportunity index scores to the Highest Resource designation and the next 20% to the High Resource designation.  The remaining non-filtered tracts are\n
-      then evenly divided into Low Resource and Moderat Resource categories.\n
-      HRA data is available at the census tract level.  Staff aggregated tracts up to jurisdiction level using census 2020 population weights, assigning a tract to jurisdiction in proportion to block level population weights.'
+      then evenly divided into Low Resource and Moderat Resource categories.\n\n
+      HRA data is available at the census tract level.\n
+      Staff aggregated tracts up to jurisdiction level using ACS 2019-2023 5-year estimates for the population estimates at the census tract level.\n
+      Any census tract that intersects with the jurisdiction was included in the total population roll up, which can result in a high population estimate compared to other indicators.'
 
   AFFH_3:
     Indicator Title:
@@ -816,7 +853,7 @@ ACS5:
     Year(s):
     - 2019-2023
     Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 
 
@@ -832,7 +869,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.'
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.'
 
   OVER_1:
     Indicator Title:
@@ -844,7 +881,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
       The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
       The Census Bureau defines a severely overcrowded housing unit as 1.5 or more persons per room (excluding bathrooms and kitchens).'
 
@@ -858,7 +895,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
       The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).'
 
   OVER_4:
@@ -871,7 +908,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
       The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
       The Census Bureau defines a severely overcrowded housing unit as 1.5 or more persons per room (excluding bathrooms and kitchens).'
 
@@ -885,7 +922,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
       HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
       For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
@@ -899,7 +936,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
       HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
       For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
@@ -913,7 +950,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the year average of 2017-2021.\n
+      The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
       HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
       For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
@@ -927,7 +964,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   SEN_1:
     Indicator Title:
@@ -939,7 +976,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
       For this indicators, senior households are those with a householder who is aged 62 or older.'
 
   SEN_3:
@@ -952,7 +989,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.\n
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
       For this indicator, senior households are those with a householder who is aged 62 or older.\n
       HUD defined cost burden households as those who monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
       For renters, housing cost is gross rent (contract rent plus utilities).  For owners, housing cost is "select monthly owner costs", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
@@ -967,7 +1004,7 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
   ELI_2:
     Indicator Title:
@@ -979,14 +1016,14 @@ CHAS:
     Year(s):
     - 2017-2021
     Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
-      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the year average of 2019-2023.'
+      The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
   
 
 LEHD:
 
   POPEMP_11:
     Indicator Title:
-    - Jobs in a Jurisdiction
+    - Jobs in Jurisdiction
     Source:
     - U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Workplace Area Characteristic (WAC) files
     Website:

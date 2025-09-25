@@ -7,7 +7,7 @@ indicator = 'RHNA_POPEMP_16'
 source = 'ACS5'
 with path_func.open("r") as f: exec(f.read())
 title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
-values = 'Population'
+values = 'Households'
 columns = 'Variable'
 
 

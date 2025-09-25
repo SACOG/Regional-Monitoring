@@ -1,11 +1,16 @@
 
 
-## Packages ----
+
+
+export=True
+
+
+# Workspace --------------------------------------------------------------------------------------------------------------------------------------------
+
 
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-import getpass
 from pathlib import Path
 import os
 from tqdm import tqdm
@@ -32,7 +37,6 @@ from openpyxl.styles import numbers
 from openpyxl.styles import Border, Side
 border_thin = Side(style='thin')
 
-# Plotting
 import matplotlib.pyplot as plt
 import plotly
 import plotly.graph_objects as go
@@ -44,19 +48,13 @@ from plotly.subplots import make_subplots
 
 import warnings
 warnings.filterwarnings('ignore')
-# import pdb; pdb.set_trace()
 
 
-## File paths ---
-
-user = getpass.getuser()
-path_users = Path.home()
-
-path_sp   = path_users / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
+path_sp   = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
 path_prod = path_sp    / 'Products' / 'RHNA'
 path_raw  = path_prod  / 'New Data Collected'
 
-path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
+path_git = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
 path_census = path_git  / 'Data' / 'Census'
 path_config0 = path_git  / 'config'
 
@@ -68,14 +66,12 @@ path_py = path_prod / 'python'
 path_i = Path(r'I:\Projects\Josh\RHNA')
 
 # path_out = Path(r'I:\Projects\Josh\RHNA\Final Products')
-# path_out = path_prod / 'Cycle7' / 'Final Products'
 path_out = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
 
-path_geo = Path(r'I:\Projects\Josh\Geospatial Data\crosswalks')
+path_geo = Path(r'I:\Projects\Josh\Geospatial Data')
 path_lodes = Path(r'I:\Projects\Josh\Regional Monitoring')
 
 
-## Indicators ---
 
 indicators = [
     'POPEMP_1'
@@ -102,7 +98,7 @@ indicators = [
     , 'POPEMP_22'
     , 'POPEMP_23'
     , 'POPEMP_24'
-    # , 'POPEMP_25'
+    , 'POPEMP_25'
     , 'HSG_1'
     , 'HSG_2'
     , 'HSG_3'
@@ -114,8 +110,7 @@ indicators = [
     , 'HSG_9' 
     , 'HSG_10'
     , 'HSG_11'
-    , 'HSG_12'
-    # , 'RISK_1'
+    , 'RISK_1'
     , 'OVER_1'
     , 'OVER_2'
     , 'OVER_3'
@@ -143,12 +138,12 @@ indicators = [
     , 'DISAB_5'
     , 'HOMELS_1'
     , 'HOMELS_2'
-    # , 'HOMELS_3' # Can remove
+    , 'HOMELS_3'
     , 'HOMELS_4'
-    , 'HOMELS_5'
     , 'ELI_1'
     , 'ELI_2'
     , 'ELI_3'
+    , 'ELI_4'
     , 'AFFH_1'
     , 'AFFH_2'
     , 'AFFH_3'
@@ -156,42 +151,41 @@ indicators = [
 ]
 
 
-
-# indicators=['HSG_12']
-
+indicators = ['RISK_1']
 
 
-## Main ---
+# Main -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-export=False
-list_indicators = []
+if __name__ == '__main__':
 
-with open(path_yaml, 'r', encoding='utf-8') as yaml_file:
-    dict_about = yaml.load(yaml_file, Loader=yaml.SafeLoader)
+    list_indicators = []
 
-
-start_time = time.time()
+    with open(path_yaml, 'r', encoding='utf-8') as yaml_file:
+        dict_about = yaml.load(yaml_file, Loader=yaml.SafeLoader)
 
 
-for indicator in indicators:
+    start_time = time.time()
+
+
+    for indicator in indicators:
+        print(); print()
+        print(indicator)
+        path_run = path_py / f'{indicator}.py'
+        with path_run.open("r") as f: exec(f.read())
+
+
     print(); print()
-    print(indicator)
-    path_run = path_py / f'{indicator}.py'
-    with path_run.open("r") as f: exec(f.read())
+    print('Finished!! Now go outside.')
+    print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---')
+    print(); print()
+    # takes 45 min for local exporting
+    # takes ~150 minutes for I drive or SharePoint exporting
 
 
-print(); print()
-print('Finished!! Now go outside.')
-print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---')
-print(); print()
-# takes 45 min for local exporting
-# takes ~150 minutes for I drive or SharePoint exporting
+    ## Check indicators ---
 
-
-## Check indicators ---
-
-print(); print()
-print('Indicators processed: '); print()
-print(list_indicators)
-print()
+    print(); print()
+    print('Indicators processed: '); print()
+    print(list_indicators)
+    print()

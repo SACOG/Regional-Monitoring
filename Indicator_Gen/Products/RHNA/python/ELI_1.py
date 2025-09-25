@@ -90,10 +90,14 @@ for county in counties:
         df_prod = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_prod = df_prod.drop('Percentage', axis=1)
         df_prod = df_prod.pivot_table(index=['Geography'], columns=columns, values=values).reset_index()
+        df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, f'{county} County', 'SACOG Region'])
+        df_prod = df_prod.sort_values(['Sort']).drop(['Sort'], axis=1).reset_index(drop=True)
 
         df_pct = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
         df_pct = df_pct.drop('Households', axis=1)
         df_pct = df_pct.pivot_table(index=['Geography'], columns=columns, values='Percentage').reset_index()
+        df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, f'{county} County', 'SACOG Region'])
+        df_pct = df_pct.sort_values(['Sort']).drop(['Sort'], axis=1).reset_index(drop=True)
         
         ## Plotting ---
 

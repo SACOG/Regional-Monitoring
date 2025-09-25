@@ -1,6 +1,18 @@
 
 
 
+
+'''
+
+Functions:
+
+load_yaml()
+api_request_params()
+
+'''
+
+
+
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -26,6 +38,34 @@ def load_yaml(path_config):
     
     return yaml_census
 
+
+
+
+def set_download_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig):
+
+    if geography == 'PUMA':
+        estimate = re.sub('ACS', 'PUMS', estimate)
+    if sample_type == 'SUBJECT':
+        estimate = re.sub('ACS', 'SUBJECT', estimate)
+    if sample_type == 'DP':
+        estimate = re.sub('ACS', 'DP', estimate)
+    
+    if margin_of_error == 'No':
+        end = 'NoME_raw.csv'
+    else:
+        end = 'raw.csv'
+
+    if sample_type == 'LEHD':
+        export_name = f"{indicator}_{geography}_{sample_type}_{end}"
+    else:
+        export_name = f"{indicator}_{geography}_{estimate}_{end}"
+    
+    print(); print()
+    print(f"Exporting {export_name} to the following location: ")
+    print(path_orig)
+    print()
+
+    return export_name
 
 
 

@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     local=False
     idrive=False
-    sharepoint=False
+    sharepoint=True
 
 
 

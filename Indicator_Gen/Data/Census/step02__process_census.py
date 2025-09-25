@@ -4,22 +4,25 @@
 
 
 
+
+# TODO:
+# write_about functions need work on specificity - being able to adjust easily what to label the geography
+
+
+print(); print(); print()
+
+
+
+
+
 rerun=True
-export=False
-about=False
+export=True
+about=True
 update=False
 server=False
 mpo = 'Yes'
 unincorporated = 'Yes'
 
-
-
-# TODO:
-# Still working on how to incorporate some of the pre, get, post params/functions in here...
-# Not going so well, but haven't spent too much time so we will see...
-
-# Post functions had major updates with how I was implementing the mappings of columns and what have you
-# This is starting to become a good case for making classes possibly... baby steps!
 
 
 
@@ -39,40 +42,14 @@ path_code    = path_git / 'Data' / 'Census'
 path_config0 = path_git / 'config'
 path_config  = path_code / 'config'
 
+sys.path.append(str(path_config0))
+import functions as func
+import plot as pt
 
 sys.path.append(str(path_config))
 import pre
 import get
 import post
-
-
-def set_workbook_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig):
-
-    if geography == 'PUMA':
-        estimate = re.sub('ACS', 'PUMS', estimate)
-    if sample_type == 'SUBJECT':
-        estimate = re.sub('ACS', 'SUBJECT', estimate)
-    if sample_type == 'DP':
-        estimate = re.sub('ACS', 'DP', estimate)
-    
-    if margin_of_error == 'No':
-        end = 'NoME_raw.csv'
-    else:
-        end = 'raw.csv'
-
-    if sample_type == 'LEHD':
-        export_name = f"{indicator}_{geography}_{sample_type}_{end}"
-    else:
-        export_name = f"{indicator}_{geography}_{estimate}_{end}"
-    
-    print(); print()
-    print(f"Exporting {export_name} to the following location: ")
-    print(path_orig)
-    print()
-
-    return export_name
-
-
 
 
 
@@ -105,7 +82,7 @@ if __name__ == '__main__':
     df_inputs, file_inputs, file_area = get.read_inputs_file(import_tab)
     df_vars = get.read_vars_file(file_inputs, sample_type, indicator, years_to_import, estimate)
 
-    file_in = path_orig / set_workbook_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig)
+    file_in = path_orig / pre.set_download_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig)
     df_census = pd.read_csv(file_in)
     display(df_census.head())
 
@@ -113,62 +90,45 @@ if __name__ == '__main__':
 
 
     # Processing
-
-
     print(); print()
 
 
+    # ACS, DP, SUBJECT, DEC
     if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC']:
-        if sample_type == 'SUBJECT':
-            estimate = re.sub('SUBJECT', 'ACS', estimate)
-        if sample_type == 'DP':
-            estimate = re.sub('DP', 'ACS', estimate)
+        if sample_type == 'SUBJECT': estimate = re.sub('SUBJECT', 'ACS', estimate)
+        if sample_type == 'DP': estimate = re.sub('DP', 'ACS', estimate)
 
         # Replace weird missing values with np.nan
-        # Melt data from wide to long
-        # Convert imported values to numeric
+        # Reshape data from wide to long
+        # Convert data types to numeric as needed
         # Manually check column names and clean as needed
         # Adjust dollars for inflation, if needed
         # Reorganize margin of error fields
-        if geography == 'Counties':
-            df_census = post.acs_processing_1(df_census, df_vars, geography, margin_of_error, post.dt_clean_cols, post.dt_geoid_clean, mpo, df_fips)
-        else:
-            df_census = post.acs_processing_1(df_census, df_vars, geography, margin_of_error, post.dt_clean_cols, post.dt_geoid_clean, mpo)
-        print(df_census.Year.unique())
-        display(df_census.head(3))
+        df_census = post.acs_processing_1(df_census, df_vars, geography, margin_of_error, mpo, import_tab)
+        print(df_census.Year.unique()); display(df_census.head(3))
 
 
         # Merge cleam label field, variable mapping, race/ethnicity, and sorting field
         # Remove unneeded columns
         # Sort by geography, variable mapping, and race/ethnicity
-        df_census = post.acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, 
-                                            path_main, path_config0, weighted_by, post.dt_geoid_clean, post.dt_geo_sheets, unincorporated)
-        print(df_census.Year.unique())
-        display(df_census.head(3))
+        df_census = post.acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_config0, weighted_by, unincorporated)
+        print(df_census.Year.unique()); display(df_census.head(3))
 
 
         # Final processing step for ACS data
         # Link various FIPS codes
         # Roll up population/households/SE's to the desired geography and variable groupings
         # Calculate percentages by geography, race/ethnicity, and variables
-
-        if geography == 'Counties':
-            if mpo == 'Yes':
-                df_census, df_mpo = post.acs_processing_3(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, 
-                                                            post.dt_geoid_clean, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
-            else:
-                df_census = post.acs_processing_3(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, 
-                                                    post.dt_geoid_clean, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
+        if geography == 'Counties' and mpo == 'Yes':
+            df_census, df_mpo = post.acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
         else:
-            df_census = post.acs_processing_3(df_census, estimate, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, 
-                                                post.dt_geoid_clean, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
-        print(df_census.Year.unique())
-        display(df_census.head(3))
+            df_census = post.acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
+        print(df_census.Year.unique()); display(df_census.head(3))
 
 
 
 
-
+    # PUMS, FOODSEC
     if sample_type in ['PUMS', 'FOODSEC']:
 
         if sample_type == 'PUMS':
@@ -184,20 +144,18 @@ if __name__ == '__main__':
         # Reshape data dictionary of values/descriptions and reorganize columns
         # Merge meaningful value descriptions onto imported data
         df_census, groups = post.pums_processing_1(df_census, df_vars, sample_type, weight)
-        print('Groups: ' + ', '.join(groups))
-        display(df_census.head(3))
+        print('Groups: ' + ', '.join(groups)); display(df_census.head(3))
 
         # Remove rows with missing values
         # Only keep description mappings, remove the original PUMS values
-        df_census = post.pums_processing_2(df_census, estimate, sample_type, groups, df_fips, dt_fips)
+        df_census = post.pums_processing_2(df_census, estimate, sample_type, groups)
         display(df_census.head(3))
 
         # Cleans race/ethnicity fields
         # Creates additional grouping variables for certain indicators
         # Adjusts income variables by inflation for the latest year
         df_census, groups = post.pums_processing_3(df_census, groups, indicator, path_config0)
-        print('Groups: ' + ', '.join(groups))
-        display(df_census.head(3))
+        print('Groups: ' + ', '.join(groups)); display(df_census.head(3))
 
         # Roll up using suggested weight field
         # Roll up to PUMA, counties, MSA, and MPO
@@ -208,17 +166,19 @@ if __name__ == '__main__':
         # Roll up using suggested weight field
         # Roll up to counties and MPO
         if sample_type == 'FOODSEC':
-            df_counties, df_mpo, groups = food_processing_4(df_census, weight, percentages, groups)
+            df_counties, df_mpo, groups = post.foodsec_processing_4(df_census, weight, percentages, groups)
             display(df_counties.head(3), df_mpo.head(3))
 
 
+    # LEHD
     if sample_type == 'LEHD':
         if geography == 'Counties':
-            df_census, df_mpo = lehd_processing(df_census, geography, indicator, percentages, df_fips)
+            df_census, df_mpo = post.lehd_processing(df_census, geography, indicator, percentages, df_fips)
             display(df_census.head(3), df_mpo.head(3))
         if geography == 'MSA':
-            df_census = lehd_processing(df_census, geography, indicator, percentages)
+            df_census = post.lehd_processing(df_census, geography, indicator, percentages)
             display(df_census.head(3))
+
 
 
 
@@ -230,156 +190,90 @@ if __name__ == '__main__':
     print('Final Results: ')
     print()
 
-    if geography not in ['Counties', 'PUMA']:
-        df_census = rename_census(df_census           = df_census
-                                    , geography       = geography
-                                    , dt_geoid_clean  = dt_geoid_clean
-                                    , indicator       = indicator
-                                    , margin_of_error = margin_of_error
-                                    , percentages     = percentages
-                                    , sample_type     = sample_type)
-        display(df_census)
-    if geography == 'Counties':
+    if geography == 'PUMA':
+        df_puma, df_counties, df_msa, df_mpo = post.rename_census(df_puma             = df_puma
+                                                                    , df_counties     = df_counties
+                                                                    , df_msa          = df_msa
+                                                                    , df_mpo          = df_mpo
+                                                                    , geography       = geography
+                                                                    , indicator       = indicator
+                                                                    , metric          = metric
+                                                                    , margin_of_error = margin_of_error
+                                                                    , percentages     = percentages
+                                                                    , sample_type     = sample_type
+                                                                    , groups          = groups
+                                                                    , table_type      = table_type)
+        display(df_puma, df_counties, df_msa, df_mpo)
+    elif geography == 'Counties':
         if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC']:
             if mpo == 'Yes':
-                df_census, df_mpo = rename_census(df_census           = df_census
-                                                    , df_mpo          = df_mpo
-                                                    , geography       = geography
-                                                    , dt_geoid_clean  = dt_geoid_clean
-                                                    , indicator       = indicator
-                                                    , margin_of_error = margin_of_error
-                                                    , percentages     = percentages
-                                                    , sample_type     = sample_type
-                                                    , df_vars         = df_vars)
+                df_census, df_mpo = post.rename_census(df_census          = df_census
+                                                        , df_mpo          = df_mpo
+                                                        , geography       = geography
+                                                        , indicator       = indicator
+                                                        , metric          = metric
+                                                        , margin_of_error = margin_of_error
+                                                        , percentages     = percentages
+                                                        , sample_type     = sample_type
+                                                        , df_vars         = df_vars
+                                                        , mpo             = mpo)
                 display(df_census, df_mpo)
-            else:
-                df_census = rename_census(df_census           = df_census
-                                            , geography       = geography
-                                            , dt_geoid_clean  = dt_geoid_clean
-                                            , indicator       = indicator
-                                            , margin_of_error = margin_of_error
-                                            , percentages     = percentages
-                                            , sample_type     = sample_type)
-                display(df_census)
-    if geography == 'PUMA':
-        df_puma, df_counties, df_msa, df_mpo = rename_census(df_puma              = df_puma
-                                                                , df_counties     = df_counties
-                                                                , df_msa          = df_msa
-                                                                , df_mpo          = df_mpo
-                                                                , geography       = geography
-                                                                , indicator       = indicator
-                                                                , margin_of_error = margin_of_error
-                                                                , percentages     = percentages
-                                                                , sample_type     = sample_type
-                                                                , groups          = groups
-                                                                , table_type      = table_type)
-        display(df_puma, df_counties, df_msa, df_mpo)
-
-
-
-
-
-    ## Exporting ===============================================================================================================
-
-
-    # if export:
-    #     if about:
-    #         estimate = re.sub('PUMS', 'ACS', estimate)
-    #         if update:
-    #             path_about = path_sp / 'Process Revamp' / 'Task 6. Process Map'
-    #             year_start = df_census_raw.Year.min()
-    #             year_end   = df_census_raw.Year.max()
-    #             df_about = write_about(sample_type     = sample_type
-    #                                     , indicator    = indicator
-    #                                     , year_start   = year_start
-    #                                     , year_end     = year_end
-    #                                     , path_config0 = path_config0
-    #                                     , MOE_thresh   = MOE_thresh
-    #                                     , estimate     = estimate)
-    #             file_about = path_about / 'About Indicators.xlsx'
-    #             with pd.ExcelWriter(file_about, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
-    #                 df_about.to_excel(writer, index=False, sheet_name=indicator, header=False)
-
-
-    # if export:
-    #     if about:
-    #         if estimate not in ['LEHD', 'CPS']:
-    #             df_about = write_about(sample_type     = sample_type
-    #                                     , indicator    = indicator
-    #                                     , year_start   = year_start
-    #                                     , year_end     = year_end
-    #                                     , path_config0 = path_config0
-    #                                     , geography    = geography
-    #                                     , MOE_thresh   = MOE_thresh
-    #                                     , estimate     = estimate)
-    #             if geography == 'Counties':
-    #                 if mpo == 'Yes':
-    #                     geography = 'MPO'
-    #                     df_about_mpo = write_about(sample_type     = sample_type
-    #                                                 , indicator    = indicator
-    #                                                 , year_start   = year_start
-    #                                                 , year_end     = year_end
-    #                                                 , path_config0 = path_config0
-    #                                                 , geography    = geography
-    #                                                 , MOE_thresh   = MOE_thresh
-    #                                                 , estimate     = estimate)
-    #                     geography = 'Counties'
-    #                 else: pass
-    #         else:
-    #             df_about = write_about(sample_type     = sample_type
-    #                                     , indicator    = indicator
-    #                                     , year_start   = year_start
-    #                                     , year_end     = year_end
-    #                                     , path_config0 = path_config0
-    #                                     , geography    = geography
-    #                                     , estimate     = estimate)
-
-
-
-    if geography == 'Counties':
-        if mpo == 'Yes':
-            df_about, df_about_mpo = write_about_master(export, about, update, df_census_raw, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, path_about)
-        else:
-            df_about = write_about_master(export, about, update, df_census_raw, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, path_about)
     else:
-        df_about = write_about_master(export, about, update, df_census_raw, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, path_about)
-    print("About documentation of the output for:", indicator)
-    display(df_about)
+        df_census = post.rename_census(df_census          = df_census
+                                        , geography       = geography
+                                        , indicator       = indicator
+                                        , metric          = metric
+                                        , margin_of_error = margin_of_error
+                                        , percentages     = percentages
+                                        , sample_type     = sample_type)
+        display(df_census); print(); print()
 
 
 
+
+
+
+
+    # Write about page if needed
+    if about:
+        if geography == 'Counties' and mpo == 'Yes':
+            df_about, df_about_mpo = post.write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, update, path_about)
+        else:
+            df_about = post.write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, update, path_about)
+        print("About documentation of the output for:", indicator)
+        display(df_about)
+        
     print(); print()
 
+
+
+
+    # Exporting
     if export:
-        if sample_type == 'SUBJECT':
-            estimate = re.sub('ACS', 'SUBJECT', estimate)
-        if sample_type == 'DP':
-            estimate = re.sub('ACS', 'DP', estimate)
+        print(); print()
+
+
+        if sample_type == 'SUBJECT': estimate = re.sub('ACS', 'SUBJECT', estimate)
+        if sample_type == 'DP': estimate = re.sub('ACS', 'DP', estimate)
 
         if geography == 'PUMA':
             estimate = re.sub('ACS', 'PUMS', estimate)
-            workbook_name1 = f"{indicator} PUMA {estimate}.xlsx"
-            workbook_name2 = f"{indicator} Counties {estimate}.xlsx"
-            workbook_name3 = f"{indicator} MSA {estimate}.xlsx"
-            workbook_name4 = f"{indicator} MPO {estimate}.xlsx"
-            print(workbook_name1)
-            print(workbook_name2)
-            print(workbook_name3)
-            print(workbook_name4)
-        
+            workbook_name1 = f"{indicator} PUMA {estimate}.xlsx"; print(workbook_name1)
+            workbook_name2 = f"{indicator} Counties {estimate}.xlsx"; print(workbook_name2)
+            workbook_name3 = f"{indicator} MSA {estimate}.xlsx"; print(workbook_name3)
+            workbook_name4 = f"{indicator} MPO {estimate}.xlsx"; print(workbook_name4)
+                    
         elif geography == 'Counties':
-            workbook_name1 = f"{indicator} {geography} {estimate}.xlsx"
-            print(workbook_name1)
+            workbook_name = f"{indicator} {geography} {estimate}.xlsx"; print(workbook_name)
             if mpo == 'Yes':
-                workbook_name2 = f"{indicator} MPO {estimate}.xlsx"
-                print(workbook_name2)
+                workbook_name2 = f"{indicator} MPO {estimate}.xlsx"; print(workbook_name2)
         else:
             if sample_type == 'LEHD':
                 workbook_name = f"{indicator} {geography} {sample_type}.xlsx"
             else:
                 workbook_name = f"{indicator} {geography} {estimate}.xlsx"
             print(workbook_name)
-            print()
+        print()
         
         path_out_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
         path_out_sp = Path(export_loc) / f"{indicator} {folder}"
@@ -387,74 +281,78 @@ if __name__ == '__main__':
         if project != 'Monitoring and Reporting':
             path_out_sp = Path(export_loc)
 
-        if project == 'Monitoring and Reporting':
-            if server:
-                paths = [path_out_server, path_out_sp]
-            else: paths = [path_out_sp]
+        if project == 'Monitoring and Reporting' and server == True:
+            paths = [path_out_server, path_out_sp]
         else:
             paths = [path_out_sp]
         
+
         for path_ in paths:
-            try:
-                path_wb = path_ / workbook_name
+
+            try: path_wb = path_ / workbook_name
             except: pass
             
-            if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC']:
+
+            if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC', 'LEHD']:
+
                 if geography == 'Places':
-                    if about:
-                        df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Census Designated Places (Jurisdictions)'
-                if geography != 'Counties':
-                    export_indicator(geography, df_census, path_wb, about)
-                if geography == 'Counties':
-                    path_wb = path_ / workbook_name1
-                    if about:
-                        df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Counties'
-                    export_indicator(geography, df_census, path_wb, about)
-                    if mpo == 'Yes':
-                        path_wb = path_ / workbook_name2
-                        if about:
-                            df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
-                        export_indicator(geography, df_mpo, path_wb, about)
-            
+                    if about: df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Census Designated Places (Jurisdictions)'
+                if geography == 'Counties' and mpo == 'Yes':
+                    path_mpo = path_ / workbook_name2
+                    if about: post.export_indicator(geography, df_mpo, path_mpo, about, df_about_mpo)
+                    else:     post.export_indicator(geography, df_mpo, path_mpo, about)
+                if about: post.export_indicator(geography, df_census, path_wb, about, df_about)
+                else:     post.export_indicator(geography, df_census, path_wb, about)
+
+
             if sample_type == 'PUMS':
+
                 path_wb = path_ / workbook_name1
-                export_indicator(geography, df_puma, path_wb, about)
+                if about: post.export_indicator(geography, df_puma, path_wb, about, df_about)
+                else:     post.export_indicator(geography, df_puma, path_wb, about)
+
                 path_wb = path_ / workbook_name2
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Counties'
-                export_indicator(geography, df_counties, path_wb, about)
+                    post.export_indicator(geography, df_counties, path_wb, about, df_about)
+                else:
+                    post.export_indicator(geography, df_counties, path_wb, about)
+
                 path_wb = path_ / workbook_name3
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MSA'
-                export_indicator(geography, df_msa, path_wb, about)
+                    post.export_indicator(geography, df_msa, path_wb, about, df_about)
+                else:
+                    post.export_indicator(geography, df_msa, path_wb, about)
+
                 path_wb = path_ / workbook_name4
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
-                export_indicator(geography, df_mpo, path_wb, about)
+                    post.export_indicator(geography, df_mpo, path_wb, about, df_about)
+                else:
+                    post.export_indicator(geography, df_mpo, path_wb, about)
+
             
             if sample_type == 'FOODSEC':
+
                 path_wb = path_ / workbook_name1
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Counties'
-                export_indicator(geography, df_counties, path_wb, about)
+                    post.export_indicator(geography, df_counties, path_wb, about, df_about)
+                else:
+                    post.export_indicator(geography, df_counties, path_wb, about)
+
                 path_wb = path_ / workbook_name2
                 if about:
                     df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
-                export_indicator(geography, df_mpo, path_wb, about)
-            
-            if sample_type == 'LEHD':
-                if geography == 'Counties':
-                    path_wb = path_ / workbook_name1
-                    if about:
-                        df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'Counties'
-                    export_indicator(geography, df_census, path_wb, about)
-                    path_wb = path_ / workbook_name2
-                    if about:
-                        df_about.loc[df_about['Indicator'] == 'Geography', indicator] = 'MPO'
-                    export_indicator(geography, df_mpo, path_wb, about)
-                if geography == 'MSA':
-                    path_wb = path_ / workbook_name
-                    export_indicator(geography, df_census, path_wb, about)
+                    post.export_indicator(geography, df_mpo, path_wb, about)
+                else:
+                    post.export_indicator(geography, df_mpo, path_wb, about)
+
+
+    print(); print()      
+
+
 
 
 

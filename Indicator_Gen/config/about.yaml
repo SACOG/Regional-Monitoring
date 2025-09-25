@@ -2316,7 +2316,7 @@ Zillow:
     - '2026-06-01'
     Notes: 'Home sale prices are approximated with the Zillow Home Value Index. In their own words,\n
       this index is "a measure of the typical home value and market changes across a given region\n
-      and housing type. It reflects the typical value for homes in the 3th to 6th percentile range.\n
+      and housing type. It reflects the typical value for homes in the 30th to 60th percentile range.\n
       Available as a smoothed, seasonally adjusted measure and as a raw measure." The smoothed measure is used here.'
 
   Cost_2:

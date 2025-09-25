@@ -15,6 +15,8 @@ get_dp()
 get_subject()
 get_dec()
 get_lehd()
+get_data_any()
+
 
 '''
 
@@ -25,8 +27,8 @@ get_lehd()
 import numpy as np
 import pandas as pd
 from pathlib import Path
-import time
 from tqdm import tqdm
+import time
 import functools as ft
 import re
 import requests
@@ -34,6 +36,7 @@ import ast
 from IPython.display import display
 import traceback
 import sys
+import traceback
 
 
 sys.path.append(str(Path(__file__).parent.parent.parent.parent / 'config'))
@@ -107,8 +110,8 @@ def get_data(
             else:
                 location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state
         else:
-            # location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
-            location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'
+            location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
+            # location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'
     if geography == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
     if geography == 'States':
@@ -195,17 +198,17 @@ def read_fips_file_pums(import_tab):
 
 
 
+def moe_split(text):
+    try:
+        estimates = text.split(',')
+        pattern = re.compile('.*E$|.*M$')
+        text = ','.join([est for est in estimates if pattern.match(est)])
+        return text
+    except:
+        return text
+
 
 def prep_request_special(df_inputs, file_inputs, file_area, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate):
-
-    def moe_split(text):
-        try:
-            estimates = text.split(',')
-            pattern = re.compile('.*E$|.*M$')
-            text = ','.join([est for est in estimates if pattern.match(est)])
-            return text
-        except:
-            return text
 
     df_vars = read_vars_file(file_inputs, sample_type, indicator, years_to_import, estimate)
 
@@ -305,6 +308,9 @@ def prep_request_special(df_inputs, file_inputs, file_area, sample_type, indicat
 
 
 
+
+
+
 # ACS ---
 
 def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab):
@@ -349,8 +355,13 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
     list_df_years = []
 
     for year in tqdm(years_to_import):
+                
+        print(); print(); print(); print()
+        tqdm.write("Year: " + str(year))
+        tqdm.write('')
 
         list_df_tables = []
+
         
         try:
             for table in tables:
@@ -380,6 +391,7 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                     list_variables2.append(y2)
                 
                 list_df_vars = []
+
                 
                 for variables, variables2 in zip(list_variables, list_variables2):
 
@@ -401,7 +413,7 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                                                 , state     = state
                                                 , county    = dt_fips[state])
                                 )
-                            except Exception as e: print(e)
+                            except Exception as e: print(e); traceback.print_exc(); print(); print()
                                     
                     if import_tab == 'MSA':
                         try:
@@ -418,7 +430,7 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                                             , year      = year
                                             , msa       = msa_to_import)
                             )
-                        except Exception as e: print(e)
+                        except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                     if import_tab == 'States':
                         for state in states_to_import:
@@ -434,7 +446,7 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                                               , year      = year
                                               , state     = state)
                                 )
-                            except Exception as e: print(e)
+                            except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                     if import_tab == 'National':
                         try:
@@ -447,12 +459,13 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                                             , variables = variables
                                             , year      = year)
                             )
-                        except Exception as e: print(e)
+                        except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                     df_states = pd.concat(list_df_states)
                     df_states = df_states.set_index(geo_id + ['Year']).reset_index()
                     df_states.columns = geo_id + ['Year'] + variables2
                     list_df_vars.append(df_states)
+
 
                 df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = geo_id + ['Year'], how='outer'), list_df_vars)
 
@@ -477,7 +490,7 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
 
 
             list_df_years.append(df_year)
-        except Exception as e: print(e)
+        except Exception as e: print(e); traceback.print_exc(); print(); print()
 
     df_census = pd.concat(list_df_years)
     df_census = df_census.drop_duplicates().reset_index(drop=True)
@@ -722,7 +735,7 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
                                                 , state     = state
                                                 , county    = dt_fips[state])
                             )
-                        except Exception as e: print(e)
+                        except Exception as e: print(e); traceback.print_exc(); print(); print()
                                 
                 if import_tab == 'MSA':
                     try:
@@ -736,7 +749,7 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
                                             , year      = year
                                             , msa       = msa_to_import)
                         )
-                    except Exception as e: print(e)
+                    except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 if import_tab == 'States':
                     for state in states_to_import:
@@ -752,7 +765,7 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
                                                 , year      = year
                                                 , state     = state)
                             )
-                        except Exception as e: print(e)
+                        except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 df_states = pd.concat(list_df_states)
                 df_states = df_states.set_index(geo_id + ['Year']).reset_index()
@@ -762,7 +775,7 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
             df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = geo_id + ['Year'], how='outer'), list_df_vars)
             list_df_years.append(df_vars_all)
 
-        except Exception as e: print(e)
+        except Exception as e: print(e); traceback.print_exc(); print(); print()
 
 
     print()
@@ -889,7 +902,7 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
                                                 , state     = state
                                                 , county    = dt_fips[state])
                             )
-                        except Exception as e: print(e)
+                        except Exception as e: print(e); traceback.print_exc(); print(); print()
                                 
                 if import_tab == 'MSA':
                     try:
@@ -906,7 +919,7 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
                                             , year      = year
                                             , msa       = msa_to_import)
                         )
-                    except Exception as e: print(e)
+                    except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 if import_tab == 'States':
                     for state in states_to_import:
@@ -922,7 +935,7 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
                                                 , year      = year
                                                 , state     = state)
                             )
-                        except Exception as e: print(e)
+                        except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 if import_tab == 'National':
                     try:
@@ -935,7 +948,7 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
                                             , variables = variables
                                             , year      = year)
                         )
-                    except Exception as e: print(e)
+                    except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 df_states = pd.concat(list_df_states)
                 df_states = df_states.set_index(geo_id + ['Year']).reset_index()
@@ -1078,7 +1091,7 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
                                         , state     = state
                                         , county    = dt_fips[state])
                     )
-                except Exception as e: print(e)
+                except Exception as e: print(e); traceback.print_exc(); print(); print()
 
         if import_tab == 'States':
             for state in states_to_import:
@@ -1094,7 +1107,7 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
                                         , year      = year
                                         , state     = state)
                     )
-                except Exception as e: print(e)
+                except Exception as e: print(e); traceback.print_exc(); print(); print()
 
         df_states = pd.concat(list_df_states)
         df_states = df_states.set_index(geo_id + ['Year']).reset_index()
@@ -1201,7 +1214,7 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
                 df_state = df_state.drop(['state', 'county'], axis=1)
                 df_state = df_state.set_index(['State FIPS', 'County FIPS', 'County Name', 'year', 'time']).reset_index()
                 list_df_states.append(df_state)
-            except Exception as e: print(e)
+            except Exception as e: print(e); traceback.print_exc(); print(); print()
 
     if import_tab == 'MSA':
 
@@ -1221,7 +1234,7 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
                 df_state = df_state.drop(['state', 'metropolitan statistical area/micropolitan statistical area'], axis=1)
                 df_state = df_state.set_index(['State FIPS', 'MSA_ID', 'MSA', 'time']).reset_index()
                 list_df_states.append(df_state)
-            except Exception as e: print(e)
+            except Exception as e: print(e); traceback.print_exc(); print(); print()
     df_census = pd.concat(list_df_states)
     df_census = df_census.rename(columns = {'year':'Year'})
     df_census = df_census.drop_duplicates(subset=['MSA_ID', 'time', 'Year', 'firmage', 'Emp']).reset_index(drop=True)
@@ -1229,6 +1242,65 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
     return df_census
 
 
+
+
+
+
+
+def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab, path_config):
+
+    print(); print(); print()
+    start_time = time.time()
+
+    ## Import Census Bureau data to url mapping table
+    file_url = path_config / 'census.xlsx'; sheet_name='URL'
+    df_urls = pd.read_excel(file_url, sheet_name=sheet_name)
+
+
+    ## Request data
+    if sample_type == 'ACS':     df_census = get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
+    if geography == 'PUMA':      df_census = get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, margin_of_error, import_tab)
+    if sample_type == 'SUBJECT': df_census = get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
+    if sample_type == 'DP':      df_census = get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
+    if estimate == 'DEC':        df_census = get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, import_tab)
+    if sample_type == 'LEHD':    df_census = get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, import_tab, years_to_import)
+
+    # # For CPS Tables
+    # if estimate == 'CPS':
+    #     df_census = get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, import_tab, years_to_import)
+
+
+    ## Calculate time amounted while requesting data
+    print()
+    print("Finished!!")
+    print(f"Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---")
+    print()
+
+
+    ## Summary of data quality
+    print()
+    print('Summary of data quality: ')
+    print()
+    print("Count of '-555555555'   values in dataframe: " + str((df_census.values == '-555555555'  ).sum()))
+    print("Count of '-666666666'   values in dataframe: " + str((df_census.values == '-666666666'  ).sum()))
+    print("Count of '-222222222'   values in dataframe: " + str((df_census.values == '-222222222'  ).sum()))
+    print("Count of '-999999999.0' values in dataframe: " + str((df_census.values == '-999999999.0').sum()))
+    print("Count of 'null'         values in dataframe: " + str((df_census.values == 'null'        ).sum()))
+    print("Count of '-'            values in dataframe: " + str((df_census.values == '-'           ).sum()))
+    print("Count of ''             values in dataframe: " + str((df_census.values == ''            ).sum()))
+    print("Count of NaN            values in dataframe: " + str(df_census.isna().sum()              .sum()))
+    print()
+
+
+    ## Result
+    print()
+    print('Number of rows/columns: ')
+    print(df_census.shape)
+    print('Years imported: ')
+    print(df_census.Year.unique())
+    display(df_census)
+
+    return df_census
 
 
 
@@ -1287,7 +1359,7 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
 #                                     , state     = state
 #                                     , county    = dt_fips[state])
 #                             )
-#             except Exception as e: print(e)
+#             except Exception as e: print(e); traceback.print_exc(); print(); print()
                 
 #     df_census = pd.concat(list_df)
 #     df_census['state' ] = df_census['state' ].astype(str).apply('{:0>2}'.format)
@@ -1300,68 +1372,5 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
 
 #     return df_census
 
-
-
-
-
-# # Request any ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-# def get_any(api_key, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab):
-
-#     print(); print(); print()
-#     start_time = time.time()
-
-#     file_url = Path(__file__).parent / 'census.xlsx'
-#     sheet_name = 'URL'
-#     df_urls = pd.read_excel(file_url, sheet_name=sheet_name)
-
-#     if sample_type == 'ACS':
-#         df_census = get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-
-#     if geography == 'PUMA':
-#         df_census = get_pums(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-        
-#     if sample_type == 'SUBJECT':
-#         df_census = get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-
-#     if sample_type == 'DP':
-#         df_census = get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-
-#     if estimate == 'DEC':
-#         df_census = get_dec(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-
-#     if sample_type == 'LEHD':
-#         df_census = get_lehd(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-
-#     if estimate == 'CPS':
-#         df_census = get_cps(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-
-
-#     print()
-#     print("Finished!!")
-#     print(f"Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---")
-#     print()
-#     print()
-#     print('Summary of data quality: ')
-#     print()
-#     print("Count of '-555555555'   values in dataframe: " + str((df_census.values == '-555555555'  ).sum()))
-#     print("Count of '-666666666'   values in dataframe: " + str((df_census.values == '-666666666'  ).sum()))
-#     print("Count of '-222222222'   values in dataframe: " + str((df_census.values == '-222222222'  ).sum()))
-#     print("Count of '-999999999.0' values in dataframe: " + str((df_census.values == '-999999999.0').sum()))
-#     print("Count of 'null'         values in dataframe: " + str((df_census.values == 'null'        ).sum()))
-#     print("Count of '-'            values in dataframe: " + str((df_census.values == '-'           ).sum()))
-#     print("Count of ''             values in dataframe: " + str((df_census.values == ''            ).sum()))
-#     print("Count of NaN            values in dataframe: " + str( df_census.isna().sum()             .sum()))
-#     print()
-#     print()
-
-#     df_census = df_census.drop_duplicates().reset_index(drop=True)
-#     print('Number of rows/columns: ')
-#     print(df_census.shape)
-#     print('Years imported: ')
-#     print(df_census.Year.unique())
-
-#     return df_census
 
 

@@ -67,7 +67,7 @@ def proc_ami(df, hh_bracket_acs, dt_hcd_brackets, hh_bracket_hcd, list_df_sub):
 
 
 
-indicator = 'RHNA_HSG_12'
+indicator = 'RHNA_ELI_4'
 
 
 # Set indicator
@@ -194,6 +194,7 @@ for county in counties:
 
         fig = px.bar(df_plot, x='Income Bracket', y='Percentage')
         fig.update_traces(marker_color='#1E90FF')
+        fig.update_yaxes(ticksuffix='%')
         fig.update_traces(hovertemplate="%{y}")
 
         path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'

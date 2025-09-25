@@ -37,8 +37,8 @@ for county in counties:
         df_prod = df_usda[df_usda['County'] == county]
         df_prod = df_prod.drop('County', axis=1)
 
-        ## Plotting ---
 
+        ## Plotting ---
 
         df_plot = df_prod.copy()
         df_plot = df_prod.melt(id_vars='Farm Worker', var_name='Year', value_name='Number of Workers')

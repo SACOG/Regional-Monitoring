@@ -12,20 +12,16 @@ print(); print()
 
 
 
-## Setup ================================================================================================
+# Workspace ------------------------------------------------------------------------------------------------------------------------
 
 
-export=True
+export=False
 
-## Packages ---
 
 from pathlib import Path
-import os
 import sys
-sys.path.append(str(Path(__file__).parent))
-from time import perf_counter as perf # what is sthis
+from time import perf_counter as perf # what is this
 import time
-
 import pandas as pd
 import arcpy
 import numpy as np
@@ -33,25 +29,24 @@ import geopandas as gpd
 import rasterio
 from rasterio.mask import mask
 from tqdm import tqdm
-from arcgis.features import GeoAccessor, GeoSeriesAccessor
+from arcgis.features import GeoAccessor
 
+
+sys.path.append(str(Path(__file__).parent / 'config'))
 import parameters as params
 import utils as ut
 
 import yaml
-yaml_file = Path(__file__).parent.joinpath('config_regavgs.yaml')
+yaml_file = Path(__file__).parent / 'config' / 'config_regavgs.yaml'
 with open(yaml_file, 'r') as y:
     pathconfigs = yaml.load(y, Loader=yaml.FullLoader)
     acc_cfg = pathconfigs['access_data']
 
 from IPython.display import display
 
-
 from osgeo import gdal
 gdal.SetConfigOption("GDAL_MEM_ENABLE_OPEN", "YES")
 
-
-## User defined functions ---
 
     
 def set_fc(tif_main, fc_main, search_dist):
@@ -145,8 +140,7 @@ def get_acc_data(gdf_fc, tif_main, destination, idx):
 
 
 
-## Main ================================================================================================
-
+# Main -------------------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
@@ -201,8 +195,8 @@ if __name__ == '__main__':
         print(); print()
 
 
-        ## Exporting ---
 
+        # Exporting
         if export:
 
             # Feature class to file gdb

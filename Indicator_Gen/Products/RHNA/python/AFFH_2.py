@@ -26,11 +26,14 @@ df_acs['county'] = df_acs['County FIPS'].astype(str).apply('{:0>3}'.format)
 df_acs['tract' ] = df_acs['Tract ID'   ].astype(str).apply('{:0>6}'.format)
 df_acs['fips'  ] = df_acs['state'] + df_acs['county'] + df_acs['tract']
 df_acs = df_acs[df_acs['Race_Ethnicity'] != 'All']
+
 df_acs = df_acs[['fips', 'Race_Ethnicity', 'Population']]
 display(df_acs.head())
 
 
+
 df_tcac = df_tcac.merge(df_acs, on='fips', how='left')
+
 
 
 ## Read in opportunity map tract data

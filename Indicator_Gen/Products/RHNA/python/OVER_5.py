@@ -52,6 +52,7 @@ choices = ['0%-30% of income used for housing', '30%-50% of income used for hous
 
 df_chas['Cost Burden'] = np.select(conditions, choices, default='no')
 
+
 conditions = [
     df_chas['Income Level'  ] == ' AND household income is less than or equal to 30% of HAMFI'
     , df_chas['Income Level'] == ' AND household income is greater than 30% but less than or equal to 50% of HAMFI'

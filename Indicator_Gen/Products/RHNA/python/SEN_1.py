@@ -80,7 +80,7 @@ for county in counties:
         ## Plotting ---
 
         df_plot = df_chas_sub[df_chas_sub['name'] == jurisdiction]
-        df_plot['Percentage'] = round(df_plot['Percentage'], 1)
+        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
         
         color_map = {
                  "Owner occupied":"#1F45FC",
