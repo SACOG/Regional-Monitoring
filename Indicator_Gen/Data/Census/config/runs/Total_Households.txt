@@ -1,10 +1,10 @@
 Project: Miscellaneous
 Indicator Name: Total_Households
-Export Location: Reference\\Weights
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Reference\Weights
 Folder: 
 Sample: ACS
 Estimate: ACS1
 Geography: MSA
-Years Imported: 2008
+Years Imported: 2021, 2022, 2023, 2024
 Import Tab: MSA
-Margin of Error: No
+Margin of Error: Yes

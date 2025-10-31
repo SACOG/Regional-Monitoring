@@ -1,0 +1,10 @@
+Project: Small Data Requests
+Indicator Name: Davis_Pop
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\DavisPop
+Folder: 
+Sample: DEC
+Estimate: DEC
+Geography: Places
+Years Imported: 2000
+Import Tab: States
+Margin of Error: No

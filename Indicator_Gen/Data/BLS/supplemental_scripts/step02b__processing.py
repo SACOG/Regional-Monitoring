@@ -163,6 +163,8 @@ print('Final renaming and reorganization of data: ')
 if indicator == 'Jobs_1':
     if geography == 'MSA':
         df_bls1 = df_bls1.rename(columns={'area_text':'MSA', 'Variable':'Sector', 'Value':'Total Jobs', 'area_code':'MSA ID'})
+    if geography == 'National':
+        df_bls1 = df_bls1.rename(columns={'area_text':'MSA', 'Variable':'Sector', 'Value':'Total Jobs', 'area_code':'MSA ID'})
     display(df_bls1.head())
 
 if indicator == 'Labor_2':
@@ -184,6 +186,9 @@ if indicator == 'Jobs_3':
     df_bls1_1 = df_bls1_1.rename(columns={'Variable':'Sector', 'Value':'Total Jobs'})
     df_bls1_2 = df_bls1_2.rename(columns={'Variable':'Sector', 'Value':'Total Jobs'})
     if geography == 'MSA':
+        df_bls1_1 = df_bls1_1.rename(columns={'area_text':'MSA', 'area_code':'MSA ID'})
+        df_bls1_2 = df_bls1_2.rename(columns={'area_text':'MSA', 'area_code':'MSA ID'})
+    if geography == 'National':
         df_bls1_1 = df_bls1_1.rename(columns={'area_text':'MSA', 'area_code':'MSA ID'})
         df_bls1_2 = df_bls1_2.rename(columns={'area_text':'MSA', 'area_code':'MSA ID'})
     display(df_bls1_1.head(), df_bls1_2.head())

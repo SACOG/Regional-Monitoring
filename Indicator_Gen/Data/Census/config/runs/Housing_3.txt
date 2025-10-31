@@ -1,0 +1,10 @@
+Project: StoryMaps
+Indicator Name: Housing_3
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export
+Folder: 
+Sample: PUMS
+Estimate: ACS1
+Geography: PUMA
+Years Imported: 2018, 2019, 2021, 2022, 2023
+Import Tab: Counties
+Margin of Error: Yes
