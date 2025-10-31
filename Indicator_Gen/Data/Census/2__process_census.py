@@ -1,6 +1,8 @@
 
 
 
+def print2(): print(); print()
+def print3(): print(); print(); print()
 
 
 
@@ -9,7 +11,7 @@
 # write_about functions need work on specificity - being able to adjust easily what to label the geography
 
 
-print(); print(); print()
+print3()
 
 
 
@@ -17,11 +19,11 @@ print(); print(); print()
 
 rerun=True
 export=True
-about=True
+about=False
 update=False
 server=False
-mpo = 'Yes'
-unincorporated = 'Yes'
+mpo = 'No'
+unincorporated='No'
 
 
 
@@ -37,16 +39,17 @@ from IPython.display import display
 import sys
 
 
-path_git = Path(__file__).parent.parent.parent
-path_code    = path_git / 'Data' / 'Census'
-path_config0 = path_git / 'config'
-path_config  = path_code / 'config'
+PATH_GIT = Path(__file__).parent.parent.parent
+PATH_CODE    = PATH_GIT / 'Data' / 'Census'
+PATH_CONFIG0 = PATH_GIT / 'config'
+PATH_CONFIG  = PATH_CODE / 'config'
 
-sys.path.append(str(path_config0))
-import functions as func
-import plot as pt
+FILE_API = PATH_CONFIG / 'api_key.txt'
+FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
+FILE_CPI = PATH_CONFIG0 / 'CPI_IAF.xlsx'
+FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
 
-sys.path.append(str(path_config))
+sys.path.append(str(PATH_CONFIG))
 import pre
 import get
 import post
@@ -54,12 +57,12 @@ import post
 
 
 # SharePoint OneDrive paths
-path_sp = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-path_orig = path_sp / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
-path_main = path_sp / 'Data'
-path_prod = path_sp / 'Products'
-path_about = path_sp / 'Process Revamp' / 'Task 6. Process Map'
-path_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+PATH_ORIG = PATH_SP / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
+PATH_MAIN = PATH_SP / 'Data'
+PATH_PROD = PATH_SP / 'Products'
+PATH_ABOUT = PATH_SP / 'Process Revamp' / 'Task 6. Process Map'
+PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
     
 
@@ -72,25 +75,25 @@ if __name__ == '__main__':
 
 
     # Rerun prep work to read in census data collected in step 1
-    file_api = path_config / 'api_key.txt'
-    with open(file_api, 'r') as file:
+    with open(PATH_CONFIG / 'api_key.txt', 'r') as file:
         api_key = file.read()
 
-    yaml_census = pre.load_yaml(path_config)
+    yaml_census = pre.load_yaml()
     project, indicator, sample_type, estimate, geography, years_to_import, year_start, year_end, import_tab, margin_of_error, export_loc, folder, MOE_thresh, num_vars, percentages, weighted_by, metric = pre.api_request_params(yaml_census, rerun)
 
-    df_inputs, file_inputs, file_area = get.read_inputs_file(import_tab)
-    df_vars = get.read_vars_file(file_inputs, sample_type, indicator, years_to_import, estimate)
+    df_vars = get.read_vars_file(sample_type, indicator, years_to_import, estimate)
 
-    file_in = path_orig / pre.set_download_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig)
+    file_in = PATH_ORIG / pre.set_download_name(indicator, estimate, sample_type, geography, margin_of_error)
     df_census = pd.read_csv(file_in)
+    df_census = df_census.dropna().reset_index(drop=True)
     display(df_census.head())
 
 
 
 
+
     # Processing
-    print(); print()
+    print2()
 
 
     # ACS, DP, SUBJECT, DEC
@@ -111,7 +114,7 @@ if __name__ == '__main__':
         # Merge cleam label field, variable mapping, race/ethnicity, and sorting field
         # Remove unneeded columns
         # Sort by geography, variable mapping, and race/ethnicity
-        df_census = post.acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_config0, weighted_by, unincorporated)
+        df_census = post.acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, weighted_by, unincorporated)
         print(df_census.Year.unique()); display(df_census.head(3))
 
 
@@ -120,9 +123,9 @@ if __name__ == '__main__':
         # Roll up population/households/SE's to the desired geography and variable groupings
         # Calculate percentages by geography, race/ethnicity, and variables
         if geography == 'Counties' and mpo == 'Yes':
-            df_census, df_mpo = post.acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
+            df_census, df_mpo = post.acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, metric, unincorporated, mpo)
         else:
-            df_census = post.acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo)
+            df_census = post.acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, metric, unincorporated, mpo)
         print(df_census.Year.unique()); display(df_census.head(3))
 
 
@@ -148,13 +151,13 @@ if __name__ == '__main__':
 
         # Remove rows with missing values
         # Only keep description mappings, remove the original PUMS values
-        df_census = post.pums_processing_2(df_census, estimate, sample_type, groups)
+        df_census = post.pums_processing_2(df_census, estimate, sample_type, groups, import_tab)
         display(df_census.head(3))
 
         # Cleans race/ethnicity fields
         # Creates additional grouping variables for certain indicators
         # Adjusts income variables by inflation for the latest year
-        df_census, groups = post.pums_processing_3(df_census, groups, indicator, path_config0)
+        df_census, groups = post.pums_processing_3(df_census, groups, project, indicator)
         print('Groups: ' + ', '.join(groups)); display(df_census.head(3))
 
         # Roll up using suggested weight field
@@ -173,7 +176,7 @@ if __name__ == '__main__':
     # LEHD
     if sample_type == 'LEHD':
         if geography == 'Counties':
-            df_census, df_mpo = post.lehd_processing(df_census, geography, indicator, percentages, df_fips)
+            df_census, df_mpo = post.lehd_processing(df_census, geography, indicator, percentages)
             display(df_census.head(3), df_mpo.head(3))
         if geography == 'MSA':
             df_census = post.lehd_processing(df_census, geography, indicator, percentages)
@@ -181,12 +184,10 @@ if __name__ == '__main__':
 
 
 
-
-
     # Final organization of tables for cleanliness
     # Renaming columns, subsetting to only desired columns, ...
 
-    print(); print()
+    print2()
     print('Final Results: ')
     print()
 
@@ -226,7 +227,7 @@ if __name__ == '__main__':
                                         , margin_of_error = margin_of_error
                                         , percentages     = percentages
                                         , sample_type     = sample_type)
-        display(df_census); print(); print()
+        display(df_census); print2()
 
 
 
@@ -237,20 +238,20 @@ if __name__ == '__main__':
     # Write about page if needed
     if about:
         if geography == 'Counties' and mpo == 'Yes':
-            df_about, df_about_mpo = post.write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, update, path_about)
+            df_about, df_about_mpo = post.write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, update)
         else:
-            df_about = post.write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, update, path_about)
+            df_about = post.write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, update)
         print("About documentation of the output for:", indicator)
         display(df_about)
         
-    print(); print()
+    print2()
 
 
 
 
     # Exporting
     if export:
-        print(); print()
+        print2()
 
 
         if sample_type == 'SUBJECT': estimate = re.sub('ACS', 'SUBJECT', estimate)
@@ -275,14 +276,14 @@ if __name__ == '__main__':
             print(workbook_name)
         print()
         
-        path_out_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+
         path_out_sp = Path(export_loc) / f"{indicator} {folder}"
         
         if project != 'Monitoring and Reporting':
             path_out_sp = Path(export_loc)
 
         if project == 'Monitoring and Reporting' and server == True:
-            paths = [path_out_server, path_out_sp]
+            paths = [PATH_SERVER, path_out_sp]
         else:
             paths = [path_out_sp]
         
@@ -350,7 +351,7 @@ if __name__ == '__main__':
                     post.export_indicator(geography, df_mpo, path_wb, about)
 
 
-    print(); print()      
+    print2()      
 
 
 

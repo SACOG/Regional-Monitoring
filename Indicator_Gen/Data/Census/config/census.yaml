@@ -248,6 +248,15 @@ Indicators:
       percentages: 'Yes'
       weighted_by: ''
       metric: 'Households'
+    Housing_3:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
+      folder: ''
+      sample: 'PUMS'
+      MOE_threshold: 0.05
+      number_of_variables: 7
+      percentages: 'Yes'
+      weighted_by: ''
+      metric: 'Households'
 
   Chamber Study Missions:
     Chamber_H_1aa:
@@ -1013,6 +1022,26 @@ Indicators:
       weighted_by: ''
       metric: 'Population'
       requested_by: 'Shengyi'
+    Davis_Pop:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\DavisPop'
+      folder: ''
+      sample: 'DEC'
+      MOE_threshold: 0.05
+      number_of_variables: 18
+      percentages: 'Yes'
+      weighted_by: ''
+      metric: 'Population'
+      requested_by: 'Pete'
+    TheObserver_1:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Sac Observer'
+      folder: ''
+      sample: 'ACS'
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: 'Yes'
+      weighted_by: ''
+      metric: 'Households'
+      requested_by: 'TheObserver'
 
 
 Samples:

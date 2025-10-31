@@ -1,7 +1,7 @@
 
 
 
-## Preparing workspace ---
+# Workspace ----------------------------------------------------------------------------------------------------------------
 
 import pandas as pd
 from pathlib import Path
@@ -9,11 +9,9 @@ from datetime import date
 import re
 from tqdm import tqdm
 
-path_main = Path(r'I:\Projects\Josh\Regional Monitoring')
-path_log = path_main / 'LoggingUsage'
+PATH_MAIN = Path(r'I:\Projects\Josh\Regional Monitoring')
+PATH_LOG = PATH_MAIN / 'LoggingUsage'
 
-
-## User defined functions function ---
 
 def clean_file_name(file_):
     try:
@@ -59,12 +57,12 @@ Check for updated packages and that file paths are assigned correctly if running
 '''
 
 
-def count_log_theme(file_in, file_theme):
+def count_log_theme(FILE_IN, FILE_THEME):
     
     try:
 
         # Read in txt file
-        df = pd.read_csv(file_in, sep=' ', names=['date_', 'file_'])
+        df = pd.read_csv(FILE_IN, sep=' ', names=['date_', 'file_'])
         
         df['date_'] = pd.to_datetime(df['date_'])
         df['year' ] = df['date_'].dt.year
@@ -73,7 +71,7 @@ def count_log_theme(file_in, file_theme):
         df['Indicator'] = df['file_name'].apply(keep_str_until_num)
 
         # Merge themes onto workbooks
-        df_map = pd.read_csv(file_theme)
+        df_map = pd.read_csv(FILE_THEME)
         df = df.merge(df_map, on='Indicator', how='left')
 
         # Calculate counts by theme
@@ -88,12 +86,12 @@ def count_log_theme(file_in, file_theme):
 
 
 
-def count_log_page(file_in, file_theme):
+def count_log_page(FILE_IN, FILE_THEME):
     
     try:
 
         # Read in txt file
-        df = pd.read_csv(file_in, sep=' ', names=['date_', 'file_'])
+        df = pd.read_csv(FILE_IN, sep=' ', names=['date_', 'file_'])
         
         df['date_'] = pd.to_datetime(df['date_'])
         df['year' ] = df['date_'].dt.year
@@ -103,7 +101,7 @@ def count_log_page(file_in, file_theme):
         df['Indicator'] = df['file_name'].apply(keep_str_until_num)
 
         # Merge themes onto workbooks
-        df_map = pd.read_csv(file_theme)
+        df_map = pd.read_csv(FILE_THEME)
         df = df.merge(df_map, on='Indicator', how='left')
 
         # Counts by page
@@ -118,12 +116,12 @@ def count_log_page(file_in, file_theme):
 
 
 
-def count_log_indicator(file_in):
+def count_log_indicator(FILE_IN):
     
     try:
 
         # Read in txt file
-        df = pd.read_csv(file_in, sep=' ', names=['date_', 'file_'])
+        df = pd.read_csv(FILE_IN, sep=' ', names=['date_', 'file_'])
         
         df['date_'] = pd.to_datetime(df['date_'])
         df['year' ] = df['date_'].dt.year
@@ -144,10 +142,10 @@ def count_log_indicator(file_in):
 
 
 
-def count_log_geography(file_in):
+def count_log_geography(FILE_IN):
     
         # Read in txt file
-        df = pd.read_csv(file_in, sep=' ', names=['date_', 'file_'])
+        df = pd.read_csv(FILE_IN, sep=' ', names=['date_', 'file_'])
         
         df['date_'] = pd.to_datetime(df['date_'])
         df['year' ] = df['date_'].dt.year
@@ -183,28 +181,32 @@ def count_log_geography(file_in):
 
 
 
-## Main ---
+# Main ----------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
-    file_theme = path_main / 'Indicator_Theme_Mapping.csv'
-    file_in = path_log / 'download_log_files' / '_DownloadedFiles.txt'
-    file_out = path_log / 'download_duplicate_counts' / f'MnR_logging__{date.today().strftime("%Y-%m-%d")}.xlsx'
+    if '01' in date.today().strftime("%Y%m"):
+        month_in_review = f'{int(date.today().strftime("%Y"))-1}12'
+    else:
+        month_in_review = str(int(date.today().strftime("%Y%m"))-1)
 
-    df_theme     = count_log_theme(file_in, file_theme)
-    df_page      = count_log_page(file_in, file_theme)
-    df_indicator = count_log_indicator(file_in)
-    df_geo       = count_log_geography(file_in)
+    FILE_THEME = PATH_MAIN / 'Indicator_Theme_Mapping.csv'
+    FILE_IN = PATH_LOG / 'download_log_files' / '_DownloadedFiles.txt'
+    FILE_OUT = PATH_LOG / 'download_duplicate_counts' / f'MnR_logging__{month_in_review}.xlsx'
 
 
+    df_theme     = count_log_theme(FILE_IN, FILE_THEME)
+    df_page      = count_log_page(FILE_IN, FILE_THEME)
+    df_indicator = count_log_indicator(FILE_IN)
+    df_geo       = count_log_geography(FILE_IN)
     
-    # Write out to excel
-    with pd.ExcelWriter(file_out, engine='xlsxwriter') as writer:
+
+    with pd.ExcelWriter(FILE_OUT, engine='xlsxwriter') as writer:
         df_theme    .to_excel(writer, index=False, sheet_name='Theme'    )
         df_page     .to_excel(writer, index=False, sheet_name='Page'     )
         df_indicator.to_excel(writer, index=False, sheet_name='Indicator')
         df_geo      .to_excel(writer, index=False, sheet_name='Geography')
-    print(); print(f'Successfully exported results to {file_out}'); print()
+    print(); print(f'Successfully exported results to {FILE_OUT}'); print()
 
     
 

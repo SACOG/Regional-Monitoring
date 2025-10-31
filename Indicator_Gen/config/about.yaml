@@ -2224,7 +2224,7 @@ SACOG Housing:
 
 
 
-RTIS:
+RITIS:
 
   Congestion_1:
     Indicator Title:
@@ -2244,7 +2244,7 @@ RTIS:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
+    - '2026-09-01'
     Notes: 'When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. These will be empty values.\n
       Download from the dashboard MAP-21 widget tool \n
       Salt Lake City UZA did not allow for this indicator to be selected on the dashboard UI.\n
@@ -2254,7 +2254,7 @@ RTIS:
     Indicator Title:
     - Percent of road miles congested
     Source:
-    - RTIS
+    - RITIS
     Year(s):
     - 2017-2023
     Description:
@@ -2266,8 +2266,8 @@ RTIS:
     Last Updated:
     - '2025-09-01'
     Next Update:
-    - August, 2025
-    Notes: 'Data retreived from NPMRDS tool provided by RTIS'
+    - '2026-09-01'
+    Notes: 'Data retreived from NPMRDS tool provided by RITIS'
 
   Congestion_3:
     Indicator Title:
@@ -2287,7 +2287,7 @@ RTIS:
     Last Updated:
     - 
     Next Update:
-    - '2025-09-01'
+    - '2026-09-01'
     Notes: 'When downloaded with the current year, this survey will return all of the months in the year, even ones in the future. These will be empty values.\n
       Download from the dashboard MAP-21 widget tool \n
       Salt Lake City UZA did not allow for this indicator to be selected on the dashboard UI.\n

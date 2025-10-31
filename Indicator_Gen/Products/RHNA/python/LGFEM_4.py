@@ -1,94 +1,105 @@
 
 
-indicator = 'RHNA_LGFEM_4'
 
 
-# Set indicator
-source = 'ACS5'
-with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
-values = 'Households'
-columns = 'Category'
+
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import time
+import plotly.express as px
 
 
-## Importing ---
 
-df_places = pd.read_excel(os.path.join(path_raw, f'{indicator} Places ACS5.xlsx'))
+PATH_DATA = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected'
+PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
 
 
-## Organizing ---
+import sys
+sys.path.append(str(PATH_CONFIG))
+import rhna
+FILE_YAML = rhna.load_yaml()
+
+
 
 def re_remove_post(x, exp = ':'):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return x.split(exp, 1)[0]
+    try: x = x.split(exp, 1)[0]
+    except: pass
+    return x
 
 def re_remove_pre(x, exp = ':  '):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return str(x.split(exp, 1)[1])
-
-df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
-df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-df_places = df_places.rename(columns={'NAME':'Geography'})
-df_places = df_places[df_places['Year'] == df_places['Year'].max()]
-df_places = df_places.reset_index(drop=True)
-df_places['Category'] = df_places['Variable'].apply(re_remove_post)
-df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
-df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
-
-df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
-
-df_places['Sort'] = pd.Categorical(df_places['Variable'], ['Married-couple family', 'Female-headed family household', 'Male-headed family household', 'Householders living alone', 'Other non-family households'])
-df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, True])
-df_places = df_places.drop(['Sort'], axis = 1)
-df_places = df_places.reset_index(drop=True)
+    try: x = x.split(exp, 1)[1]
+    except: pass
+    return x
 
 
-counties = list(df_places['County Name'].unique())
+if __name__ == '__main__':
+
+    indicator = 'RHNA_LGFEM_4'
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    values = 'Households'
+    columns = 'Category'
 
 
-for county in counties:
-    
-    print();print()
-    print(county)
-    time.sleep(2)
+    ## Organizing
 
-    df_places_sub = df_places.copy()
-    df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
-    jurisdictions = df_places_sub['Geography'].unique()
-    
-    for jurisdiction in tqdm(jurisdictions, position=0):
+    df_places = pd.read_excel(PATH_DATA / f'{indicator} Places ACS5.xlsx')
 
-        tqdm.write(jurisdiction)
+    df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
+    df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
+    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places[df_places['Year'] == df_places['Year'].max()]
+    df_places = df_places.reset_index(drop=True)
+    df_places['Category'] = df_places['Variable'].apply(re_remove_post)
+    df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
+    df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
 
-        df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values)
+    df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
 
-        ## Plotting ---
+    df_places['Sort'] = pd.Categorical(df_places['Variable'], ['Married-couple family', 'Female-headed family household', 'Male-headed family household', 'Householders living alone', 'Other non-family households'])
+    df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, True])
+    df_places = df_places.drop(['Sort'], axis = 1)
+    df_places = df_places.reset_index(drop=True)
 
-        df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
-        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
+
+    counties = list(df_places['County Name'].unique())
+
+
+    for county in counties:
         
-        color_map  = {
-            'Owner occupied': '#1F45FC'
-            , 'Renter occupied': '#9DC209'
-        }
+        rhna.print2()
+        print(county)
+        time.sleep(2)
 
-        fig = px.bar(df_plot, x='Variable', y=values
-                     , color=columns
-                     , color_discrete_map=color_map
-                     , barmode='group')
+        df_places_sub = df_places.copy()
+        df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
+        jurisdictions = df_places_sub['Geography'].unique()
         
-        fig.update_traces(hovertemplate="%{y}")
+        for jurisdiction in tqdm(jurisdictions, position=0):
+
+            tqdm.write(jurisdiction)
+
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+
+            ## Plotting ---
+
+            df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+            df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
             
-        path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
-        plot_rhna(export=export)
-    
-        ## Exporting ---
-        if export:
-            export_rhna(df_prod, df_pct)
+            color_map  = {
+                'Owner occupied': '#1F45FC'
+                , 'Renter occupied': '#9DC209'
+            }
 
-list_indicators.append(indicator)
+            fig = px.bar(df_plot, x='Variable', y=values
+                        , color=columns
+                        , color_discrete_map=color_map
+                        , barmode='group')
+            
+            fig.update_traces(hovertemplate="%{y}")
+                
+    
+            rhna.plot_rhna(fig, county, jurisdiction, indicator, title)
+            rhna.export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct)
 

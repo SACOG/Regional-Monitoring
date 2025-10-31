@@ -1,5 +1,6 @@
 
 
+def print2(): print(); print()
 
 
 
@@ -21,7 +22,7 @@ year_end=2024
 
 
 
-print(); print()
+print2()
 
 
 # Workspace ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -35,24 +36,24 @@ import urllib.request, json
 import sys
 
 
-path_git = Path(__file__).parent.parent.parent.parent.parent
-path_code    = path_git / 'Data' / 'Census'
-path_config0 = path_git / 'config'
-path_config  = path_code / 'config'
-path_csv = path_config / 'step0' / 'csv'
+PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
+PATH_CODE    = PATH_GIT / 'Data' / 'Census'
+PATH_CONFIG0 = PATH_GIT / 'config'
+PATH_CONFIG  = PATH_CODE / 'config'
+PATH_CSV = PATH_CONFIG / 'step0' / 'csv'
 
+FILE_API = PATH_CONFIG / 'api_key.txt'
 
-sys.path.append(str(path_config0))
+sys.path.append(str(PATH_CONFIG0))
 import functions as func
 
-sys.path.append(str(path_config))
+sys.path.append(str(PATH_CONFIG))
 import get
 
 
 
 # API key
-file_api = path_config / 'api_key.txt'
-with open(file_api, 'r') as file:
+with open(FILE_API, 'r') as file:
     api_key = file.read()
 
 
@@ -65,9 +66,9 @@ if __name__ == '__main__':
 
     if ACS:
 
-        print(); print()
+        print2()
         print('ACS ------------------------------------------------------------------------------------------------------------------------')
-        print(); print()
+        print2()
 
         ## ACS5 ---
         ## Organize list of all variables from all years into one nice table
@@ -104,8 +105,8 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        years_to_import = func.sequence(2005, year_end, 1)
-        # years_to_import = func.sequence(2019, 2021, 1)
+        # years_to_import = func.sequence(2005, year_end, 1)
+        years_to_import = func.sequence(2019, 2023, 1)
         years_to_import.remove(2020)
         list_df = []
 
@@ -143,7 +144,7 @@ if __name__ == '__main__':
         display(df_acs.head())
 
 
-        file_acs = path_config / 'census.xlsx'; sheet_name='ACS'
+        file_acs = PATH_CONFIG / 'census.xlsx'; sheet_name='ACS'
         df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
         df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID2', 'ID_Attributes2']]
 
@@ -166,8 +167,7 @@ if __name__ == '__main__':
         ## Exporting to Git ---
 
         if export:
-            file_out = path_csv / 'ACS.csv'
-            df_acs.to_csv(file_out, index=False)
+            df_acs.to_csv(PATH_CSV / 'ACS.csv', index=False)
 
 
 
@@ -175,9 +175,9 @@ if __name__ == '__main__':
 
     if PUMS:
 
-        print(); print()
+        print2()
         print('PUMS ------------------------------------------------------------------------------------------------------------------------')
-        print(); print()
+        print2()
 
 
         ## PUMS1 ---
@@ -190,7 +190,7 @@ if __name__ == '__main__':
             # append to list
         # concatenate all data frames together
 
-        print(); print()
+        print2()
         print('Importing PUMS variables tables by year...'); print()
 
         years = func.sequence(2005, year_end, 1)
@@ -233,7 +233,7 @@ if __name__ == '__main__':
 
         # concatenate all data frames together
 
-        print(); print()
+        print2()
         print('Cleaned PUMS variables table:'); print()
 
         list_df_years = []
@@ -246,7 +246,7 @@ if __name__ == '__main__':
                 
                 for ID in df_pums_vars['ID'].values:
                     
-                    df_ID = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop = True)
+                    df_ID = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop=True)
                     
                     for key in list(df_ID['values'][0].keys()):
 
@@ -274,8 +274,8 @@ if __name__ == '__main__':
                             df_vars = pd.concat(list_range)
                             
                         df_vars['ID'] = ID
-                        df_vars['Label'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop = True)['label'].values[0]
-                        df_vars['Suggested Weight'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop = True)['suggested-weight'].values[0]
+                        df_vars['Label'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop=True)['label'].values[0]
+                        df_vars['Suggested Weight'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop=True)['suggested-weight'].values[0]
                 
                         df_vars = df_vars[['Label', 'ID', 'Value1', 'Value2', 'Description', 'Suggested Weight']]
                 
@@ -304,7 +304,7 @@ if __name__ == '__main__':
             # append to list
         # concatenate all data frames together
 
-        print(); print()
+        print2()
         print('Importing PUMS variables tables by year...'); print()
 
         years = func.sequence(2020, 2020, 1)
@@ -345,7 +345,7 @@ if __name__ == '__main__':
 
         # concatenate all data frames together
 
-        print(); print()
+        print2()
         print('Cleaned PUMS variables table:'); print()
 
         list_df_years = []
@@ -358,15 +358,15 @@ if __name__ == '__main__':
                 
                 for ID in df_pums_vars['ID'].values:
                     
-                    df_ID = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop = True)
+                    df_ID = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop=True)
                     
                     for key in list(df_ID['values'][0].keys()):
 
                         if key == 'item':
                             dict_values = {
                                             'Value1'     : list(list(df_ID['values'].values)[0]['item'].keys()  )
-                                        , 'Value2'     : list(list(df_ID['values'].values)[0]['item'].keys()  )
-                                        , 'Description': list(list(df_ID['values'].values)[0]['item'].values())
+                                            , 'Value2'     : list(list(df_ID['values'].values)[0]['item'].keys()  )
+                                            , 'Description': list(list(df_ID['values'].values)[0]['item'].values())
                                         }
                             df_vars = pd.DataFrame(dict_values)
                             
@@ -386,8 +386,8 @@ if __name__ == '__main__':
                             df_vars = pd.concat(list_range)
                             
                         df_vars['ID'] = ID
-                        df_vars['Label'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop = True)['label'].values[0]
-                        df_vars['Suggested Weight'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop = True)['suggested-weight'].values[0]
+                        df_vars['Label'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop=True)['label'].values[0]
+                        df_vars['Suggested Weight'] = df_pums_vars[df_pums_vars['ID'] == ID].reset_index(drop=True)['suggested-weight'].values[0]
                 
                         df_vars = df_vars[['Label', 'ID', 'Value1', 'Value2', 'Description', 'Suggested Weight']]
                 
@@ -417,7 +417,7 @@ if __name__ == '__main__':
         df_pums = df_pums.reset_index(drop=True)
 
 
-        file_config = path_config / 'census.xlsx'; sheet_name='PUMS'
+        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='PUMS'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name, dtype={'Value1':'str'})
         df_config = df_config[['ID', 'Value1', 'Indicator Name', 'Include', 'ID2', 'Description2', 'Data Type', 'Table Type']]
 
@@ -429,8 +429,7 @@ if __name__ == '__main__':
 
         ## Exporting to Git ---
         if export:
-            file_out = path_csv / 'PUMS.csv'
-            df_pums.to_csv(file_out, index=False)
+            df_pums.to_csv(PATH_CSV / 'PUMS.csv', index=False)
 
 
 
@@ -439,9 +438,9 @@ if __name__ == '__main__':
 
     if SUBJECT:
             
-        print(); print()
+        print2()
         print('SUBJECT ------------------------------------------------------------------------------------------------------------------------')
-        print(); print()
+        print2()
 
         ## ACS5 ---
         ## Organize list of all variables from all years into one nice table
@@ -521,7 +520,7 @@ if __name__ == '__main__':
 
         display(df_acs.head())
 
-        file_config = path_config / 'census.xlsx'; sheet_name='SUBJECT'
+        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='SUBJECT'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
         df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
 
@@ -546,8 +545,7 @@ if __name__ == '__main__':
         ## Exporting to Git ---
 
         if export:
-            file_out = path_csv / 'SUBJECT.csv'
-            df_acs.to_csv(file_out, index=False)
+            df_acs.to_csv(PATH_CSV / 'SUBJECT.csv', index=False)
 
 
 
@@ -558,9 +556,9 @@ if __name__ == '__main__':
 
     if DP:
 
-        print(); print()
+        print2()
         print('DP ------------------------------------------------------------------------------------------------------------------------')
-        print(); print()
+        print2()
 
         ## ACS5 ---
         ## Organize list of all variables from all years into one nice table
@@ -636,7 +634,7 @@ if __name__ == '__main__':
         display(df_acs.head())
 
 
-        file_acs = path_config / 'census.xlsx'; sheet_name='ACS'
+        file_acs = PATH_CONFIG / 'census.xlsx'; sheet_name='ACS'
         df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
         df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
 
@@ -659,8 +657,7 @@ if __name__ == '__main__':
         ## Exporting to Git ---
 
         if export:
-            file_out = path_csv / 'DP.csv'
-            df_acs.to_csv(file_out, index=False)
+            df_acs.to_csv(PATH_CSV / 'DP.csv', index=False)
 
 
 
@@ -668,9 +665,9 @@ if __name__ == '__main__':
 
     if DEC:
 
-        print(); print()
+        print2()
         print('DEC ------------------------------------------------------------------------------------------------------------------------')
-        print(); print()
+        print2()
 
 
 
@@ -724,7 +721,7 @@ if __name__ == '__main__':
         df_dec['Label_clean'] = df_dec['Label_clean'].str.replace('!!', ' ')
         df_dec['Label_clean'] = df_dec['Label_clean'].str.replace(':', '')
 
-        file_config = path_config / 'census.xlsx'; sheet_name='DEC'
+        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='DEC'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
         df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
 
@@ -735,16 +732,15 @@ if __name__ == '__main__':
 
         ## Exporting to Git ---
         if export:
-            file_out = path_csv / 'DEC.csv'
-            df_dec.to_csv(file_out, index=False)
+            df_dec.to_csv(PATH_CSV / 'DEC.csv', index=False)
 
 
 
     if LEHD:
 
-        print(); print()
+        print2()
         print('LEHD ------------------------------------------------------------------------------------------------------------------------')
-        print(); print()
+        print2()
 
         ## Importing ---
 
@@ -776,8 +772,7 @@ if __name__ == '__main__':
 
         ## Combining ---
 
-        file_config = path_config / 'census.xlsx'
-        sheet_name='LEHD'
+        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='LEHD'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
         df_config = df_config[['Table', 'ID', 'Indicator Name', 'Include', 'Sample']]
 
@@ -788,17 +783,16 @@ if __name__ == '__main__':
         ## Exporting to Git ---
 
         if export:
-            file_out = path_csv / 'LEHD.csv'
-            df_vars.to_csv(file_out, index=False)
+            df_vars.to_csv(PATH_CSV / 'LEHD.csv', index=False)
 
 
 
 
     # if CPS:
 
-    #     print(); print()
+    #     print2()
     #     print('CPS ------------------------------------------------------------------------------------------------------------------------')
-    #     print(); print()
+    #     print2()
 
     #     ## Importing ---
 
@@ -812,7 +806,7 @@ if __name__ == '__main__':
     #         # append to list
     #     # concatenate all data frames together
 
-    #     print(); print()
+    #     print2()
     #     print('Importing CPS variables tables by year...'); print()
 
     #     year_start = 2009
@@ -864,7 +858,7 @@ if __name__ == '__main__':
     #     # concatenate all data frames together
 
 
-    #     print(); print()
+    #     print2()
     #     print('Cleaned CPS variables table:'); print()
 
     #     list_df_years = []
@@ -876,7 +870,7 @@ if __name__ == '__main__':
             
     #         for ID in df_cps_vars['ID'].values:
                 
-    #             df_ID = df_cps_vars[df_cps_vars['ID'] == ID].reset_index(drop = True)
+    #             df_ID = df_cps_vars[df_cps_vars['ID'] == ID].reset_index(drop=True)
 
     #             if df_ID['values'][0] is np.nan:
     #                 df_vars = pd.DataFrame()

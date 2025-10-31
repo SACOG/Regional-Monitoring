@@ -1,5 +1,26 @@
 
 
+
+
+import numpy as np
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import time
+import yaml
+import plotly.express as px
+from IPython.display import display
+
+
+PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
+FILE_INCOME = Path(r'\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data') / 'Income_1 Counties ACS5.xlsx'
+
+import sys
+sys.path.append(str(PATH_CONFIG))
+import rhna
+FILE_YAML = rhna.load_yaml()
+
+
 def org_ami(df):
 
     df = df[['Geography', 'Variable', 'Households']]
@@ -21,9 +42,6 @@ def org_ami(df):
     df['bounds'] = np.select(conditions, choices, default=0)
 
     return df
-
-
-
 
 def proc_ami(df, hh_bracket_acs, dt_hcd_brackets, hh_bracket_hcd, list_df_sub):
     
@@ -67,144 +85,131 @@ def proc_ami(df, hh_bracket_acs, dt_hcd_brackets, hh_bracket_hcd, list_df_sub):
 
 
 
-indicator = 'RHNA_ELI_4'
 
 
-# Set indicator
-source = 'ACS5'
-with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
+if __name__ == '__main__':
+        
+    indicator = 'RHNA_ELI_4'
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
 
 
-## Importing ---
+    ## Organizing
 
-df_places, df_counties, df_mpo = import_rhna(path_raw, indicator)
+    df_places, df_counties, df_mpo = rhna.acs_import(indicator)
 
+    df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
+    df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
+    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places[df_places['Year'] == df_places['Year'].max()]
+    df_places = df_places.reset_index(drop=True)
 
+    df_places = df_places[['County Name', 'Geography', 'Variable', 'Households']].drop_duplicates()
 
-## Organizing ---
-
-df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
-df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-df_places = df_places.rename(columns={'NAME':'Geography'})
-df_places = df_places[df_places['Year'] == df_places['Year'].max()]
-df_places = df_places.reset_index(drop=True)
-
-df_places = df_places[['County Name', 'Geography', 'Variable', 'Households']].drop_duplicates()
-
-counties = list(df_places['County Name'].unique())
+    counties = list(df_places['County Name'].unique())
 
 
-path_server = Path(r'\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data')
-file_ami = path_server / 'Income_1 Counties ACS5.xlsx'
-df_counties_ami = pd.read_excel(file_ami, sheet_name='Counties')
-df_counties_ami = df_counties_ami[df_counties_ami['Race_Ethnicity'] == 'All']
-df_counties_ami = df_counties_ami[df_counties_ami['Year'] == df_counties_ami['Year'].max()]
+    df_counties_ami = pd.read_excel(FILE_INCOME, sheet_name='Counties')
+    df_counties_ami = df_counties_ami[df_counties_ami['Race_Ethnicity'] == 'All']
+    df_counties_ami = df_counties_ami[df_counties_ami['Year'] == df_counties_ami['Year'].max()]
 
 
-for county in counties:
+    for county in counties:
 
-    df_ami = df_counties_ami[df_counties_ami['County Name'] == county]
-    ami = df_ami['Median Household Income'].values[0]
+        df_ami = df_counties_ami[df_counties_ami['County Name'] == county]
+        ami = df_ami['Median Household Income'].values[0]
 
-    dt_hcd_brackets = {
-        'Acutely low income: 0-15 pct of AMI': [0, ami*0.15]
-        , 'Extremely low income: 15-30 pct of AMI': [ami*0.15, ami*0.3]
-        , 'Very low income: 30-50 pct of AMI': [ami*0.3, ami*0.5]
-        , 'Lower income: 50-80 pct of AMI': [ami*0.5, ami*0.8]
-        , 'Moderate income: 80 to 120 pct of AMI': [ami*0.8, ami*1.2]
-        , 'High income: >120 pct of AMI': [ami*1.2, ami*10]
-    }
+        dt_hcd_brackets = {
+            'Acutely low income: 0-15 pct of AMI': [0, ami*0.15]
+            , 'Extremely low income: 15-30 pct of AMI': [ami*0.15, ami*0.3]
+            , 'Very low income: 30-50 pct of AMI': [ami*0.3, ami*0.5]
+            , 'Lower income: 50-80 pct of AMI': [ami*0.5, ami*0.8]
+            , 'Moderate income: 80 to 120 pct of AMI': [ami*0.8, ami*1.2]
+            , 'High income: >120 pct of AMI': [ami*1.2, ami*10]
+        }
 
-    print();print()
-    print(county)
+        rhna.print2()
+        print(county)
 
-    print('County AMI: ', ami)
-    display(dt_hcd_brackets)
-    time.sleep(2)
+        print('County AMI: ', ami)
+        display(dt_hcd_brackets)
+        time.sleep(2)
 
-    df_places_sub = df_places.copy()
-    df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
-    jurisdictions = df_places_sub['Geography'].unique()
+        df_places_sub = df_places.copy()
+        df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
+        jurisdictions = df_places_sub['Geography'].unique()
 
-    for jurisdiction in tqdm(jurisdictions):
+        for jurisdiction in tqdm(jurisdictions):
 
-        tqdm.write(jurisdiction)
+            tqdm.write(jurisdiction)
 
-        df = df_places_sub[df_places_sub['Geography'] == jurisdiction]
-        df = org_ami(df)
+            df = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+            df = org_ami(df)
 
-        list_brackets_acs = list(df['Variable'].unique())
-        list_brackets_hcd = list(dt_hcd_brackets.keys())
+            list_brackets_acs = list(df['Variable'].unique())
+            list_brackets_hcd = list(dt_hcd_brackets.keys())
 
-        list_df_var_places = []
+            list_df_var_places = []
 
-        for hh_bracket_acs in list_brackets_acs:
+            for hh_bracket_acs in list_brackets_acs:
 
-            list_df_sub_places = []
+                list_df_sub_places = []
 
-            for hh_bracket_hcd in list_brackets_hcd:
-                
-                list_df_sub_places = proc_ami(df, hh_bracket_acs, dt_hcd_brackets, hh_bracket_hcd, list_df_sub_places)
+                for hh_bracket_hcd in list_brackets_hcd:
                     
-            if not list_df_sub_places:
-                print('no df_sub')
-            else:
-                df_sub_places_all = pd.concat(list_df_sub_places)
-                list_df_var_places.append(df_sub_places_all)
+                    list_df_sub_places = proc_ami(df, hh_bracket_acs, dt_hcd_brackets, hh_bracket_hcd, list_df_sub_places)
+                        
+                if not list_df_sub_places:
+                    print('no df_sub')
+                else:
+                    df_sub_places_all = pd.concat(list_df_sub_places)
+                    list_df_var_places.append(df_sub_places_all)
 
-        df2 = pd.concat(list_df_var_places)
+            df2 = pd.concat(list_df_var_places)
 
-        if round(df['Households'].sum()) != round(df2['HH_adj'].sum()):
-            tqdm.write(f'Something wrong - Before: {df['Households'].sum()}, After: {df2['HH_adj'].sum()}')
+            if round(df['Households'].sum()) != round(df2['HH_adj'].sum()):
+                tqdm.write(f'Something wrong - Before: {df['Households'].sum()}, After: {df2['HH_adj'].sum()}')
 
-        df = df2.groupby(['HCD_var'], as_index=False).agg(HH_adj=('HH_adj', 'sum'))
+            df = df2.groupby(['HCD_var'], as_index=False).agg(HH_adj=('HH_adj', 'sum'))
 
-        sort_hcd = ['Acutely low income: 0-15 pct of AMI', 'Extremely low income: 15-30 pct of AMI', 'Very low income: 30-50 pct of AMI', 
-                    'Lower income: 50-80 pct of AMI', 'Moderate income: 80 to 120 pct of AMI', 'High income: >120 pct of AMI']
-        
-        df['HCD_var_sort'] = pd.Categorical(df['HCD_var'], sort_hcd)
+            sort_hcd = ['Acutely low income: 0-15 pct of AMI', 'Extremely low income: 15-30 pct of AMI', 'Very low income: 30-50 pct of AMI', 
+                        'Lower income: 50-80 pct of AMI', 'Moderate income: 80 to 120 pct of AMI', 'High income: >120 pct of AMI']
+            
+            df['HCD_var_sort'] = pd.Categorical(df['HCD_var'], sort_hcd)
 
-        df = df.sort_values('HCD_var_sort', ascending=True)
-        df = df.drop('HCD_var_sort', axis=1)
+            df = df.sort_values('HCD_var_sort', ascending=True)
+            df = df.drop('HCD_var_sort', axis=1)
 
-        df['Percentage'] = df['HH_adj'] / df['HH_adj'].sum()
+            df['Percentage'] = df['HH_adj'] / df['HH_adj'].sum()
 
-        conditions = [
-                    df['HCD_var'] == 'Acutely low income: 0-15 pct of AMI', 
-                    df['HCD_var'] == 'Extremely low income: 15-30 pct of AMI', 
-                    df['HCD_var'] == 'Very low income: 30-50 pct of AMI', 
-                    df['HCD_var'] == 'Lower income: 50-80 pct of AMI', 
-                    df['HCD_var'] == 'Moderate income: 80 to 120 pct of AMI', 
-                    df['HCD_var'] == 'High income: >120 pct of AMI']
-        
-        choices = ['Acutely low income', 'Extremely low income', 'Very low income', 'Lower income', 'Moderate income', 'High income']
-        df['HCD_var'] = np.select(conditions, choices, default='no')
+            conditions = [
+                        df['HCD_var'] == 'Acutely low income: 0-15 pct of AMI', 
+                        df['HCD_var'] == 'Extremely low income: 15-30 pct of AMI', 
+                        df['HCD_var'] == 'Very low income: 30-50 pct of AMI', 
+                        df['HCD_var'] == 'Lower income: 50-80 pct of AMI', 
+                        df['HCD_var'] == 'Moderate income: 80 to 120 pct of AMI', 
+                        df['HCD_var'] == 'High income: >120 pct of AMI']
+            
+            choices = ['Acutely low income', 'Extremely low income', 'Very low income', 'Lower income', 'Moderate income', 'High income']
+            df['HCD_var'] = np.select(conditions, choices, default='no')
 
-        df = df.rename(columns={'HCD_var':'Income Bracket', 'HH_adj':'Households'})
+            df = df.rename(columns={'HCD_var':'Income Bracket', 'HH_adj':'Households'})
 
-        df_prod = df[['Income Bracket', 'Households']]
-        df_pct  = df[['Income Bracket', 'Percentage']]
+            df_prod = df[['Income Bracket', 'Households']]
+            df_pct  = df[['Income Bracket', 'Percentage']]
 
-        df_plot = df_pct.copy()
-        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
-
-
-        ## Plotting ---
-
-        fig = px.bar(df_plot, x='Income Bracket', y='Percentage')
-        fig.update_traces(marker_color='#1E90FF')
-        fig.update_yaxes(ticksuffix='%')
-        fig.update_traces(hovertemplate="%{y}")
-
-        path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
-        plot_rhna(export=export)
-    
-        ## Exporting ---
-        
-        if export:
-            export_rhna(df_prod, df_pct)
+            df_plot = df_pct.copy()
+            df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
 
 
-list_indicators.append(indicator)
+            ## Plotting
+
+            fig = px.bar(df_plot, x='Income Bracket', y='Percentage')
+            fig.update_traces(marker_color='#1E90FF')
+            fig.update_yaxes(ticksuffix='%')
+            fig.update_traces(hovertemplate="%{y}")
+
+
+            rhna.plot_rhna(fig, county, jurisdiction, indicator, title)
+            rhna.export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct)
 

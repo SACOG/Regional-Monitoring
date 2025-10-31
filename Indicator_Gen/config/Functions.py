@@ -1,5 +1,6 @@
 
 
+from pathlib import Path
 import pandas as pd
 import re
 from datetime import date
@@ -12,6 +13,11 @@ import urllib
 import sqlalchemy as sqla
 
 
+PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
+PATH_CODE    = PATH_GIT / 'Data' / 'Census'
+PATH_CONFIG0 = PATH_GIT / 'config'
+PATH_CONFIG  = PATH_CODE / 'config'
+PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
 
 
@@ -20,7 +26,7 @@ import sqlalchemy as sqla
 
 
 # Writes about page for each indicator
-def write_about(sample_type, indicator, year_start, year_end, path_config0, geography=None, MOE_thresh=None, estimate=None):
+def write_about(sample_type, indicator, year_start, year_end, geography=None, MOE_thresh=None, estimate=None):
 
     '''
     User defined function to create/export about documentation for each indicator
@@ -31,7 +37,7 @@ def write_about(sample_type, indicator, year_start, year_end, path_config0, geog
     # Reads in .yaml file
     # Defines initialized objects in the yaml file with objects defined in processing script
 
-    path_yaml = path_config0 / 'about.yaml'
+    path_yaml = PATH_CONFIG0 / 'about.yaml'
     
     try:
         with open(path_yaml, 'r') as yaml_file:
@@ -165,6 +171,8 @@ def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
 # Miscellaneous ----------------------------------------------------------------------------------------------------------------------------------
 
 
+
+
 # Unique values - a substitute for list(set(x))
 def unique(list_a):
  
@@ -195,11 +203,11 @@ def sequence(r1, r2, step):
 
 
 # Remove anything before/after specified string, use regular expression (currently set to remove everything after the first period)
-def re_remove_post(x, exp=' '):
+def remove_post_comma(x, exp=','):
     try: x = x.split(exp, 1)[0]
     except: pass
     return x
-def re_remove_pre(x, exp=' '):
+def remove_pre_comma(x, exp=','):
     try: x = x.split(exp, 1)[1]
     except: pass
     return x

@@ -1,10 +1,12 @@
-
-
-
-
 library(tidyverse)
-library(here)
 library(splitstackshape)
+
+
+# File paths
+user <- Sys.getenv("USERNAME")
+path_git <- file.path('C:/Users', user, 'Documents/Projects/Regional-Monitoring')
+path_config <- file.path(path_git, 'Indicator_Gen/Data/NTD/config')
+
 
 # Build peer table
 ntdid <-
@@ -56,7 +58,12 @@ ntdid <-
     90034,
     50157,
     90043,
-    90161
+    90161,
+    90223, #Paratransit Inc.,
+    91032, #Auburn Transit,
+    90167, #Davis Community Transit,
+    90220, #Folsom Stage Line - Roll into SacRT
+    90205  #E-Tran - Roll into SacRT
   )
 
 agency <-
@@ -108,7 +115,12 @@ agency <-
     "City of Glendale",
     "Butler County Regional Transit Authority",
     "City of Commerce",
-    "City of Union City"
+    "City of Union City",
+    "Paratransit Inc.",
+    "Auburn Transit",
+    "Davis Community Transit",
+    "Folsom Stage Line - SacRT",
+    "E-Tran - SacRT"
   )
 
 acronym <-
@@ -160,7 +172,12 @@ acronym <-
     "Beeline",
     "BCRTA",
     "Commerce Transit",
-    "UCT"
+    "UCT",
+    "PI",
+    "Auburn Transit",
+    "DCT",
+    "Folsom Stage Line - SacRT",
+    "E-Tran - SacRT"
   )
 
 peer_assign <-
@@ -212,34 +229,22 @@ peer_assign <-
     "edt_peer",
     "edt_peer",
     "edt_peer",
-    "edt_peer"
+    "edt_peer",
+    "self",
+    "self",
+    "self",
+    "self",
+    "self"
   )
 
 peer_table <- tibble(ntdid, agency, acronym, peer_assign)
 
-
-
-## TODO:  What does this chunk of code do?  I don't see a "mode" field
-
-# # match RTA defined modes with NTD mode codes
-# 
-# ntd_modes_map <- c(
-#   light_rail = "LR",
-#   urban_bus = "MB",
-#   commuter_bus = "CB",
-#   demand_response = "DR"
-# )
-# 
-# peer_table$ntd_mode <- NA
-# 
-# for (i in 1:nrow(peer_table)) {
-#   x = as.character(peer_table$mode[i]) # TODO: Where does mode come from?
-#   peer_table$ntd_mode[i] <- ntd_modes_map[x]
-# }
-
-
+ntd_modes_map <- c(
+  light_rail = "LR",
+  urban_bus = "MB",
+  commuter_bus = "CB",
+  demand_response = "DR"
+)
 
 # export clean peer table
-write_csv(peer_table, here("tables", "peer_table.csv"))
-
-
+write_csv(peer_table, file.path(path_config, "peer_table.csv"))

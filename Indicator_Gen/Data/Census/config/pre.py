@@ -17,55 +17,32 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 import os
+import re
 from datetime import datetime
 import yaml
 from IPython.display import display
 
 
+PATH_GIT = Path(__file__).parent.parent.parent.parent
+PATH_CODE    = PATH_GIT / 'Data' / 'Census'
+PATH_CONFIG0 = PATH_GIT / 'config'
+PATH_CONFIG  = PATH_CODE / 'config'
+PATH_ORIG = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
 
 
-def load_yaml(path_config):
+def load_yaml():
 
-    path_yaml = path_config / 'census.yaml'
+    PATH_YAML = PATH_CONFIG / 'census.yaml'
 
     try:
-        with open(path_yaml, 'r') as yaml_file:
+        with open(PATH_YAML, 'r') as yaml_file:
             yaml_census = yaml.load(yaml_file, Loader=yaml.SafeLoader)
     except FileNotFoundError:
-        print(f"Error: The file at {path_yaml} does not exist.")
+        print(f"Error: The file at {PATH_YAML} does not exist.")
     except Exception as e:
         print(f"An error occurred: {e}")
     
     return yaml_census
-
-
-
-
-def set_download_name(indicator, estimate, sample_type, geography, margin_of_error, path_orig):
-
-    if geography == 'PUMA':
-        estimate = re.sub('ACS', 'PUMS', estimate)
-    if sample_type == 'SUBJECT':
-        estimate = re.sub('ACS', 'SUBJECT', estimate)
-    if sample_type == 'DP':
-        estimate = re.sub('ACS', 'DP', estimate)
-    
-    if margin_of_error == 'No':
-        end = 'NoME_raw.csv'
-    else:
-        end = 'raw.csv'
-
-    if sample_type == 'LEHD':
-        export_name = f"{indicator}_{geography}_{sample_type}_{end}"
-    else:
-        export_name = f"{indicator}_{geography}_{estimate}_{end}"
-    
-    print(); print()
-    print(f"Exporting {export_name} to the following location: ")
-    print(path_orig)
-    print()
-
-    return export_name
 
 
 
@@ -78,8 +55,8 @@ def api_request_params(yaml_census, rerun):
 
 
     if rerun:
-        path_runs = Path(__file__).parent / 'runs'
-        list_files = [str(entry) for entry in path_runs.iterdir() if entry.is_file()]
+        PATH_RUNS = PATH_CONFIG / 'runs'
+        list_files = [str(entry) for entry in PATH_RUNS.iterdir() if entry.is_file()]
         dt_mod = {}
 
         for file in list_files:
@@ -238,5 +215,34 @@ def api_request_params(yaml_census, rerun):
             f.write(f"Margin of Error: {margin_of_error}\n")
 
     return project, indicator, sample_type, estimate, geography, years_to_import, year_start, year_end, import_tab, margin_of_error, export_loc, folder, MOE_thresh, num_vars, percentages, weighted_by, metric
+
+
+
+
+def set_download_name(indicator, estimate, sample_type, geography, margin_of_error):
+
+    if geography == 'PUMA':
+        estimate = re.sub('ACS', 'PUMS', estimate)
+    if sample_type == 'SUBJECT':
+        estimate = re.sub('ACS', 'SUBJECT', estimate)
+    if sample_type == 'DP':
+        estimate = re.sub('ACS', 'DP', estimate)
+    
+    if margin_of_error == 'No':
+        end = 'NoME_raw.csv'
+    else:
+        end = 'raw.csv'
+
+    if sample_type == 'LEHD':
+        export_name = f"{indicator}_{geography}_{sample_type}_{end}"
+    else:
+        export_name = f"{indicator}_{geography}_{estimate}_{end}"
+    
+    print(); print()
+    print(f"Exporting {export_name} to the following location: ")
+    print(PATH_ORIG)
+    print()
+
+    return export_name
 
 

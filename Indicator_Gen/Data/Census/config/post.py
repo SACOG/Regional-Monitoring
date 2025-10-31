@@ -35,15 +35,32 @@ import pandas as pd
 from pathlib import Path
 import os
 import re
-from xlwt.Workbook import *
+# from xlwt.Workbook import *
 import sys
 
+PATH_GIT = Path(__file__).parent.parent.parent.parent
+PATH_CODE    = PATH_GIT / 'Data' / 'Census'
+PATH_CONFIG0 = PATH_GIT / 'config'
+PATH_CONFIG  = PATH_CODE / 'config'
 
-sys.path.append(str(Path(__file__).parent.parent.parent.parent / 'config'))
+FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
+FILE_CPI = PATH_CONFIG0 / 'CPI_IAF.xlsx'
+FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
+
+# SharePoint OneDrive paths
+PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+PATH_ORIG = PATH_SP / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
+PATH_MAIN = PATH_SP / 'Data'
+PATH_WEIGHTS = PATH_MAIN / 'Reference' / 'Weights'
+PATH_PROD = PATH_SP / 'Products'
+
+PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+
+
+sys.path.append(str(PATH_CONFIG0))
 import functions as func
 
-sys.path.append(str(Path(__file__).parent / 'config'))
-import pre
+sys.path.append(str(PATH_CONFIG))
 import get
 
 
@@ -52,8 +69,10 @@ import get
 
 def clean_fips(df):
         
+        if 'STATEFP' in df.columns:                          df['STATEFP'                         ] = df['STATEFP'                         ].astype(str).apply('{:0>2}'.format)
         if 'State FIPS' in df.columns:                       df['State FIPS'                      ] = df['State FIPS'                      ].astype(str).apply('{:0>2}'.format)
         if 'Place ID' in df.columns:                         df['Place ID'                        ] = df['Place ID'                        ].astype(str).apply('{:0>5}'.format)
+        if 'COUNTYFP' in df.columns:                         df['COUNTYFP'                        ] = df['COUNTYFP'                        ].astype(str).apply('{:0>3}'.format)
         if 'County FIPS' in df.columns:                      df['County FIPS'                     ] = df['County FIPS'                     ].astype(str).apply('{:0>3}'.format)
         if 'Congressional District' in df.columns:           df['Congressional District'          ] = df['Congressional District'          ].astype(str).apply('{:0>2}'.format)
         if 'State Legislative Upper District' in df.columns: df['State Legislative Upper District'] = df['State Legislative Upper District'].astype(str).apply('{:0>3}'.format)
@@ -64,60 +83,58 @@ def clean_fips(df):
 
 
 
-def misc_mappings():
 
-    dt_geo_sheets = {
-                        'Block Groups': 'Block Groups'
-                            , 'Counties': 'Counties'
-                            , 'MPO': 'MPO'
-                            , 'States': 'States'
-                            , 'National': 'National'
-                            , 'Places': 'Places'
-                            , 'MSA': 'MSA'
-                            , 'Congressional Districts': 'CD'
-                            , 'State Legislative Upper Districts': 'SLDU'
-                            , 'State Legislative Lower Districts': 'SLDL'
+GEO_SHEETS = {
+                    'Block Groups': 'Block Groups'
+                        , 'Counties': 'Counties'
+                        , 'MPO': 'MPO'
+                        , 'States': 'States'
+                        , 'National': 'National'
+                        , 'Places': 'Places'
+                        , 'MSA': 'MSA'
+                        , 'Congressional Districts': 'CD'
+                        , 'State Legislative Upper Districts': 'SLDU'
+                        , 'State Legislative Lower Districts': 'SLDL'
+                }
+
+GEOID_ORIG = {
+                    'Places': ['state', 'place', 'NAME']
+                        , 'Block Groups': ['state', 'County Name', 'county', 'tract', 'block group', 'NAME']
+                        , 'Tracts': ['state', 'County Name', 'county', 'tract', 'NAME']
+                        , 'Counties': ['state', 'County Name', 'county', 'NAME']
+                        , 'MSA': ['MSA_ID', 'MSA']
+                        , 'Congressional Districts': ['NAME', 'state', 'congressional district']
+                        , 'State Legislative Upper Districts': ['NAME', 'state', 'state legislative district (upper chamber)']
+                        , 'State Legislative Lower Districts': ['NAME', 'state', 'state legislative district (lower chamber)']
+                        , 'States': ['NAME', 'state']
+                        , 'National': ['NAME']
+                }
+
+CLEAN_COLS = {
+                    'state':'State FIPS'
+                        , 'place':'Place ID'
+                        , 'county':'County FIPS'
+                        , 'tract':'Tract ID'
+                        , 'block group':'Block Group ID'
+                        , 'congressional district':'Congressional District'
+                        , 'state legislative district (upper chamber)':'State Legislative Upper District'
+                        , 'state legislative district (lower chamber)':'State Legislative Lower District'
+                        , 'metropolitan statistical area/micropolitan statistical area':'MSA_ID'
+                        , 'COUNTYNAME': 'County Name'
                     }
 
-    dt_geoid_og = {
-                        'Places': ['state', 'place', 'NAME']
-                            , 'Block Groups': ['state', 'County Name', 'county', 'tract', 'block group', 'NAME']
-                            , 'Tracts': ['state', 'County Name', 'county', 'tract', 'NAME']
-                            , 'Counties': ['state', 'County Name', 'county', 'NAME']
-                            , 'MSA': ['MSA_ID', 'MSA']
-                            , 'Congressional Districts': ['NAME', 'state', 'congressional district']
-                            , 'State Legislative Upper Districts': ['NAME', 'state', 'state legislative district (upper chamber)']
-                            , 'State Legislative Lower Districts': ['NAME', 'state', 'state legislative district (lower chamber)']
-                            , 'States': ['NAME', 'state']
-                            , 'National': ['NAME']
-                    }
-
-    dt_clean_cols = {
-                        'state':'State FIPS'
-                            , 'place':'Place ID'
-                            , 'county':'County FIPS'
-                            , 'tract':'Tract ID'
-                            , 'block group':'Block Group ID'
-                            , 'congressional district':'Congressional District'
-                            , 'state legislative district (upper chamber)':'State Legislative Upper District'
-                            , 'state legislative district (lower chamber)':'State Legislative Lower District'
-                            , 'metropolitan statistical area/micropolitan statistical area':'MSA_ID'
-                        }
-
-    dt_geoid_clean = {
-                        'Places': ['State FIPS', 'County Name', 'Place ID', 'NAME']
-                            , 'Block Groups': ['State FIPS', 'County FIPS', 'County Name', 'Tract ID', 'Block Group ID', 'NAME']
-                            , 'Tracts': ['State FIPS', 'County FIPS', 'County Name', 'Tract ID', 'NAME']
-                            , 'Counties': ['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME']
-                            , 'MSA': ['MSA_ID', 'MSA']
-                            , 'Congressional Districts': ['Congressional District']
-                            , 'State Legislative Upper Districts': ['State Legislative Upper District']
-                            , 'State Legislative Lower Districts': ['State Legislative Lower District']
-                            , 'States': ['State FIPS', 'NAME']
-                            , 'National': ['NAME']
-                    }
-
-    return dt_geo_sheets, dt_geoid_og, dt_clean_cols, dt_geoid_clean
+GEOID_CLEAN = {
+                    'Places': ['State FIPS', 'County Name', 'Place ID', 'NAME']
+                        , 'Block Groups': ['State FIPS', 'County FIPS', 'County Name', 'Tract ID', 'Block Group ID', 'NAME']
+                        , 'Tracts': ['State FIPS', 'County FIPS', 'County Name', 'Tract ID', 'NAME']
+                        , 'Counties': ['State FIPS', 'MPO', 'County FIPS', 'County Name', 'NAME']
+                        , 'MSA': ['MSA_ID', 'MSA']
+                        , 'Congressional Districts': ['Congressional District']
+                        , 'State Legislative Upper Districts': ['State Legislative Upper District']
+                        , 'State Legislative Lower Districts': ['State Legislative Lower District']
+                        , 'States': ['State FIPS', 'NAME']
+                        , 'National': ['NAME']
+                }
 
 
 def misc_groups():
@@ -170,8 +187,6 @@ Adjusts dollars for inflation as needed
 
 def acs_processing_1(df_census, df_vars, geography, margin_of_error, mpo, import_tab):
 
-    dt_geo_sheets, dt_geoid_og, dt_clean_cols, dt_geoid_clean = misc_mappings()
-
     print()
     print('Processing Step 1:')
     print('Reshaping data from columns to rows...')
@@ -193,16 +208,17 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error, mpo, import
     df_census = df_census.replace('null', np.nan)
     df_census = df_census.dropna(axis=1, how='all')
 
-    df_census = df_census.rename(columns=dt_clean_cols)
+    df_census = df_census.rename(columns=CLEAN_COLS)
     if geography == 'MSA':
         df_census = df_census.rename(columns={'NAME':'MSA'})
-    geo_ID = dt_geoid_clean[geography]
+    geo_ID = GEOID_CLEAN[geography]
     if geography == 'Places':
         df_census['County Name'] = 'placeholder'
     
-    if geography == 'Counties':
-        df_inputs, file_inputs, file_area = get.read_inputs_file(import_tab)
-        df_fips = pd.read_excel(file_area, sheet_name='CountyFIPS', dtype={'State FIPS':str, 'County FIPS':str})
+    if geography == 'Counties': # changed from geography to import_tab
+        df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+        df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
+        df_fips = df_fips.rename(columns={'STATE':'State', 'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS', 'COUNTYNAME':'County Name'})
         df_fips = df_fips[(df_fips['State'].isin(df_inputs['states'].values)) & (df_fips['County Name'].isin(df_inputs['counties'].values))]
 
         dt_fips = df_fips[['State FIPS', 'County FIPS']].drop_duplicates().reset_index(drop=True).groupby('State FIPS')['County FIPS'].apply(list).to_dict()
@@ -261,10 +277,8 @@ For any indicator involving money ($-USD), adjusts for inflation based on latest
 For any indicator involving rolls ups that need to be weighted by the population by geography, imports and merges population estimates
 '''
 
-def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, path_main, path_config0, weighted_by, unincorporated):
+def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_of_error, year_end, weighted_by, unincorporated):
     
-    dt_geo_sheets, dt_geoid_og, dt_clean_cols, dt_geoid_clean = misc_mappings()
-
     print()
     print('Processing Step 2:')
     print('Mapping Estimate ID field to cleaned label field, variable grouping fields, race/ethnicity mapping, and variable sorting order...')
@@ -272,7 +286,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
     print('If needed for any aggregations, population weights are merged onto the dataframe...')
     print()
 
-    geo_ID = dt_geoid_clean[geography]
+    geo_ID = GEOID_CLEAN[geography]
     df_census['Year'] = df_census['Year'].astype(int)
 
     df_census = df_census.merge(df_vars[['Year', 'ID2','Label_clean', 'Variable', 'Race_Ethnicity', 'Sort']].rename(columns={'ID2':'Estimate ID'}), on=['Year', 'Estimate ID'], how='left').drop_duplicates()
@@ -284,8 +298,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
     df_census = df_census[cols_to_keep]
 
     if indicator in ['Income_1', 'Income_3']:#, 'Chamber_H_5']:
-        file_cpi = path_config0 / 'CPI_IAF.xlsx'
-        df_cpi = pd.read_excel(file_cpi, sheet_name='BLS_West')
+        df_cpi = pd.read_excel(FILE_CPI, sheet_name='BLS_West')
         df_cpi = df_cpi[['Year', 'IAF_' + str(year_end)]]
         df_census = df_census.merge(df_cpi, on='Year', how='left')
         df_census['Total'] = round(df_census['Total']*df_census['IAF_' + str(year_end)])
@@ -295,14 +308,12 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
     # Some indicators require the roll up to be weighted by population
     # The following step aligns the Race/Ethnicity mappings with the population counts workbook
     if weighted_by != '':
-        path_weights = path_main / 'Reference' / 'Weights'
-        file_weights = path_weights / f'Total_{weighted_by} {geography} {estimate}.xlsx' # _ChamberStudy2026.xlsx
-        df_weight = pd.read_excel(file_weights, sheet_name=dt_geo_sheets[geography])
+        file_weights = PATH_WEIGHTS / f'Total_{weighted_by} {geography} {estimate}.xlsx' # _ChamberStudy2026.xlsx
+        df_weight = pd.read_excel(file_weights, sheet_name=GEO_SHEETS[geography])
 
-        if geography == 'MSA':
-            field_id = 'MSA_ID'
-        else:
-            field_id = 'NAME'
+        if geography == 'MSA': field_id = 'MSA_ID'
+        else: field_id = 'NAME'
+        
         df_weight = df_weight[[field_id, 'Year','Race_Ethnicity', weighted_by]]
         if weighted_by == 'Population': ## NEW, IDK IF THIS WILL WORK BUT THIS IS HOW IT SHOULD BE, NOT SURE HOW THIS WAS WORKING FOR HOUSEHOLDS BEFORE
             conditions = [
@@ -335,8 +346,7 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
 
     if geography == 'Places':
         df_census = df_census.drop('County Name', axis=1)
-        file_cdp = path_config0 / 'area_codes.xlsx'
-        df_codes = pd.read_excel(file_cdp, sheet_name='CDPcodes')
+        df_codes = pd.read_excel(FILE_AREA, sheet_name='CDPcodes')
         if unincorporated == 'Yes':
             df_codes = df_codes[(df_codes['MPO'].str.contains('SACOG')) & (df_codes['Incorporated'] == 'Yes')]
         df_codes['place'] = df_codes['place'].astype(str).apply('{:0>5}'.format)
@@ -396,10 +406,8 @@ User defined function to process ACS tables
 Rolls up population/household counts and standard errors and calculates percentages based on user defined geography/variable mappings
 '''
 
-def acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, path_server, metric, unincorporated, mpo):
+def acs_processing_3(df_census, estimate, sample_type, indicator, geography, percentages, margin_of_error, MOE_thresh, num_vars, weighted_by, project, export_loc, metric, unincorporated, mpo):
     
-    dt_geo_sheets, dt_geoid_og, dt_clean_cols, dt_geoid_clean = misc_mappings()
-
     print('Margin of error threshold: ', MOE_thresh)
 
     print()
@@ -409,7 +417,7 @@ def acs_processing_3(df_census, estimate, sample_type, indicator, geography, per
     print('Reshape data from rows to columns...')
     print()
 
-    geo_ID = dt_geoid_clean[geography]
+    geo_ID = GEOID_CLEAN[geography]
 
     # User defined functions
     def calculate_ME_ratio(df, MOE_thresh):
@@ -449,7 +457,7 @@ def acs_processing_3(df_census, estimate, sample_type, indicator, geography, per
             estimate = re.sub('ACS', 'DP', estimate)
         if unincorporated == 'Yes':
             if project == 'Monitoring and Reporting':
-                file_counties = path_server / f'{indicator} Counties {estimate}.xlsx'  
+                file_counties = PATH_SERVER / f'{indicator} Counties {estimate}.xlsx'  
             else:
                 file_counties = Path(export_loc) / f'{indicator} Counties {estimate}.xlsx'
         if sample_type == 'SUBJECT':
@@ -684,7 +692,7 @@ def pums_processing_1(df_census, df_vars, sample_type, weight):
         df_census = df_census.drop_duplicates(['Household_ID', 'Year'])
 
     for group in groups2:
-        df_census[group] = df_census[group].astype(str).apply('{:0>2}'.format)
+        df_census[group] = df_census[group].astype(int).astype(str).apply('{:0>2}'.format)
 
     df_vars  ['Value1'] = df_vars  ['Value1'].astype(str).apply('{:0>2}'.format)
     df_census['state' ] = df_census['state' ].astype(str).apply('{:0>2}'.format)
@@ -730,7 +738,6 @@ Then maps the county FIPS codes to MSA IDs
 
 def pums_processing_2(df_census, estimate, sample_type, groups, import_tab):
 
-    df_inputs, file_inputs, file_area = get.read_inputs_file(import_tab)
     df_fips, dt_fips = get.read_fips_file_pums(import_tab)
     
     print()
@@ -742,7 +749,7 @@ def pums_processing_2(df_census, estimate, sample_type, groups, import_tab):
     df_census = df_census.rename(columns={'state':'State FIPS', 'county':'County FIPS'})
 
     if sample_type == 'PUMS':
-        df_fips_pums = pd.read_excel(file_area, sheet_name='PUMAcodes', dtype={'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
+        df_fips_pums = pd.read_excel(FILE_AREA, sheet_name='PUMAcodes', dtype={'STATEFP': object, 'COUNTYFP': object, 'TRACTCE': object, 'PUMA5CE': object})
         df_fips_pums = df_fips_pums[df_fips_pums['STATEFP'].isin(list(dt_fips.keys()))]
         df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns={'PUMA5CE':'PUMA', 'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS'}).drop_duplicates()
 
@@ -757,7 +764,6 @@ def pums_processing_2(df_census, estimate, sample_type, groups, import_tab):
         df_census2 = df_census2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on=['State FIPS', 'PUMA'], how='left')
         df_census = pd.concat([df_census1, df_census2])
         df_census = df_census.drop('Years', axis=1)
-
         df_census['County FIPS'] = df_census['County FIPS'].astype(str).apply('{:0>3}'.format)
         df_census = df_census.merge(df_fips[['State FIPS', 'MPO', 'County FIPS', 'County Name', 'MSA_ID', 'MSA_acs']].drop_duplicates(), on=['State FIPS', 'County FIPS'])
         df_census = df_census.rename(columns={'MSA_acs':'MSA'})
@@ -780,7 +786,7 @@ Creates new groups for Cost_6 indicator
 Adjusts $USD fields for inflation to the latest year (creates groupings as needed)
 '''
 
-def pums_processing_3(df_census, groups, indicator, path_config0):
+def pums_processing_3(df_census, groups, project, indicator):
 
     print()
     print('Processing Step 3:')
@@ -834,7 +840,7 @@ def pums_processing_3(df_census, groups, indicator, path_config0):
         groups = ['RAC1P', 'housing_type', 'housing_burden']
 
     if indicator in ['Income_2', 'Accessibility_2', 'Accessibility_4']:
-        df_cpi = pd.read_excel(os.path.join(path_config0, 'CPI Inflation Adjustment Factors.xlsx'), sheet_name='BLS_West')
+        df_cpi = pd.read_excel(os.path.join(PATH_CONFIG0, 'CPI_IAF.xlsx'), sheet_name='BLS_West')
         df_cpi = df_cpi[['Year', 'IAF_2023']]
 
         df_census = df_census.merge(df_cpi, on='Year', how='left')
@@ -843,7 +849,7 @@ def pums_processing_3(df_census, groups, indicator, path_config0):
         df_census['HINCP'] = df_census['HINCP']*df_census['ADJINC']*df_census['IAF_2023']
         df_census = df_census.drop(['IAF_2023', 'ADJINC'], axis=1)
 
-        df_income_brackets = pd.read_excel(os.path.join(path_config0, 'CA State Income Brackets by Household Size.xlsx'), sheet_name='Table')
+        df_income_brackets = pd.read_excel(os.path.join(PATH_CONFIG0, 'CA_state_income_brackets_by_household_size.xlsx'), sheet_name='Table')
         df_income_brackets['County'].fillna(method='ffill', inplace=True)
         df_income_brackets['County'] = df_income_brackets['County'].str.replace(' County.*'         , '' , regex = True)
         df_income_brackets['County'] = df_income_brackets['County'].str.replace('\n'                , ' ', regex = True)
@@ -1293,13 +1299,13 @@ def lehd_processing(df_census, geography, indicator, percentages, df_fips=None):
 
 
     
-def clean_pop_6(df_census, estimate, geography, dt_geo_sheets, metric, path_main):
+def clean_pop_6(df_census, estimate, geography, metric):
 
     # Some indicators require the roll up to be weighted by population
     # The following step aligns the Race/Ethnicity mappings with the population counts workbook
-    path_weights = path_main / 'Reference' / 'Weights'
+    path_weights = PATH_MAIN / 'Reference' / 'Weights'
     file_weights = path_weights / f'Pop_3 {geography} {estimate}.xlsx'
-    df_pop = pd.read_excel(file_weights, sheet_name=dt_geo_sheets[geography])
+    df_pop = pd.read_excel(file_weights, sheet_name=GEO_SHEETS[geography])
 
     df_pop = df_pop.rename(columns={'Population': f'Total {metric}'})
 
@@ -1332,9 +1338,9 @@ def clean_pop_6(df_census, estimate, geography, dt_geo_sheets, metric, path_main
     return df_census
 
 
-def clean_pop_7(df_census, geography, dt_geoid_clean):
+def clean_pop_7(df_census, geography, GEOID_CLEAN):
 
-    geo_ID = dt_geoid_clean[geography]
+    geo_ID = GEOID_CLEAN[geography]
     df_census['Total Population'] = df_census.groupby(geo_ID + ['Year'])['Population'].transform('sum')
 
     df_census['Marriage Rate Per 1,000 People'] = (df_census['Population'] / df_census['Total Population']) * 1000
@@ -1364,11 +1370,10 @@ def rename_census(
         df_census=None, df_puma=None, df_counties=None, df_msa=None, df_mpo=None
         ):
     
-    dt_geo_sheets, dt_geoid_og, dt_clean_cols, dt_geoid_clean = misc_mappings()
     group_puma, group_counties, group_msa, group_mpo = misc_groups()
     
     if geography != 'PUMA':
-        geo_ID = dt_geoid_clean[geography]
+        geo_ID = GEOID_CLEAN[geography]
 
     if margin_of_error == 'Yes':
         if sample_type in ['ACS', 'DP', 'SUBJECT', 'DEC']:
@@ -1466,7 +1471,7 @@ def rename_census(
             df_counties = df_counties.rename(columns={'Total':'Households'})
             df_mpo      = df_mpo     .rename(columns={'Total':'Households'})
         df_counties = df_counties.sort_values(group_counties + groups, ascending=[True, True, True, True] + [item in groups for item in groups])
-        df_mpo      = df_mpo     .sort_values(group_mpo      + groups, ascending=[True, True,           ] + [item in groups for item in groups])
+        df_mpo      = df_mpo     .sort_values(group_mpo      + groups, ascending=[True,                 ] + [item in groups for item in groups])
         if 'PTDTRACE' in groups:
             df_counties = df_counties.set_index(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'PTDTRACE']).reset_index()
             df_mpo      = df_mpo     .set_index(['State FIPS', 'MPO',                               'PTDTRACE']).reset_index()
@@ -1474,8 +1479,7 @@ def rename_census(
 
     ## Renaming specifically by indicators
     if indicator in ['Income_3']:
-        path_inc = path_main / 'Vibrant and Inclusive Places' / 'Economy' / 'Income' / 'Income_1 HH Income'
-        file_inc = path_inc / 'Income_1 MPO ACS5.xlsx'
+        file_inc = PATH_MAIN / 'Vibrant and Inclusive Places' / 'Economy' / 'Income' / 'Income_1 HH Income' / 'Income_1 MPO ACS5.xlsx'
         df_mpo_wm = pd.read_excel(file_inc, sheet_name='MPO')
         df_mpo_wm = df_mpo_wm[df_mpo_wm['Race_Ethnicity'] == 'All'].reset_index(drop=True)
     
@@ -1504,8 +1508,8 @@ def rename_census(
 
         df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True,  True,  True, False, True, True])
         df_counties = df_counties.sort_values(by= group_counties + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True,  True,  True, False, True, True])
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True,  True, False,  True, True      ])
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True, False,  True,  True            ])
+        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True, False,  True, True      ])
+        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, False,  True,  True            ])
 
         df_puma     = df_puma    .drop(['RAC1P_sort', 'JWTRNS_sort'], axis=1)
         df_counties = df_counties.drop(['RAC1P_sort', 'JWTRNS_sort'], axis=1)
@@ -1527,8 +1531,8 @@ def rename_census(
 
         df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, True, True, False, True, True])
         df_counties = df_counties.sort_values(by= group_counties + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, True, True, False, True, True])
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, True, False, True, True])
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, False, True, True])
+        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, False, True, True])
+        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, False, True, True])
 
         df_puma     = df_puma    .drop(['Income_sort', 'JWTRNS_sort'], axis=1)
         df_counties = df_counties.drop(['Income_sort', 'JWTRNS_sort'], axis=1)
@@ -1556,8 +1560,8 @@ def rename_census(
 
         df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, True, True, False, True, True, True])
         df_counties = df_counties.sort_values(by= group_counties + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, True, True, False, True, True, True])
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, True, False, True, True, True])
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, False, True, True, True])
+        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, False, True, True, True])
+        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, False, True, True, True])
 
         df_puma     = df_puma    .drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis=1)
         df_counties = df_counties.drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis=1)
@@ -1567,7 +1571,7 @@ def rename_census(
     if indicator == 'Accessibility_3':
         factor_race = ['All', 'American Indian or Alaska Native (NH)', 'Asian (NH)', 'Black or African American (NH)', 'Hispanic or Latino', 'Native Hawaiian or other Pacific Islander (NH)', 'White (NH)', 'Some other race (NH)', 'Two or more races (NH)']
         df_mpo['RAC1P_sort'] = pd.Categorical(df_mpo['RAC1P'], factor_race)
-        df_mpo = df_mpo.sort_values(by= group_mpo + ['Year', 'RAC1P_sort', 'VEH'], ascending=[True, True, False, True, True])
+        df_mpo = df_mpo.sort_values(by= group_mpo + ['Year', 'RAC1P_sort', 'VEH'], ascending=[True, False, True, True])
         df_mpo = df_mpo.drop(['RAC1P_sort'], axis=1)
         
     if indicator == 'Income_2':
@@ -1579,8 +1583,8 @@ def rename_census(
         
         df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'Income_sort'], ascending=[True, True, True, True, False, True])
         df_counties = df_counties.sort_values(by= group_counties + ['Year', 'Income_sort'], ascending=[True, True, True, True, False, True])
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'Income_sort'], ascending=[True, True, True, False, True])
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'Income_sort'], ascending=[True, True, False, True])
+        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'Income_sort'], ascending=[True, True, False, True])
+        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'Income_sort'], ascending=[True, False, True])
 
         df_puma     = df_puma    .drop(['Income_sort'], axis=1)
         df_counties = df_counties.drop(['Income_sort'], axis=1)
@@ -1692,7 +1696,7 @@ def rename_census(
 
 
 
-def write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, path_config0, update, path_about):
+def write_about_master(df_census, indicator, sample_type, geography, estimate, mpo, MOE_thresh, update):
 
     year_start = df_census.Year.min()
     year_end   = df_census.Year.max()
@@ -1703,10 +1707,9 @@ def write_about_master(df_census, indicator, sample_type, geography, estimate, m
                                         , indicator    = indicator
                                         , year_start   = year_start
                                         , year_end     = year_end
-                                        , path_config0 = path_config0
                                         , MOE_thresh   = MOE_thresh
                                         , estimate     = estimate)
-        file_about = path_about / 'About Indicators.xlsx'
+        file_about = PATH_ABOUT / 'About Indicators.xlsx'
         with pd.ExcelWriter(file_about, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
             df_about.to_excel(writer, index=False, sheet_name=indicator, header=False)
 
@@ -1715,7 +1718,6 @@ def write_about_master(df_census, indicator, sample_type, geography, estimate, m
                                         , indicator    = indicator
                                         , year_start   = year_start
                                         , year_end     = year_end
-                                        , path_config0 = path_config0
                                         , geography    = geography
                                         , MOE_thresh   = MOE_thresh
                                         , estimate     = estimate)
@@ -1726,7 +1728,6 @@ def write_about_master(df_census, indicator, sample_type, geography, estimate, m
                                                     , indicator    = indicator
                                                     , year_start   = year_start
                                                     , year_end     = year_end
-                                                    , path_config0 = path_config0
                                                     , geography    = geography
                                                     , MOE_thresh   = MOE_thresh
                                                     , estimate     = estimate)
@@ -1737,7 +1738,6 @@ def write_about_master(df_census, indicator, sample_type, geography, estimate, m
                                         , indicator    = indicator
                                         , year_start   = year_start
                                         , year_end     = year_end
-                                        , path_config0 = path_config0
                                         , geography    = geography
                                         , estimate     = estimate)
             

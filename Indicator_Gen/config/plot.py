@@ -1,5 +1,6 @@
 
-
+from pathlib import Path
+PATH_PLOTS = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring")
 
 font_family = 'Microsoft YaHei'
 # font_family = 'Arial Black, Arial, sans-serif'
@@ -8,7 +9,7 @@ config={'modeBarButtonsToRemove': ['select', 'lasso', 'toImage'], 'displaylogo':
 # config={'modeBarButtonsToRemove': ['select', 'lasso'], 'displaylogo': False}
 
 
-def plot_agol(fig, export, title, indicator, plot_name, path_plots):
+def plot_agol(fig, export, title, indicator, plot_name):
     fig.update_layout(
         legend_title=None
         , title=title
@@ -23,8 +24,8 @@ def plot_agol(fig, export, title, indicator, plot_name, path_plots):
     fig.show(config=config)
     
     if export:
-        file_html = path_plots / f'{indicator}_{plot_name}.html'
-        file_png  = path_plots / 'png' / f'{indicator}_{plot_name}.png'
+        file_html = PATH_PLOTS / f'{indicator}_{plot_name}.html'
+        file_png  = PATH_PLOTS / 'png' / f'{indicator}_{plot_name}.png'
         fig.write_html( file=file_html, config=config)
         fig.write_image(file=file_png , engine='kaleido', scale=1, width=1000, height=500)
        
