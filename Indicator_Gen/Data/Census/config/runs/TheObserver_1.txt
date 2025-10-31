@@ -1,0 +1,10 @@
+Project: Small Data Requests
+Indicator Name: TheObserver_1
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Sac Observer
+Folder: 
+Sample: ACS
+Estimate: ACS5
+Geography: Block Groups
+Years Imported: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+Import Tab: Counties
+Margin of Error: Yes

@@ -1,109 +1,119 @@
 
 
-indicator = 'RHNA_POPEMP_10'
 
 
-# Set indicator
-source = 'ACS5'
-with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
-values = 'Population'
-columns = 'Category'
 
 
-## Importing ---
+import numpy as np
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import time
+import plotly.express as px
 
-df_places_a = pd.read_excel(os.path.join(path_raw, f'{indicator}a Places ACS5.xlsx'))
-df_places_b = pd.read_excel(os.path.join(path_raw, f'{indicator}b Places ACS5.xlsx'))
-df_places = pd.concat([df_places_a, df_places_b])
+PATH_DATA = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected'
+PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
+
+import sys
+sys.path.append(str(PATH_CONFIG))
+import rhna
+FILE_YAML = rhna.load_yaml()
 
 
-## Organizing ---
 
 def re_remove_post(x, exp = ':'):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return x.split(exp, 1)[0]
+    try: x = str(x.split(exp, 1)[0])
+    except: pass
+    return x
 
 def re_remove_pre(x, exp = ':  '):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return str(x.split(exp, 1)[1])
-
-df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
-df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-df_places = df_places.rename(columns={'NAME':'Geography'})
-df_places = df_places[df_places['Year'] == df_places['Year'].max()]
-df_places = df_places.reset_index(drop=True)
-df_places['Category'] = df_places['Variable'].apply(re_remove_post)
-df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
-
-df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
-
-df_places['Sort'] = pd.Categorical(df_places['Variable'], ['75k or more', '50k to 75k', '25k to 50k', '10k to 25k', 'Less than 10k'])
-df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, False])
-df_places = df_places.drop(['Sort'], axis = 1)
-df_places = df_places.reset_index(drop=True)
-
-conditions = [
-    df_places['Variable'] == 'Less than 10k'
-    , df_places['Variable'] == '10k to 25k'
-    , df_places['Variable'] == '25k to 50k'
-    , df_places['Variable'] == '50k to 75k'
-    , df_places['Variable'] == '75k or more'
-]
-
-choices = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
-
-df_places['Variable'] = np.select(conditions, choices, default = 'no')
+    try: x = str(x.split(exp, 1)[1])
+    except: pass
+    return x
 
 
-counties = list(df_places['County Name'].unique())
+
+if __name__ == '__main__':
+
+    indicator = 'RHNA_POPEMP_10'
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    values = 'Population'
+    columns = 'Category'
 
 
-for county in counties:
-    
-    print();print()
-    print(county)
-    time.sleep(2)
+    ## Organizing ---
 
-    df_places_sub = df_places.copy()
-    df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
-    jurisdictions = df_places_sub['Geography'].unique()
-    
-    for jurisdiction in tqdm(jurisdictions, position=0):
+    df_places_a = pd.read_excel(PATH_DATA / f'{indicator}a Places ACS5.xlsx')
+    df_places_b = pd.read_excel(PATH_DATA / f'{indicator}b Places ACS5.xlsx')
+    df_places = pd.concat([df_places_a, df_places_b])
 
-        tqdm.write(jurisdiction)
 
-        df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values)
+    df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
+    df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
+    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places[df_places['Year'] == df_places['Year'].max()]
+    df_places = df_places.reset_index(drop=True)
+    df_places['Category'] = df_places['Variable'].apply(re_remove_post)
+    df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
 
-        ## Plotting ---
+    df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
 
-        df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+    df_places['Sort'] = pd.Categorical(df_places['Variable'], ['75k or more', '50k to 75k', '25k to 50k', '10k to 25k', 'Less than 10k'])
+    df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, False])
+    df_places = df_places.drop(['Sort'], axis = 1)
+    df_places = df_places.reset_index(drop=True)
+
+    conditions = [
+        df_places['Variable'] == 'Less than 10k'
+        , df_places['Variable'] == '10k to 25k'
+        , df_places['Variable'] == '25k to 50k'
+        , df_places['Variable'] == '50k to 75k'
+        , df_places['Variable'] == '75k or more'
+    ]
+
+    choices = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
+
+    df_places['Variable'] = np.select(conditions, choices, default = 'no')
+
+
+    counties = list(df_places['County Name'].unique())
+
+
+    for county in counties:
         
-        color_map  = {
-            'Place of residence': '#9DC209'
-            , 'Place of work': '#1F45FC'
-        }
+        rhna.print2()
+        print(county)
+        time.sleep(2)
 
-        fig = px.bar(df_plot, x='Variable', y=values
-                     , color = columns
-                     , barmode='group'
-                     , color_discrete_map=color_map)
+        df_places_sub = df_places.copy()
+        df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
+        jurisdictions = df_places_sub['Geography'].unique()
         
-        fig.update_traces(hovertemplate="%{y}")
-        fig.update_yaxes(tickprefix='$')
-        fig.update_xaxes(tickvals=[0, 1, 2, 3, 4], ticktext=['Less than &#36;10k', '&#36;10k to &#36;25k', '&#36;25k to &#36;50k', '&#36;50k to &#36;75k', '&#36;75k or more'])
-    
-        path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
-        plot_rhna(export=export)
-    
-        ## Exporting ---
-        
-        if export:
-            export_rhna(df_prod, df_pct)
+        for jurisdiction in tqdm(jurisdictions, position=0):
 
-list_indicators.append(indicator)
+            tqdm.write(jurisdiction)
+
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+
+            ## Plotting
+
+            df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+            
+            color_map  = {
+                'Place of residence': '#9DC209'
+                , 'Place of work': '#1F45FC'
+            }
+
+            fig = px.bar(df_plot, x='Variable', y=values
+                        , color = columns
+                        , barmode='group'
+                        , color_discrete_map=color_map)
+            
+            fig.update_traces(hovertemplate="%{y}")
+            fig.update_yaxes(tickprefix='$')
+            fig.update_xaxes(tickvals=[0, 1, 2, 3, 4], ticktext=['Less than &#36;10k', '&#36;10k to &#36;25k', '&#36;25k to &#36;50k', '&#36;50k to &#36;75k', '&#36;75k or more'])
+
+            rhna.plot_rhna(fig, county, jurisdiction, indicator, title)
+            rhna.export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct)
 

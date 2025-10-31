@@ -1,7 +1,7 @@
 Project: Monitoring and Reporting
 Indicator: Jobs_3
 Export Location: Vibrant and Inclusive Places\\Economy\\Jobs
-Folder: Race
+Folder: Type
 Survey: SM
 Data Type: All Employees, in Thousands
 Seasonal Adjustment: U

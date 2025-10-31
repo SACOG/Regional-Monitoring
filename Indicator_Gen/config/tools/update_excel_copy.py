@@ -12,10 +12,9 @@ print(); print()
 update = 'RHNA'
 
 
-## Setup ================================================================================================
 
+# Setup ----------------------------------------------------------------------------------------------------------------------------------------------
 
-## Packages ---
 
 import pandas as pd
 import getpass
@@ -29,7 +28,6 @@ import shutil
 from tqdm import tqdm
 import time
 
-## User defined functions ---
 
 
 def update_excel_copy(file_master, file_copy):
@@ -54,16 +52,13 @@ def update_excel_copy(file_master, file_copy):
 
 
 
-## Main ================================================================================================
+# Main ----------------------------------------------------------------------------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
+    
 
-    ## File paths
-    user = getpass.getuser()
-    path_users = Path.home()
-
-    path_sp = path_users / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
+    path_sp = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
 
   
     ## (1)
@@ -79,11 +74,11 @@ if __name__ == '__main__':
     ## (2)
     if update == 'RHNA':
         dict_ = {
-            'El Dorado' : ['Placerville', 'South Lake Tahoe', 'Unincorporated'],
-            'Placer'    : ['Auburn', 'Colfax', 'Lincoln', 'Loomis', 'Rocklin', 'Roseville', 'Unincorporated'],
-            'Sacramento': ['Citrus Heights', 'Elk Grove', 'Folsom', 'Galt', 'Isleton', 'Rancho Cordova', 'Sacramento', 'Unincorporated'],
-            'Sutter'    : ['Live Oak', 'Yuba City', 'Unincorporated'],
-            'Yolo'      : ['Davis', 'West Sacramento', 'Winters', 'Woodland', 'Unincorporated'],
+            # 'El Dorado' : ['Placerville', 'South Lake Tahoe', 'Unincorporated'],
+            # 'Placer'    : ['Auburn', 'Colfax', 'Lincoln', 'Loomis', 'Rocklin', 'Roseville', 'Unincorporated'],
+            # 'Sacramento': ['Citrus Heights', 'Elk Grove', 'Folsom', 'Galt', 'Isleton', 'Rancho Cordova', 'Sacramento', 'Unincorporated'],
+            # 'Sutter'    : ['Live Oak', 'Yuba City', 'Unincorporated'],
+            # 'Yolo'      : ['Davis', 'West Sacramento', 'Winters', 'Woodland', 'Unincorporated'],
             'Yuba'      : ['Marysville', 'Wheatland', 'Unincorporated']
         }
 

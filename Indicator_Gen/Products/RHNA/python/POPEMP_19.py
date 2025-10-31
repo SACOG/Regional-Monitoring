@@ -1,96 +1,104 @@
 
 
-indicator = 'RHNA_POPEMP_19'
 
 
-# Set indicator
-source = 'ACS5'
-with path_func.open("r") as f: exec(f.read())
-title = dict_about[source][indicator.replace('RHNA_', '')]['Indicator Title'][0]
-values = 'Households'
-columns = 'Category'
+
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import time
+import plotly.express as px
+
+PATH_DATA = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected'
+PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
+
+import sys
+sys.path.append(str(PATH_CONFIG))
+import rhna
+FILE_YAML = rhna.load_yaml()
 
 
-## Importing ---
-
-df_places_a = pd.read_excel(os.path.join(path_raw, f'{indicator}a Places ACS5.xlsx'))
-df_places_b = pd.read_excel(os.path.join(path_raw, f'{indicator}b Places ACS5.xlsx'))
-df_places = pd.concat([df_places_a, df_places_b])
-
-
-## Organizing ---
 
 def re_remove_post(x, exp = ':'):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return x.split(exp, 1)[0]
+    try: x = str(x.split(exp, 1)[0])
+    except: pass
+    return x
 
-def re_remove_pre(x, exp = ': '):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return str(x.split(exp, 1)[1])
-
-df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
-df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-df_places = df_places.rename(columns={'NAME':'Geography'})
-df_places = df_places[df_places['Year'] == df_places['Year'].max()]
-df_places = df_places.reset_index(drop=True)
-df_places['Category'] = df_places['Variable'].apply(re_remove_post)
-df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
-df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
-
-df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
-
-df_places['Sort'] = pd.Categorical(df_places['Variable'], ['Moved in 2021 or later', 'Moved in 2018 to 2020', 'Moved in 2010 to 2017', 'Moved in 2000 to 2009', 'Moved in 1999 or earlier'])
-df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, False])
-df_places = df_places.drop(['Sort'], axis = 1)
-
-counties = list(df_places['County Name'].unique())
+def re_remove_pre(x, exp = ':  '):
+    try: x = str(x.split(exp, 1)[1])
+    except: pass
+    return x
 
 
-for county in counties:
-    
-    print();print()
-    print(county)
-    time.sleep(2)
 
-    df_places_sub = df_places.copy()
-    df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
-    jurisdictions = df_places_sub['Geography'].unique()
-    
-    for jurisdiction in tqdm(jurisdictions):
+if __name__ == '__main__':
 
-        tqdm.write(jurisdiction)
+    indicator = 'RHNA_POPEMP_19'
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    values = 'Households'
+    columns = 'Category'
 
-        df_prod, df_pct = pivot_rhna(indicator, df_places_sub, county, jurisdiction, columns, values)
 
-        ## Plotting ---
 
-        df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
-        df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
+    ## Organizing
 
-        color_map  = {
-            'Owner occupied': '#1F45FC'
-            , 'Renter occupied': '#9DC209'
-        }
+    df_places_a = pd.read_excel(PATH_DATA / f'{indicator}a Places ACS5.xlsx')
+    df_places_b = pd.read_excel(PATH_DATA / f'{indicator}b Places ACS5.xlsx')
+    df_places = pd.concat([df_places_a, df_places_b])
 
-        fig = px.bar(df_plot, x='Variable', y='Percentage'
-                     , color = columns
-                     , color_discrete_map=color_map)
+    df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
+    df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
+    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places[df_places['Year'] == df_places['Year'].max()]
+    df_places = df_places.reset_index(drop=True)
+    df_places['Category'] = df_places['Variable'].apply(re_remove_post)
+    df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
+    df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
+
+    df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
+
+    df_places['Sort'] = pd.Categorical(df_places['Variable'], ['Moved in 2021 or later', 'Moved in 2018 to 2020', 'Moved in 2010 to 2017', 'Moved in 2000 to 2009', 'Moved in 1999 or earlier'])
+    df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, False])
+    df_places = df_places.drop(['Sort'], axis = 1)
+
+    counties = list(df_places['County Name'].unique())
+
+
+    for county in counties:
         
-        fig.update_yaxes(dtick=10, ticksuffix='%', range = [0,102])
-        fig.update_layout(legend={'traceorder': 'reversed'})
-        fig.update_traces(hovertemplate="%{y}")
+        rhna.print2()
+        print(county)
+        time.sleep(2)
+
+        df_places_sub = df_places.copy()
+        df_places_sub = df_places_sub[df_places_sub['County Name'] == county]
+        jurisdictions = df_places_sub['Geography'].unique()
+        
+        for jurisdiction in tqdm(jurisdictions):
+
+            tqdm.write(jurisdiction)
+
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+
+            ## Plotting
+
+            df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+            df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
+
+            color_map  = {
+                'Owner occupied': '#1F45FC'
+                , 'Renter occupied': '#9DC209'
+            }
+
+            fig = px.bar(df_plot, x='Variable', y='Percentage'
+                        , color = columns
+                        , color_discrete_map=color_map)
             
-        path_plots = path_out / county.replace(' County', '') / jurisdiction / 'Supplemental'
-        plot_rhna(export=export)
-    
-        ## Exporting ---
-        
-        if export:
-            export_rhna(df_prod, df_pct)
-
-list_indicators.append(indicator)
+            fig.update_yaxes(dtick=10, ticksuffix='%', range = [0,102])
+            fig.update_layout(legend={'traceorder': 'reversed'})
+            fig.update_traces(hovertemplate="%{y}")
+                  
+            rhna.plot_rhna(fig, county, jurisdiction, indicator, title)
+            rhna.export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct)
 
