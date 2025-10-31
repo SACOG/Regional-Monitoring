@@ -1,6 +1,6 @@
 Project: Monitoring and Reporting
 Indicator Name: Accessibility_2
-Export Location: Safe Equitable Resilient Infrastructure\\Accessibility
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility
 Folder: Travel Mode by Household Income
 Sample: PUMS
 Estimate: ACS5

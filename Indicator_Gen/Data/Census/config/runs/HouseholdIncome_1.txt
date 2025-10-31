@@ -1,0 +1,10 @@
+Project: Small Data Requests
+Indicator Name: HouseholdIncome_1
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework
+Folder: 
+Sample: PUMS
+Estimate: ACS5
+Geography: PUMA
+Years Imported: 2018, 2019, 2020, 2021, 2022, 2023
+Import Tab: Counties
+Margin of Error: Yes
