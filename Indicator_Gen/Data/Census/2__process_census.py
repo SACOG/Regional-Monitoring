@@ -19,10 +19,10 @@ print3()
 
 rerun=True
 export=True
-about=False
+about=True
 update=False
-server=False
-mpo = 'No'
+server=True
+mpo = 'Yes'
 unincorporated='No'
 
 

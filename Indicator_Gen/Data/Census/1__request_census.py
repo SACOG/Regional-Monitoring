@@ -18,7 +18,7 @@ Request parameters need to be updated using the config folder
 
 rerun=False
 export=True
-mpo='No'
+mpo='Yes'
 unincorporated='No'
 
 
@@ -31,6 +31,7 @@ unincorporated='No'
 from pathlib import Path
 from xlwt.Workbook import *
 from IPython.display import display
+import sys
 
 PATH_GIT = Path(__file__).parent.parent.parent
 PATH_CODE    = PATH_GIT / 'Data' / 'Census'

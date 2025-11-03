@@ -128,29 +128,29 @@ df_service3 <- merge(
   all.x=T
 )
 
-df_service3_sacog <- df_service3[`Peer Assign` == 'self']
-df_service3_sacog <- df_service3_sacog[, .(
-  `VOMS` = sum(`VOMS`, na.rm=TRUE),
-   `VRM` = sum( `VRM`, na.rm=TRUE),
-   `VRH` = sum( `VRH`, na.rm=TRUE),
-   `UPT` = sum( `UPT`, na.rm=TRUE),
-
-  `Service Area Sq Miles` = sum(`Service Area Sq Miles`, na.rm=TRUE),
-  `Service Area Pop` = sum(`Service Area Pop`, na.rm=TRUE)
-), by= .(`Year`, `Mode`)]
-
+df_service3_sacog <- df_service2[`Peer Assign` == 'self']
 # df_service3_sacog <- df_service3_sacog[, .(
 #   `VOMS` = sum(`VOMS`, na.rm=TRUE),
-#   `VRM` = sum( `VRM`, na.rm=TRUE),
-#   `VRH` = sum( `VRH`, na.rm=TRUE),
-#   `UPT` = sum( `UPT`, na.rm=TRUE)
+#    `VRM` = sum( `VRM`, na.rm=TRUE),
+#    `VRH` = sum( `VRH`, na.rm=TRUE),
+#    `UPT` = sum( `UPT`, na.rm=TRUE),
+# 
+#   `Service Area Sq Miles` = sum(`Service Area Sq Miles`, na.rm=TRUE),
+#   `Service Area Pop` = sum(`Service Area Pop`, na.rm=TRUE)
 # ), by= .(`Year`, `Mode`)]
-# df_service3_sacog <- merge(
-#   df_service3_sacog,
-#   df_dof,
-#   by=c('Year'),
-#   all.x=T
-# )
+
+df_service3_sacog <- df_service3_sacog[, .(
+  `VOMS` = sum(`VOMS`, na.rm=TRUE),
+  `VRM` = sum( `VRM`, na.rm=TRUE),
+  `VRH` = sum( `VRH`, na.rm=TRUE),
+  `UPT` = sum( `UPT`, na.rm=TRUE)
+), by= .(`Year`, `Mode`)]
+df_service3_sacog <- merge(
+  df_service3_sacog,
+  df_dof,
+  by=c('Year'),
+  all.x=T
+)
 
 df_service3_sacog[, `Region` := 'SACOG 6-County Region']
 
@@ -431,10 +431,13 @@ write_xlsx(list('Data' = df_pop), file_pop)
 
 file_transit1 = file.path(path_server, glue("Transit_1 {ntd_indicators['Transit_1']} SACOG.xlsx"))
 file_transit2 = file.path(path_server, glue("Transit_2 {ntd_indicators['Transit_2']} SACOG.xlsx"))
-
 write_xlsx(list('Data' = df_transit1_sacog), file_transit1)
 write_xlsx(list('Data' = df_transit2_sacog), file_transit2)
 
+file_transit1 = file.path(path_transit, glue("Transit_1 {ntd_indicators['Transit_1']} SACOG.xlsx"))
+file_transit2 = file.path(path_transit, glue("Transit_2 {ntd_indicators['Transit_2']} SACOG.xlsx"))
+write_xlsx(list('Data' = df_transit1_sacog), file_transit1)
+write_xlsx(list('Data' = df_transit2_sacog), file_transit2)
 
 
 
@@ -473,24 +476,6 @@ if(export==TRUE){
 
 
 
-export<-TRUE
-
-if(export==TRUE){
-  
-  file_transit1 = file.path(path_server, glue("Transit_1 {ntd_indicators['Transit_1']}.xlsx"))
-  file_transit2 = file.path(path_server, glue("Transit_2 {ntd_indicators['Transit_2']}.xlsx"))
-  
-  write_xlsx(list('Data' = df_transit1), file_transit1)
-  write_xlsx(list('Data' = df_transit2), file_transit2)
-  
-  
-  file_transit1 = file.path(path_transit, glue("Transit_1 {ntd_indicators['Transit_1']}.xlsx"))
-  file_transit2 = file.path(path_transit, glue("Transit_2 {ntd_indicators['Transit_2']}.xlsx"))
-  
-  write_xlsx(list('Data' = df_transit1), file_transit1)
-  write_xlsx(list('Data' = df_transit2), file_transit2)
-  
-}
 
 
 
