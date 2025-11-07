@@ -13,7 +13,9 @@ SQL Flavor: SQL Server
 */
 
 SET NOCOUNT ON;
-
+/*================= Definitions =================================
+TMC
+*/
 
 DECLARE @FFprdStart INT SET @FFprdStart = 20 --free-flow period starts at or after this time at night
 DECLARE @FFprdEnd INT SET @FFprdEnd = 6 --free-flow period ends before this time in the morning
@@ -44,9 +46,9 @@ SELECT
 	DISTINCT tmc.tmc,
 	tmc.f_system,
 	tmc.nhs,
-	CASE WHEN f_system IN (1,2)
-		THEN PERCENTILE_CONT(0.85)
-			WITHIN GROUP (ORDER BY speed)
+	CASE WHEN f_system IN (1,2) --when freeway
+		THEN PERCENTILE_CONT(0.85) --take 85th percentile speed
+			WITHIN GROUP (ORDER BY speed) --order 
 			OVER (PARTITION BY tmc_code)
 		ELSE PERCENTILE_CONT(0.6)
 			WITHIN GROUP (ORDER BY speed)
