@@ -24,8 +24,7 @@ pd.set_option('display.max_columns', None)
 
 # Path to monthly csv files
 PATH_IDRIVE = Path(r"I:/Projects/Josh/Regional Monitoring/Congestion/monthly csv")
-LOCAL_PATH=Path(r"C:/Users/tenoru/Downloads/monthly csv test")
-PATH_IDRIVE=LOCAL_PATH
+
 # Output Paths
 PATH_FINAL = Path(r"I:/Projects/Josh/Regional Monitoring/Congestion/final csv")
 PATH_SUMMARY = Path(r"I:/Projects/Josh/Regional Monitoring/Congestion/summary csv")
