@@ -15,10 +15,9 @@ PATH_GIT = Path.home() / 'Documents' / 'Github Repos' / 'Regional-Monitoring' / 
 PATH_CODE    = PATH_GIT / 'Data' / 'RITIS'
 PATH_CONFIG0 = PATH_GIT / 'config'
 PATH_CONFIG  = PATH_CODE / 'config'
-PATH_SQL = PATH_GIT / 'Data' / 'RITIS' / 'sql_scripts'#not needed because I wont be running the sql scripts in this script
+PATH_SQL = PATH_GIT / 'Data' / 'RITIS' / 'sql_scripts'
 
 sys.path.append(str(PATH_CONFIG0))
-
 
 pd.set_option('display.max_columns', None)
 
@@ -40,8 +39,9 @@ tp_dict = {
 FF_PERIOD_START = 20  
 FF_PERIOD_END = 6     
 
-#Choose what vehicle class to process
+# Choose what vehicle class to process
 vehicle_class = 'Combined'  # Options: 'Truck', 'Pax', 'Combined'
+
 # Weekdays
 WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
@@ -73,7 +73,6 @@ def calc_freeflow_speed(group):
         return group['speed'].quantile(0.85)
     else:
         return group['speed'].quantile(0.60)
-    
 
 
 # ====================================================================
@@ -81,7 +80,7 @@ def calc_freeflow_speed(group):
 # ====================================================================
 
 all_system_metrics = []
-all_final=pd.DataFrame()
+all_final = pd.DataFrame()
 print(f"Searching for zip files in: {PATH_IDRIVE}")
 zip_files = list(PATH_IDRIVE.glob('*.zip'))
 
@@ -96,22 +95,21 @@ for zip_path in zip_files:
     zip_name = zip_path.name
     
     no_extension = zip_name.split(".")[0]
-    if tp_dict[vehicle_class]=='TAP':
-        if no_extension[-3:] not in ['TAP']:
+    if tp_dict[vehicle_class] == 'TAP':
+        if not no_extension.endswith('TAP'):
             print(f"Skipping {zip_name}: Filename does not end with expected vehicle type code")
             continue
-    elif tp_dict[vehicle_class] in ['T','P']:
-        if no_extension[-1:] != tp_dict[vehicle_class]:
+    elif tp_dict[vehicle_class] in ['T', 'P']:
+        if not no_extension.endswith(tp_dict[vehicle_class]):
             print(f"Skipping {zip_name}: Filename does not end with expected vehicle type code")
             continue
 
     print(f"\n*** Processing {zip_path.name} ***")
+    
     # --- Infer year_month from zip_name (e.g., '2025_01TAP.zip' -> '2025_01')
     file_base = zip_name.split(".")[0]
-    year_month= file_base[:7]  # 'YYYY_MM' format
+    year_month = file_base[:7]  # 'YYYY_MM' format
     
-
-        
     speed_file = year_month + '.csv'
     tmc_file = 'TMC_Identification.csv'
     
@@ -120,14 +118,13 @@ for zip_path in zip_files:
         # Load traffic speed data
         with ZipFile(zip_path) as z:
             with z.open(speed_file) as f:
-                # Assuming traffic data's time column is 'measurement_tstamp'
-                df_traffic = pd.read_csv(f)
-                df_traffic['measurement_tstamp'] = pd.to_datetime(df_traffic['measurement_tstamp'], utc=True) 
+                df_traffic = pd.read_csv(f, usecols=['tmc_code', 'measurement_tstamp', 'speed', 'travel_time_seconds'])
+                df_traffic['measurement_tstamp'] = pd.to_datetime(df_traffic['measurement_tstamp'], utc=True)
         
         # Load TMC metadata
         with ZipFile(zip_path) as z:
             with z.open(tmc_file) as f:
-                df_tmc = pd.read_csv(f)
+                df_tmc = pd.read_csv(f, usecols=['tmc', 'f_system', 'nhs', 'miles'])
                 
         print(f"Traffic records loaded: {len(df_traffic):,}")
         print(f"TMC segments loaded: {len(df_tmc):,}")
@@ -138,7 +135,12 @@ for zip_path in zip_files:
     except Exception as e:
         print(f"Skipping {zip_path.name}: Error loading data: {e}")
         continue
-        
+    
+    # --- Early exit if traffic data is empty ---
+    if df_traffic.empty or df_tmc.empty:
+        print(f"Skipping {zip_path.name}: Empty dataframes")
+        continue
+    
     # --- Calculating Free Flow Speeds ---
     print("  ...Calculating Free Flow Speeds...")
     df_ff = df_tmc.merge(df_traffic, left_on='tmc', right_on='tmc_code', how='inner')
@@ -147,32 +149,36 @@ for zip_path in zip_files:
     # Filter for overnight free-flow period and NHS roads
     ff_mask = (df_ff['hour'] >= FF_PERIOD_START) | (df_ff['hour'] < FF_PERIOD_END)
     df_ff = df_ff[ff_mask]
-    
     df_ff['f_system'] = df_ff['f_system'].astype(float)
     df_ff = df_ff[df_ff['nhs'] > 0]
     
-    if len(df_ff) > 0:
-        ff_speeds = df_ff.groupby('tmc_code', group_keys=False).apply(calc_freeflow_speed, include_groups=False).reset_index()
-        ff_speeds.columns = ['tmc_code', 'ff_speed_art60thp']
-        epochs_night = df_ff.groupby('tmc_code').size().reset_index(name='epochs_night')
-    else:
+    if len(df_ff) == 0:
         print("  ...Insufficient data on NHS roads for free-flow calculation.")
-        ff_speeds = pd.DataFrame(columns=['tmc_code', 'ff_speed_art60thp'])
-        epochs_night = pd.DataFrame(columns=['tmc_code', 'epochs_night'])
-        
+        continue
+    
+    ff_speeds = df_ff.groupby('tmc_code', group_keys=False).apply(calc_freeflow_speed, include_groups=False).reset_index()
+    ff_speeds.columns = ['tmc_code', 'ff_speed_art60thp']
+    epochs_night = df_ff.groupby('tmc_code').size().reset_index(name='epochs_night')
+    
     if ff_speeds.empty:
         print("  ...Skipping remaining steps for this file.")
         continue
+    
+    # Clean up to free memory
+    del df_ff
 
     # --- Calculate Hourly Speeds ---
     print("  ...Calculating Hourly Speeds...")
-    df_hourly = df_tmc.merge(df_traffic, left_on='tmc', right_on='tmc_code', how='inner')
+    df_hourly = df_traffic.merge(df_tmc, left_on='tmc_code', right_on='tmc', how='inner')
     df_hourly['day_name'] = df_hourly['measurement_tstamp'].dt.day_name()
     df_hourly = df_hourly[df_hourly['day_name'].isin(WEEKDAYS)]
     df_hourly['hour'] = df_hourly['measurement_tstamp'].dt.hour
     
     df_hourly = df_hourly.merge(ff_speeds, on='tmc_code', how='inner')
     df_hourly_clean = df_hourly[df_hourly['speed'] > 0].copy()
+    
+    # Keep only necessary columns for aggregation
+    df_hourly_clean = df_hourly_clean[['tmc_code', 'measurement_tstamp', 'speed', 'travel_time_seconds', 'ff_speed_art60thp', 'hour']]
     
     # Calculate harmonic average speed by TMC and hour
     hourly_stats = df_hourly_clean.groupby(['tmc_code', 'hour']).agg(
@@ -185,24 +191,28 @@ for zip_path in zip_files:
     # Apply epoch filter and calculate congestion rank
     hourly_stats = hourly_stats[hourly_stats['total_epochs_hr'] >= MIN_EPOCHS]
     
-    if len(hourly_stats) > 0:
-        hourly_stats['cong_ratio_hr_weekdy'] = (
-            hourly_stats['havg_spd_weekdy'] / hourly_stats['ff_speed_art60thp']
-        )
-        hourly_stats['hour_cong_rank'] = (
-            hourly_stats.groupby('tmc_code')['cong_ratio_hr_weekdy']
-            .rank(method='first', ascending=True)
-        )
-    else:
+    if len(hourly_stats) == 0:
         print("  ...Skipping remaining steps due to empty hourly statistics set.")
         continue
+    
+    hourly_stats['cong_ratio_hr_weekdy'] = (
+        hourly_stats['havg_spd_weekdy'] / hourly_stats['ff_speed_art60thp']
+    )
+    hourly_stats['hour_cong_rank'] = (
+        hourly_stats.groupby('tmc_code')['cong_ratio_hr_weekdy']
+        .rank(method='first', ascending=True)
+    )
+    
+    # Clean up to free memory
+    del df_hourly, df_hourly_clean
 
     # --- Calculate Worst 4 Hours Speed and Slowest Hour ---
     print("  ...Calculating Worst 4 Hours and Slowest Hour metrics...")
     
     # Worst 4 Hours
     worst_hours = hourly_stats[hourly_stats['hour_cong_rank'] < 5][['tmc_code', 'hour']]
-    df_worst = df_tmc.merge(df_traffic, left_on='tmc', right_on='tmc_code', how='inner')
+    
+    df_worst = df_traffic.merge(df_tmc, left_on='tmc_code', right_on='tmc', how='inner')
     df_worst['day_name'] = df_worst['measurement_tstamp'].dt.day_name()
     df_worst = df_worst[df_worst['day_name'].isin(WEEKDAYS)]
     df_worst['hour'] = df_worst['measurement_tstamp'].dt.hour
@@ -220,6 +230,9 @@ for zip_path in zip_files:
     slowest = slowest[['tmc_code', 'hour', 'havg_spd_weekdy', 'total_epochs_hr']]
     slowest.columns = ['tmc_code', 'slowest_hr', 'slowest_hr_speed', 'epochs_slowest_hr']
     slowest = slowest.drop_duplicates(subset=['tmc_code'], keep='first')
+    
+    # Clean up to free memory
+    del df_worst, hourly_stats, worst_hours
     
     # --- Create Final Report ---
     
@@ -255,7 +268,8 @@ for zip_path in zip_files:
         -1.0
     )
     final['year_month'] = year_month
-    all_final=pd.concat([all_final,final],ignore_index=True)
+    all_final = pd.concat([all_final, final], ignore_index=True)
+    
     # --- Calculate System wide metrics ---
     print("  ...Calculating System-wide metrics...")
     valid_mask = (final['havg_spd_worst4hrs'] > -1) & (final['ff_speed_art60thp'] > -1)
@@ -292,16 +306,17 @@ if all_system_metrics:
     print(df_summary.to_string(index=False, float_format="%.2f"))
 else:
     print("\nNo data processed successfully.")
+    sys.exit()
 
 # ====================================================================
 # Export
 # ====================================================================    
 # name output file based on vehicle class and date range
-min_time=min(df_summary['month'])
-max_time=max(df_summary['month'])
+min_time = min(df_summary['month'])
+max_time = max(df_summary['month'])
 base_filename = f"Final_Congestion_{min_time}_to_{max_time}{tp_dict[vehicle_class]}.csv"
 
-output_path=PATH_FINAL / f"{base_filename}"
+output_path = PATH_FINAL / f"{base_filename}"
 if output_path.exists():
     print(f"\n*** Skipping {base_filename} ***")
     print(f"  Output file already exists at: {output_path}")
@@ -309,7 +324,6 @@ else:
     print(f"  ...Exporting to {output_path}")
     all_final.to_csv(output_path, index=False)
     print("  Export complete.")
-
 
 # Define the output file name for the monthly summary
 summary_output_filename = f"Summary{base_filename[5:]}"
