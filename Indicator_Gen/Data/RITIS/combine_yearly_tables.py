@@ -420,7 +420,7 @@ else:
 # name output file based on vehicle class and date range
 min_time = min(df_summary['month'])
 max_time = max(df_summary['month'])
-base_filename = f"Final_Congestion_{vehicle_class}_{min_time}_to_{max_time}.csv"
+base_filename = f"Final_Congestion_{min_time}_to_{max_time}{tp_dict[vehicle_class]}.csv"
 
 output_path = PATH_FINAL / f"{base_filename}"
 if output_path.exists():
