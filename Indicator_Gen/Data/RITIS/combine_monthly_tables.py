@@ -187,7 +187,9 @@ for zip_path in zip_files:
         avg_tt_sec_weekdy=('travel_time_seconds', 'mean'),
         ff_speed_art60thp=('ff_speed_art60thp', 'first')
     ).reset_index()
-    
+
+    #MIN_EPOCHS = int(hourly_stats['total_epochs_hr'].quantile(0.25))
+    #print(f"  ...Using MIN_EPOCHS = {MIN_EPOCHS} based on 25th percentile of hourly epochs.")
     # Apply epoch filter and calculate congestion rank
     hourly_stats = hourly_stats[hourly_stats['total_epochs_hr'] >= MIN_EPOCHS]
     
@@ -281,13 +283,23 @@ for zip_path in zip_files:
     
     pct_dirmi_congested = (congested_miles / tot_nhs_dirmiles * 100) if tot_nhs_dirmiles > 0 else 0
     
+    # Count tmcs with valid speed metrics for congestion calculation
+    num_valid_tmcs = valid_mask.sum()
+    print(f"TMCs with valid speed metrics: {num_valid_tmcs:,}")
+
+    # Total observations used in the congestion calculation (only count observations from TMCs that were actually used and have epoch data)
+    obs_mask = valid_mask & (final['epochs_worst4hrs'] > -1)
+    obs_used_for_congestion = int(final[obs_mask]['epochs_worst4hrs'].sum())
+
     # Store results for final summary
     system_metrics = {
         'month': year_month,
         'total_nhs_dirmiles': tot_nhs_dirmiles,
         'congested_miles': congested_miles,
         'pct_miles_congested': pct_dirmi_congested,
-        'tmcs_insufficient_data': len(final[~valid_mask])
+        'tmcs_insufficient_data': len(final[~valid_mask]),
+        'num_valid_tmcs': num_valid_tmcs,
+        'obs_used_for_congestion': obs_used_for_congestion
     }
     all_system_metrics.append(system_metrics)
     
@@ -302,7 +314,8 @@ if all_system_metrics:
     print("\n\n*** Summary of All Processed Months ***")
     df_summary = pd.DataFrame(all_system_metrics)
     # Reorder columns for a cleaner look
-    df_summary = df_summary[['month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 'tmcs_insufficient_data']]
+    df_summary = df_summary[['month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 
+                         'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
     print(df_summary.to_string(index=False, float_format="%.2f"))
 else:
     print("\nNo data processed successfully.")
@@ -320,6 +333,8 @@ output_path = PATH_FINAL / f"{base_filename}"
 if output_path.exists():
     print(f"\n*** Skipping {base_filename} ***")
     print(f"  Output file already exists at: {output_path}")
+    
+
 else:
     print(f"  ...Exporting to {output_path}")
     all_final.to_csv(output_path, index=False)
