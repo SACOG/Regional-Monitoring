@@ -121,12 +121,22 @@ df_service2 <- df_peers %>%
   setDT()
 
 
+
+file_pi <- file.path('C:/Users', user, 'Sacramento Area Council of Governments/Regional Monitoring and Reporting - Documents', 'Data', 'Next Gen of Mobility Solutions', 'Transit', 'Transit Measures_download.xlsx')
+df_pi <- read_excel(file_pi, sheet='PI_2002_2012') %>% setDT()
+df_service2 <- df_service2[!(`NTD ID` == 90223 & `Year` %in% c(2011, 2012))]
+df_service2 <- df_service2[!(`NTD ID` == 90223 & `Year` > 2020)]
+df_service2 <- rbind(df_service2, df_pi, fill=TRUE)
+
+
 df_service3 <- merge(
   df_service2,
   df_pop,
   by=c('Year', 'NTD ID'),
   all.x=T
 )
+
+
 
 df_service3_sacog <- df_service2[`Peer Assign` == 'self']
 # df_service3_sacog <- df_service3_sacog[, .(
@@ -249,7 +259,7 @@ head(df_transit4)
 # Roll up
 df_opex2 <- df_peers %>%
   left_join(., df_opex, by = c("NTD ID"="NTD ID"), relationship = "many-to-many") %>%
-  filter(`Mode` %in% ntd_modes_map & `Operating Expense Type` != "Total") %>%
+  filter(`Mode` %in% ntd_modes_map & `Operating Expense Type` == "Total") %>%
   select(`Year`,
          `NTD ID`,
          `Agency`,
@@ -291,7 +301,9 @@ head(df_transit5)
 
 
 
-# Revenue sources table -------------------------------------------------------------------------------------------------
+
+
+ # Revenue sources table -------------------------------------------------------------------------------------------------
 
 
 # Roll up
@@ -473,8 +485,6 @@ if(export==TRUE){
   write_xlsx(list('Data' = df_transit8), file_transit8)
   
 }
-
-
 
 
 

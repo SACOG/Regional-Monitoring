@@ -27,7 +27,7 @@ PATH_GIT = Path(__file__).parent.parent.parent.parent
 PATH_CODE    = PATH_GIT / 'Data' / 'Census'
 PATH_CONFIG0 = PATH_GIT / 'config'
 PATH_CONFIG  = PATH_CODE / 'config'
-PATH_ORIG = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
+PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
 
 def load_yaml():

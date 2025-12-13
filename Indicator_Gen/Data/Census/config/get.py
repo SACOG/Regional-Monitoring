@@ -42,7 +42,7 @@ PATH_GIT = Path(__file__).parent.parent.parent.parent
 PATH_CODE    = PATH_GIT / 'Data' / 'Census'
 PATH_CONFIG0 = PATH_GIT / 'config'
 PATH_CONFIG  = PATH_CODE / 'config'
-PATH_ORIG = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
+PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
 FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
 FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
@@ -89,6 +89,7 @@ def get_data(
         & (df_urls['Estimate' ] == estimate)
         & (df_urls['c_vintage'] == year    )
         ]
+                  
 
     # Create rootpath and specify dataset type
     root_ = df_url['c_url'].values[0]
@@ -1062,6 +1063,7 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
         if import_tab == 'Counties':
             for state in list(dt_fips.keys()):
                 tqdm.write('State: ' + state)
+
                 try:
                     list_df_states.append(
                         get_data(df_urls        = df_urls
@@ -1099,13 +1101,13 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
         
     df_census = pd.concat(list_df_years)
 
-    if geography == 'Counties':
+    if geography in ['Block Groups', 'Tracts', 'Counties']:
         df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on = ['state', 'county'], right_on = ['STATEFP', 'COUNTYFP'])
         df_census = df_census.drop(['STATEFP', 'COUNTYFP'], axis=1).set_index(GEO_ID[geography] + ['COUNTYNAME', 'Year']).reset_index()
-    if geography in ['Block Groups', 'Tracts', 'Counties']:
-        df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on=['state', 'county'], right_on=['STATEFP', 'COUNTYFP'])
-        df_census.drop(['STATEFP', 'COUNTYFP'], axis=1, inplace=True)
-        df_census = df_census.set_index(GEO_ID[geography] + ['Year']).reset_index()
+    # if geography in ['Block Groups', 'Tracts', 'Counties']:
+    #     df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on=['state', 'county'], right_on=['STATEFP', 'COUNTYFP'])
+    #     df_census.drop(['STATEFP', 'COUNTYFP'], axis=1, inplace=True)
+    #     df_census = df_census.set_index(GEO_ID[geography] + ['Year']).reset_index()
 
     return df_census
 
@@ -1278,7 +1280,8 @@ def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_
 
     ## Result
     print()
-    df_census = df_census.dropna().reset_index(drop=True)
+    if estimate != 'DEC':
+        df_census = df_census.dropna().reset_index(drop=True)
     print('Number of rows/columns: ')
     print(df_census.shape)
     print('Years imported: ')

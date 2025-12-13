@@ -31,16 +31,14 @@ def keep_str_until_num(workbook_name):
     
 # Remove anything after specified string, use regular expression (currently set to remove everything after the first period)
 def re_remove_post(x, exp = ' '):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return x.split(exp, 1)[0]
+    try: x.split(exp, 1)[0]
+    except: pass
+    return x
     
 def re_remove_pre(x, exp = ' '):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return x.split(exp, 1)[1]
+    try: x.split(exp, 1)[1]
+    except: pass
+    return x
     
 
 

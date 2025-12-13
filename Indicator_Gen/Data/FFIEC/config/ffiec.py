@@ -1,3 +1,33 @@
+
+
+
+import pandas as pd
+import os
+from pathlib import Path
+from tqdm import tqdm
+from datetime import datetime
+from IPython.display import display
+pd.set_option('display.max_columns', None)
+
+
+PATH_GIT = Path.cwd().parent.parent
+PATH_CONFIG0 = PATH_GIT / 'config'
+PATH_CONFIG  = PATH_GIT / 'Data' / 'FFIEC' / 'config'
+
+# SharePoint OneDrive paths
+PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+PATH_MAIN = PATH_SP / 'Data'
+
+PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\FFIEC')
+
+import sys
+sys.path.append(str(PATH_CONFIG0))
+import functions as func
+import plot as pt
+
+
+
 # let's make functions that will import, clean, and shape our data the same way the Delaware guys did it
 # https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?counties=06101,06115,06113,06061,06017,06067&years=2023
 
@@ -17,7 +47,7 @@ def get_demographics_new(row):
         demographics.append(row['derived_ethnicity'])
     return demographics
 
-def hmda_import(years, counties, dtypes, path_raw):
+def hmda_import(years, counties, dtypes):
     '''
     Years can only be from 2018, to 2024. County codes can be found by using the online tool: https://ffiec.cfpb.gov/data-browser/data/2023?category=counties. 
     '''
@@ -37,9 +67,10 @@ def hmda_import(years, counties, dtypes, path_raw):
         list_df.append(df)
     
     df = pd.concat(list_df, ignore_index=True)
-    df.to_csv(os.path.join(path_raw, '2018-2023', 'HMDA_raw'), index=False)
+    df.to_csv(PATH_ORIG / '2018-2023' / 'HMDA_raw', index=False)
 
     return df
+
 
 
 def hmda_process(df):
@@ -125,7 +156,6 @@ def hmda_import_vintage(path, counties, dtype):
 
 
 def hmda_process_vintage(df):
-
     
     df = df[df['loan_purpose_name'].isin(['Home purchase', 'Home improvement', 'Refinancing'])]
     df = df[df['action_taken'].isin([1, 3])]

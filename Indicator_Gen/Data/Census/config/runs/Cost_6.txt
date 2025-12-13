@@ -1,10 +1,10 @@
 Project: Monitoring and Reporting
 Indicator Name: Cost_6
-Export Location: Vibrant and Inclusive Places\\Development\\Housing Cost
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost
 Folder: Housing Cost Burden
 Sample: PUMS
 Estimate: ACS5
 Geography: PUMA
-Years Imported: 2016, 2017, 2018, 2019, 2020, 2021, 2023
+Years Imported: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
 Import Tab: Counties
 Margin of Error: Yes

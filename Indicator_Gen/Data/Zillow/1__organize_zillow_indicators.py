@@ -1,6 +1,14 @@
 
 
-export=False
+def print2(): print(); print()
+
+
+
+
+EXPORT=True
+
+
+
 
 
 ## Preparing Workspace ---------------------------------------------------------------------------------------------------------------
@@ -12,13 +20,21 @@ from pathlib import Path
 from xlwt.Workbook import *
 from IPython.display import display
 
-path_git = Path(__file__).parent.parent.parent
-path_code    = path_git / 'Data' / 'Zillow'
-path_config0 = path_git / 'config'
+PATH_GIT = Path(__file__).parent.parent.parent
+PATH_CONFIG0 = PATH_GIT / 'config'
+
+
+# SharePoint OneDrive paths
+PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+PATH_ORIG = PATH_SP / 'Process Revamp' / 'Task 9. Collect new data' / 'Zillow'
+PATH_MAIN = PATH_SP / 'Data'
+PATH_OUT = PATH_MAIN / 'Vibrant and Inclusive Places' / 'Development' / 'Housing Cost'
+PATH_WEIGHTS = PATH_MAIN / 'Reference' / 'Weights'
+
 
 
 import sys
-sys.path.append(str(path_config0))
+sys.path.append(str(PATH_CONFIG0))
 import functions as func
 import plot as pt
 
@@ -43,23 +59,33 @@ def process_nonmpo(df):
     df = df[df['RegionType'] == regiontype]
 
     cols_dates = [col for col in df.columns if '20' in col]
-    df = df[['StateName', 'Metro', 'RegionName'] + cols_dates]
-    df = pd.melt(df, id_vars=['StateName', 'Metro', 'RegionName'], var_name='date_', value_name='Price')
+    if 'CountyName' in df.columns: cols_geos = ['StateName', 'Metro', 'CountyName', 'RegionName']
+    else: cols_geos = ['StateName', 'Metro', 'RegionName']
+
+    df = df[cols_geos + cols_dates]
+    df = pd.melt(df, id_vars=cols_geos, var_name='date_', value_name='Price')
     df = df[df['StateName'].isin(['CA'])]
     df = df[df['Metro'].isin(metros)]
 
-    df = df[['Metro', 'RegionName', 'date_', 'Price']]
-    df.columns = ['Metro', geography, 'date_', 'Price']
-
-    df = df.sort_values(by=['Metro', geography, 'date_'], ascending=[True, True, False]).reset_index(drop=True)
+    if 'CountyName' in df.columns:
+        df = df[['Metro', 'CountyName', 'RegionName', 'date_', 'Price']]
+        df.columns = ['Metro', 'CountyName', geography, 'date_', 'Price']
+        df = df.sort_values(by=['Metro', 'CountyName', geography, 'date_'], ascending=[True, True, True, False]).reset_index(drop=True)
+    else:
+        df = df[['Metro', 'RegionName', 'date_', 'Price']]
+        df.columns = ['Metro', geography, 'date_', 'Price']
+        df = df.sort_values(by=['Metro', geography, 'date_'], ascending=[True, True, False]).reset_index(drop=True)
 
     df['date_'] = pd.to_datetime(df['date_'])
     df['Year'] = df['date_'].dt.year
 
     if geography != 'Cities':
-        df_yr = df.groupby(['Metro', geography, 'Year'], as_index=False)['Price'].mean()
+        if 'CountyName' in df.columns:
+            df_yr = df.groupby(['Metro', 'CountyName', geography, 'Year'], as_index=False)['Price'].mean()
+        else:
+            df_yr = df.groupby(['Metro', geography, 'Year'], as_index=False)['Price'].mean()
     else:
-        file_weights = path_weights / 'Total_Households Places ACS5.xlsx'
+        file_weights = PATH_WEIGHTS / 'Total_Households Places ACS5.xlsx'
         df_weights = pd.read_excel(file_weights)
         df_weights = df_weights[['NAME', 'Year', 'Households']].rename(columns={'NAME':'Cities'})
         df_temp  = df_weights[df_weights['Year'] == 2023]
@@ -92,12 +118,20 @@ def process_nonmpo(df):
 
         df_no_na = df.dropna().drop_duplicates().reset_index(drop=True)
         wm = lambda x: np.average(x, weights = df_no_na.loc[x.index, "Households"])
-        df_yr = df_no_na.groupby(['Metro', geography, 'Year' ], as_index=False).agg(Price=('Price', wm))
-        df    = df_no_na.groupby(['Metro', geography, 'date_'], as_index=False).agg(Price=('Price', wm))
+        if 'CountyName' in df.columns:
+            df_yr = df_no_na.groupby(['Metro', 'CountyName', geography, 'Year' ], as_index=False).agg(Price=('Price', wm))
+            df    = df_no_na.groupby(['Metro', 'CountyName', geography, 'date_'], as_index=False).agg(Price=('Price', wm))
+        else:
+            df_yr = df_no_na.groupby(['Metro', geography, 'Year' ], as_index=False).agg(Price=('Price', wm))
+            df    = df_no_na.groupby(['Metro', geography, 'date_'], as_index=False).agg(Price=('Price', wm))
 
     df = df.drop_duplicates()
-    df    = df   .sort_values(['Metro', geography, 'date_'], ascending=[True, True, False]).reset_index(drop=True)
-    df_yr = df_yr.sort_values(['Metro', geography, 'Year' ], ascending=[True, True, False]).reset_index(drop=True)
+    if 'CountyName' in df.columns:
+        df    = df   .sort_values(['Metro', 'CountyName', geography, 'date_'], ascending=[True, True, True, False]).reset_index(drop=True)
+        df_yr = df_yr.sort_values(['Metro', 'CountyName', geography, 'Year' ], ascending=[True, True, True, False]).reset_index(drop=True)
+    else:
+        df    = df   .sort_values(['Metro', geography, 'date_'], ascending=[True, True, False]).reset_index(drop=True)
+        df_yr = df_yr.sort_values(['Metro', geography, 'Year' ], ascending=[True, True, False]).reset_index(drop=True)
 
     df['date_'] = df['date_'].astype('str')
 
@@ -152,7 +186,7 @@ def process_mpo(df):
     df['date_'] = pd.to_datetime(df['date_'])
     df['Year'] = df['date_'].dt.year
 
-    file_weights = path_weights / 'Total_Households MSA ACS1.xlsx'
+    file_weights = PATH_WEIGHTS / 'Total_Households MSA ACS1.xlsx'
     df_weights = pd.read_excel(file_weights)
     df_weights = df_weights[['MSA', 'Year', 'Households']]
     df_temp  = df_weights[df_weights['Year'] == 2023]
@@ -221,14 +255,6 @@ def process_mpo(df):
 
 
 
-# SharePoint OneDrive paths
-path_sp = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-path_orig = path_sp / 'Process Revamp' / 'Task 9. Collect new data' / 'Zillow'
-path_main = path_sp / 'Data'
-path_prod = path_sp / 'Products'
-path_out = path_main / 'Vibrant and Inclusive Places' / 'Development' / 'Housing Cost'
-path_weights = path_main / 'Reference' / 'Weights'
-
 
 
 
@@ -253,33 +279,33 @@ if __name__ == '__main__':
     dt_geo = {
             'Cost_1':
                 {
-                    'MSA'          : {'file_in':'Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'       , 'file_out': 'Cost_1 MSA Sales Price Zillow.xlsx'          },
-                    'Counties'     : {'file_in':'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'      , 'file_out': 'Cost_1 Counties Sales Price Zillow.xlsx'     },
-                    'Cities'       : {'file_in':'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'        , 'file_out': 'Cost_1 Cities Sales Price Zillow.xlsx'       },
-                    'Neighborhoods': {'file_in':'Neighborhood_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv', 'file_out': 'Cost_1 Neighborhoods Sales Price Zillow.xlsx'}
-                    # 'ZIP Codes'    : {'file_in':'Zip_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'         , 'file_out': 'Cost_1 ZIP Codes Sales Price Zillow.xlsx'    }
+                    # 'MSA'          : {'file_in':'Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'       , 'file_out': 'Cost_1 MSA Sales Price Zillow.xlsx'          },
+                    # 'Counties'     : {'file_in':'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'      , 'file_out': 'Cost_1 Counties Sales Price Zillow.xlsx'     },
+                    # 'Cities'       : {'file_in':'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'        , 'file_out': 'Cost_1 Cities Sales Price Zillow.xlsx'       },
+                    # 'Neighborhoods': {'file_in':'Neighborhood_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv', 'file_out': 'Cost_1 Neighborhoods Sales Price Zillow.xlsx'}
+                    'ZIP Codes'    : {'file_in':'Zip_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'         , 'file_out': 'Cost_1 ZIP Codes Sales Price Zillow.xlsx'    }
                 },
             'Cost_2':
                 {
-                    'MSA'      : {'file_in':'Metro_zori_uc_sfrcondomfr_sm_month.csv' , 'file_out': 'Cost_2 MSA Rent Price Zillow.xlsx'      },
-                    'Counties' : {'file_in':'County_zori_uc_sfrcondomfr_sm_month.csv', 'file_out': 'Cost_2 Counties Rent Price Zillow.xlsx' },
-                    'Cities'   : {'file_in':'City_zori_uc_sfrcondomfr_sm_month.csv'  , 'file_out': 'Cost_2 Cities Rent Price Zillow.xlsx'   }
-                    # 'ZIP Codes': {'file_in':'Zip_zori_uc_sfrcondomfr_sm_month.csv'   , 'file_out': 'Cost_2 ZIP Codes Rent Price Zillow.xlsx'}
+                    # 'MSA'      : {'file_in':'Metro_zori_uc_sfrcondomfr_sm_month.csv' , 'file_out': 'Cost_2 MSA Rent Price Zillow.xlsx'      },
+                    # 'Counties' : {'file_in':'County_zori_uc_sfrcondomfr_sm_month.csv', 'file_out': 'Cost_2 Counties Rent Price Zillow.xlsx' },
+                    # 'Cities'   : {'file_in':'City_zori_uc_sfrcondomfr_sm_month.csv'  , 'file_out': 'Cost_2 Cities Rent Price Zillow.xlsx'   }
+                    'ZIP Codes': {'file_in':'Zip_zori_uc_sfrcondomfr_sm_month.csv'   , 'file_out': 'Cost_2 ZIP Codes Rent Price Zillow.xlsx'}
                 }
         }
 
     for indicator in indicators:
 
-        print(); print()
+        print2()
         print(indicator)
 
         for geography, files in dt_geo[indicator].items():
 
-            print(); print()
+            print2()
             print(geography)
             print()
 
-            file_in = path_orig / files['file_in']
+            file_in = PATH_ORIG / files['file_in']
             df = pd.read_csv(file_in)
 
             if geography == 'MSA':
@@ -288,7 +314,7 @@ if __name__ == '__main__':
                 df, df_yr = process_nonmpo(df)
 
 
-            if export:
+            if EXPORT:
 
                 year_start = df_yr['Year'].min()
                 year_end   = df_yr['Year'].max()
@@ -297,18 +323,17 @@ if __name__ == '__main__':
                                             , indicator    = indicator
                                             , year_start   = year_start
                                             , year_end     = year_end
-                                            , path_config0 = path_config0
                                             , geography    = geography)
                 print("About page documentation table:")
                 display(df_about)
 
                 if indicator == 'Cost_1':
-                    path_sp = path_out / 'Cost_1 Sales Price'
+                    PATH_SP = PATH_OUT / 'Cost_1 Sales Price'
                 if indicator == 'Cost_2':
-                    path_sp = path_out / 'Cost_2 Rent Prices'
+                    PATH_SP = PATH_OUT / 'Cost_2 Rent Prices'
                 path_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
-                paths = [path_sp, path_server]
+                paths = [PATH_SP, path_server]
                 workbook_name = files['file_out']
 
                 for path_ in paths:

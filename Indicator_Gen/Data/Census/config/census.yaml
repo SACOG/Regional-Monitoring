@@ -105,7 +105,7 @@ Indicators:
     Cost_5:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
       folder: 'Home Ownership'
-      sample: 'ACS'
+      sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
@@ -114,7 +114,7 @@ Indicators:
     Income_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
       folder: 'HH Income'
-      sample: 'ACS'
+      sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
@@ -965,7 +965,7 @@ Indicators:
     Total_Population:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Reference\Weights'
       folder: ''
-      sample: 'ACS'
+      sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
@@ -1178,3 +1178,48 @@ Import Geographies:
   PUMA: Counties
 
 
+
+# Samples:
+#   DEC:
+#     - SF1
+#     - SF2
+#     - SF3
+#     - DP
+#     - DHC
+#   ACS:
+#     - DT
+#     - DP
+#     - SUBJECT
+#     - PUMS
+#   LEHD:
+#     - RE
+#     - SA
+#     - SE
+
+
+
+# ACS5:
+#   geographies_available:
+#   - Block Groups
+#   - Tracts
+#   - Counties
+#   - MSA
+#   - Places
+#   - ZIP Codes
+#   - Congressional Districts
+#   - State Legislative Upper Districts
+#   - State Legislative Lower Districts
+#   - States
+#   - National
+#   years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+# ACS1:
+#   geographies_available:
+#   - Counties
+#   - MSA
+#   - Places
+#   - Congressional Districts
+#   - State Legislative Upper Districts
+#   - State Legislative Lower Districts
+#   - States
+#   - National
+#   years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]

@@ -49,12 +49,13 @@ FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
 
 # SharePoint OneDrive paths
 PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-PATH_ORIG = PATH_SP / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
 PATH_MAIN = PATH_SP / 'Data'
 PATH_WEIGHTS = PATH_MAIN / 'Reference' / 'Weights'
 PATH_PROD = PATH_SP / 'Products'
+PATH_ABOUT = PATH_SP / 'Process Revamp' / 'Task 6. Process Map'
 
 PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
 
 sys.path.append(str(PATH_CONFIG0))

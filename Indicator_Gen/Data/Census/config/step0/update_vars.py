@@ -8,11 +8,11 @@ export=True
 
 
 
-ACS=True
+ACS=False
 PUMS=False
 SUBJECT=False
 DP=False
-DEC=False
+DEC=True
 LEHD=False
 CPS=False
 
@@ -49,6 +49,18 @@ import functions as func
 
 sys.path.append(str(PATH_CONFIG))
 import get
+
+
+def import_dec_vars(year, sample):
+    with urllib.request.urlopen(f"https://api.census.gov/data/{year}/dec/{sample}/variables.json") as url:
+        dt = json.load(url)
+    df = pd.DataFrame.from_dict(dt['variables']).T.reset_index().rename(columns = {'index':'ID'})
+    df = df[['ID', 'label', 'concept', 'predicateType', 'group']]
+    df['Year'] = year
+    df['estimate'] = sample
+    df = df.sort_values(['ID'])
+    display(df.head())
+    return df
 
 
 
@@ -663,6 +675,7 @@ if __name__ == '__main__':
 
 
 
+
     if DEC:
 
         print2()
@@ -673,50 +686,17 @@ if __name__ == '__main__':
 
         ## Importing ---
 
-        with urllib.request.urlopen("https://api.census.gov/data/2000/dec/sf1/variables.json") as url:
-            dict_dec_2000 = json.load(url)
-        df_dec_2000 = pd.DataFrame.from_dict(dict_dec_2000['variables']).T.reset_index().rename(columns = {'index':'ID'})
-        df_dec_2000 = df_dec_2000[['ID', 'label', 'concept', 'predicateType', 'group']]
-        df_dec_2000['Year'] = 2000
-        df_dec_2000['estimate'] = 'sf1'
-        df_dec_2000 = df_dec_2000.sort_values(['ID'])
-        display(df_dec_2000.head())
-
-
-        with urllib.request.urlopen("https://api.census.gov/data/2010/dec/sf1/variables.json") as url:
-            dict_dec_2010 = json.load(url)
-        df_dec_2010 = pd.DataFrame.from_dict(dict_dec_2010['variables']).T.reset_index().rename(columns = {'index':'ID'})
-        df_dec_2010 = df_dec_2010[['ID', 'label', 'concept', 'predicateType', 'group']]
-        df_dec_2010['Year'] = 2010
-        df_dec_2010['estimate'] = 'sf1'
-        df_dec_2010 = df_dec_2010.sort_values(['ID'])
-        display(df_dec_2010.head())
-
-
-        with urllib.request.urlopen("https://api.census.gov/data/2020/dec/dp/variables.json") as url:
-            dict_dec_2020 = json.load(url)
-        df_dec_2020 = pd.DataFrame.from_dict(dict_dec_2020['variables']).T.reset_index().rename(columns = {'index':'ID'})
-        df_dec_2020 = df_dec_2020[['ID', 'label', 'concept', 'predicateType', 'group']]
-        df_dec_2020['Year'] = 2020
-        df_dec_2020['estimate'] = 'dp'
-        df_dec_2020 = df_dec_2020.sort_values(['ID'])
-        display(df_dec_2020.head())
-
-
-        with urllib.request.urlopen("https://api.census.gov/data/2020/dec/dhc/variables.json") as url:
-            dict_dhc_2020 = json.load(url)
-        df_dhc_2020 = pd.DataFrame.from_dict(dict_dhc_2020['variables']).T.reset_index().rename(columns = {'index':'ID'})
-        df_dhc_2020 = df_dhc_2020[['ID', 'label', 'concept', 'predicateType', 'group']]
-        df_dhc_2020['Year'] = 2020
-        df_dhc_2020['estimate'] = 'dhc'
-        df_dhc_2020 = df_dhc_2020.sort_values(['ID'])
-        display(df_dhc_2020.head())
+        df_dec_2000_sf1 = import_dec_vars(2000, 'sf1')
+        df_dec_2000_sf3 = import_dec_vars(2000, 'sf3')
+        df_dec_2010_sf1 = import_dec_vars(2010, 'sf1')
+        df_dec_2020_dp  = import_dec_vars(2020,  'dp')
+        df_dec_2020_dhc = import_dec_vars(2020, 'dhc')
 
 
 
         ## Combining ---
 
-        df_dec = pd.concat([df_dec_2000, df_dec_2010, df_dec_2020, df_dhc_2020])
+        df_dec = pd.concat([df_dec_2000_sf1, df_dec_2000_sf3, df_dec_2010_sf1, df_dec_2020_dp, df_dec_2020_dhc])
         df_dec['Label_clean'] = df_dec['label'].str.replace('Estimate!!', '')
         df_dec['Label_clean'] = df_dec['Label_clean'].str.replace('!!', ' ')
         df_dec['Label_clean'] = df_dec['Label_clean'].str.replace(':', '')

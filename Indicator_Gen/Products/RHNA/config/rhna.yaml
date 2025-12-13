@@ -532,7 +532,7 @@ HSG_8:
   Notes: 'Zillow describes the ZHVI as a smoothed, seasonally adjusted measure of the typical home value and market changes across a given region and housing type.\n
     The ZHVI reflects the typical value for homes in the 35th to 65th percentile range.\n
     Includes all owner-occpied housing units, including both single-family homes and condominiums.\n
-    The regional estimate is a household-weighted average of county-level ZHVI files, using yearly household count estimates from DOF E5 series\n.
+    The regional estimate is a household-weighted average of county-level ZHVI files, using yearly household count estimates from DOF E5 series.\n
     For unincorporated communities, the value is a population weighted average of unincorporated communities in the county matched to census-designated population counts.'
 
 HSG_9:
@@ -1275,7 +1275,7 @@ AFFH_2:
     The TCAC and HCD created the Opportunity Map using reliable and publicly available data sources to identify areas in the state whose characteristics have been shown by research to support\n
     positive economic, educational, and health outcomes for low-income families and their children.  The TCAC/HCD Opportunity Map uses 21 indicators to calculate opportunity index scores for\n
     census tracts in each region in California.  For more information on these indicators, see the Opportunity Map methodology document.\n
-    The TCAC/HCD Opportunity Map categorizes census tracts into five groups based on opportunity index scores:
+    The TCAC/HCD Opportunity Map categorizes census tracts into five groups based on opportunity index scores:\n
     - Highest Resource\n
     - High Resource\n
     - Moderate Resource/Moderate Resource (Rapidly Changing)\n

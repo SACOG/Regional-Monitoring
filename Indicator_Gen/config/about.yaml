@@ -2549,16 +2549,22 @@ NTD:
     Geography:
     - Transit Operator level
     Website:
-    - Audits can be found on individual transit operator websites
+    - https://www.transit.dot.gov/ntd/ntd-data
+    # - Audits can be found on individual transit operator websites
     Last Updated:
     - 
     Next Update:
-    - '2025-11-01'
+    - '2026-11-01'
     Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
       https://www.transit.dot.gov/ntd/transit-agency-profiles \n
       Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
       The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
       The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+    # Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
+    #   https://www.transit.dot.gov/ntd/transit-agency-profiles \n
+    #   Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
+    #   The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
+    #   The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
 
   Transit_2:
     Indicator Title:

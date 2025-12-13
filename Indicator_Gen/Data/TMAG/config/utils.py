@@ -24,7 +24,7 @@ def time_it(task_desc=None):
             start = perf_counter()
             result = func(*args, **kwargs)
             elapsed = round((perf_counter() - start) / 60, 1)
-            print(f"{task_desc} finished in {elapsed} mins.") 
+            print(f"{task_desc} finished in {elapsed} mins.")
             return result
         return wrapper
     return time_it_decorator

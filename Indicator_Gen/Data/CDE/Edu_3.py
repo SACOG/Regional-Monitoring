@@ -1,50 +1,43 @@
 
 
 
+# Workspace ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-## Packages ---
+EXPORT=False
+
+
 import pandas as pd
 import os
-import getpass
 from pathlib import Path
 from tqdm import tqdm
-from datetime import date
-from IPython.display import display
 import random
 import time
+from IPython.display import display
+pd.set_option('display.max_columns', None)
+
+
+PATH_GIT = Path.cwd().parent.parent
+PATH_CONFIG0 = PATH_GIT / 'config'
+
+# SharePoint OneDrive paths
+PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
+PATH_MAIN = PATH_SP / 'Data'
+
+PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\BEA')
+FILE_IN = PATH_ORIG / 'CAGDP9' / 'CAGDP9_MSA_2001_2023.csv'
+
+import sys
+sys.path.append(str(PATH_CONFIG0))
+import functions as func
 
 
 
 
-## File paths ---
 
-user = getpass.getuser()
-path_users = Path.home()
+# Main ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-path_sp = path_users / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-path_raw = path_sp / 'Process Revamp' / 'Task 9. Collect new data' / 'Census'
-path_main = path_sp / 'Data'
-path_prod = path_sp / 'Products'
-path_git = path_users / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
-path_code    = path_git / 'Data' / 'Census'
-path_config0 = path_git / 'config'
-path_config  = path_code / 'config'
-path_server = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
-
-
-
-## User defined functions ---
-
-path_func = path_config0 / 'Functions.py'
-with path_func.open("r") as f:
-    exec(f.read())
-
-export=True
-
-
-
-## Processing ----
 
 if __name__ == '__main__':
         
@@ -166,23 +159,18 @@ if __name__ == '__main__':
     print(); print()
 
 
-    ## Exporting ---
-
-    if export:
+    if EXPORT:
 
         indicator='Edu_3'
         sample_type='CDE'
         geography='Counties and School Districts'
+        file_out = PATH_SERVER / f'{indicator} A-G v2.xlsx'
 
-        workbook = f'{indicator} A-G v2.xlsx'
-        file_out = path_server / workbook
-
-        df_about = write_about(sample_type     = sample_type
-                                , indicator    = indicator
-                                , year_start   = year_start
-                                , year_end     = year_end
-                                , geography    = geography
-                                , path_config0 = path_config0)
+        df_about = func.write_about(sample_type  = sample_type
+                                    , indicator  = indicator
+                                    , year_start = year_start
+                                    , year_end   = year_end
+                                    , geography  = geography)
         display(df_about)
 
 

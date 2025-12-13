@@ -86,6 +86,8 @@ if __name__ == '__main__':
         df_wac = df_wac[df_wac['job_sector_code'].isin(job_sectors)]
         df_wac = df_wac.reset_index(drop=True)
 
+        breakpoint()
+
         conditions = [
             df_wac['Desc'].isin(['Number of jobs with earnings $1250/month or less'])
             , df_wac['Desc'].isin(['Number of jobs with earnings $1251/month to $3333/month'])
