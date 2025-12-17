@@ -54,9 +54,7 @@ PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Mon
 PATH_CONGESTION = PATH_SP / 'Data' / 'Safe Equitable Resilient Infrastructure' / 'Congestion'
 PATH_PHED  = PATH_CONGESTION / 'RITIS' / 'PHED'
 PATH_LOTTR = PATH_CONGESTION / 'RITIS' / 'LOTTR'
-#PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
-## Format csv names
 # clean_names.clean_files(PATH_IDRIVE) # Assuming this is a local utility
 
 
@@ -184,7 +182,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     )
     final['year'] = year_str
     
-    # --- System Metrics (CORRECTED) ---
+    # --- System Metrics ---
     valid = (final['havg_spd_worst4hrs'] > -1) & (final['ff_speed_art60thp'] > -1)
     congested = (final['congratio_worst4hrs'] < 0.6) & valid
     
@@ -206,7 +204,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
 
 
 # ====================================================================
-# Main Processing Loop (No Changes Needed Here)
+# Main Processing Loop
 # ====================================================================
 
 all_system_metrics = []
@@ -304,9 +302,7 @@ for zip_path in zip_files:
             writer.close()
         print("  Finished partitioning.")
 
-        # -----------------------------------------
-        # STEP 3 *MUST REMAIN INSIDE TEMP DIR BLOCK*
-        # -----------------------------------------
+        # --- 3. Read parquet files to pandas and compute metrics ---
         print("  Loading full year data from partitioned files...")
 
         try:
@@ -333,7 +329,7 @@ for zip_path in zip_files:
     
 
 # ====================================================================
-# Final Summary Output (No Changes Needed Here)
+# Final Summary Output
 # ====================================================================
 
 if all_system_metrics:
