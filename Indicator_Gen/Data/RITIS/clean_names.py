@@ -1,3 +1,11 @@
+"""
+Docstring for Indicator_Gen.Data.RITIS.combine_monthly_tables
+Author: Terrell Enoru
+Date: December 2025
+This script takes the zip files downloaded from RITIS and formats the names such that they indicate whether they contain truck data, passenger data, or both.  
+It also removes any extraneous characters such as (1), (2), etc. from the filenames.
+"""
+
 import os
 import re
 import zipfile

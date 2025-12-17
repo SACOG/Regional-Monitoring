@@ -1,5 +1,11 @@
 export=False
-
+"""
+Docstring for Indicator_Gen.Data.RITIS.combine_monthly_tables
+Author: Terrell Enoru
+Date: December 2025
+This script combines all the monthly tables for the current year into a single yearly table for a specified vehicle class 
+so it can be processed with the other yearly zips by the combine_yearly_tables.py script.
+"""
 from pathlib import Path
 from zipfile import ZipFile
 import pandas as pd

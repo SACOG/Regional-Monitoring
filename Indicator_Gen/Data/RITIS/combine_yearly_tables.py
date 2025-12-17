@@ -1,3 +1,10 @@
+"""
+Docstring for Indicator_Gen.Data.RITIS.combine_yearly_tables
+Author: Tenoru
+Date: December 2025
+This script calculates system-wide congestion metrics as well as tmc-level metrics for every YEAR available in the specified input directory and saves them to csvs in the specified output directories.  
+If using this for Congestion 2 monthly indicator just run master_monthly.py instead.
+"""
 export=False
 
 from pathlib import Path
@@ -363,10 +370,7 @@ else:
 summary_output_filename = f"Summary{base_filename[5:]}"
 summary_output_path = PATH_SUMMARY / summary_output_filename
 
-if summary_output_path.exists():
-    print(f"\n*** Skipping {summary_output_filename} ***")
-    print(f"  Output file already exists at: {summary_output_path}")
-else:
-    print(f"  ...Exporting to {summary_output_filename}")
-    df_summary.to_csv(summary_output_path, index=False)
-    print("  Export complete.")
+
+print(f"  ...Exporting to {summary_output_filename}")
+df_summary.to_csv(summary_output_path, index=False)
+print("  Export complete.")
