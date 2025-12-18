@@ -138,11 +138,6 @@ print(f"\nCreating yearly zip file...")
 zip_filename = f"{year}{vehicle_suffix}.zip"
 zip_output_path = PATH_YEARLY / zip_filename
 
-if zip_output_path.exists():
-    print(f"Warning: {zip_filename} already exists. Skipping.")
-    import os
-    os.unlink(temp_csv_path)
-    sys.exit()
 
 # Prepare Contents.txt
 contents_text = f"Speed, historical average speed, reference speed, travel time (reported in seconds), and data density for NPMRDS from INRIX ({vehicle_description}) data expanded"
@@ -155,11 +150,7 @@ try:
         with open(temp_csv_path, 'rb') as f_in:
             with zf.open(yearly_csv_name, 'w',force_zip64=True) as f_out:
                 shutil.copyfileobj(f_in, f_out, length=8192*1024)
-                #while True:
-                    #chunk = f_in.read(8192 * 1024)  # 8MB chunks
-                    #if not chunk:
-                        #break
-                    #f_out.write(chunk)
+                
         print(f"  Added {yearly_csv_name} ({total_rows:,} rows)")
         
         # Write TMC identification
