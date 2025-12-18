@@ -1,3 +1,10 @@
+"""
+Docstring for Indicator_Gen.Data.RITIS.append_matching_tables
+Author: Terrell Enoru
+Date: December 2025
+This script takes two files and if they have matching columns and compatible metadata (Final/Summary, vehicle class), merges them into a single file and exports it to the appropriate directory.
+If Congestion_2_Monthly is set to True, it will also export an Excel file formatted for the Congestion 2 Monthly indicator.
+"""
 import pandas as pd
 import sys
 from pathlib import Path
