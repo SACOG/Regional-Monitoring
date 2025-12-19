@@ -2488,7 +2488,7 @@ TIMS:
     Last Updated:
     - 
     Next Update:
-    - '2025-10-01'
+    - '2026-10-01'
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS'
 
@@ -2508,7 +2508,7 @@ TIMS:
     Last Updated:
     - 
     Next Update:
-    - '2025-10-01'
+    - '2026-10-01'
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS'
 
@@ -2528,7 +2528,7 @@ TIMS:
     Last Updated:
     - 
     Next Update:
-    - '2025-10-01'
+    - '2026-10-01'
     Notes: 'TIMS uses the following data sets in the indicator preparation\n
       Serious Injury definition comes from SWITRS\n
       Totals differ slightly from combined bike and ped collision indicator, likely due to underlying source treatment of other non-motorized modes'
@@ -2543,9 +2543,9 @@ NTD:
     Source:
     - National Transit Database (NTD)
     Year(s):
-    - 2014-2023
+    - 2002-2024
     Description:
-    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    - Total service hours and service hours per capita by transit mode
     Geography:
     - Transit Operator level
     Website:
@@ -2555,16 +2555,17 @@ NTD:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
-      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
-      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
-      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
-      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
-    # Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
-    #   https://www.transit.dot.gov/ntd/transit-agency-profiles \n
-    #   Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
-    #   The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
-    #   The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
 
   Transit_2:
     Indicator Title:
@@ -2572,9 +2573,9 @@ NTD:
     Source:
     - National Transit Database (NTD)
     Year(s):
-    - 2014-2023
+    - 2002-2024
     Description:
-    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    - Total ridership and ridership per capita by transit mode
     Geography:
     - Transit Operator level
     Website:
@@ -2582,12 +2583,18 @@ NTD:
     Last Updated:
     - 
     Next Update:
-    - '2025-11-01'
-    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
-      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
-      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
-      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
-      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+    - '2026-11-01'
+    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
 
   Transit_4:
     Indicator Title:
@@ -2595,9 +2602,9 @@ NTD:
     Source:
     - National Transit Database (NTD)
     Year(s):
-    - 2014-2023
+    - 2002-2024
     Description:
-    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    - Total fare revenue and fare revenue per capita by transit mode
     Geography:
     - Transit Operator level
     Website:
@@ -2605,12 +2612,18 @@ NTD:
     Last Updated:
     - 
     Next Update:
-    - '2025-11-01'
-    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
-      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
-      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
-      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
-      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+    - '2026-11-01'
+    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
 
   Transit_5:
     Indicator Title:
@@ -2618,9 +2631,9 @@ NTD:
     Source:
     - National Transit Database (NTD)
     Year(s):
-    - 2014-2023
+    - 2002-2024
     Description:
-    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    - Total operating expenses and operating expenses per capita by transit mode
     Geography:
     - Transit Operator level
     Website:
@@ -2628,12 +2641,18 @@ NTD:
     Last Updated:
     - 
     Next Update:
-    - '2025-11-01'
-    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
-      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
-      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
-      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
-      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+    - '2026-11-01'
+    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
 
   Transit_6:
     Indicator Title:
@@ -2641,9 +2660,9 @@ NTD:
     Source:
     - National Transit Database (NTD)
     Year(s):
-    - 2014-2023
+    - 2014-2024
     Description:
-    - Fixed route, commuter service, and demand response as collected from triennial performance audits (per capita)
+    - Funds expended on capital/operations and funds expended on capital/operations per capita by funding source
     Geography:
     - Transit Operator level
     Website:
@@ -2651,13 +2670,47 @@ NTD:
     Last Updated:
     - 
     Next Update:
-    - '2025-11-01'
-    Notes: 'Data that could not be found in Triennial Performance Audits were collected from the National Transit Database (NTD). NTD numbers are similar to those found in the audits.\n
-      https://www.transit.dot.gov/ntd/transit-agency-profiles \n
-      Data for year 2022 currently uses National Transit Database, until Triennial Performance Audit data becomes available.\n
-      The NTD report for Placer County includes service outside of SACOG area (Tahoe Truckee Area Regional Transit). SACOG worked with sponsor for 2022 numbers just for PCT (i.e., not including Tahoe).\n
-      The Triennial audit data includes all the transportation services provided by Paratransit, while the NTD data only covers Paratranist trips provided on behalf of Alta. Since 2022 uses NTD data across operators, the dataset for Paratransit currently uses NTD back through time until new audit data is released.'
+    - '2026-11-01'
+    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
 
+  Transit_7:
+    Indicator Title:
+    - Transit Cost Effectiveness
+    Source:
+    - National Transit Database (NTD)
+    Year(s):
+    - 2015-2024
+    Description:
+    - Transit cost effectiveness and cost effectiveness per capita by transit mode
+    Geography:
+    - Transit Operator level
+    Website:
+    - Audits can be found on individual transit operator websites
+    Last Updated:
+    - 
+    Next Update:
+    - '2026-11-01'
+    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
 
 
 
@@ -2729,7 +2782,7 @@ TMAG:
     - 
     Next Update:
     - '2026-06-01'
-    Notes: 'This indicator estimates the number of jobs, schools, or neighborhood services accessible by various transit modes.\n
+    Notes: 'This indicator estimates the number of jobs, schools, or neighborhood services accessible by transit mode.\n
       Conveyal applies a decay curve rather than a fixed time cutoff to estimate the sum all opportunities in the region, with each opportunity weighted by the population in that region.\n
       The number of jobs, schools, and neighborhood services is estimated using a point of interest dataset prepared by SACOG (sourced from Overture and CDE).\n
       The measure defines educational facilities as public and private K-12 schools, pre-schools, and universities, including vocational and technical schools.\n
@@ -2753,7 +2806,7 @@ TMAG:
     - 
     Next Update:
     - '2026-06-01'
-    Notes: 'This indicator estimates the number of jobs, schools, or neighborhood services accessible by various transit modes.\n
+    Notes: 'This indicator estimates the number of jobs, schools, or neighborhood services accessible by transit mode.\n
       Conveyal applies a decay curve rather than a fixed time cutoff to estimate the sum all opportunities in the region, with each opportunity weighted by the population in that region.\n
       The number of jobs, schools, and neighborhood services is estimated using a point of interest dataset prepared by SACOG (sourced from Overture and CDE).\n
       The measure defines educational facilities as public and private K-12 schools, pre-schools, and universities, including vocational and technical schools.\n

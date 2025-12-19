@@ -17,6 +17,7 @@ ntd_indicators <- c(
   Transit_4 = 'Fares',
   Transit_5 = 'Operating Expenses',
   Transit_6 = 'Revenue Sources',
+  Transit_7 = 'Cost Effectiveness',
   Transit_8 = 'Vehicle Inventories'
 )
 
@@ -258,7 +259,7 @@ read_veh <- function(file){
 }
 
 
-
+# Might want 300-400 hours in Tool development, and only 422-522 hours in data collection/analysis (possibly)
 
 
 

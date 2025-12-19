@@ -16,7 +16,7 @@ PATH_CONFIG  = PATH_GIT / 'Data' / 'TIMS' / 'config'
 
 # SharePoint OneDrive paths
 PATH_MAIN = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' / 'Data'
-PATH_OUT  = PATH_MAIN, 'Safe Equitable Resilient Infrastructure' / 'Safety'
+PATH_OUT  = PATH_MAIN / 'Safe Equitable Resilient Infrastructure' / 'Safety'
 PATH_TIMS = PATH_OUT / 'TIMS'
 PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
@@ -32,7 +32,7 @@ def jurisdiction(categories, years_to_import):
         path_cat = PATH_TIMS / cat / 'Jurisdictions'
 
         dt_counties = {}
-        for county in path_cat:
+        for county in os.listdir(path_cat):
             path_county = PATH_TIMS / cat / 'Jurisdictions' / county
         
             list_files = []
@@ -91,7 +91,7 @@ def jurisdiction(categories, years_to_import):
                     else:
                         list_df_total.append(df_temp)
         if cat == 'Non-Motorized':                
-            df_non1  = pd.concat(list_df_non1 )
+            df_non1  = pd.concat(list_df_non1)
             df_non2  = pd.concat(list_df_non2)
             list_df_cat = [df_non1, df_non2]
         else:                
