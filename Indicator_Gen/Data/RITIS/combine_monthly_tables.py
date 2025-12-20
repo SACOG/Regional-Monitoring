@@ -300,7 +300,7 @@ for zip_path in zip_files:
 
     # Store results for final summary
     system_metrics = {
-        'month': year_month,
+        'year_or_month': year_month,
         'total_nhs_dirmiles': tot_nhs_dirmiles,
         'congested_miles': congested_miles,
         'pct_miles_congested': pct_dirmi_congested,
@@ -321,7 +321,7 @@ if all_system_metrics:
     print("\n\n*** Summary of All Processed Months ***")
     df_summary = pd.DataFrame(all_system_metrics)
     # Reorder columns for a cleaner look
-    df_summary = df_summary[['month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 
+    df_summary = df_summary[['year_or_month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 
                          'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
     print(df_summary.to_string(index=False, float_format="%.2f"))
 else:
@@ -332,8 +332,8 @@ else:
 # Export
 # ====================================================================    
 # name output file based on vehicle class and date range
-min_time = min(df_summary['month'])
-max_time = max(df_summary['month'])
+min_time = min(df_summary['year_or_month'])
+max_time = max(df_summary['year_or_month'])
 base_filename = f"Final_Congestion_{min_time}_to_{max_time}{tp_dict[vehicle_class]}.csv"
 
 output_path = PATH_FINAL / f"{base_filename}"

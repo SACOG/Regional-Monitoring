@@ -196,7 +196,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     obs_used_for_congestion = int(final.loc[final['epochs_worst4hrs'] > 0, 'epochs_worst4hrs'].sum())
     
     sys_metrics = {
-        'year': year_str,
+        'year_or_month': year_str,
         'total_nhs_dirmiles': final.loc[valid, 'miles'].sum(),
         'congested_miles': final.loc[congested, 'miles'].sum(),
         'num_valid_tmcs': valid.sum(),
@@ -340,7 +340,7 @@ for zip_path in zip_files:
 if all_system_metrics:
     print("\n\n*** Summary of All Processed Years ***")
     df_summary = pd.DataFrame(all_system_metrics)
-    df_summary = df_summary[['year', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
+    df_summary = df_summary[['year_or_month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
     print(df_summary.to_string(index=False, float_format="%.2f"))
     print("\nConcatenating all yearly reports...")
     all_final = pd.concat(all_final_list, ignore_index=True)
@@ -351,8 +351,8 @@ else:
 # ====================================================================
 # Export
 # ====================================================================    
-min_time = min(df_summary['year'])
-max_time = max(df_summary['year'])
+min_time = min(df_summary['year_or_month'])
+max_time = max(df_summary['year_or_month'])
 base_filename = f"Final_Congestion_{min_time}_to_{max_time}_{tp_dict[vehicle_class]}_Yearly.csv"
 
 output_path = PATH_FINAL / f"{base_filename}"

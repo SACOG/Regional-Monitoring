@@ -56,22 +56,35 @@ def run_script(script_path, script_name):
         return False
 
 
-def find_latest_files(pattern_prefix, vehicle_suffix):
+def find_latest_files(vehicle_code):
     """
-    Find the most recent Summary files matching a pattern.
-    Returns (older_file, newer_file) or (None, None) if not found.
+    Find the most recent yearly summary and the most recent monthly summary.
+    Returns (yearly_file, monthly_file) or (None, None) if not found.
     """
-    vehicle_code = tp_dict[vehicle_class]
     
-    summary_files = list(PATH_SUMMARY.glob(f'Summary_Congestion_*{vehicle_code}.csv'))
-    
-    if len(summary_files) < 2:
+    # Look for yearly file (contains "Yearly" in name)
+    yearly_files = list(PATH_SUMMARY.glob(f'Summary_Congestion_*{vehicle_code}_Yearly.csv'))
+    if not yearly_files:
+        print("  No yearly summary file found")
         return None, None
     
-    # Sort by modification time, get two most recent
-    summary_files.sort(key=lambda x: x.stat().st_mtime)
+    yearly_files.sort(key=lambda x: x.stat().st_mtime)
+    yearly_file = yearly_files[-1].name
+    print(f"  Found yearly: {yearly_file}")
     
-    return summary_files[-2].name, summary_files[-1].name
+    # Look for monthly file (does NOT contain "Yearly" in name)
+    monthly_files = [f for f in PATH_SUMMARY.glob(f'Summary_Congestion_*{vehicle_code}.csv') 
+                     if 'Yearly' not in f.name]
+    
+    if not monthly_files:
+        print("  No monthly summary file found")
+        return None, None
+    
+    monthly_files.sort(key=lambda x: x.stat().st_mtime)
+    monthly_file = monthly_files[-1].name
+    print(f"  Found monthly: {monthly_file}")
+    
+    return yearly_file, monthly_file
 
 
 def update_append_script(file1, file2):
@@ -138,7 +151,7 @@ def main():
     print("\n[STEP 4/4] Appending summary tables...")
     
     # Find the two most recent summary files
-    file1, file2 = find_latest_files('Summary_Congestion', tp_dict[vehicle_class])
+    file1, file2 = find_latest_files(tp_dict[vehicle_class])
     
     if not file1 or not file2:
         print("\n✗ Could not find summary files to append")
