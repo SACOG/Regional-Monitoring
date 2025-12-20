@@ -62,14 +62,13 @@ PATH_CONGESTION = PATH_SP / 'Data' / 'Safe Equitable Resilient Infrastructure' /
 PATH_PHED  = PATH_CONGESTION / 'RITIS' / 'PHED'
 PATH_LOTTR = PATH_CONGESTION / 'RITIS' / 'LOTTR'
 
-# clean_names.clean_files(PATH_IDRIVE) # Assuming this is a local utility
+# clean_names.clean_files(PATH_IDRIVE) 
 
 
 # ====================================================================
-# Functions (Refined)
+# Functions
 # ====================================================================
 
-# Removed 'calc_freeflow_speed' as its logic is now vectorized in 'process_year_optimized'
 
 def process_year_optimized(df_traffic_year, df_tmc, year_str):
     """
@@ -105,10 +104,10 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     # Calculate percentiles efficiently by f_system group
     fw_mask = df_ff['f_system'].isin([1.0, 2.0])
     
-    # Freeways (1,2) -> 85th percentile
+    # Take the 85th percentile of freeway speeds during free-flow period for freeway
     ff_fw = df_ff[fw_mask].groupby('tmc_code', observed=True)['speed'].quantile(0.85)
     
-    # Arterials (other) -> 60th percentile
+    # Take the 60th percentile of arterial speeds during free-flow period for freeway
     ff_art = df_ff[~fw_mask].groupby('tmc_code', observed=True)['speed'].quantile(0.60)
     
     # Combine results
@@ -127,8 +126,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     mask_weekday = df_base['day_of_week'].le(4)
     df_weekday = df_base[mask_weekday].copy()
 
-    # Harmonic Mean calculation: N / Sum(1/v). We calculate sum(1/v) inside agg.
-    # IMPROVEMENT: Calculate sum(1/v) directly inside agg to avoid creating a large 'inv_speed' column.
+    # Harmonic Mean calculation: N / Sum(1/v)
     hourly_agg = df_weekday.groupby(['tmc_code', 'hour'], observed=True)['speed'].agg(
         total_epochs_hr='count',
         sum_inv_speed=lambda x: np.sum(1.0 / x)
@@ -342,7 +340,6 @@ for zip_path in zip_files:
 if all_system_metrics:
     print("\n\n*** Summary of All Processed Years ***")
     df_summary = pd.DataFrame(all_system_metrics)
-    # Ensure this column list matches the keys returned by process_year_optimized
     df_summary = df_summary[['year', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
     print(df_summary.to_string(index=False, float_format="%.2f"))
     print("\nConcatenating all yearly reports...")
