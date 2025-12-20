@@ -359,13 +359,10 @@ max_time = max(df_summary['year'])
 base_filename = f"Final_Congestion_{min_time}_to_{max_time}_{tp_dict[vehicle_class]}_Yearly.csv"
 
 output_path = PATH_FINAL / f"{base_filename}"
-if output_path.exists():
-    print(f"\n*** Skipping {base_filename} ***")
-    print(f"  Output file already exists at: {output_path}")
-else:
-    print(f"  ...Exporting to {output_path}")
-    all_final.to_csv(output_path, index=False)
-    print("  Export complete.")
+
+print(f"  ...Exporting to {output_path}")
+all_final.to_csv(output_path, index=False)
+print("  Export complete.")
 
 summary_output_filename = f"Summary{base_filename[5:]}"
 summary_output_path = PATH_SUMMARY / summary_output_filename
