@@ -62,7 +62,7 @@ PATH_CONGESTION = PATH_SP / 'Data' / 'Safe Equitable Resilient Infrastructure' /
 PATH_PHED  = PATH_CONGESTION / 'RITIS' / 'PHED'
 PATH_LOTTR = PATH_CONGESTION / 'RITIS' / 'LOTTR'
 
-# clean_names.clean_files(PATH_IDRIVE) 
+clean_names.clean_files(PATH_IDRIVE) 
 
 
 # ====================================================================
