@@ -2,6 +2,14 @@
 
 
 
+## TODO:
+# Include all self transit operators as separate tab in the SACOG workbook, as opposed to a completely different workbook - CHECK
+# Include about page for state of good repair indicator
+# Remove pre-2015 years from cost-effectiveness and operating costs workbooks - CHECK
+# Include link to storymap on dashboard
+
+
+
 rm(list = ls())
 gc()
 options(scipen = 999)
@@ -100,7 +108,7 @@ colnames(df_dof) <- c('Year', 'Service Area Pop')
 
 df_service2 <- df_peers %>%
   left_join(., df_service, by = c("NTD ID"="NTD ID"), relationship = "many-to-many") %>%
-  filter(`Mode` %in% ntd_modes_map & `Time Period` == 'Annual Total') %>% 
+  filter(`Mode` %in% ntd_modes_map & `Time Period` == 'Annual Total') %>%
   select(`Year`,
          `NTD ID`,
          `Agency`,
@@ -133,6 +141,7 @@ df_service2 <- rbind(df_service2, df_pi, fill=TRUE)
 
 # By transit authority
 df_service3 <- merge(df_service2, df_pop, by=c('Year', 'NTD ID'), all.x=T)
+df_service3 <- df_service3[`Peer Assign` == 'self']
 df_service3[, ':='(
   VRH_per_capita = VRH/`Service Area Pop`,
   UPT_per_capita = UPT/`Service Area Pop`
@@ -193,6 +202,7 @@ df_fares2 <- df_peers %>%
 
 # By transit authority
 df_fares3 <- merge(df_fares2, df_pop, by=c('Year', 'NTD ID'), all.x=T)
+df_fares3 <- df_fares3[`Peer Assign` == 'self']
 df_fares3[, ':='(`Fare Revenues Per Capita` = `Fare Revenues`/`Service Area Pop`)]
 
 df_transit4 = df_fares3[, .(
@@ -224,11 +234,13 @@ tail(df_transit4_sacog)
 
 
 
-
-
+## TODO:
+# Why not show before
+# df_opex <- df_opex[!is.na(`Mode`)]
+df_opex <- df_opex[`Year` > 2014]
 df_opex2 <- df_peers %>%
   left_join(., df_opex, by = c("NTD ID"="NTD ID"), relationship = "many-to-many") %>%
-  filter(`Mode` %in% ntd_modes_map & `Operating Expense Type` == "Total") %>%
+  filter(`Mode` %in% ntd_modes_map & `Operating Expense Type` == "Total") %>% # should maybe be != Total
   select(`Year`,
          `NTD ID`,
          `Agency`,
@@ -244,6 +256,7 @@ df_opex2 <- df_peers %>%
 
 # By transit authority
 df_opex3 <- merge(df_opex2, df_pop, by=c('Year', 'NTD ID'), all.x=T)
+df_opex3 <- df_opex3[`Peer Assign` == 'self']
 df_opex3[, ':='(`Total Operating Expenses Per Capita` = `Total Operating Expenses`/`Service Area Pop`)]
 df_transit5 = df_opex3[, .(
   `Year`, `NTD ID`, `Agency`, `Acronym`, `Peer Assign`, `Mode`, `Total Operating Expenses`, `Total Operating Expenses Per Capita`
@@ -297,6 +310,7 @@ df_rev2 <- df_peers %>%
 
 # By transit authority
 df_rev3 <- merge(df_rev2, df_pop, by=c('Year', 'NTD ID'), all.x=T)
+df_rev3 <- df_rev3[`Peer Assign` == 'self']
 df_rev3[, ':='(
   `Funds Expended on Capital Per Capita` = `Funds Expended on Capital`/`Service Area Pop`,
   `Funds Expended on Operations Per Capita` = `Funds Expended on Operations`/`Service Area Pop`
@@ -349,6 +363,7 @@ cols_cpi <- c('Year', paste0('IAF_', as.character(df_transit7$Year %>% max())))
 df_cpi <- df_cpi[, cols_cpi, with=FALSE]
 
 df_transit7 <- merge(df_transit7, df_cpi, by = 'Year', all.x = TRUE)
+df_transit7 <- df_transit7[`Year` > 2014]
 
 df_transit7[, ':='(
   `Fare Adj` = `Fare Revenues`*`IAF_2024`,
@@ -365,6 +380,8 @@ df_transit7[, ':='(
   `OpEx per VRH` = `Total Operating Expenses`/`VRH`
 )]
 
+df_transit7 <- df_transit7[,.(`Year`, `NTD ID`, `Agency`, `Acronym`, `Peer Region`, `Transit Mode`, `Net cost per trip`)]
+
 
 # SACOG roll up
 df_transit7_sacog <- merge(df_transit1_sacog, df_transit4_sacog, by=c('Year', 'Region', 'Transit Mode'))
@@ -377,6 +394,7 @@ cols_cpi <- c('Year', paste0('IAF_', as.character(df_transit7$Year %>% max())))
 df_cpi <- df_cpi[, cols_cpi, with=FALSE]
 
 df_transit7_sacog <- merge(df_transit7_sacog, df_cpi, by = 'Year', all.x = TRUE)
+df_transit7_sacog <- df_transit7_sacog[`Year` > 2014]
 
 df_transit7_sacog[, ':='(
   `Fare Adj` = `Fare Revenues`*`IAF_2024`,
@@ -393,6 +411,7 @@ df_transit7_sacog[, ':='(
   `OpEx per VRH` = `Total Operating Expenses`/`VRH`
 )]
 
+df_transit7_sacog <- df_transit7_sacog[,.(`Year`, `Region`, `Transit Mode`, `Net cost per trip`)]
 
 
 
@@ -424,6 +443,7 @@ df_veh2 <- df_peers %>%
 
 # By transit authority
 df_veh3 <- merge(df_veh2, df_pop, by=c('Year', 'NTD ID'), all.x=T)
+df_veh3 <- df_veh3[`Peer Assign` == 'self']
 df_veh3[, ':='(
   `Weighted Average Miles Per Capita` = `Weighted Average Miles`/`Service Area Pop`,
   `Total Fleet Vehicles Per Capita` = `Total Fleet Vehicles`/`Service Area Pop`
@@ -493,8 +513,6 @@ head(df_transit8)
 
 
 
-
-
 if(export==TRUE){
   
   paths = c(path_transit, path_server)
@@ -511,35 +529,17 @@ if(export==TRUE){
     file_transit7 = file.path(path_, glue("Transit_7 {ntd_indicators['Transit_7']}.xlsx"))
     file_transit8 = file.path(path_, glue("Transit_8 {ntd_indicators['Transit_8']}.xlsx"))
     
-    write_xlsx(list('Data' = df_transit1), file_transit1)
-    write_xlsx(list('Data' = df_transit2), file_transit2)
-    write_xlsx(list('Data' = df_transit4), file_transit4)
-    write_xlsx(list('Data' = df_transit5), file_transit5)
-    write_xlsx(list('Data' = df_transit6), file_transit6)
-    write_xlsx(list('Data' = df_transit7), file_transit7)
-    write_xlsx(list('Data' = df_transit8), file_transit8)
-    
-    file_transit1_sacog = file.path(path_, glue("Transit_1 {ntd_indicators['Transit_1']} SACOG.xlsx"))
-    file_transit2_sacog = file.path(path_, glue("Transit_2 {ntd_indicators['Transit_2']} SACOG.xlsx"))
-    file_transit4_sacog = file.path(path_, glue("Transit_4 {ntd_indicators['Transit_4']} SACOG.xlsx"))
-    file_transit5_sacog = file.path(path_, glue("Transit_5 {ntd_indicators['Transit_5']} SACOG.xlsx"))
-    file_transit6_sacog = file.path(path_, glue("Transit_6 {ntd_indicators['Transit_6']} SACOG.xlsx"))
-    file_transit7_sacog = file.path(path_, glue("Transit_7 {ntd_indicators['Transit_7']} SACOG.xlsx"))
-    file_transit8_sacog = file.path(path_, glue("Transit_8 {ntd_indicators['Transit_8']} SACOG.xlsx"))
-    
-    write_xlsx(list('Data' = df_transit1_sacog), file_transit1_sacog)
-    write_xlsx(list('Data' = df_transit2_sacog), file_transit2_sacog)
-    write_xlsx(list('Data' = df_transit4_sacog), file_transit4_sacog)
-    write_xlsx(list('Data' = df_transit5_sacog), file_transit5_sacog)
-    write_xlsx(list('Data' = df_transit6_sacog), file_transit6_sacog)
-    write_xlsx(list('Data' = df_transit7_sacog), file_transit7_sacog)
-    write_xlsx(list('Data' = df_transit8_sacog), file_transit8_sacog)
+    write_xlsx(list('Transit Operator' = df_transit1, 'SACOG Region' = df_transit1_sacog), file_transit1)
+    write_xlsx(list('Transit Operator' = df_transit2, 'SACOG Region' = df_transit2_sacog), file_transit2)
+    write_xlsx(list('Transit Operator' = df_transit4, 'SACOG Region' = df_transit4_sacog), file_transit4)
+    write_xlsx(list('Transit Operator' = df_transit5, 'SACOG Region' = df_transit5_sacog), file_transit5)
+    write_xlsx(list('Transit Operator' = df_transit6, 'SACOG Region' = df_transit6_sacog), file_transit6)
+    write_xlsx(list('Transit Operator' = df_transit7, 'SACOG Region' = df_transit7_sacog), file_transit7)
+    write_xlsx(list('Transit Operator' = df_transit8, 'SACOG Region' = df_transit8_sacog), file_transit8)
     
   }
   
 }
-
-
 
 
 

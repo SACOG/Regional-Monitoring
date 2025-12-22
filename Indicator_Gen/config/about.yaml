@@ -2545,18 +2545,17 @@ NTD:
     Year(s):
     - 2002-2024
     Description:
-    - Total service hours and service hours per capita by transit mode
+    - Total revenue service hours and revenue service hours per capita, by transit mode
     Geography:
     - Transit Operator level
     Website:
     - https://www.transit.dot.gov/ntd/ntd-data
-    # - Audits can be found on individual transit operator websites
     Last Updated:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
-      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
       Key terms:\n
       DR = Demand Response\n
       LR = Light Rail\n
@@ -2579,13 +2578,13 @@ NTD:
     Geography:
     - Transit Operator level
     Website:
-    - Audits can be found on individual transit operator websites
+    - https://www.transit.dot.gov/ntd/ntd-data
     Last Updated:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
-      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
       Key terms:\n
       DR = Demand Response\n
       LR = Light Rail\n
@@ -2608,13 +2607,13 @@ NTD:
     Geography:
     - Transit Operator level
     Website:
-    - Audits can be found on individual transit operator websites
+    - https://www.transit.dot.gov/ntd/ntd-data
     Last Updated:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
-      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
       Key terms:\n
       DR = Demand Response\n
       LR = Light Rail\n
@@ -2637,13 +2636,13 @@ NTD:
     Geography:
     - Transit Operator level
     Website:
-    - Audits can be found on individual transit operator websites
+    - https://www.transit.dot.gov/ntd/ntd-data
     Last Updated:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
-      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
       Key terms:\n
       DR = Demand Response\n
       LR = Light Rail\n
@@ -2666,13 +2665,13 @@ NTD:
     Geography:
     - Transit Operator level
     Website:
-    - Audits can be found on individual transit operator websites
+    - https://www.transit.dot.gov/ntd/ntd-data
     Last Updated:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
-      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
       Key terms:\n
       DR = Demand Response\n
       LR = Light Rail\n
@@ -2691,17 +2690,46 @@ NTD:
     Year(s):
     - 2015-2024
     Description:
-    - Transit cost effectiveness and cost effectiveness per capita by transit mode
+    - Net operating costs (less passenger fares) per transit boarding
     Geography:
     - Transit Operator level
     Website:
-    - Audits can be found on individual transit operator websites
+    - https://www.transit.dot.gov/ntd/ntd-data
     Last Updated:
     - 
     Next Update:
     - '2026-11-01'
-    Notes: 'The region is served by over ten transit operators, with key connections facilitating cross-jurisdictional travel.\n
-      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately. The figures were adjusted to reflect this reporting anomaly\n
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
+      Key terms:\n
+      DR = Demand Response\n
+      LR = Light Rail\n
+      MB = Motor Bus\n
+      CB = Commuter Bus\n
+      VRH = Actual Vehicle/Passenger Car Revenue Hours\n
+      VRM = Actual Vehicle/Passenger Car Revenue miles\n
+      UPT = Unlinked Passenger Trips
+      '
+
+  Transit_8:
+    Indicator Title:
+    - State of Good Repair
+    Source:
+    - National Transit Database (NTD)
+    Year(s):
+    - 2015-2024
+    Description:
+    - Average lifetime mileage of vehicles by vehicle type
+    Geography:
+    - Transit Operator level
+    Website:
+    - https://www.transit.dot.gov/ntd/ntd-data
+    Last Updated:
+    - 
+    Next Update:
+    - '2026-11-01'
+    Notes: 'Data is aggregated from all transit operators within the six-county Sacramento region.\n
+      Prior to 2020, SacRT ADA paratransit service was contracted and reported to the National Transit Database separately.\n
       Key terms:\n
       DR = Demand Response\n
       LR = Light Rail\n

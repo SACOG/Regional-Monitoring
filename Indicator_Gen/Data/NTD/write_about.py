@@ -32,50 +32,47 @@ import functions as func
 if __name__ == '__main__':
 
 
-    indicators = ['Transit_1', 'Transit_2', 'Transit_4', 'Transit_5', 'Transit_6', 'Transit_7']
+    indicators = ['Transit_1', 'Transit_2', 'Transit_4', 'Transit_5', 'Transit_6', 'Transit_7', 'Transit_8']
     # indicators = ['Transit_1', 'Transit_2']
 
     dt_ntd = {
-            'Transit_1' : ['Service Hours SACOG', 'Service Hours'],
-            'Transit_2' : ['Ridership SACOG', 'Ridership'],
-            'Transit_4' : ['Fares SACOG', 'Fares'],
-            'Transit_5' : ['Operating Expenses SACOG', 'Operating Expenses'],
-            'Transit_6' : ['Revenue Sources SACOG', 'Revenue Sources'],
-            'Transit_7' : ['Cost Effectiveness SACOG', 'Cost Effectiveness']
+            'Transit_1' : 'Service Hours',
+            'Transit_2' : 'Ridership',
+            'Transit_4' : 'Fares',
+            'Transit_5' : 'Operating Expenses',
+            'Transit_6' : 'Revenue Sources',
+            'Transit_7' : 'Cost Effectiveness',
+            'Transit_8' : 'Vehicle Inventories'
     }
 
     sample_type = 'NTD'
     paths = [PATH_SERVER, PATH_SP]
 
-
     for indicator in indicators:
         print(indicator); print()
-        for ii in dt_ntd[indicator]:
-            wkbook = f'{indicator} {ii}.xlsx'
-            file_in = PATH_SERVER / wkbook
-            df = pd.read_excel(file_in, sheet_name='Data')
-            print(wkbook)
-            # display(df)
+        wkbook = f'{indicator} {dt_ntd[indicator]}.xlsx'
+        file_in = PATH_SERVER / wkbook
+        df1 = pd.read_excel(file_in, sheet_name='Transit Operator')
+        df2 = pd.read_excel(file_in, sheet_name='SACOG Region'    )
+        print(wkbook)
+        # display(df)
 
-            year_start = df['Year'].min()
-            year_end   = df['Year'].max()
+        year_start = df2['Year'].min()
+        year_end   = df2['Year'].max()
 
-            df_about = func.write_about(sample_type  = sample_type
-                                        , indicator  = indicator
-                                        , year_start = year_start
-                                        , year_end   = year_end)
-            # display(df_about)
+        df_about = func.write_about(sample_type  = sample_type
+                                    , indicator  = indicator
+                                    , year_start = year_start
+                                    , year_end   = year_end)
+        # display(df_about)
 
-            if 'SACOG' in ii:
-                df_about.loc[df_about['Indicator']=='Geography', indicator] = 'SACOG 6-County Region'
-
-            for path in paths:
-                file_out = path / wkbook
-                with pd.ExcelWriter(file_out, engine='xlsxwriter') as writer:
-                    df_about.to_excel(writer, index=False, sheet_name='About', header=False)
-                    df      .to_excel(writer, index=False, sheet_name='Data')
-                print(f'Exported to {str(file_out)}')
-            print()
+        for path in paths:
+            file_out = path / wkbook
+            with pd.ExcelWriter(file_out, engine='xlsxwriter') as writer:
+                df_about.to_excel(writer, index=False, sheet_name='About', header=False)
+                df1     .to_excel(writer, index=False, sheet_name='Transit Operator'   )
+                df2     .to_excel(writer, index=False, sheet_name='SACOG Region'       )
+            print(f'Exported to {str(file_out)}')
         print2()
     print3()
 
