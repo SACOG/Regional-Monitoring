@@ -3,6 +3,9 @@ Indicator: Labor_2
 Export Location: Vibrant and Inclusive Places\\Economy\\Labor Force
 Folder: Unemployment
 Survey: LA
+Data Type: None
+Employer Size: None
+Ownership Type: None
 Measure Type: Unemployment Rate
 Seasonal Adjustment: U
 Geography: MSA

@@ -2,8 +2,7 @@
 
 
 
-
-
+import numpy as np
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
@@ -36,10 +35,10 @@ def re_remove_pre(x, exp = '('):
 if __name__ == '__main__':
 
     indicator = 'RHNA_POPEMP_14'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     base_year = 2002
-    end_year = 2022
+    end_year = 2023
 
 
     ## Mappings
@@ -85,8 +84,8 @@ if __name__ == '__main__':
         df_wac = df_wac.merge(df_lodes, on='job_sector_code', how='left')
         df_wac = df_wac[df_wac['job_sector_code'].isin(job_sectors)]
         df_wac = df_wac.reset_index(drop=True)
-
         breakpoint()
+
 
         conditions = [
             df_wac['Desc'].isin(['Number of jobs with earnings $1250/month or less'])

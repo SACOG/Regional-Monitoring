@@ -6,7 +6,7 @@ import geopandas as gpd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import yaml
+import plotly.express as px
 from IPython.display import display
 
 
@@ -40,8 +40,8 @@ def clean_years(df):
 if __name__ == '__main__':
         
     indicator = 'RHNA_HOMELS_4'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
 
     # Use URLs to import enrollment total files

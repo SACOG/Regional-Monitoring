@@ -255,7 +255,7 @@ def acs_processing_1(df_census, df_vars, geography, margin_of_error, mpo, import
     if margin_of_error == 'No':
         df_census = df_census[list(df_census.drop(['Total'], axis=1).columns) + ['Total']]
 
-    if geography == 'MSA': 
+    if geography == 'MSA':
         df_census = df_census.sort_values(['MSA_ID', 'Year', 'Estimate ID'], ascending=[True, False, True])
         df_census = df_census.rename(columns={'NAME':'MSA'})
     else: 
@@ -306,43 +306,6 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
         df_census = df_census.drop(['IAF_' + str(year_end)], axis=1)
 
 
-    # Some indicators require the roll up to be weighted by population
-    # The following step aligns the Race/Ethnicity mappings with the population counts workbook
-    if weighted_by != '':
-        file_weights = PATH_WEIGHTS / f'Total_{weighted_by} {geography} {estimate}.xlsx' # _ChamberStudy2026.xlsx
-        df_weight = pd.read_excel(file_weights, sheet_name=GEO_SHEETS[geography])
-
-        if geography == 'MSA': field_id = 'MSA_ID'
-        else: field_id = 'NAME'
-        
-        df_weight = df_weight[[field_id, 'Year','Race_Ethnicity', weighted_by]]
-        if weighted_by == 'Population': ## NEW, IDK IF THIS WILL WORK BUT THIS IS HOW IT SHOULD BE, NOT SURE HOW THIS WAS WORKING FOR HOUSEHOLDS BEFORE
-            conditions = [
-                            (df_weight["Race_Ethnicity"] == 'All'                                           ),
-                            (df_weight["Race_Ethnicity"] == 'American Indian or Alaska Native (NH)'         ),
-                            (df_weight["Race_Ethnicity"] == 'Asian (NH)'                                    ),
-                            (df_weight["Race_Ethnicity"] == 'Black or African American (NH)'                ),
-                            (df_weight["Race_Ethnicity"] == 'Hispanic or Latino'                            ),
-                            (df_weight["Race_Ethnicity"] == 'Native Hawaiian or other Pacific Islander (NH)'),
-                            (df_weight["Race_Ethnicity"] == 'White (NH)'                                    ),
-                            (df_weight["Race_Ethnicity"] == 'Some other race (NH)'                          ),
-                            (df_weight["Race_Ethnicity"] == 'Two or more races (NH)'                        )
-                        ]
-            choices = ["All", "American Indian or Alaska Native", "Asian", "Black or African American", "Hispanic or Latino",
-                        "Native Hawaiian or other Pacific Islander", "White (NH)", "Some other race", "Two or more races"]
-            df_weight["Race_Ethnicity"] = np.select(conditions, choices)
-
-        df_census = df_census.merge(df_weight, on=[field_id, 'Year', 'Race_Ethnicity'], how='left')
-        df_census = df_census.drop_duplicates()
-
-        if indicator in ['Chamber_H_5', 'Chamber_H_7']:
-            df_hisp = df_census[df_census['Race_Ethnicity'] == 'Hispanic or Latino']
-            df_hisp = df_hisp[geo_ID + ['Year', 'Households']]
-            df_hisp = df_hisp.rename(columns={'Households':'Hispanic Households'})
-            df_census = df_census.merge(df_hisp, on=geo_ID+['Year'], how='left')
-            df_census.loc[df_census['Race_Ethnicity'] == 'All', 'Households'] = df_census['Households'] - df_census['Hispanic Households']
-            df_census = df_census.drop('Hispanic Households', axis=1)
-
     df_census = clean_fips(df_census)
 
     if geography == 'Places':
@@ -372,6 +335,74 @@ def acs_processing_2(df_census, df_vars, estimate, indicator, geography, margin_
         df_census['NAME'] = df_census['NAME'].str.replace(' town, California', '', regex=True)
         df_census['NAME'] = df_census['NAME'].str.replace(' city, California', '', regex=True)
         df_census = df_census.drop_duplicates()
+
+
+
+    # Some indicators require the roll up to be weighted by population
+    # The following step aligns the Race/Ethnicity mappings with the population counts workbook
+    if weighted_by != '':
+        file_weights = PATH_WEIGHTS / f'Total_{weighted_by} {geography} {estimate}.xlsx' # _ChamberStudy2026.xlsx
+        df_weight = pd.read_excel(file_weights, sheet_name=GEO_SHEETS[geography])
+
+        if geography == 'MSA': field_id = 'MSA_ID'
+        else: field_id = 'NAME'
+        
+        df_weight = df_weight[[field_id, 'Year','Race_Ethnicity', weighted_by]]
+        if weighted_by == 'Population': ## NEW, IDK IF THIS WILL WORK BUT THIS IS HOW IT SHOULD BE, NOT SURE HOW THIS WAS WORKING FOR HOUSEHOLDS BEFORE
+            conditions = [
+                            (df_weight["Race_Ethnicity"] == 'All'                                           ),
+                            (df_weight["Race_Ethnicity"] == 'American Indian or Alaska Native (NH)'         ),
+                            (df_weight["Race_Ethnicity"] == 'Asian (NH)'                                    ),
+                            (df_weight["Race_Ethnicity"] == 'Black or African American (NH)'                ),
+                            (df_weight["Race_Ethnicity"] == 'Hispanic or Latino'                            ),
+                            (df_weight["Race_Ethnicity"] == 'Native Hawaiian or other Pacific Islander (NH)'),
+                            (df_weight["Race_Ethnicity"] == 'White (NH)'                                    ),
+                            (df_weight["Race_Ethnicity"] == 'Some other race (NH)'                          ),
+                            (df_weight["Race_Ethnicity"] == 'Two or more races (NH)'                        )
+                        ]
+            choices = ["All", "American Indian or Alaska Native", "Asian", "Black or African American", "Hispanic or Latino",
+                        "Native Hawaiian or other Pacific Islander", "White (NH)", "Some other race", "Two or more races"]
+            df_weight["Race_Ethnicity"] = np.select(conditions, choices)          
+        
+        df_census = df_census.merge(df_weight, on=[field_id, 'Year', 'Race_Ethnicity'], how='left').drop_duplicates()
+
+        if indicator in ['Chamber_H_5', 'Chamber_H_7']:
+            df_hisp = df_census[df_census['Race_Ethnicity'] == 'Hispanic or Latino']
+            df_hisp = df_hisp[geo_ID + ['Year', 'Households']]
+            df_hisp = df_hisp.rename(columns={'Households':'Hispanic Households'})
+            df_census = df_census.merge(df_hisp, on=geo_ID+['Year'], how='left')
+            df_census.loc[df_census['Race_Ethnicity'] == 'All', 'Households'] = df_census['Households'] - df_census['Hispanic Households']
+            df_census = df_census.drop('Hispanic Households', axis=1)
+
+    # df_census = clean_fips(df_census)
+
+    # if geography == 'Places':
+    #     df_census = df_census.drop('County Name', axis=1)
+    #     df_codes = pd.read_excel(FILE_AREA, sheet_name='CDPcodes')
+    #     if unincorporated == 'Yes':
+    #         df_codes = df_codes[(df_codes['MPO'].str.contains('SACOG')) & (df_codes['Incorporated'] == 'Yes')]
+    #     df_codes['place'] = df_codes['place'].astype(str).apply('{:0>5}'.format)
+    #     CDP_to_keep = list(df_codes['place'].unique())
+    #     df_census = df_census[df_census['Place ID'].isin(CDP_to_keep)]
+    #     df_codes = df_codes.rename(columns={'place':'Place ID'})
+
+    #     df_codes = df_codes[['Year', 'Place ID', 'County Name']]
+
+    #     df_codes2010 = df_codes[df_codes['Year'] == 2010]
+    #     df_codes2020 = df_codes[df_codes['Year'] == 2020]
+
+    #     df_census2010 = df_census[df_census['Year'] <  2020]
+    #     df_census2020 = df_census[df_census['Year'] >= 2020]
+
+    #     df_census2010 = df_census2010.merge(df_codes2010.drop('Year', axis=1), on='Place ID', how='left')
+    #     df_census2020 = df_census2020.merge(df_codes2020.drop('Year', axis=1), on='Place ID', how='left')
+
+    #     df_census = pd.concat([df_census2020, df_census2010])
+
+    #     df_census['NAME'] = df_census['NAME'].str.replace(' CDP, California' , '', regex=True)
+    #     df_census['NAME'] = df_census['NAME'].str.replace(' town, California', '', regex=True)
+    #     df_census['NAME'] = df_census['NAME'].str.replace(' city, California', '', regex=True)
+    #     df_census = df_census.drop_duplicates()
 
     df_census['Race_Ethnicity_sort'] = pd.Categorical(df_census['Race_Ethnicity'], ['All'
                                                                                     , 'American Indian or Alaska Native'
@@ -501,19 +532,79 @@ def acs_processing_3(df_census, estimate, sample_type, indicator, geography, per
 
             if geography == 'Places':
                 if unincorporated == 'Yes':
-                    wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight'])
-                    df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), ME=('ME', sqrtsumsq), Weight=('Weight', 'sum'))
-                    df_counties = pd.read_excel(file_counties, sheet_name='Counties')
-                    df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Variable', col_var, 'Margin of Error']], on=['County Name', 'Year', 'Race_Ethnicity', 'Variable'], how='left')
-                    df_inc1['diff'] = df_inc1[col_var] - df_inc1['Total']
-                    df_inc1['diff_ME'] = np.sqrt(df_inc1['Margin of Error']**2 + df_inc1['ME']**2)
-                    df_inc1['Place ID'] = 'Unincorporated'
-                    df_inc1['NAME'    ] = 'Unincorporated'
-                    df_uninc = df_inc1[['State FIPS', 'County Name', 'Place ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'diff', 'diff_ME']]
-                    df_uninc = df_uninc.rename(columns={'diff': 'Total', 'diff_ME':'ME'})
-                    df_uninc = calculate_ME_ratio(df_uninc, MOE_thresh)
-                    df_census = pd.concat([df_census, df_uninc])
-                    df_census = df_census.reset_index(drop=True)
+                    if indicator == 'Income_1':
+                        ## Need to include weighted average of unincorporated areas properly for things like income
+                        # County Average Household Income = ((Unincorporated Average Household Income)*(Unincorporated Population) + (Incorporated Average Household Income)*(Incorporated Population)) / (County Population)
+                        # Unincorporated Average Household Income = ((County Average Household Income)*(County Population) - (Incorporated Average Household Income)*(Incorporated Population)) / (Unincorporated Population)
+                        
+                        # Import County average household income
+                        # Calculate incorporated average household income and total households
+                        # Import total households in county
+                        # Subtact total incorporated county households from total county households to get total unincorporated county households
+
+                        df_counties = pd.read_excel(file_counties, sheet_name='Counties')
+                        df_counties = df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Median Household Income', 'Margin of Error']].rename(columns={'Median Household Income':'Median Household Income County', 'Margin of Error':'ME County'})
+                        
+                        wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight'])
+                        df_inc1 = df_census.groupby(['County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), ME=('ME', sqrtsumsq), Weight=('Weight', 'sum'))
+                        df_inc1 = df_inc1.drop(['Variable', 'Weight'], axis=1).rename(columns={'Total':'Median Household Income Inc', 'ME':'ME Inc'})
+                        file_cdp_pop = PATH_WEIGHTS / f'Total_{weighted_by} {geography} {estimate}.xlsx'
+                        df_inc_pop = pd.read_excel(file_cdp_pop, sheet_name=GEO_SHEETS[geography])
+                        df_inc_pop = df_inc_pop[['County Name', 'Place ID', 'NAME', 'Year','Race_Ethnicity', weighted_by]]
+                        list_cdp_inc = pd.read_excel(FILE_AREA, sheet_name='CDPcodes')
+                        list_cdp_inc = list_cdp_inc[(list_cdp_inc['MPO']=='SACOG') & (list_cdp_inc['Year']==2020) & (list_cdp_inc['Incorporated']=='Yes')]
+                        list_cdp_inc['NAME'] = list_cdp_inc['NAME'].str.replace(' city', '')
+                        list_cdp_inc['NAME'] = list_cdp_inc['NAME'].str.replace(' town', '')
+                        list_cdp_inc = list(list_cdp_inc.NAME.unique())
+                        df_inc_pop = df_inc_pop[df_inc_pop['NAME'].isin(list_cdp_inc)]
+                        # df_inc_pop = df_inc_pop[~((df_inc_pop['County Name'] == 'El Dorado') & (df_inc_pop['NAME'] == 'Elk Grove'))]
+                        df_inc_pop = df_inc_pop.groupby(['County Name', 'Year', 'Race_Ethnicity'], as_index=False)['Households'].sum()
+
+                        file_cdp_pop = PATH_WEIGHTS / f'Total_{weighted_by} Counties {estimate}.xlsx'
+                        df_counties_pop = pd.read_excel(file_cdp_pop, sheet_name='Counties')
+                        df_counties_pop = df_counties_pop[['County Name', 'Year','Race_Ethnicity', weighted_by]]
+
+                        df_all_households = df_counties_pop.merge(df_inc_pop.rename(columns={'Households':'Households Inc'}), on=['County Name', 'Year', 'Race_Ethnicity'])
+                        df_all_households['Households Uninc'] = df_all_households['Households'] - df_all_households['Households Inc']
+
+                        df_all_income = df_counties.merge(df_inc1, on=['County Name', 'Year', 'Race_Ethnicity'])
+                        df_all = df_all_income.merge(df_all_households, on=['County Name', 'Year', 'Race_Ethnicity'])
+
+                        def calculate_uninc_income(county_income, county_households, incorp_income, incorp_households, unincorp_households):
+                            try: unincorp_income = ((county_income)*(county_households) - (incorp_income)*(incorp_households)) / (unincorp_households)
+                            except: unincorp_income = 999999
+                            return unincorp_income
+                        
+                        def calculate_uninc_income_me(county_income_me, incorp_income_me):
+                            try: unincorp_income_me = np.sqrt(county_income_me**2 + incorp_income_me**2)
+                            except: unincorp_income_me = 999999
+                            return unincorp_income_me
+                        
+                        df_all['Median Household Income Uninc'   ] = df_all.apply(lambda x: calculate_uninc_income(x['Median Household Income County'], x['Households'], x['Median Household Income Inc'], x['Households Inc'], x['Households Uninc']), axis=1)
+                        df_all['Median Household Income Uninc ME'] = df_all.apply(lambda x: calculate_uninc_income_me(x['ME County'], x['ME Inc']), axis=1)                        
+                        df_uninc = df_all[['County Name', 'Year', 'Race_Ethnicity', 'Median Household Income Uninc', 'Median Household Income Uninc ME']].rename(columns={'Median Household Income Uninc':'Total', 'Median Household Income Uninc ME':'ME'})
+                        df_uninc['State FIPS'] = '06'
+                        df_uninc['Variable'] = 'Median household income in the past 12 months (in inflation-adjusted dollars by year)'
+                        df_uninc['Place ID'] = 'Unincorporated'
+                        df_uninc['NAME'    ] = 'Unincorporated'
+                        df_uninc = calculate_ME_ratio(df_uninc, MOE_thresh)
+                        df_census = pd.concat([df_census, df_uninc])
+                        df_census = df_census.reset_index(drop=True)
+
+                    else:
+                        wm = lambda x: np.average(x, weights = df_census.loc[x.index, 'Weight'])
+                        df_inc1 = df_census.groupby(['State FIPS', 'County Name', 'Year', 'Race_Ethnicity', 'Variable'], as_index=False, sort=False).agg(Total=('Total', wm), ME=('ME', sqrtsumsq), Weight=('Weight', 'sum'))
+                        df_counties = pd.read_excel(file_counties, sheet_name='Counties')
+                        df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race_Ethnicity', 'Variable', col_var, 'Margin of Error']], on=['County Name', 'Year', 'Race_Ethnicity', 'Variable'], how='left')
+                        df_inc1['diff'] = df_inc1[col_var] - df_inc1['Total']
+                        df_inc1['diff_ME'] = np.sqrt(df_inc1['Margin of Error']**2 + df_inc1['ME']**2)
+                        df_inc1['Place ID'] = 'Unincorporated'
+                        df_inc1['NAME'    ] = 'Unincorporated'
+                        df_uninc = df_inc1[['State FIPS', 'County Name', 'Place ID', 'NAME', 'Year', 'Race_Ethnicity', 'Variable', 'diff', 'diff_ME']]
+                        df_uninc = df_uninc.rename(columns={'diff': 'Total', 'diff_ME':'ME'})
+                        df_uninc = calculate_ME_ratio(df_uninc, MOE_thresh)
+                        df_census = pd.concat([df_census, df_uninc])
+                        df_census = df_census.reset_index(drop=True)
 
         else:
             if indicator == 'Income_4':

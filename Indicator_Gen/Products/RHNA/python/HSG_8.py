@@ -61,8 +61,8 @@ def extrapolate_weights(df):
 if __name__ == '__main__':
 
     indicator = 'RHNA_HSG_8'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
 
     ## Importing ---

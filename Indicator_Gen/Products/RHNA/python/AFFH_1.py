@@ -9,7 +9,7 @@ import plotly.express as px
 
 
 PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
-PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'General' / 'RHNA' / 'Final Products'
+PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 PATH_GEO = Path(r'I:\Projects\Josh\Geospatial Data')
 FILE_TRACTS = PATH_GEO / 'GISOWNER' / 'T2020_Census_Tracts_SACOG_Region' / 'T2020_Census_Tracts_SACOG_Region.shp'
 FILE_JURISDICTIONS = PATH_GEO / 'GISOWNER' / 'CityCounty' / 'CityCounty.shp'
@@ -25,8 +25,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_AFFH_1'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Race_Ethnicity'
 
@@ -146,10 +146,10 @@ if __name__ == '__main__':
             df_plot = df_sub_juris.copy()
 
             df_prod = df_sub_juris[['Race_Ethnicity', 'action_taken', 'size']]
-            df_prod = df_prod.pivot_table(index='Race_Ethnicity', columns='action_taken', values='size').reset_index()
+            df_prod = df_prod.pivot_table(index='Race_Ethnicity', columns='action_taken', values='size').reset_index().rename(columns={'Race_Ethnicity':'Race/Ethnicity'})
 
             df_pct  = df_sub_juris[['Race_Ethnicity', 'action_taken', 'Percentage']]
-            df_pct = df_pct.pivot_table(index='Race_Ethnicity', columns='action_taken', values='Percentage').reset_index()
+            df_pct = df_pct.pivot_table(index='Race_Ethnicity', columns='action_taken', values='Percentage').reset_index().rename(columns={'Race_Ethnicity':'Race/Ethnicity'})
 
             df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
                 

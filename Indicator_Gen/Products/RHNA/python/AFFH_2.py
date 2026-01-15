@@ -30,8 +30,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_AFFH_2'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Race_Ethnicity'
 
@@ -124,17 +124,17 @@ if __name__ == '__main__':
 
                 ## Plotting
 
-                df_plot = df_sub_juris.copy()
+                df_plot = df_sub_juris.copy().rename(columns={'oppcat':'Opportunity Category'})
 
                 df_prod = df_sub_juris[[columns, 'oppcat', values]]
-                df_prod = df_prod.pivot_table(index='oppcat', columns=columns, values=values).reset_index()
+                df_prod = df_prod.pivot_table(index='oppcat', columns=columns, values=values).reset_index().rename(columns={'oppcat':'Opportunity Category'})
 
                 df_pct  = df_sub_juris[[columns, 'oppcat', 'Percentage']]
-                df_pct = df_pct.pivot_table(index='oppcat', columns=columns, values='Percentage').reset_index()
+                df_pct = df_pct.pivot_table(index='oppcat', columns=columns, values='Percentage').reset_index().rename(columns={'oppcat':'Opportunity Category'})
 
                 df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
-                df_sort = pd.DataFrame({'oppcat': ['Low Resource', 'Moderate Resource', 'High/Highest Resource', 'Unknown'], 'Sort': [1, 2, 3, 4]})
-                df_plot = df_plot.merge(df_sort, on='oppcat', how='left')
+                df_sort = pd.DataFrame({'Opportunity Category': ['Low Resource', 'Moderate Resource', 'High/Highest Resource', 'Unknown'], 'Sort': [1, 2, 3, 4]})
+                df_plot = df_plot.merge(df_sort, on='Opportunity Category', how='left')
 
                 df_plot['Sort_eth'] = pd.Categorical(df_plot[columns], [
                     'American Indian or Alaska Native (NH)'
@@ -159,7 +159,7 @@ if __name__ == '__main__':
                     , 'White (NH)': '#1F45FC'
                 }
             
-                fig = px.bar(df_plot, x='oppcat', y='Percentage'
+                fig = px.bar(df_plot, x='Opportunity Category', y='Percentage'
                             , color = columns
                             , color_discrete_map=color_map)
                 

@@ -25,8 +25,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_OVER_3'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Households'
     columns = 'Race_Ethnicity'
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         
         for jurisdiction in tqdm(jurisdictions):
                     
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub, df_mpo)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub=df_counties_sub, df_mpo=df_mpo)
             
             ## Plotting ---
             

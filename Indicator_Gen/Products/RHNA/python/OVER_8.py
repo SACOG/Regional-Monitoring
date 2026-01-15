@@ -26,8 +26,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_OVER_8'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Households'
     columns = 'Cost Burden'
 
@@ -111,11 +111,11 @@ if __name__ == '__main__':
 
             df_prod = df_chas_sub[df_chas_sub['name'] == jurisdiction]
             df_prod = df_prod.drop('Percentage', axis=1)
-            df_prod = df_prod.pivot_table(index=['Race Ethnicity'], columns=columns, values=values).reset_index()
+            df_prod = df_prod.pivot_table(index=['Race Ethnicity'], columns=columns, values=values).reset_index().rename(columns={'Race Ethnicity':'Race/Ethnicity'})
 
             df_pct = df_chas_sub[df_chas_sub['name'] == jurisdiction]
             df_pct = df_pct.drop('Households', axis=1)
-            df_pct = df_pct.pivot_table(index=['Race Ethnicity'], columns=columns, values='Percentage').reset_index()
+            df_pct = df_pct.pivot_table(index=['Race Ethnicity'], columns=columns, values='Percentage').reset_index().rename(columns={'Race Ethnicity':'Race/Ethnicity'})
             
             ## Plotting ---
 

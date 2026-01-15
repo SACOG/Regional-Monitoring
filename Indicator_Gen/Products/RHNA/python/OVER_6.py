@@ -35,10 +35,11 @@ def re_remove_pre(x, exp = ':  '):
 if __name__ == '__main__':
 
     indicator = 'RHNA_OVER_6'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Households'
     columns = 'Burden'
+    variable = 'Housing Tenure'
 
 
 
@@ -48,18 +49,18 @@ if __name__ == '__main__':
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places.rename(columns={'NAME':'Geography', 'Variable': variable})
     df_places = df_places[df_places['Year'] == df_places['Year'].max()]
     df_places = df_places.reset_index(drop=True)
-    df_places['Tenure'  ] = df_places['Variable'].apply(re_remove_post)
-    df_places['Burden'  ] = df_places['Variable'].apply(re_remove_pre )
-    df_places['Variable'] = df_places['Tenure'].copy()
-    df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
+    df_places['Tenure'  ] = df_places[variable].apply(re_remove_post)
+    df_places['Burden'  ] = df_places[variable].apply(re_remove_pre )
+    df_places[variable] = df_places['Tenure'].copy()
+    df_places['Percentage'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', variable])['Households'].transform('sum')
 
-    df_places = df_places[['County Name', 'Geography', values, 'Variable', columns, 'Percentage']]
+    df_places = df_places[['County Name', 'Geography', values, variable, columns, 'Percentage']]
 
     df_places['Sort'] = pd.Categorical(df_places['Burden'], ['0%-30% of income used for housing', '30%-50% of income used for housing', '50% or more of income used for housing', 'Not computed'])
-    df_places = df_places.sort_values(['County Name', 'Geography', 'Variable', 'Sort'], ascending=[True, True, True, True])
+    df_places = df_places.sort_values(['County Name', 'Geography', variable, 'Sort'], ascending=[True, True, True, True])
     df_places = df_places.drop(['Sort'], axis = 1)
     df_places = df_places.reset_index(drop=True)
     # df_places
@@ -82,7 +83,7 @@ if __name__ == '__main__':
 
             tqdm.write(jurisdiction)
 
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, variable)
 
             ## Plotting ---
 
@@ -96,7 +97,7 @@ if __name__ == '__main__':
                     "Not computed":"#9B9A96"
             }
 
-            fig = px.bar(df_plot, x='Variable', y='Percentage'
+            fig = px.bar(df_plot, x=variable, y='Percentage'
                         , color = columns
                         , color_discrete_map=color_map)
             

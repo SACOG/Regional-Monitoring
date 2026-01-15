@@ -24,10 +24,11 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_POPEMP_4'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Year'
+    variable = 'Age Group'
     df_places2 = pd.read_excel(PATH_DATA / f'{indicator} Places ACS5.xlsx' , sheet_name='Places')
     df_places1 = pd.read_excel(PATH_DATA / f'{indicator} Places DEC.xlsx', sheet_name='Places')
 
@@ -39,14 +40,14 @@ if __name__ == '__main__':
     df_places2['NAME'] = df_places2['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places2['NAME'] = df_places2['NAME'].str.replace(' city, California', '', regex=True)
 
-    df_places1 = df_places1.rename(columns={'NAME':'Geography'})
-    df_places2 = df_places2.rename(columns={'NAME':'Geography'})
+    df_places1 = df_places1.rename(columns={'NAME':'Geography', 'Variable':variable})
+    df_places2 = df_places2.rename(columns={'NAME':'Geography', 'Variable':variable})
 
-    df_places1 = df_places1[['County Name', 'Geography', 'Variable', columns, values, 'Percentage']]
-    df_places2 = df_places2[['County Name', 'Geography', 'Variable', columns, values, 'Percentage']]
+    df_places1 = df_places1[['County Name', 'Geography', variable, columns, values, 'Percentage']]
+    df_places2 = df_places2[['County Name', 'Geography', variable, columns, values, 'Percentage']]
 
-    df_places1 = df_places1.groupby(['County Name', 'Geography', 'Variable', columns], as_index=False)['Population'].sum()
-    df_places2 = df_places2.groupby(['County Name', 'Geography', 'Variable', columns], as_index=False)['Population'].sum()
+    df_places1 = df_places1.groupby(['County Name', 'Geography', variable, columns], as_index=False)['Population'].sum()
+    df_places2 = df_places2.groupby(['County Name', 'Geography', variable, columns], as_index=False)['Population'].sum()
 
     df_places1['Percentage'] = df_places1['Population'] / df_places1.groupby(['County Name', 'Geography', columns])['Population'].transform('sum')
     df_places2['Percentage'] = df_places2['Population'] / df_places2.groupby(['County Name', 'Geography', columns])['Population'].transform('sum')
@@ -76,20 +77,20 @@ if __name__ == '__main__':
             df_pct  = df_places_sub[df_places_sub['Geography'] == jurisdiction]
 
             df_prod = df_prod.drop('Geography', axis=1)
-            df_prod = df_prod.pivot_table(index='Variable', columns=columns, values=values).reset_index()
+            df_prod = df_prod.pivot_table(index=variable, columns=columns, values=values).reset_index()
             df_prod = df_prod.reset_index(drop=True)
 
             df_pct = df_pct.drop('Geography', axis=1)
-            df_pct = df_pct.pivot_table(index='Variable', columns=columns, values='Percentage').reset_index()
+            df_pct = df_pct.pivot_table(index=variable, columns=columns, values='Percentage').reset_index()
             df_pct = df_pct.reset_index(drop=True)
             
 
             ## Plotting ---
             
-            df_plot = df_pct.melt(id_vars=['Variable'], var_name='Year', value_name='Percentage')
+            df_plot = df_pct.melt(id_vars=[variable], var_name='Year', value_name='Percentage')
             df_plot['Year'] = df_plot['Year'].str.replace('Year ', '')
             df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
-            df_plot['Sort'] = pd.Categorical(df_plot['Variable'], [
+            df_plot['Sort'] = pd.Categorical(df_plot[variable], [
                 'Age 0-4'
                 , 'Age 5-17'
                 , 'Age 18-24'
@@ -118,7 +119,7 @@ if __name__ == '__main__':
             }
     
             fig = px.bar(df_plot, x='Year', y='Percentage'
-                        , color='Variable'
+                        , color=variable
                         , color_discrete_map=color_map)
             
             # title = f'<b>{plot_title}</b>'

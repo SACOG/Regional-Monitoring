@@ -5,7 +5,6 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import yaml
 import plotly.express as px
 
 PATH_DATA = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected'
@@ -22,10 +21,11 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
         
     indicator = 'RHNA_ELI_3'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Category'
+    variable = 'Race/Ethnicity'
 
 
 
@@ -35,14 +35,14 @@ if __name__ == '__main__':
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places.rename(columns={'NAME':'Geography', 'Variable': variable})
     df_places = df_places[df_places['Year'] == df_places['Year'].max()]
     df_places = df_places.reset_index(drop=True)
 
-    df_places['Category'] = df_places['Variable'].copy()
-    df_places['Variable'] = df_places['Race_Ethnicity']
+    df_places['Category'] = df_places[variable].copy()
+    df_places[variable] = df_places['Race_Ethnicity']
 
-    df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
+    df_places = df_places[['County Name', 'Geography', values, columns, variable, 'Percentage']]
     df_places = df_places.reset_index(drop=True)
 
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
             tqdm.write(jurisdiction)
 
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, variable)
 
             ## Plotting ---
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 , 'Below poverty level': '#1F45FC'
             }
 
-            fig = px.bar(df_plot, x='Variable', y='Percentage'
+            fig = px.bar(df_plot, x=variable, y='Percentage'
                         , color=columns
                         , color_discrete_map=color_map)
             

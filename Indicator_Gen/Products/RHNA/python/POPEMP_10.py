@@ -36,10 +36,11 @@ def re_remove_pre(x, exp = ':  '):
 if __name__ == '__main__':
 
     indicator = 'RHNA_POPEMP_10'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Category'
+    variable = 'Earnings'
 
 
     ## Organizing ---
@@ -51,30 +52,30 @@ if __name__ == '__main__':
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places.rename(columns={'NAME':'Geography', 'Variable': variable})
     df_places = df_places[df_places['Year'] == df_places['Year'].max()]
     df_places = df_places.reset_index(drop=True)
-    df_places['Category'] = df_places['Variable'].apply(re_remove_post)
-    df_places['Variable'] = df_places['Variable'].apply(re_remove_pre )
+    df_places['Category'] = df_places[variable].apply(re_remove_post)
+    df_places[variable] = df_places[variable].apply(re_remove_pre )
 
-    df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
+    df_places = df_places[['County Name', 'Geography', values, columns, variable, 'Percentage']]
 
-    df_places['Sort'] = pd.Categorical(df_places['Variable'], ['75k or more', '50k to 75k', '25k to 50k', '10k to 25k', 'Less than 10k'])
+    df_places['Sort'] = pd.Categorical(df_places[variable], ['75k or more', '50k to 75k', '25k to 50k', '10k to 25k', 'Less than 10k'])
     df_places = df_places.sort_values(['County Name', 'Geography', 'Category', 'Sort'], ascending=[True, True, True, False])
     df_places = df_places.drop(['Sort'], axis = 1)
     df_places = df_places.reset_index(drop=True)
 
     conditions = [
-        df_places['Variable'] == 'Less than 10k'
-        , df_places['Variable'] == '10k to 25k'
-        , df_places['Variable'] == '25k to 50k'
-        , df_places['Variable'] == '50k to 75k'
-        , df_places['Variable'] == '75k or more'
+        df_places[variable] == 'Less than 10k'
+        , df_places[variable] == '10k to 25k'
+        , df_places[variable] == '25k to 50k'
+        , df_places[variable] == '50k to 75k'
+        , df_places[variable] == '75k or more'
     ]
 
     choices = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
 
-    df_places['Variable'] = np.select(conditions, choices, default = 'no')
+    df_places[variable] = np.select(conditions, choices, default = 'no')
 
 
     counties = list(df_places['County Name'].unique())
@@ -94,7 +95,7 @@ if __name__ == '__main__':
 
             tqdm.write(jurisdiction)
 
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, variable)
 
             ## Plotting
 
@@ -105,7 +106,7 @@ if __name__ == '__main__':
                 , 'Place of work': '#1F45FC'
             }
 
-            fig = px.bar(df_plot, x='Variable', y=values
+            fig = px.bar(df_plot, x=variable, y=values
                         , color = columns
                         , barmode='group'
                         , color_discrete_map=color_map)

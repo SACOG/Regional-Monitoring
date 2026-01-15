@@ -5,12 +5,11 @@
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
-import yaml
 import plotly.express as px
 
 
 PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
-PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'General' / 'RHNA' / 'Final Products'
+PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 FILE_FARMWORKERS = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected' / 'USDA' / 'USDA_FarmWorkers_Summarized.xlsx'
 
 
@@ -24,8 +23,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
         
     indicator = 'RHNA_FARM_2'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
     ## Organizing
 

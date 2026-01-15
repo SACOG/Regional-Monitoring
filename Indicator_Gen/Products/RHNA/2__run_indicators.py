@@ -1,6 +1,7 @@
 
 
 
+
 def print2(): print();print()
 def print3(): print();print();print()
 print3()
@@ -16,22 +17,23 @@ PATH_PY = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indi
 
 if __name__ == '__main__':
 
+    # Comments show which jurisdictions are missing
     indicators = [
         'POPEMP_1'
         , 'POPEMP_2'
         , 'POPEMP_3'
-        , 'POPEMP_4'
+        , 'POPEMP_4' # Elk Grove
         , 'POPEMP_5'
         , 'POPEMP_6'
         , 'POPEMP_7'
         , 'POPEMP_8'
-        , 'POPEMP_9'
+        , 'POPEMP_9' # Isleton
         , 'POPEMP_10'
-        , 'POPEMP_11'
-        , 'POPEMP_12'
-        , 'POPEMP_13'
-        , 'POPEMP_14'
-        , 'POPEMP_15'
+        , 'POPEMP_11' # Isleton
+        , 'POPEMP_12' # Isleton
+        , 'POPEMP_13' # Isleton
+        , 'POPEMP_14' # Isleton
+        , 'POPEMP_15' # South Lake Tahoe, Loomis, Elk Grove, Rancho Cordova
         , 'POPEMP_16'
         , 'POPEMP_17'
         , 'POPEMP_18'
@@ -47,21 +49,21 @@ if __name__ == '__main__':
         , 'HSG_3'
         , 'HSG_4'
         , 'HSG_5'
-        , 'HSG_6'
+        , 'HSG_6' # Colfax, Galt, Live Oak, Winters
         , 'HSG_7'
-        , 'HSG_8'
+        , 'HSG_8' # South Lake Tahoe
         , 'HSG_9' 
         , 'HSG_10'
         , 'HSG_11'
         , 'RISK_1'
-        , 'OVER_1'
-        , 'OVER_2'
+        , 'OVER_1' # South Lake Tahoe
+        , 'OVER_2' # South Lake Tahoe
         , 'OVER_3'
-        , 'OVER_4'
-        , 'OVER_5'
+        , 'OVER_4' # South Lake Tahoe
+        , 'OVER_5' # South Lake Tahoe
         , 'OVER_6'
         , 'OVER_7'
-        , 'OVER_8'
+        , 'OVER_8' # South Lake Tahoe
         , 'OVER_9'
         , 'FARM_1'
         , 'FARM_2'
@@ -83,8 +85,8 @@ if __name__ == '__main__':
         , 'HOMELS_2'
         , 'HOMELS_3'
         , 'HOMELS_4'
-        , 'ELI_1'
-        , 'ELI_2'
+        , 'ELI_1' # South Lake Tahoe
+        , 'ELI_2' # South Lake Tahoe
         , 'ELI_3'
         , 'ELI_4'
         , 'AFFH_1'
@@ -93,7 +95,7 @@ if __name__ == '__main__':
         # , 'HHPROJ_1'
     ]
 
-    indicators = ['AFFH_2']
+
 
     start_time = time.time()
 

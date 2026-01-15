@@ -23,7 +23,7 @@ path_py = path_prod / 'python'
 path_i = Path(r'I:\Projects\Josh\RHNA')
 
 # path_out = Path(r'I:\Projects\Josh\RHNA\Final Products')
-path_out = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
+path_out = Path(r'C:\Users\jfontes\Documents\Projects\Local\RHNA\Final Products')
 
 path_geo = Path(r'I:\Projects\Josh\Geospatial Data\crosswalks')
 path_lodes = Path(r'I:\Projects\Josh\Regional Monitoring')

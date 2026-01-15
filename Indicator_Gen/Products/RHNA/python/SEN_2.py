@@ -21,10 +21,11 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_SEN_2'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Race_Ethnicity'
+    variable = 'Age Group'
 
 
     ## Organizing
@@ -32,13 +33,13 @@ if __name__ == '__main__':
     df_places = pd.read_excel(PATH_DATA / f'{indicator} Places ACS5.xlsx')
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
-    df_places = df_places.rename(columns={'NAME':'Geography'})
+    df_places = df_places.rename(columns={'NAME':'Geography', 'Variable': variable})
     df_places = df_places[df_places['Year'] == df_places['Year'].max()]
     df_places = df_places.reset_index(drop=True)
 
-    df_places = df_places[['County Name', 'Geography', values, columns, 'Variable', 'Percentage']]
+    df_places = df_places[['County Name', 'Geography', values, columns, variable, 'Percentage']]
 
-    df_places['Sort'] = pd.Categorical(df_places['Variable'], ['Age 0-17', 'Age 18-64', 'Age 65+'])
+    df_places['Sort'] = pd.Categorical(df_places[variable], ['Age 0-17', 'Age 18-64', 'Age 65+'])
     df_places['Sort_eth'] = pd.Categorical(df_places['Race_Ethnicity'], [
         'American Indian or Alaska Native'
         , 'Asian'
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     df_places = df_places.sort_values(['County Name', 'Geography', 'Sort_eth', 'Sort'], ascending=[True, True, False, True])
     df_places = df_places.drop(['Sort', 'Sort_eth'], axis = 1)
 
-    df_places['Percentage'] = df_places['Population'] / df_places.groupby(['County Name', 'Geography', 'Variable'])['Population'].transform('sum')
+    df_places['Percentage'] = df_places['Population'] / df_places.groupby(['County Name', 'Geography', variable])['Population'].transform('sum')
 
     df_places = df_places.reset_index(drop=True)
 
@@ -73,7 +74,7 @@ if __name__ == '__main__':
 
             tqdm.write(jurisdiction)
 
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, variable)
 
             ## Plotting ---
 
@@ -89,7 +90,7 @@ if __name__ == '__main__':
                 , 'Hispanic or Latino'
                 , 'White (NH)'
             ])
-            df_plot = df_plot.sort_values(['Variable', 'Sort_eth'], ascending=[True, False])
+            df_plot = df_plot.sort_values([variable, 'Sort_eth'], ascending=[True, False])
             df_plot = df_plot.drop(['Sort_eth'], axis=1)
                 
             color_map  = {
@@ -102,7 +103,7 @@ if __name__ == '__main__':
                 , 'White (NH)': '#1F45FC'
             }
 
-            fig = px.bar(df_plot, x='Variable', y='Percentage'
+            fig = px.bar(df_plot, x=variable, y='Percentage'
                         , color=columns
                         , color_discrete_map=color_map)
             

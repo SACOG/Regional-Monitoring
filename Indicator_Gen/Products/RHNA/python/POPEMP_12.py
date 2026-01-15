@@ -35,10 +35,10 @@ def re_remove_pre(x, exp = '('):
 if __name__ == '__main__':
 
     indicator = 'RHNA_POPEMP_12'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     base_year = 2002
-    end_year = 2022
+    end_year = 2023
 
 
     ## Mappings

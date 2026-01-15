@@ -27,7 +27,7 @@ pd.options.display.float_format = '{:.1f}'.format
 
 ## File paths ---
 
-rerun=False
+rerun=True
 export=True
 
 user = getpass.getuser()

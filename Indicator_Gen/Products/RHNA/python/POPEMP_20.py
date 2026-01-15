@@ -22,10 +22,11 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_POPEMP_20'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Households'
     columns = 'Tenure'
+    variable = 'Race/Ethnicity'
 
 
     ## Organizing
@@ -58,30 +59,30 @@ if __name__ == '__main__':
     df_counties = df_counties.rename(columns={'Variable':'Tenure'})
     df_mpo      = df_mpo     .rename(columns={'Variable':'Tenure'})
 
-    df_places   = df_places  .rename(columns={'NAME':'Geography', 'Race_Ethnicity':'Variable'})
-    df_counties = df_counties.rename(columns={'NAME':'Geography', 'Race_Ethnicity':'Variable'})
-    df_mpo      = df_mpo     .rename(columns={'MPO' :'Geography', 'Race_Ethnicity':'Variable'})
+    df_places   = df_places  .rename(columns={'NAME':'Geography', 'Race_Ethnicity':variable})
+    df_counties = df_counties.rename(columns={'NAME':'Geography', 'Race_Ethnicity':variable})
+    df_mpo      = df_mpo     .rename(columns={'MPO' :'Geography', 'Race_Ethnicity':variable})
     df_mpo = df_mpo.drop_duplicates()
 
     df_places   = df_places  [df_places  ['Year'] == df_places  ['Year'].max()]
     df_counties = df_counties[df_counties['Year'] == df_counties['Year'].max()]
     df_mpo      = df_mpo     [df_mpo     ['Year'] == df_mpo     ['Year'].max()]
 
-    df_places  ['Variable'] = df_places  ['Variable'].replace(race_ethcnitiy_map)
-    df_counties['Variable'] = df_counties['Variable'].replace(race_ethcnitiy_map)# trying to role up to new race/ethnicity mapping, it's new so may not run properly, double check
-    df_mpo     ['Variable'] = df_mpo     ['Variable'].replace(race_ethcnitiy_map)
+    df_places  [variable] = df_places  [variable].replace(race_ethcnitiy_map)
+    df_counties[variable] = df_counties[variable].replace(race_ethcnitiy_map)# trying to role up to new race/ethnicity mapping, it's new so may not run properly, double check
+    df_mpo     [variable] = df_mpo     [variable].replace(race_ethcnitiy_map)
 
-    df_places   = df_places  .groupby(['County Name', 'Geography', columns, 'Variable'], as_index=False)['Households'].sum()
-    df_counties = df_counties.groupby([               'Geography', columns, 'Variable'], as_index=False)['Households'].sum()
-    df_mpo      = df_mpo     .groupby([               'Geography', columns, 'Variable'], as_index=False)['Households'].sum()
+    df_places   = df_places  .groupby(['County Name', 'Geography', columns, variable], as_index=False)['Households'].sum()
+    df_counties = df_counties.groupby([               'Geography', columns, variable], as_index=False)['Households'].sum()
+    df_mpo      = df_mpo     .groupby([               'Geography', columns, variable], as_index=False)['Households'].sum()
 
-    df_places  ['Percentage'] = df_places  ['Households'] / df_places  .groupby(['County Name', 'Geography', 'Variable'])['Households'].transform('sum')
-    df_counties['Percentage'] = df_counties['Households'] / df_counties.groupby([               'Geography', 'Variable'])['Households'].transform('sum')
-    df_mpo     ['Percentage'] = df_mpo     ['Households'] / df_mpo     .groupby([               'Geography', 'Variable'])['Households'].transform('sum')
+    df_places  ['Percentage'] = df_places  ['Households'] / df_places  .groupby(['County Name', 'Geography', variable])['Households'].transform('sum')
+    df_counties['Percentage'] = df_counties['Households'] / df_counties.groupby([               'Geography', variable])['Households'].transform('sum')
+    df_mpo     ['Percentage'] = df_mpo     ['Households'] / df_mpo     .groupby([               'Geography', variable])['Households'].transform('sum')
 
-    df_places   = df_places  [['County Name', 'Geography', 'Variable', columns, values, 'Percentage']].reset_index(drop=True)
-    df_counties = df_counties[[               'Geography', 'Variable', columns, values, 'Percentage']].reset_index(drop=True)
-    df_mpo      = df_mpo     [[               'Geography', 'Variable', columns, values, 'Percentage']].reset_index(drop=True)
+    df_places   = df_places  [['County Name', 'Geography', variable, columns, values, 'Percentage']].reset_index(drop=True)
+    df_counties = df_counties[[               'Geography', variable, columns, values, 'Percentage']].reset_index(drop=True)
+    df_mpo      = df_mpo     [[               'Geography', variable, columns, values, 'Percentage']].reset_index(drop=True)
 
     counties = df_counties['Geography'].unique()
     df_counties
@@ -99,7 +100,7 @@ if __name__ == '__main__':
 
             tqdm.write(jurisdiction)
 
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, variable)
 
             ## Plotting
 
@@ -110,7 +111,7 @@ if __name__ == '__main__':
                 , 'Renter occupied': '#9DC209'
             }
 
-            fig = px.bar(df_plot, x='Variable', y=values
+            fig = px.bar(df_plot, x=variable, y=values
                         , color = columns
                         , barmode='group'
                         , color_discrete_map=color_map)

@@ -36,8 +36,8 @@ def clean_years(df):
 if __name__ == '__main__':
         
     indicator = 'RHNA_FARM_1'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
 
     # Use URLs to import enrollment total files

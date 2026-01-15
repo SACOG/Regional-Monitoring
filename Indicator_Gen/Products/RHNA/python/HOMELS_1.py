@@ -8,7 +8,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
-PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'General' / 'RHNA' / 'Final Products'
+PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 PATH_GEO = Path(r'I:\Projects\Josh\RHNA\Geospatial Data')
 
 
@@ -28,8 +28,8 @@ def remove_subtext(x):
 if __name__ == '__main__':
         
     indicator = 'RHNA_HOMELS_1'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
 
     ## Importing
@@ -107,10 +107,10 @@ if __name__ == '__main__':
 
                 df_prod = df_sub.copy()
 
-                df_prod = df_prod.melt(id_vars=['Geography', 'Household Type'], var_name='Variable', value_name='Number of Households')
-                df_prod = df_prod.pivot_table(index=['Geography', 'Variable'], columns='Household Type', values='Number of Households').reset_index()
+                df_prod = df_prod.melt(id_vars=['Geography', 'Household Type'], var_name='Shelter Status', value_name='Number of Households')
+                df_prod = df_prod.pivot_table(index=['Geography', 'Shelter Status'], columns='Household Type', values='Number of Households').reset_index()
                 df_prod = df_prod.drop('Geography', axis=1)
-                df_prod = df_prod.sort_values('Variable')
+                df_prod = df_prod.sort_values('Shelter Status')
                 df_prod = df_prod.reset_index(drop=True)
 
 

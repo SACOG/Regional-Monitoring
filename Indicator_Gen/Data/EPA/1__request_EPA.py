@@ -74,7 +74,7 @@ print(api_key)
 
 
 year_min = 1999
-year_max = 2024
+year_max = 2023
 
 start_time = time.time()
 

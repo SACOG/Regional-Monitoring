@@ -21,8 +21,8 @@ if __name__ == '__main__':
 
 
     indicator = 'RHNA_HSG_3'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Households'
     columns = 'Variable'
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
             tqdm.write(jurisdiction)
                     
-            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub, df_mpo)
+            df_prod, df_pct = rhna.acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub=df_counties_sub, df_mpo=df_mpo)
         
         
             ## Plotting
@@ -76,5 +76,5 @@ if __name__ == '__main__':
         
 
             rhna.plot_rhna(fig, county, jurisdiction, indicator, title)
-            rhna.export_rhna(county, jurisdiction, indicator, title, df_prod)
+            rhna.export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct)
 

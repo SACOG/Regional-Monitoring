@@ -6,7 +6,7 @@ def print3(): print();print();print()
 
 
 
-EXPORT=False
+EXPORT=True
 
 
 
@@ -20,6 +20,7 @@ from tqdm import tqdm
 from datetime import datetime
 import re
 import yaml
+import traceback
 from IPython.display import display
 
 import openpyxl
@@ -40,11 +41,9 @@ PATH_CONFIG0 = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 
 PATH_PROD    = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA'
 PATH_CONFIG  = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
 PATH_PY      = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'python'
-PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'General' / 'RHNA' / 'Final Products'
+PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 PATH_GEO = Path(r'I:\Projects\Josh\Geospatial Data')
 PATH_LODES = Path(r'I:\Projects\Josh\Regional Monitoring')
-
-FILE_YAML = PATH_CONFIG / 'rhna.yaml'
 
 
 
@@ -59,6 +58,7 @@ def load_yaml():
 
 
 def split_notes(indicator):
+    FILE_YAML = load_yaml()
     notes = FILE_YAML[indicator.replace('RHNA_', '')]['Notes']
     
     lines = notes.split('\\n')
@@ -261,7 +261,7 @@ def acs_sub(df_places, df_counties, county):
     return df_places_sub, df_counties_sub
 
 
-def acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, df_counties_sub=None, df_mpo=None):
+def acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, variable=None, df_counties_sub=None, df_mpo=None):
 
     indicator_name = indicator.replace('RHNA_', '')
 
@@ -270,7 +270,7 @@ def acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, d
                         , 'SEN_1', 'SEN_2', 'SEN_3', 'DISAB_3', 'HOMELS_1', 'HOMELS_2', 'HOMELS_3', 'HOMELS_4', 'ELI_2', 'ELI_3', 'AFFH_1', 'AFFH_2']:
 
         df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
-        df_prod = df_plot.pivot_table(index=['Geography', 'Variable'], columns=columns, values=values).reset_index()
+        df_prod = df_plot.pivot_table(index=['Geography', variable], columns=columns, values=values).reset_index()
 
         if indicator_name == 'POPEMP_10':
             vars_to_sort = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
@@ -301,11 +301,11 @@ def acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, d
 
 
 
-        df_prod['Sort'] = pd.Categorical(df_prod['Variable'], vars_to_sort)
+        df_prod['Sort'] = pd.Categorical(df_prod[variable], vars_to_sort)
         df_prod = df_prod.sort_values(['Sort'])
         df_prod = df_prod.drop(['Geography', 'Sort'], axis=1)
-        df_pct = df_plot.pivot_table(index=['Geography', 'Variable'], columns=columns, values='Percentage').reset_index()
-        df_pct['Sort'] = pd.Categorical(df_pct['Variable'], vars_to_sort)
+        df_pct = df_plot.pivot_table(index=['Geography', variable], columns=columns, values='Percentage').reset_index()
+        df_pct['Sort'] = pd.Categorical(df_pct[variable], vars_to_sort)
         df_pct = df_pct.sort_values(['Sort'])
         df_pct = df_pct.drop(['Geography', 'Sort'], axis=1)
     
@@ -648,9 +648,52 @@ def plot_rhna(fig, county, jurisdiction, indicator, title):
 
 
 
+
+
+
+
+
+def export_rhna_temp(county, jurisdiction, indicator):
+
+    if EXPORT:
+
+        FILE_YAML = load_yaml()
+
+        indicator2 = indicator.replace('RHNA_', '')
+
+        path_juris = PATH_OUT / county.replace(' County', '') / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
+
+        if os.path.isfile(path_juris):
+            wb = openpyxl.load_workbook(path_juris)
+        else:
+            wb = openpyxl.Workbook()
+        if indicator2 not in wb.sheetnames:
+            wb.create_sheet(indicator2)
+        if indicator2 in wb.sheetnames:
+            sheet_index = wb.sheetnames.index(indicator2)
+            wb.remove(wb[indicator2])
+            wb.create_sheet(indicator2, sheet_index)
+        ws = wb[indicator2]
+
+        df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator2]['Title'], 'The data used for this indicator is not available for this jurisdiction']})
+        if indicator2 == 'POPEMP_25':
+            df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator2]['Title'], 'This indicator is still a work in progress']})
+
+        for r in dataframe_to_rows(df_out, index=False, header=False):
+            ws.append(r)
+        ws['A1'].font = Font(bold=True, size=14)
+
+
+        wb.save(path_juris)
+
+
+
+
 def export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct=None):
 
     if EXPORT:
+
+        FILE_YAML = load_yaml()
 
         path_plots  = PATH_OUT / county.replace(' County', '') / jurisdiction / 'plots'
         path_tables = PATH_OUT / county.replace(' County', '') / jurisdiction / 'tables'
@@ -707,13 +750,13 @@ def export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct=None):
 
             df_source = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
             df_source.iloc[0, 0] = 'Source'
-            df_source.iloc[0, 1] = FILE_YAML[indicator2]['Source'][0]
+            df_source.iloc[0, 1] = FILE_YAML[indicator2]['Source']
 
             df_years = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
             df_years.iloc[0, 0] = 'Year(s)'
-            df_years.iloc[0, 1] = FILE_YAML[indicator2]['Year(s)'][0]
+            df_years.iloc[0, 1] = FILE_YAML[indicator2]['Year(s)']
 
-            df_notes = split_notes(FILE_YAML[indicator2]['Notes'])
+            df_notes = split_notes(indicator)
 
             df_title    .columns = df_prod2.columns
             df_subtitle1.columns = df_prod2.columns
@@ -792,43 +835,10 @@ def export_rhna(county, jurisdiction, indicator, title, df_prod, df_pct=None):
                 ws.add_image(img, f'B{row_num}') # 21 (style 1)
             except: pass
             wb.save(path_juris)
-        except:
-            pass
+        except Exception as e:
+                    print(e); traceback.print_exc(); print()
+                    export_rhna_temp(county, jurisdiction, indicator)
 
 
 
 
-
-
-def export_rhna_temp(county, jurisdiction, indicator):
-
-    if EXPORT:
-
-        indicator2 = indicator.replace('RHNA_', '')
-
-        path_juris = PATH_OUT / county.replace(' County', '') / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
-
-        if os.path.isfile(path_juris):
-            wb = openpyxl.load_workbook(path_juris)
-        else:
-            wb = openpyxl.Workbook()
-        if indicator2 not in wb.sheetnames:
-            wb.create_sheet(indicator2)
-        if indicator2 in wb.sheetnames:
-            sheet_index = wb.sheetnames.index(indicator2)
-            wb.remove(wb[indicator2])
-            wb.create_sheet(indicator2, sheet_index)
-        ws = wb[indicator2]
-
-        if indicator2 == 'POPEMP_25':
-            df_out = pd.DataFrame({'Test': ['Households by Displacement Risk and Tenure', 'This indicator is still a work in progress']})
-        if indicator2 == 'RISK_1':
-            df_out = pd.DataFrame({'Test': ['Assisted Units at Risk of Conversion', 'This indicator is still a work in progress']})
-
-
-        for r in dataframe_to_rows(df_out, index=False, header=False):
-            ws.append(r)
-        ws['A1'].font = Font(bold=True, size=14)
-
-
-        wb.save(path_juris)

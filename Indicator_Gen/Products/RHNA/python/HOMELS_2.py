@@ -9,7 +9,7 @@ import plotly.express as px
 
 PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
 PATH_GEO = Path(r'I:\Projects\Josh\RHNA\Geospatial Data')
-PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'General' / 'RHNA' / 'Final Products'
+PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 
 
 
@@ -28,8 +28,8 @@ if __name__ == '__main__':
     ## Organizing POPEMP_3
 
     indicator = 'RHNA_POPEMP_3'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
     values = 'Population'
     columns = 'Race_Ethnicity'
 
@@ -77,8 +77,8 @@ if __name__ == '__main__':
     ## Organizing HOMELS_2
 
     indicator = 'RHNA_HOMELS_2'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
     path_in = PATH_GEO / 'HUD'
     files = [f for f in path_in.iterdir() if f.is_file()]
@@ -167,10 +167,10 @@ if __name__ == '__main__':
 
                 ## Plotting ---
 
-                df_prod = df_sub[['Race_Ethnicity', 'Homeless population', 'Overall population']]
-                df_pct  = df_sub[['Race_Ethnicity', 'Share of homeless population', 'Share of overall population']]
+                df_prod = df_sub[['Race_Ethnicity', 'Homeless population', 'Overall population']].rename(columns={'Race_Ethnicity':'Race/Ethnicity'})
+                df_pct  = df_sub[['Race_Ethnicity', 'Share of homeless population', 'Share of overall population']].rename(columns={'Race_Ethnicity':'Race/Ethnicity'})
 
-                df_plot = df_pct.melt(id_vars='Race_Ethnicity', var_name='Prop', value_name='Percentage')
+                df_plot = df_pct.melt(id_vars='Race/Ethnicity', var_name='Prop', value_name='Percentage')
 
                 df_plot['Percentage'] = round(df_plot['Percentage']*100, 1)
                 
@@ -179,7 +179,7 @@ if __name__ == '__main__':
                     , 'Share of overall population': '#1F45FC'
                 }
 
-                fig = px.bar(df_plot, x='Race_Ethnicity', y='Percentage'
+                fig = px.bar(df_plot, x='Race/Ethnicity', y='Percentage'
                             , color = 'Prop'
                             , barmode='group'
                             , color_discrete_map=color_map)

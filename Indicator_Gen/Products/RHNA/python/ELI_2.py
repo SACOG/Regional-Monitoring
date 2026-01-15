@@ -5,7 +5,6 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import yaml
 import plotly.express as px
 
 FILE_CHAS = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected' / f'HUD_CHAS_2017thru2021.csv'
@@ -23,8 +22,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
         
     indicator = 'RHNA_ELI_2'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
     values = 'Households'
     columns = 'Income Level'
 
@@ -118,11 +117,11 @@ if __name__ == '__main__':
 
             df_prod = df_chas_sub[df_chas_sub['name'] == jurisdiction]
             df_prod = df_prod.drop('Percentage', axis=1)
-            df_prod = df_prod.pivot_table(index=['Race Ethnicity'], columns=columns, values=values).reset_index()
+            df_prod = df_prod.pivot_table(index=['Race Ethnicity'], columns=columns, values=values).reset_index().rename(columns={'Race Ethnicity':'Race/Ethnicity'})
 
             df_pct = df_chas_sub[df_chas_sub['name'] == jurisdiction]
             df_pct = df_pct.drop('Households', axis=1)
-            df_pct = df_pct.pivot_table(index=['Race Ethnicity'], columns=columns, values='Percentage').reset_index()
+            df_pct = df_pct.pivot_table(index=['Race Ethnicity'], columns=columns, values='Percentage').reset_index().rename(columns={'Race Ethnicity':'Race/Ethnicity'})
             
             ## Plotting ---
 

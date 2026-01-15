@@ -15,19 +15,19 @@ import time
 if __name__ == '__main__':
 
 
-    local=False
-    idrive=False
-    sharepoint=True
+    LOCAL=True
+    IDRIVE=False
+    SHAREPOINT=False
 
 
 
-    if local:
-        path_out = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
+    if LOCAL:
+        path_out = Path(r'C:\Users\jfontes\Documents\Projects\Local\RHNA\Final Products')
 
-    if idrive:
+    if IDRIVE:
         path_out = Path('I:\Projects\Josh\RHNA\Final Products')
 
-    if sharepoint:
+    if SHAREPOINT:
         user = getpass.getuser()
         path_users = Path.home()
         path_sp   = path_users / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'

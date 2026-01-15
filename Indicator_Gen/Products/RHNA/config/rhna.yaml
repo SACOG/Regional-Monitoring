@@ -2,220 +2,193 @@
 
 # Population, Employment, and Household Characteristics --------------------------------------------------------------------------------------------------------------------------------------------------
 
+
 POPEMP_1:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Total Population Difference Relative to Base Year (%)
-  Source:
-  - Department of Finance, series E-5
-  Abbrv:
-  - DOF
-  Website:
-  - https://dof.ca.gov/forecasting/demographics/
-  Year(s):
-  - 2000-2024
+  Theme: Population, Employment, and Household Characteristics
+  Title: Total Population Difference Relative to Base Year (%)
+  Source: Department of Finance, series E-5
+  Abbrv: DOF
+  Website: https://dof.ca.gov/forecasting/demographics/
+  Year(s): 2000-2024
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Geography
   Notes: 'This indicator shows the total population estimate by year.\n
     The data shown on the graph represents the population for the jurisdiction, county, and region indexed to the population in the year 2000 (or the first year of incorporation).\n
     The data points represent the relative population growth in each of these geographies relative to their populations in 2000 (or the first year of incorporation)'
-  Word: 'In {max_year}, {jurisdiction} had a total population of approximately {value1:,.0f}, a percent growth of approximately {value2:.0f}% since the year 2000.'
 
 POPEMP_2:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Population by Race/Ethnicity, 2000-2023
-  Source:
-  - U.S. Census Bureau, Decennial Census 2000-2020, Table P004, American Community Survey 5-Year Data 2023, Table B03002
-  Abbrv:
-  - DEC
-  Website:
-  - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2000-2020, 2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Population by Race/Ethnicity, 2000-2023
+  Source: U.S. Census Bureau, Decennial Census 2000-2020, Table P004, American Community Survey 5-Year Data 2023, Table B03002
+  Abbrv: DEC
+  Website: https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2000-2020, 2023
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
-  Word: 'testing...'
 
 POPEMP_3:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Population by Race/Ethnicity
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B03002
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Population by Race/Ethnicity
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B03002
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_4:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Population by Age, 2000-2023
-  Source:
-  - U.S. Census Bureau, Decennial Census 2000-2020, Table P12, American Community Survey 5-Year Data 2023, Table B01001
-  Abbrv:
-  - DEC
-  Website:
-  - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2000-2020, 2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Population by Age, 2000-2023
+  Source: U.S. Census Bureau, Decennial Census 2000-2020, Table P12, American Community Survey 5-Year Data 2023, Table B01001
+  Abbrv: DEC
+  Website: https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2000-2020, 2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Age Group
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_5:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Location of Population 1 Year Ago
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B07204
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Location of Population 1 Year Ago
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B07204
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Location
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_6:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Resident Employment by Industry
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table C24030
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Resident Employment by Industry
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table C24030
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Industry
   Notes: 'This indicator shows the industries in which residents of the jurisdiction work (whether the job is within the jurisdiction or not).\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_7:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Resident Employment by Occupation
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table C24010
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Resident Employment by Occupation
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table C24010
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Occupation
   Notes: 'This indicator shows the occupations in which jurisidiction residents work (whether within the jurisdiction or not).\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_8:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Resident Employment by Class of Worker
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B08128
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Resident Employment by Class of Worker
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B08128
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Class of Worker
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     Data is reported for jurisdiction of residence.'
 
 POPEMP_9:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Workers by Class of Worker, by Place of Work
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B08528
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Workers by Class of Worker, by Place of Work
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B08528
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Class of Worker
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     Data is reported for the jurisdiction where the job is located (regardless of if the employee also lives in that jurisdiction).'
 
 POPEMP_10:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Workers by Earnings, by Jurisdiction as Place of Work and Place of Residence
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B08119 and B08519
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Workers by Earnings, by Jurisdiction as Place of Work and Place of Residence
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B08119 and B08519
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Earnings
   Notes: 'This indicator shows the total population estimate for workers 16 years of age and over with earnings, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_11:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Jobs in Jurisdiction
-  Source:
-  - U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Workplace Area Characteristic (WAC) files
-  Abbrv:
-  - LEHD
-  Website:
-  - https://lehd.ces.census.gov/data/
-  Year(s):
-  - 2002-2022
+  Theme: Population, Employment, and Household Characteristics
+  Title: Jobs in Jurisdiction
+  Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Workplace Area Characteristic (WAC) files
+  Abbrv: LEHD
+  Website: https://lehd.ces.census.gov/data/
+  Year(s): 2002-2022
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Industry
   Notes: 'The data is tabulated by place of work, regardless of where a worker lives. The source data is provided at the census block level. These are crosswalked to jurisdictions and summarized.\n
     Industry NAICS groupings are as follows:\n
     11, 21->Agriculture & Natural Resources; 71, 72, 81->Arts, Recreation & Other Services; 23->Construction; 52, 53->Financial & Leasing; 92->Government;\n
     61, 62->Health & Educational Services; 51->Information; 31-33, 42->Manufacturing & Wholesale; 54, 55, 56->Professional & Managerial Services; 44-45->Retail; 22, 48-49->Transportation & Utilities'
 
 POPEMP_12:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Job Holders in a Jurisdiction by Industry
-  Source:
-  - U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Residence Area Characteristic (RAC) files
-  Abbrv:
-  - LEHD
-  Website:
-  - https://lehd.ces.census.gov/data/
-  Year(s):
-  - 2002-2022
+  Theme: Population, Employment, and Household Characteristics
+  Title: Job Holders in a Jurisdiction by Industry
+  Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Residence Area Characteristic (RAC) files
+  Abbrv: LEHD
+  Website: https://lehd.ces.census.gov/data/
+  Year(s): 2002-2022
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Industry
   Notes: 'The data is tabulated by place of residence, regardless of location of workplace. The source data is provided at the census block level. These are crosswalked to jurisdictions and summarized.\n
     Industry NAICS groupings are as follows:\n
     11, 21->Agriculture & Natural Resources; 71, 72, 81->Arts, Recreation & Other Services; 23->Construction; 52, 53->Financial & Leasing; 92->Government;\n
     61, 62->Health & Educational Services; 51->Information; 31-33, 42->Manufacturing & Wholesale; 54, 55, 56->Professional & Managerial Services; 44-45->Retail; 22, 48-49->Transportation & Utilities'
 
 POPEMP_13:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Jobs-Household Ratio
-  Source:
-  - U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Workplace Area Characteristic (WAC) files and DOF E5 Household Estimates
-  Abbrv:
-  - LEHD
-  Website:
-  - https://lehd.ces.census.gov/data/
-  Year(s):
-  - 2002-2022
+  Theme: Population, Employment, and Household Characteristics
+  Title: Jobs-Household Ratio
+  Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Workplace Area Characteristic (WAC) files and DOF E5 Household Estimates
+  Abbrv: LEHD
+  Website: https://lehd.ces.census.gov/data/
+  Year(s): 2002-2022
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Geography
   Notes: 'The data is tabulated by place of work, regardless of where a worker lives. The source data is provided at the census block level. These are crosswalked to jurisdictions and summarized.\n
     A similar measure is the ratio of jobs to housing units. However, this jobs-household ratio serves to compare the number of jobs in a jurisdiction to the number of housing units that are actually occupied.\n
     The difference between a jurisdiction jobs-housing ratio and jobs-household ratio will be most pronounced in jurisdictions with high vacancy rates, a high rate of units used for seasonal use, or a high rate of units used as short-term rentals
@@ -224,177 +197,171 @@ POPEMP_13:
     61, 62->Health & Educational Services; 51->Information; 31-33, 42->Manufacturing & Wholesale; 54, 55, 56->Professional & Managerial Services; 44-45->Retail; 22, 48-49->Transportation & Utilities'
 
 POPEMP_14:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Jobs-Worker Ratios, by Wage Group
-  Source:
-  - U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Residence Area Characteristic (RAC) files, and Workplace Area Characteristic (WAC) files 
-  Abbrv:
-  - LEHD
-  Website:
-  - https://lehd.ces.census.gov/data/
-  Year(s):
-  - 2002-2022
+  Theme: Population, Employment, and Household Characteristics
+  Title: Jobs-Worker Ratios, by Wage Group
+  Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Residence Area Characteristic (RAC) files, and Workplace Area Characteristic (WAC) files 
+  Abbrv: LEHD
+  Website: https://lehd.ces.census.gov/data/
+  Year(s): 2002-2022
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Wage Group
   Notes: 'The ratio compares job counts by wage group from two tabulations of LEHD data: Counts by place of work relative to counts by place of residence.'
 
 POPEMP_15:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Unemployment Rate
-  Source:
-  - California Employment Development Department, Local Area Unemployment Statistics (LAUS), Sub-county areas monthly updates, 2010-2025.
-  Abbrv:
-  - EDD
-  Website:
-  - https://data.ca.gov/dataset/local-area-unemployment-statistics-laus
-  Year(s):
-  - 2010-2025
+  Theme: Population, Employment, and Household Characteristics
+  Title: Unemployment Rate
+  Source: California Employment Development Department, Local Area Unemployment Statistics (LAUS), Sub-county areas monthly updates, 2010-2025.
+  Abbrv: EDD
+  Website: https://data.ca.gov/dataset/local-area-unemployment-statistics-laus
+  Year(s): 2010-2025
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Geography
   Notes: 'This indicator shows the unemployment rate over time.'
 
 POPEMP_16:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Housing Tenure
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25003
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Housing Tenure
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25003
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Geography
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_17:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Housing Tenure, 2000-2023
-  Source:
-  - U.S. Census Bureau, Decennial Census 2000-2020, Table H04, American Community Survey 5-Year Data 2023, Table B25003
-  Abbrv:
-  - DEC
-  Website:
-  - https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2000-2020, 2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Housing Tenure, 2000-2023
+  Source: U.S. Census Bureau, Decennial Census 2000-2020, Table H04, American Community Survey 5-Year Data 2023, Table B25003
+  Abbrv: DEC
+  Website: https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2000-2020, 2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Housing Tenure
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_18:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Housing Tenure by Age
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25007
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Housing Tenure by Age
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25007
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Age Group
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_19:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Housing Tenure by Year Moved to Current Residence
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25038
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Housing Tenure by Year Moved to Current Residence
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25038
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Year Moved to Current Residence
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_20:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Housing Tenure by Race of Householder
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25003(A-I)
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Housing Tenure by Race of Householder
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25003(A-I)
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_21:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Household Income Level by Tenure
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Population, Employment, and Household Characteristics
+  Title: Household Income Level by Tenure
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.'
 
 POPEMP_22:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Housing Tenure by Housing Type
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25032
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Housing Tenure by Housing Type
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25032
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Housing Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_23:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Household Type
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B11001
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Household Type
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B11001
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Household Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_24:
-  Theme:
-  - Population, Employment, and Household Characteristics
-  Title:
-  - Households by Presence of Children
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B11005
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Population, Employment, and Household Characteristics
+  Title: Households by Presence of Children
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B11005
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Household Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
+    The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
+
+POPEMP_25:
+  Theme: Population, Employment, and Household Characteristics
+  Title: Households by Displacement Risk and Tenure
+  Source: Urban Displacement Project for classification, U.S. Census Bureau, American Community Survey 5-Year Data, Table B25003
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Displacement Group
+  Notes: 'Displacement data is available at the census tract level.\n
+    Staff aggregated tracts up to jurisdiction level using census 2010 population weights, assigning a tract to jurisdiction in proportion to block level population weights.\n
+    Total household count may differ slightly from counts in other tables sourced from jurisdiction level sources.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 
@@ -403,132 +370,114 @@ POPEMP_24:
 # Housing Stock Characteristics --------------------------------------------------------------------------------------------------------------------------------------------------
 
 HSG_1:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Housing Type Trends
-  Source:
-  - Department of Finance, series E-5
-  Abbrv:
-  - DOF
-  Website:
-  - https://dof.ca.gov/forecasting/demographics/
-  Year(s):
-  - 2010, 2020, and 2024
+  Theme: Housing Stock Characteristics
+  Title: Housing Type Trends
+  Source: Department of Finance, series E-5
+  Abbrv: DOF
+  Website: https://dof.ca.gov/forecasting/demographics/
+  Year(s): 2010, 2020, and 2024
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Housing Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data shown on the graph represents the housing type breakout for the jurisdiction in the years 2010, 2020, and 2024.'
-  Word: '{jurisdiction} had approximately {value1:,.0f} Single Family Detached and about {value2:,.0f} Single Family Attached homes built in the year 2024.'
 
 HSG_2:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Occupancy Status
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25002
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Occupancy Status
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25002
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Household Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
-  Word: '{jurisdiction} had approximately {value1}% of units considered to be occupied, compared with {value2}% in Sacramento county and {value3}% in the entire SACOG region.'
 
 HSG_3:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Vacant Units by Type
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25004
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Vacant Units by Type
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25004
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Vacancy Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_4:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Housing Units by Year Structure Built
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25034
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Housing Units by Year Structure Built
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25034
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Year Built
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_5:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Housing Units by Number of Bedrooms
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25042
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Housing Units by Number of Bedrooms
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25042
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Number of Bedrooms
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_6:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Substandard Housing Issues
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25053, B25043, and B25049
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Substandard Housing Issues
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25053, B25043, and B25049
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Housing Issue
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_7:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Home Values of Owner-Occupied Units
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25075
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Home Values of Owner-Occupied Units
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25075
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Home Value
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_8:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Zillow Home Value Index (ZHVI)
-  Source:
-  - Zillow, Zillow Home Value Index (ZHVI)
-  Abbrv:
-  - Zillow
-  Website:
-  - https://www.zillow.com/research/data/
-  Year(s):
-  - 2001-2025
+  Theme: Housing Stock Characteristics
+  Title: Zillow Home Value Index (ZHVI)
+  Source: Zillow, Zillow Home Value Index (ZHVI)
+  Abbrv: Zillow
+  Website: https://www.zillow.com/research/data/
+  Year(s): 2001-2025
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Geography
   Notes: 'Zillow describes the ZHVI as a smoothed, seasonally adjusted measure of the typical home value and market changes across a given region and housing type.\n
     The ZHVI reflects the typical value for homes in the 35th to 65th percentile range.\n
     Includes all owner-occpied housing units, including both single-family homes and condominiums.\n
@@ -536,50 +485,44 @@ HSG_8:
     For unincorporated communities, the value is a population weighted average of unincorporated communities in the county matched to census-designated population counts.'
 
 HSG_9:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Contract Rents for Renter-Occupied Units
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25056
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Contract Rents for Renter-Occupied Units
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25056
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Contract Rent
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_10:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Median Contract Rent
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25058, B25056, and B25003
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Housing Stock Characteristics
+  Title: Median Contract Rent
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25058, B25056, and B25003
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Geography
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 HSG_11:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Housing Permitting
-  Source:
-  - California Department of Housing and Community Development (HCD), 5th Cycle Annual Progress Report Permit Summary (2020) - This indicator will be updated with the latest RHNA Cycle data at a future date
-  Abbrv:
-  - HCD
-  Website:
-  - https://www.hcd.ca.gov/planning-and-community-development/housing-elements
-  Year(s):
-  - '2015-2019'
+  Theme: Housing Stock Characteristics
+  Title: Housing Permitting
+  Source: California Department of Housing and Community Development (HCD), 5th Cycle Annual Progress Report Permit Summary (2020) - This indicator will be updated with the latest RHNA Cycle data at a future date
+  Abbrv: HCD
+  Website: https://www.hcd.ca.gov/planning-and-community-development/housing-elements
+  Year(s): 2015-2019
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Income Group
   Notes: 'This indicator will be updated with the latest RHNA Cycle data at a future date.\n\n
     HCD uses the following definitions for the four income categories:\n
     - Very Low Income: units affordable to households making less than 50% of the Area Median Income for the county in which the jurisdiction is located.\n
@@ -593,18 +536,16 @@ HSG_11:
 
 
 RISK_1:
-  Theme:
-  - Housing Stock Characteristics
-  Title:
-  - Assisted Units at Risk of Conversion
-  Source:
-  - California Housing Partnership (CHP)
-  Abbrv:
-  - CHP
-  Website:
-  - https://chpc.net/
-  Year(s):
-  - 'May 2025'
+  Theme: Housing Stock Characteristics
+  Title: Assisted Units at Risk of Conversion
+  Source: California Housing Partnership (CHP)
+  Abbrv: CHP
+  Website: https://chpc.net/
+  Year(s): May 2025
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Risk Level
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     Includes subsidized, affordable developments financed and/or assisted by HUD, CalHFA, LIHTC, HCD, and USDA. A subset of locally financed and/or assisted development are included based on availability of data.\n
     - While California Housing Partnership’s Preservation Database is the state’s most comprehensive source of information on subsidized affordable housing at risk of losing\n
@@ -628,157 +569,139 @@ RISK_1:
 
 
 OVER_1:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Overcrowding by Tenure and Severity
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Overpayment and Overcrowding
+  Title: Overcrowding by Tenure and Severity
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Overcrowding Severity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
     The Census Bureau defines a severely overcrowded housing unit as 1.5 or more persons per room (excluding bathrooms and kitchens).'
 
 OVER_2:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Overcrowding Severity
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Overpayment and Overcrowding
+  Title: Overcrowding Severity
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Overcrowding Severity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).'
 
 OVER_3:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Overcrowding by Race
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25014
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Overpayment and Overcrowding
+  Title: Overcrowding by Race
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25014
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 OVER_4:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Overcrowding by Income Level and Severity
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Overpayment and Overcrowding
+  Title: Overcrowding by Income Level and Severity
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
     The Census Bureau defines a severely overcrowded housing unit as 1.5 or more persons per room (excluding bathrooms and kitchens).'
 
 OVER_5:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Cost Burden by Income Level
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Overpayment and Overcrowding
+  Title: Cost Burden by Income Level
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
     For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
 OVER_6:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Cost Burden by Tenure
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25070 and B25091
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Overpayment and Overcrowding
+  Title: Cost Burden by Tenure
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25070 and B25091
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Cost Burden
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 OVER_7:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Cost Burden Severity
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25070 and B25091
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Overpayment and Overcrowding
+  Title: Cost Burden Severity
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25070 and B25091
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Cost Burden
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
     For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
 OVER_8:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Cost Burden by Race
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Overpayment and Overcrowding
+  Title: Cost Burden by Race
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
     For renters, housing cost is gross rent (contract rent plus utilities). For owners, housing cost is "select mothly owner cost", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
 OVER_9:
-  Theme:
-  - Overpayment and Overcrowding
-  Title:
-  - Cost Burden by Household Size
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.huduser.gov/portal/pdrdatas_landing.html
-  Year(s):
-  - 2017-2021
+  Theme: Overpayment and Overcrowding
+  Title: Cost Burden by Household Size
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.huduser.gov/portal/pdrdatas_landing.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Cost Burden
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
@@ -791,34 +714,30 @@ OVER_9:
 
 
 FARM_1:
-  Theme:
-  - Farmworkers
-  Title:
-  - Migrant Worker Student Population
-  Source:
-  - California Department of Education, California Longitudinal Pupil Achievement Data System (CALPADS), Cumulative Enrollment Data (Academic Years 2020-2021, 2021-2022, 2022-2023, 2023-2024)
-  Abbrv:
-  - CALPADS
-  Website:
-  - https://www.cde.ca.gov/ds/ad/filesenrcum.asp
-  Year(s):
-  - 2020-2024
+  Theme: Farmworkers
+  Title: Migrant Worker Student Population
+  Source: California Department of Education, California Longitudinal Pupil Achievement Data System (CALPADS), Cumulative Enrollment Data (Academic Years 2020-2021, 2021-2022, 2022-2023, 2023-2024)
+  Abbrv: CALPADS
+  Website: https://www.cde.ca.gov/ds/ad/filesenrcum.asp
+  Year(s): 2020-2024
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Season
   Notes: 'This indicator shows the total population of students from migrant workers.\n
     The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
 
 FARM_2:
-  Theme:
-  - Farmworkers
-  Title:
-  - Farm Operations and Farm Labor by County
-  Source:
-  - U.S. Department of Agriculture, Census of Agriculture (Table 7, Hired Farm Labor)
-  Abbrv:
-  - USDA
-  Website:
-  - https://www.nass.usda.gov/Publications/AgCensus/2022/index.php, https://agcensus.library.cornell.edu/census_year/2012-census/
-  Year(s):
-  - '2002-2022'
+  Theme: Farmworkers
+  Title: Farm Operations and Farm Labor by County
+  Source: U.S. Department of Agriculture, Census of Agriculture (Table 7, Hired Farm Labor)
+  Abbrv: USDA
+  Website: https://www.nass.usda.gov/Publications/AgCensus/2022/index.php, https://agcensus.library.cornell.edu/census_year/2012-census/
+  Year(s): 2002-2022
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Year
   Notes: 'Farm workers are considered seasonal if they work on a farm less than 150 days in a year,\n
     while farm workers who work on a farm more than 150 days are considered to be permanent workers for that farm.'
 
@@ -827,82 +746,72 @@ FARM_2:
 
 
 LGFEM_1:
-  Theme:
-  - Large Families and Female-Headed Households
-  Title:
-  - Household Size by Tenure
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25009
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Large Families and Female-Headed Households
+  Title: Household Size by Tenure
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25009
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Household Size
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 LGFEM_2:
-  Theme:
-  - Large Families and Female-Headed Households
-  Title:
-  - Households by Household Size
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B11016
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Large Families and Female-Headed Households
+  Title: Households by Household Size
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B11016
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Household Size
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 LGFEM_3:
-  Theme:
-  - Large Families and Female-Headed Households
-  Title:
-  - Household Size by Household Income Level
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2017-2021
+  Theme: Large Families and Female-Headed Households
+  Title: Household Size by Household Income Level
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 LGFEM_4:
-  Theme:
-  - Large Families and Female-Headed Households
-  Title:
-  - Housing Tenure by Household Type
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B25011
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Large Families and Female-Headed Households
+  Title: Housing Tenure by Household Type
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B25011
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Household Type
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 LGFEM_5:
-  Theme:
-  - Large Families and Female-Headed Households
-  Title:
-  - Female-Headed Households by Poverty Status
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B17012
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Large Families and Female-Headed Households
+  Title: Female-Headed Households by Poverty Status
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B17012
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Family Status
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -912,53 +821,45 @@ LGFEM_5:
 
 
 SEN_1:
-  Theme:
-  - Seniors
-  Title:
-  - Senior Households by Income and Tenure
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2017-2021
+  Theme: Seniors
+  Title: Senior Households by Income and Tenure
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     For this indicators, senior households are those with a householder who is aged 62 or older.'
-  Word: 'In {jurisdiction}, approximately {value1}% of senior households with household income greater than 100% of the Area Median Income (AMI) are owner occupied units while only about {value2}% of 
-    senior households with household income less than 30% of the AMI are owner occupied units.'
 
 SEN_2:
-  Theme:
-  - Seniors
-  Title:
-  - Senior and Youth Population by Race
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B01001(B-I)
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Seniors
+  Title: Senior and Youth Population by Race
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B01001(B-I)
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 SEN_3:
-  Theme:
-  - Seniors
-  Title:
-  - Cost Burdened Senior Households by Income Level
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2017-2021
+  Theme: Seniors
+  Title: Cost Burdened Senior Households by Income Level
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     For this indicator, senior households are those with a householder who is aged 62 or older.\n
@@ -966,18 +867,16 @@ SEN_3:
     For renters, housing cost is gross rent (contract rent plus utilities).  For owners, housing cost is "select monthly owner costs", which includes mortgage payment, utilities, association fees, insurance, and real estate taxes.'
 
 SEN_4:
-  Theme:
-  - Seniors
-  Title:
-  - Disability by Type - Seniors (65 and Over)
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B18102, B18103, B18104, B18105, B18106, and B18107
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Seniors
+  Title: Disability by Type - Seniors (65 and Over)
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B18102, B18103, B18104, B18105, B18106, and B18107
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Disability Type
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     These disabilities are counted separately and are not mutually exclusive, as an individual may report more than one disability.'
@@ -989,85 +888,75 @@ SEN_4:
 
 
 DISAB_1:
-  Theme:
-  - People with Disabilities, Including Developmental Disabilities
-  Title:
-  - Disability by Type
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Tables B18102, B18103, B18104, B18105, B18106, and B18107
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: People with Disabilities, Including Developmental Disabilities
+  Title: Disability by Type
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B18102, B18103, B18104, B18105, B18106, and B18107
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Disability Type
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     These disabilities are counted separately and are not mutually exclusive, as an individual may report more than one disability.'
 
 DISAB_2:
-  Theme:
-  - People with Disabilities, Including Developmental Disabilities
-  Title:
-  - Population by Disability Status
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B18101
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: People with Disabilities, Including Developmental Disabilities
+  Title: Population by Disability Status
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B18101
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Disability Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 DISAB_3:
-  Theme:
-  - People with Disabilities, Including Developmental Disabilities
-  Title:
-  - Labor Force Disability Status
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table C18120
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: People with Disabilities, Including Developmental Disabilities
+  Title: Labor Force Disability Status
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table C18120
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Disability Status
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 DISAB_4:
-  Theme:
-  - People with Disabilities, Including Developmental Disabilities
-  Title:
-  - Population with Developmental Disabilities by Age
-  Source:
-  - California Department of Developmental Services, Quarterly Consumer Report by age group and residence type
-  Abbrv:
-  - DDS
-  Website:
-  - https://www.dds.ca.gov/transparency/facts-stats/
-  Year(s):
-  - 2022-2024
+  Theme: People with Disabilities, Including Developmental Disabilities
+  Title: Population with Developmental Disabilities by Age
+  Source: California Department of Developmental Services, Quarterly Consumer Report by age group and residence type
+  Abbrv: DDS
+  Website: https://www.dds.ca.gov/transparency/facts-stats/
+  Year(s): 2022-2024
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Age Group
   Notes: 'The California Department of Developmental Services is responsible for overseeing the coordination and delivery of services to more than 330,000 Californias with\n
     developmental disabilities including cerebral palsy, intellectual disability, Down syndrome, autism, epilepsy, and related conditions.\n
     The California Department of Developmental Services provides ZIP code level counts.  To get to jurisdiction-level estimates, ZIP code counts were crosswalked to\n
     jurisdictions using census block group population counts from the 2023 ACS 1 year estimates to determine the share of a ZIP code to assign to a given jurisdiction.'
 
 DISAB_5:
-  Theme:
-  - People with Disabilities, Including Developmental Disabilities
-  Title:
-  - Population with Developmental Disabilities by Residence
-  Source:
-  - California Department of Developmental Services, Quarterly Consumer Report by age group and residence type
-  Abbrv:
-  - DDS
-  Website:
-  - https://www.dds.ca.gov/transparency/facts-stats/
-  Year(s):
-  - 2022-2024
+  Theme: People with Disabilities, Including Developmental Disabilities
+  Title: Population with Developmental Disabilities by Residence
+  Source: California Department of Developmental Services, Quarterly Consumer Report by age group and residence type
+  Abbrv: DDS
+  Website: https://www.dds.ca.gov/transparency/facts-stats/
+  Year(s): 2022-2024
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Residence Type
   Notes: 'The California Department of Developmental Services is responsible for overseeing the coordination and delivery of services to more than 330,000 Californias with\n
     developmental disabilities including cerebral palsy, intellectual disability, Down syndrome, autism, epilepsy, and related conditions.\n
     The California Department of Developmental Services provides ZIP code level counts.  To get to jurisdiction-level estimates, ZIP code counts were crosswalked to\n
@@ -1081,36 +970,32 @@ DISAB_5:
 
 
 HOMELS_1:
-  Theme:
-  - People Experiences Homelessness
-  Title:
-  - Homelessness by Household Type and Shelter Status
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
-  Abbrv:
-  - HUD
-  Website:
-  - https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
-  Year(s):
-  - '2024-'
+  Theme: People Experiences Homelessness
+  Title: Homelessness by Household Type and Shelter Status
+  Source: U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
+  Abbrv: HUD
+  Website: https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
+  Year(s): 2024-
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Household Type
   Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
     Per HCD requirements, jurisdictions will need to supplement this county-level data with local estimates of people experiencing homelessness.'
     
 HOMELS_2:
-  Theme:
-  - People Experiences Homelessness
-  Title:
-  - Racial Group Share of General and Homeless Populations
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
-  Abbrv:
-  - HUD
-  Website:
-  - https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
-  Year(s):
-  - '2024-'
+  Theme: People Experiences Homelessness
+  Title: Racial Group Share of General and Homeless Populations
+  Source: U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
+  Abbrv: HUD
+  Website: https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
+  Year(s): 2024-
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
@@ -1120,18 +1005,16 @@ HOMELS_2:
     Accordingly, the racial group data listed here includes both Hispanic and non-Hispanic individuals.'
     
 HOMELS_3:
-  Theme:
-  - People Experiences Homelessness
-  Title:
-  - Characteristics for the Population Experiencing Homelessness
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
-  Abbrv:
-  - HUD
-  Website:
-  - https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
-  Year(s):
-  - '2024-'
+  Theme: People Experiences Homelessness
+  Title: Characteristics for the Population Experiencing Homelessness
+  Source: U.S. Department of Housing and Urban Development (HUD), Continuum of Care (CoC) Homeless Populations and Subpopulations Reports
+  Abbrv: HUD
+  Website: https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
+  Year(s): 2024-
+  Word:
+    Table Transpose: False
+    Percent Column: False
+    Subgroup: Characteristic
   Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
@@ -1140,18 +1023,16 @@ HOMELS_3:
     These counts should not be summed.'
 
 HOMELS_4:
-  Theme:
-  - People Experiences Homelessness
-  Title:
-  - Students in Local Public Schools Experiencing Homelessness
-  Source:
-  - California Department of Education, California Longitudinal Pupil Achievement Data System (CALPADS), Cumulative Enrollment Data (Academic Years 2020-2021, 2021-2022, 2022-2023, 2023-2024)
-  Abbrv:
-  - CALPADS
-  Website:
-  - https://www.cde.ca.gov/ds/ad/fileshse.asp
-  Year(s):
-  - 2020-2024
+  Theme: People Experiences Homelessness
+  Title: Students in Local Public Schools Experiencing Homelessness
+  Source: California Department of Education, California Longitudinal Pupil Achievement Data System (CALPADS), Cumulative Enrollment Data (Academic Years 2020-2021, 2021-2022, 2022-2023, 2023-2024)
+  Abbrv: CALPADS
+  Website: https://www.cde.ca.gov/ds/ad/fileshse.asp
+  Year(s): 2020-2024
+  Word:
+    Table Transpose: False # True
+    Percent Column: False
+    Subgroup: School Year
   Notes: 'The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
 
 
@@ -1161,66 +1042,58 @@ HOMELS_4:
 
 
 ELI_1:
-  Theme:
-  - Extremely Low-Income Housing Needs
-  Title:
-  - Households by Income Level
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2017-2021
+  Theme: Extremely Low-Income Housing Needs
+  Title: Households by Income Level
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 ELI_2:
-  Theme:
-  - Extremely Low-Income Housing Needs
-  Title:
-  - Household Income Distribution by Race/Ethnicity
-  Source:
-  - U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
-  Abbrv:
-  - CHAS
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2017-2021
+  Theme: Extremely Low-Income Housing Needs
+  Title: Household Income Distribution by Race/Ethnicity
+  Source: U.S. Department of Housing and Urban Development (HUD), Comprehensive Housing Affordability Strategy (CHAS) ACS tabulation, 2017-2021 release
+  Abbrv: CHAS
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2017-2021
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 ELI_3:
-  Theme:
-  - Extremely Low-Income Housing Needs
-  Title:
-  - Poverty Status by Race
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B17001(B-I)
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Extremely Low-Income Housing Needs
+  Title: Poverty Status by Race
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B17001(B-I)
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 ELI_4:
-  Theme:
-  - Extremely Low-Income Housing Needs
-  Title:
-  - Households by HCD Designated Income Brackets
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Data Profile, Table DP03
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/
-  Year(s):
-  - 2019-2023
+  Theme: Extremely Low-Income Housing Needs
+  Title: Households by HCD Designated Income Brackets
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Data Profile, Table DP03
+  Abbrv: ACS5
+  Website: https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Income Bracket
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     This indicator is estimated by allocating the number of households broken out by ACS income brackets (found in table DP03) into the corresponding HCD income brackets using the AMI of the county the jurisdiction resides in.\n
@@ -1240,36 +1113,32 @@ ELI_4:
 
 
 AFFH_1:
-  Theme:
-  - Affirmatively Furthering Fair Housing
-  Title:
-  - Mortgage Applications and Acceptance by Race
-  Source:
-  - Federal Financial Institutions Examination Council's (FFIEC) Home Mortgage Disclosure Act loan/application register (LAR) files
-  Abbrv:
-  - FFIEC
-  Website:
-  - https://ffiec.cfpb.gov/data-publication/modified-lar/2024
-  Year(s):
-  - '2024-'
+  Theme: Affirmatively Furthering Fair Housing
+  Title: Mortgage Applications and Acceptance by Race
+  Source: Federal Financial Institutions Examination Council's (FFIEC) Home Mortgage Disclosure Act loan/application register (LAR) files
+  Abbrv: FFIEC
+  Website: https://ffiec.cfpb.gov/data-publication/modified-lar/2024
+  Year(s): 2024-
+  Word:
+    Table Transpose: False
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: '“Loan originated” means that the application was accepted a loan was made by a financial institution to the applicant.\n
     “File incomplete or withdrawn” means a loan was not originated because the application was withdrawn before a credit decision was made or the file was closed for incompleteness.\n
     “Application denied” means a loan was not originated because the financial institution did not approve the mortgage application.\n
     “Application approved but not accepted” means the financial institution approved the loan application but the applicant did not complete the transaction and a loan was not originated.'
 
 AFFH_2:
-  Theme:
-  - Affirmatively Furthering Fair Housing
-  Title:
-  - Population Living in High Resource Areas by Race
-  Source:
-  - California Tax Credit Allocation Committee (TCAC)/California Housing and Community Development (HCD), Opportunity Maps (2020); U.S. Census Bureau, American Community Survey 5-Year Data, Table B03002
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.treasurer.ca.gov/ctcac/opportunity.asp, https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Affirmatively Furthering Fair Housing
+  Title: Population Living in High Resource Areas by Race
+  Source: California Tax Credit Allocation Committee (TCAC)/California Housing and Community Development (HCD), Opportunity Maps (2020); U.S. Census Bureau, American Community Survey 5-Year Data, Table B03002
+  Abbrv: ACS5
+  Website: https://www.treasurer.ca.gov/ctcac/opportunity.asp, https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     The TCAC and HCD created the Opportunity Map using reliable and publicly available data sources to identify areas in the state whose characteristics have been shown by research to support\n
@@ -1290,18 +1159,16 @@ AFFH_2:
     Any census tract that intersects with the jurisdiction was included in the total population roll up, which can result in a high population estimate compared to other indicators.'
 
 AFFH_3:
-  Theme:
-  - Affirmatively Furthering Fair Housing
-  Title:
-  - Population with Limited English Proficiency
-  Source:
-  - U.S. Census Bureau, American Community Survey 5-Year Data, Table B16005
-  Abbrv:
-  - ACS5
-  Website:
-  - https://www.census.gov/programs-surveys/acs/data.html
-  Year(s):
-  - 2019-2023
+  Theme: Affirmatively Furthering Fair Housing
+  Title: Population with Limited English Proficiency
+  Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B16005
+  Abbrv: ACS5
+  Website: https://www.census.gov/programs-surveys/acs/data.html
+  Year(s): 2019-2023
+  Word:
+    Table Transpose: True
+    Percent Column: True
+    Subgroup: English Proficiency
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 

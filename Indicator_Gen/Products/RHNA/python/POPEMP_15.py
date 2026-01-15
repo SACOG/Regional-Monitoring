@@ -27,8 +27,8 @@ FILE_YAML = rhna.load_yaml()
 if __name__ == '__main__':
 
     indicator = 'RHNA_POPEMP_15'
-    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv'][0]
-    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title'][0]
+    source = FILE_YAML[indicator.replace('RHNA_', '')]['Abbrv']
+    title  = FILE_YAML[indicator.replace('RHNA_', '')]['Title']
 
 
     ## Importing
@@ -38,6 +38,9 @@ if __name__ == '__main__':
     df_codes = df_codes[df_codes['MPO'] == 'SACOG']
     df_codes = df_codes[['NAME', 'MPO', 'County Name', 'Incorporated']].drop_duplicates().reset_index(drop=True)
     df_codes = df_codes.rename(columns={'NAME':'Area Name'})
+    df_codes['Area Name'] = df_codes['Area Name'].str.replace(' city', '')
+    df_codes['Area Name'] = df_codes['Area Name'].str.replace(' CDP', '')
+    df_codes['Area Name'] = df_codes['Area Name'].str.replace(' town', '')
     df_codes = df_codes.reset_index(drop=True)
 
     df_places   = pd.read_csv(FILE_EMPLOYMENT)
@@ -45,11 +48,12 @@ if __name__ == '__main__':
 
 
     ## Organizing
-
+    df_places['Area Name'] = df_places['Area Name'].str.replace(' city', '')
+    df_places['Area Name'] = df_places['Area Name'].str.replace(' CDP', '')
+    df_places['Area Name'] = df_places['Area Name'].str.replace(' town', '')
     df_places = df_places.merge(df_codes, on='Area Name', how='left')
     df_places = df_places[df_places['MPO'] == 'SACOG']
     df_places.loc[df_places['Incorporated'] != 'Yes', 'Area Name'] = 'Unincorporated'
-    df_places['Area Name'] = df_places['Area Name'].str.replace(' city', '')
 
     wm = lambda x: np.average(x, weights = df_places.loc[x.index, "Labor Force"])
     df_places = df_places.groupby(['County Name', 'Area Name', 'Year'], as_index=False).agg(unemployment_rate=('Unemployment Rate', wm))
