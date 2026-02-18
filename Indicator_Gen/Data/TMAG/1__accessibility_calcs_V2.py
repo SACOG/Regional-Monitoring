@@ -15,7 +15,7 @@ print(); print()
 # Workspace ------------------------------------------------------------------------------------------------------------------------
 
 
-export=False
+EXPORT=False
 
 
 from pathlib import Path
@@ -32,13 +32,18 @@ from tqdm import tqdm
 from arcgis.features import GeoAccessor
 
 
+FILE_GDB = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
+
+
+
+
 sys.path.append(str(Path(__file__).parent / 'config'))
 import parameters as params
 import utils as ut
 
 import yaml
-yaml_file = Path(__file__).parent / 'config' / 'config_regavgs.yaml'
-with open(yaml_file, 'r') as y:
+YAML_FILE = Path(__file__).parent / 'config' / 'config_regavgs.yaml'
+with open(YAML_FILE, 'r') as y:
     pathconfigs = yaml.load(y, Loader=yaml.FullLoader)
     acc_cfg = pathconfigs['access_data']
 
@@ -147,10 +152,9 @@ if __name__ == '__main__':
     start_time = time.time()
 
     arcpy.env.workspace = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
-    file_gdb = r'I:\Projects\Josh\Regional Monitoring\ArcPro_sup\Accessibility\Accessibility.gdb'
 
     fc_name = 'tl_2020_valleyvision_county' # tl_2020_cdp_06_sacog, tl_2020_sacog_county, tl_2020_sacog_tracts, tl_2020_sacog_blocks, Community_Type_2024_dissolve, City_County, SACOG_MPO, tl_2020_valleyvision_county, tl_2020_valleyvision
-    fc_main = file_gdb + '\\' + fc_name
+    fc_main = FILE_GDB + '\\' + fc_name
     str_project_type = 'AreaAvg'
     destination = 'emp'
     wgt = 'white' # pop, asian, black, hispanic, white
@@ -197,15 +201,15 @@ if __name__ == '__main__':
 
 
         # Exporting
-        if export:
+        if EXPORT:
 
             # Feature class to file gdb
             fc_name_out = f'{fc_name}__access_{wgt}_{destination}'
-            file_fc_out = Path(file_gdb) / fc_name_out
-            print(f'Exporting feature class {fc_name_out} to the file geodatabase {file_gdb}...'); print()
+            file_fc_out = Path(FILE_GDB) / fc_name_out
+            print(f'Exporting feature class {fc_name_out} to the file geodatabase {FILE_GDB}...'); print()
             sdf_data = GeoAccessor.from_geodataframe(gdf_fc, column_name='geometry')
             sdf_data.spatial.to_featureclass(location=file_fc_out)
-            print(); print(f'Successfully exported to the following location: {file_gdb}'); print(); print()
+            print(); print(f'Successfully EXPORTed to the following location: {FILE_GDB}'); print(); print()
 
             # csv
             path_out = Path(r'I:\Projects\Josh\Regional Monitoring\Accessibility') # Temp

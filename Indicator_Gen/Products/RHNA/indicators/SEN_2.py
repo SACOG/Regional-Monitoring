@@ -1,0 +1,81 @@
+
+
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import time
+import warnings; warnings.filterwarnings("ignore")
+
+import sys
+sys.path.append(str(Path(__file__).parent.parent/'config'))
+import rhna
+yaml_file = rhna.load_yaml()
+
+PATH_DATA = Path(yaml_file['Path_Data'])
+INDICATOR = Path(__file__).stem
+params = yaml_file[INDICATOR]
+
+
+if __name__ == '__main__':
+
+    df_places = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx')
+    df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
+    df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
+    df_places = df_places.rename(columns={'NAME':'Geography', 'Variable': 'Age Group', 'Race_Ethnicity':'Race/Ethnicity', 'Percentage':'Percent'})
+    df_places = df_places[df_places['Year'] == df_places['Year'].max()].reset_index(drop=True)
+
+    df_places = df_places[['County Name', 'Geography', 'Age Group', 'Race/Ethnicity', 'Population', 'Percent']]
+
+    df_places['Sort'] = pd.Categorical(df_places['Age Group'], ['Age 0-17', 'Age 18-64', 'Age 65+'])
+    df_places['Sort_eth'] = pd.Categorical(df_places['Race/Ethnicity'], [
+        'American Indian or Alaska Native'
+        , 'Asian'
+        , 'Black or African American'
+        , 'Hispanic or Latino'
+        , 'Native Hawaiian or other Pacific Islander'
+        , 'Some other race'
+        , 'Two or more races'
+        , 'White (NH)'
+    ])
+    df_places = df_places.sort_values(['County Name', 'Geography', 'Sort_eth', 'Sort'], ascending=[True, True, False, True]).drop(['Sort', 'Sort_eth'], axis = 1)
+    df_places['Percent'] = df_places['Population'] / df_places.groupby(['County Name', 'Geography', 'Age Group'])['Population'].transform('sum')
+    df_places = df_places.reset_index(drop=True)
+
+
+    counties = list(df_places['County Name'].unique())
+
+    for county in counties:
+        
+        rhna.print2()
+        print(county)
+        time.sleep(2)
+
+        df_places_sub = df_places[df_places['County Name'] == county]
+        jurisdictions = df_places_sub['Geography'].unique()
+        
+        for jurisdiction in tqdm(jurisdictions, position=0):
+
+            tqdm.write(jurisdiction)
+
+            df_prod = df_places_sub[df_places_sub['Geography'] == jurisdiction].pivot_table(index='Race/Ethnicity', columns='Age Group', values='Population').reset_index()
+            df_pct  = df_places_sub[df_places_sub['Geography'] == jurisdiction].pivot_table(index='Race/Ethnicity', columns='Age Group', values='Percent'   ).reset_index()
+
+            df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
+            df_plot['Percent of Population'] = round(df_plot['Percent']*100, 1)
+
+            df_plot['Sort_eth'] = pd.Categorical(df_plot['Race/Ethnicity'], [
+                'American Indian or Alaska Native'
+                , 'Native Hawaiian or other Pacific Islander'
+                , 'Other race or multiple races'
+                , 'Black or African American'
+                , 'Asian'
+                , 'Hispanic or Latino'
+                , 'White (NH)'
+            ])
+            df_plot = df_plot.sort_values(['Age Group', 'Sort_eth'], ascending=[True, False])
+            df_plot = df_plot.drop(['Sort_eth'], axis=1)
+
+            fig = rhna.make_fig(INDICATOR, params, df_plot, county, jurisdiction)
+            rhna.plot_rhna(fig, county, jurisdiction, INDICATOR, params)
+            rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod, df_pct)
+

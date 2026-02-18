@@ -1,10 +1,18 @@
+"""
+Docstring for Indicator_Gen.Data.RITIS.append_matching_tables
+Author: Terrell Enoru
+Date: December 2025
+This script takes two files and if they have matching columns and compatible metadata (Final/Summary, vehicle class), merges them into a single file and exports it to the appropriate directory.
+If Congestion_2_Monthly is set to True, the file names will be assigned automatically.
+Setting Congestion_2_Monthly will also export an Excel file formatted for the Congestion 2 Monthly indicator.
+"""
 import pandas as pd
 import sys
 from pathlib import Path
 from datetime import datetime
 ########## ENTER NAME OF FILES TO BE MERGED HERE ###########
-file1="Summary_Congestion_2017_01_to_2024_12TAP.csv"
-file2="Summary_Congestion_2025_01_to_2025_10TAP.csv"
+file1="Summary_Congestion_2017_to_2025_TAP_Yearly.csv"
+file2="Summary_Congestion_2025_01_to_2025_11TAP.csv"
 # Set True if you want to use combined df for Monthly Congestion Plot
 Congestion_2_Monthly=True
 ############################################################
@@ -29,10 +37,9 @@ def extract_metadata(filename):
     """
     Extract type (Final/Summary), date, and vehicle class from filename.
     Handles formats like:
-    - 2021_01TAP_final.csv
-    - 2021_01T_summary.csv
-    - Final_Congestion_2021_01_to_2021_06_TAP.csv
-    - Summary_Congestion_2021_01_to_2021_06_T.csv
+    - Summary_Congestion_2021_01_to_2021_06_TAP.csv
+    - Summary_Congestion_2017_to_2025_TAP_Yearly.csv
+    - Final_Congestion_2025_01_to_2025_11TAP.csv
     """
     name = filename.replace('.csv', '').replace('.pdf', '')
     name_lower = name.lower()
@@ -45,21 +52,24 @@ def extract_metadata(filename):
     else:
         return None
     
-    # Extract vehicle code (TAP, T, or P) - must be at end
+    # Extract vehicle code (TAP, T, or P)
+    # Remove 'Yearly' suffix if present, then check the end
+    name_for_code = name_lower.replace('_yearly', '').replace('yearly', '')
+    
     vehicle_code = None
-    if name_lower.endswith('tap'):
+    if name_for_code.endswith('tap'):
         vehicle_code = 'TAP'
-    elif name_lower.endswith('t'):
+    elif name_for_code.endswith('t'):
         vehicle_code = 'T'
-    elif name_lower.endswith('p'):
+    elif name_for_code.endswith('p'):
         vehicle_code = 'P'
 
     if not vehicle_code:
         return None
     
-    # Extract date range - look for YYYY_MM patterns
+    # Extract date range - look for YYYY_MM or YYYY patterns
     import re
-    dates = re.findall(r'\d{4}_\d{2}', name)
+    dates = re.findall(r'\d{4}(?:_\d{2})?', name)
     
     if len(dates) == 0:
         return None

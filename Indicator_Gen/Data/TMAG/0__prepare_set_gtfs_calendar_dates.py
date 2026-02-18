@@ -34,6 +34,10 @@ from IPython.display import display
 import plotly.express as px
 
 
+SOURCE_GTFS_PARENT_DIR = r'I:\Projects\Josh\Geospatial Data\GTFS\original_gtfs' # a folder containing only the ZIPs of GTFS feeds
+DEST_GTFS_PARENT_DIR = r'I:\Projects\Josh\Geospatial Data\GTFS\datemod_versions'
+
+
 
 
 # updates by josh
@@ -246,16 +250,13 @@ def create_zip(dir_to_zip, zip_parent_dir):
 if __name__ == '__main__':
 
     print(); print()
-    source_gtfs_parent_dir = r'I:\Projects\Josh\Geospatial Data\GTFS\original_gtfs' # a folder containing only the ZIPs of GTFS feeds
-    dest_gtfs_parent_dir = r'I:\Projects\Josh\Geospatial Data\GTFS\datemod_versions'
-
 
 
     ## Check calendars ---
 
     # updates by josh
     print('Concatenating all start/end dates together...'); print()
-    check_gtfs_dates(op_dir                  = source_gtfs_parent_dir
+    check_gtfs_dates(op_dir                  = SOURCE_GTFS_PARENT_DIR
                       , file_name            = 'calendar.txt'
                       , start_date_field     = 'start_date'
                       , end_date_field       = 'end_date'
@@ -279,7 +280,7 @@ if __name__ == '__main__':
     # if not check:
     #     raise Exception("Script aborted by user.")
     # import pdb; pdb.set_trace()
-    for src_dir_zip in Path(source_gtfs_parent_dir).glob('*.zip'):
+    for src_dir_zip in Path(SOURCE_GTFS_PARENT_DIR).glob('*.zip'):
 
         # if 'amtrak' in str(src_dir_zip):
         #     print('Restricting amtrak to ValleyVision bounding box...')
@@ -287,7 +288,7 @@ if __name__ == '__main__':
         #     print('Successfully cleaned amtrak zip file!')
 
         # set up destination directory; deleting if already exists
-        dest_dir = Path(dest_gtfs_parent_dir).joinpath(src_dir_zip.stem)
+        dest_dir = Path(DEST_GTFS_PARENT_DIR).joinpath(src_dir_zip.stem)
         if dest_dir.exists():
             shutil.rmtree(dest_dir)
 
@@ -315,4 +316,4 @@ if __name__ == '__main__':
                                , dummy_date       = dummy)
         
         print(); print()
-        create_zip(dest_dir, dest_gtfs_parent_dir)
+        create_zip(dest_dir, DEST_GTFS_PARENT_DIR)

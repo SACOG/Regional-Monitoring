@@ -2,25 +2,9 @@
 
 '''
 
-Functions:
-
-get_data()
-read_inputs_file()
-read_vars_file()
-moe_split()
-prep_request_special()
-get_acs()
-get_pums()
-get_dp()
-get_subject()
-get_dec()
-get_lehd()
-get_data_any()
-
+Note: get.py has functions that sends the API requests, after the end user creates the request
 
 '''
-
-
 
 
 
@@ -49,6 +33,7 @@ FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
 
 sys.path.append(str(PATH_CONFIG0))
 import functions as func
+import help
 
 
 GEO_ID = {
@@ -58,35 +43,43 @@ GEO_ID = {
     , 'Counties'    : ['NAME', 'state', 'county']
     , 'MSA'         : ['NAME', 'metropolitan statistical area/micropolitan statistical area']
     , 'States'      : ['NAME', 'state']
+    , 'Congressional Districts': ['NAME', 'state', 'congressional district']
+    , 'State Legislative Upper Districts': ['NAME', 'state', 'state legislative district (upper chamber)']
+    , 'State Legislative Lower Districts': ['NAME', 'state', 'state legislative district (lower chamber)']
+    , 'National' : ['NAME', 'us']
 }
 
+
+# LOCATION_URL = {
+#     'ZIP Codes': '&for=zip%20code%20tabulation%20area:'
+# }
 
 
 # Main function used to get data with API request
 def get_data(
         df_urls
-        , api_key, estimate, sample, geography, variables, year
+        , api_key, params, variables, year
         , state=None, county=None, msa=None, puma=None, ZIPcode=None
     ):
         
     '''
     User defined function to import Data from the Census Bureau
-    User inputs: [api_key, estimate, geography variables, year] to tell Census Bureau that we have access with the API key and
+    User inputs: [api_key, params['estimate'], params['geo'] variables, year] to tell Census Bureau that we have access with the API key and
                     what type of sample data to pull, which variables we want to import, what year, and which state
     The "df_urls" object pulls the "URL" tab from the "Census Configuration File.xlsx", which contains the root URL needed for any API request available here https://api.census.gov/data.html         
-    Only pulls 1 year at a time (geography IDs, like census tracts, sometimes change at the start of each decade)
+    Only pulls 1 year at a time (params['geo'] IDs, like census tracts, sometimes change at the start of each decade)
     '''
 
-    # Assert that inputs for estimate and geography are appropriate
-    assert estimate  in ['ACS5', 'ACS1', 'DEC', 'CPS' , 'RH', 'SA', 'SE'], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
-    assert sample    in ['ACS', 'DP', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'LEHD'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
-    assert geography in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA', 'ZIP Codes', 'Congressional Districts', 'State Legislative Upper Districts', 'State Legislative Lower Districts', 'States', 'National'], "Unacceptable geography input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
+    # Assert that inputs for estimate and params['geo'] are appropriate
+    assert params['estimate']  in ['ACS5', 'ACS1', 'DEC', 'CPS' , 'RH', 'SA', 'SE'], "Unacceptable estimate input, requires 'ACS5', 'ACS1', 'DEC', 'LEHD', or 'CPS' "
+    assert params['sample'  ]  in ['ACS', 'DP', 'DEC', 'DHC', 'PUMS', 'FOODSEC' , 'SUBJECT', 'LEHD'], "Unacceptable sample type input, requires 'ACS', 'DEC', 'DHS', 'PUMS', 'FOODSEC', 'SUBJECT', 'RH', 'SA', or 'SE'"
+    assert params['geo'     ]  in ['Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', 'PUMA', 'ZIP Codes', 'Congressional Districts', 'State Legislative Upper Districts', 'State Legislative Lower Districts', 'States', 'National'], "Unacceptable params['geo'] input, requires 'Places', 'Block Groups', 'Tracts', 'Counties', 'MSA', or 'PUMA' "
 
 
     ## Construct URL
     df_url = df_urls[
-          (df_urls['Sample'   ] == sample  )
-        & (df_urls['Estimate' ] == estimate)
+          (df_urls['Sample'   ] == params['sample'  ])
+        & (df_urls['Estimate' ] == params['estimate'])
         & (df_urls['c_vintage'] == year    )
         ]
                   
@@ -95,36 +88,36 @@ def get_data(
     root_ = df_url['c_url'].values[0]
     g_ = '?get='
 
-    if sample == 'LEHD':
+    if params['sample'] == 'LEHD':
         root_ = re.sub('<NA>/', '', root_)
 
     # User inputs for user API key, desired variables and years to import
     api_key_ = f"&key={api_key}"
     variables_ = variables
 
-    # Specify which geography to import
-    if geography == 'ZIP Codes':
+    # Specify which params['geo'] to import
+    if params['geo'] == 'ZIP Codes':
         location_ = '&for=zip%20code%20tabulation%20area:' + ZIPcode
-    if geography == 'Congressional Districts':
+    if params['geo'] == 'Congressional Districts':
         location_ = '&for=congressional%20district:*' + '&in=state:' + state
-    if geography == 'State Legislative Upper Districts':
+    if params['geo'] == 'State Legislative Upper Districts':
         location_ = '&for=state%20legislative%20district%20(upper%20chamber):*' + '&in=state:' + state
-    if geography == 'State Legislative Lower Districts':
+    if params['geo'] == 'State Legislative Lower Districts':
         location_ = '&for=state%20legislative%20district%20(lower%20chamber):*' + '&in=state:' + state
-    if geography == 'Places':
+    if params['geo'] == 'Places':
         location_ = '&for=place:*' + '&in=state:' + state
-    if geography == 'Block Groups':
+    if params['geo'] == 'Block Groups':
         location_ = '&for=block%20group:*' + '&in=tract:*' + '&in=state:' + state + '&in=county:' + county
-    if geography == 'Tracts':
+    if params['geo'] == 'Tracts':
         location_ = '&for=tract:*' + '&in=state:' + state + '&in=county:' + county
-    if geography == 'Counties':
+    if params['geo'] == 'Counties':
         if year == 'timeseries':
             location_ = '&for=county:' + county + '&in=state:' + state + '&time=from 2000-Q1 to 2023-Q4'
         else:
             location_ = '&for=county:' + county + '&in=state:' + state
             # location_ = '&for=county:*' + '&in=state:' + state
-    if geography == 'MSA':
-        if sample in ['LEHD']:
+    if params['geo'] == 'MSA':
+        if params['sample'] in ['LEHD']:
             if year == 'timeseries':
                 location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa) + '&in=state:' + state + '&time=from 2000-Q1 to 2024-Q4'
             else:
@@ -132,11 +125,11 @@ def get_data(
         else:
             location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:' + str(msa)
             # location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'
-    if geography == 'PUMA':
+    if params['geo'] == 'PUMA':
         location_ =  '&for=public%20use%20microdata%20area:' + puma + '&in=state:' + state
-    if geography == 'States':
+    if params['geo'] == 'States':
         location_ = '&for=state:' + state
-    if geography == 'National':
+    if params['geo'] == 'National':
         location_ = '&for=us:*'
     
     ## Concatenate constructed URL
@@ -153,7 +146,7 @@ def get_data(
     df_census = pd.DataFrame(response[1:], columns=response[0])
     
     # apply year tag
-    if sample != 'LEHD':
+    if params['sample'] != 'LEHD':
         df_census['Year'] = year
 
     ## Return
@@ -169,42 +162,27 @@ def get_data(
 
 
 
+def read_vars_file(params):
 
-
-# print()
-# print()
-# print("API request inputs:")
-# print()
-
-    
-
-
-
-
-
-def read_vars_file(sample_type, indicator, years_to_import, estimate):
-
-    df_vars = pd.read_excel(FILE_INPUTS, sheet_name=sample_type)
+    df_vars = pd.read_excel(FILE_INPUTS, sheet_name=params['sample'])
     df_vars = df_vars[
-        (
-            df_vars['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | 
-            (df_vars['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False)
-        ) &
-        (df_vars['Include'] == 'Yes') & (df_vars['Year'].isin(years_to_import))
+        (df_vars['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) | 
+        (df_vars['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False)) &
+        (df_vars['Include'] == 'Yes') & (df_vars['Year'].isin(params['years_to_import']))
         ]
 
-    if sample_type == 'LEHD':
-        df_vars[df_vars['Sample'] == estimate]
+    if params['sample'] == 'LEHD':
+        df_vars[df_vars['Sample'] == params['estimate']]
 
     return df_vars
 
 
-def read_fips_file_pums(import_tab):
-    
-    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+def read_fips_file_pums(params):
 
-    df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
-    df_fips_pums = pd.read_excel(FILE_AREA, sheet_name='PUMAcodes', dtype = {'STATEFP':str, 'COUNTYFP':str, 'TRACTCE':str, 'PUMA5CE':str})
+    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=params['import_tab'])
+
+    df_fips      = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
+    df_fips_pums = pd.read_excel(FILE_AREA, sheet_name='PUMAcodes' , dtype={'STATEFP':str, 'COUNTYFP':str, 'TRACTCE':str, 'PUMA5CE':str})
 
     df_fips = df_fips.merge(df_fips_pums[['STATEFP', 'COUNTYFP', 'PUMA5CE']].drop_duplicates(), on = ['STATEFP', 'COUNTYFP'])
     df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
@@ -230,23 +208,23 @@ def moe_split(text):
         return text
 
 
-def prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate):
+def prep_request_special(df_inputs, params):
 
-    df_vars = read_vars_file(sample_type, indicator, years_to_import, estimate)
+    df_vars = read_vars_file(params)
 
-    if margin_of_error == 'Yes':
+    if params['moe']:
         df_vars['ID_Attributes2'] = df_vars['ID_Attributes2'].apply(moe_split)
         list_vars = ['NAME'] + list(set(df_vars['ID_Attributes2'].to_list()))
     else:
         list_vars = ['NAME'] + list(set(df_vars['ID2'].to_list()))
 
-    if sample_type in ['ACS', 'DP']:
+    if params['sample'] in ['ACS', 'DP']:
         tables = df_vars['Table'].unique()
         print()
         print("Tables set to import:")
         print(tables)
 
-    if import_tab == 'Counties':
+    if params['import_tab'] == 'Counties':
         
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
         df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
@@ -261,7 +239,7 @@ def prep_request_special(df_inputs, sample_type, indicator, margin_of_error, imp
         print()
         
 
-    if import_tab == 'MSA':
+    if params['import_tab'] == 'MSA':
     
         msa_to_import = list(df_inputs['msa'].values)
         df_fips = pd.read_excel(FILE_AREA, sheet_name='MSAcodes', dtype={'MSA_ID':object})
@@ -275,7 +253,7 @@ def prep_request_special(df_inputs, sample_type, indicator, margin_of_error, imp
         print("MSA IDs:")
         display(df_fips)
 
-    if import_tab == 'States':
+    if params['import_tab'] == 'States':
     
         # Set MSAs to import
         # Import COUNTYFP mapping
@@ -289,7 +267,7 @@ def prep_request_special(df_inputs, sample_type, indicator, margin_of_error, imp
         print("States set to import:")
         print(states_to_import)
 
-    if import_tab == 'National':
+    if params['import_tab'] == 'National':
         print("Setting to import data at a national level")
 
     print()
@@ -300,23 +278,23 @@ def prep_request_special(df_inputs, sample_type, indicator, margin_of_error, imp
     display(df_vars.head(3))
 
     
-    if import_tab == 'Counties':
-        if sample_type in ['ACS', 'DP']:
+    if params['import_tab'] == 'Counties':
+        if params['sample'] in ['ACS', 'DP']:
             return df_vars, df_fips, dt_fips, tables
         else:
             return df_vars, df_fips, dt_fips
-    if import_tab == 'MSA':
-        if sample_type in ['ACS', 'DP']:
+    if params['import_tab'] == 'MSA':
+        if params['sample'] in ['ACS', 'DP']:
             return df_vars, df_fips, msa_to_import, tables
         else:
             return df_vars, df_fips, msa_to_import
-    if import_tab == 'States':
-        if sample_type in ['ACS', 'DP']:
+    if params['import_tab'] == 'States':
+        if params['sample'] in ['ACS', 'DP']:
             return df_vars, df_fips, states_to_import, tables
         else:
             return df_vars, df_fips, states_to_import
-    if import_tab == 'National':
-        if sample_type in ['ACS', 'DP']:
+    if params['import_tab'] == 'National':
+        if params['sample'] in ['ACS', 'DP']:
             return df_vars, tables
         else:
             return df_vars
@@ -335,18 +313,18 @@ def prep_request_special(df_inputs, sample_type, indicator, margin_of_error, imp
 
 # ACS ---
 
-def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab):
+def get_acs(api_key, df_urls, params):
 
-    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=params['import_tab'])
 
-    if import_tab == 'Counties':
-        df_vars, df_fips, dt_fips, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'MSA':
-        df_vars, df_fips, msa_to_import, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'States':
-        df_vars, df_fips, states_to_import, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'National':
-        df_vars, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
+    if params['import_tab'] == 'Counties':
+        df_vars, df_fips, dt_fips, tables = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'MSA':
+        df_vars, df_fips, msa_to_import, tables = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'States':
+        df_vars, df_fips, states_to_import, tables = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'National':
+        df_vars, tables = prep_request_special(df_inputs, params)
 
 
 
@@ -361,11 +339,11 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
     # reduce all tables/variables pulled into one table
 
     file_vars = Path(__file__).parent / 'census.xlsx'
-    df_vars = pd.read_excel(file_vars, sheet_name=sample_type)
+    df_vars = pd.read_excel(file_vars, sheet_name=params['sample'])
 
     list_df_years = []
 
-    for year in tqdm(years_to_import):
+    for year in tqdm(params['years_to_import']):
                 
         print(); print(); print(); print()
         tqdm.write("Year: " + str(year))
@@ -381,9 +359,9 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                 tqdm.write("Table ID: " + table)
                 tqdm.write('')
 
-                df_table = df_vars[((df_vars['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False)))
+                df_table = df_vars[((df_vars['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False)))
                                     & (df_vars['Table'] == table) & (df_vars['Year'] == year)]
-                if margin_of_error == 'Yes':
+                if params['moe']:
                     list_table_vars  = [['NAME'] + df_table['ID_Attributes'] .to_list()[x:x+20] for x in range(0, len(df_table['ID_Attributes' ].to_list()), 20)]
                     list_table_vars2 = [['NAME'] + df_table['ID_Attributes2'].to_list()[x:x+20] for x in range(0, len(df_table['ID_Attributes2'].to_list()), 20)]
                 else:
@@ -409,16 +387,14 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                     tqdm.write("Variables: " + variables)
                     list_df_states = []
 
-                    if import_tab == 'Counties':
+                    if params['import_tab'] == 'Counties':
                         for state in list(dt_fips.keys()):
                             tqdm.write('State: ' + state)
                             try:
                                 list_df_states.append(
                                     get_data(df_urls      = df_urls
                                                 , api_key   = api_key
-                                                , estimate  = estimate
-                                                , sample    = sample_type
-                                                , geography = geography
+                                                , params    = params
                                                 , variables = variables
                                                 , year      = year
                                                 , state     = state
@@ -426,59 +402,53 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
                                 )
                             except Exception as e: print(e); traceback.print_exc(); print(); print()
                                     
-                    if import_tab == 'MSA':
+                    if params['import_tab'] == 'MSA':
                         try:
                             msa_to_import = df_fips[df_fips['Year'] == year]
-                            msa_to_import = list(msa_to_import['MSA_ID'].values)
+                            msa_to_import = [str(msa) for msa in list(msa_to_import['MSA_ID'].values)]
                             msa_to_import = ','.join(msa_to_import)
                             list_df_states.append(
-                                get_data(df_urls      = df_urls
+                                get_data(df_urls        = df_urls
                                             , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
+                                            , params    = params
                                             , variables = variables
                                             , year      = year
                                             , msa       = msa_to_import)
                             )
                         except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-                    if import_tab == 'States':
+                    if params['import_tab'] == 'States':
                         for state in states_to_import:
                             tqdm.write('State: ' + state)
                             try:
                                 list_df_states.append(
                                     get_data(df_urls      = df_urls
                                               , api_key   = api_key
-                                              , estimate  = estimate
-                                              , sample    = sample_type
-                                              , geography = geography
+                                              , params    = params
                                               , variables = variables
                                               , year      = year
                                               , state     = state)
                                 )
                             except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-                    if import_tab == 'National':
+                    if params['import_tab'] == 'National':
                         try:
                             list_df_states.append(
                                 get_data(df_urls      = df_urls
                                             , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
+                                            , params    = params
                                             , variables = variables
                                             , year      = year)
                             )
                         except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                     df_states = pd.concat(list_df_states)
-                    df_states = df_states.set_index(GEO_ID[geography] + ['Year']).reset_index()
-                    df_states.columns = GEO_ID[geography] + ['Year'] + variables2
+                    df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+                    df_states.columns = GEO_ID[params['geo']] + ['Year'] + variables2
                     list_df_vars.append(df_states)
 
 
-                df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[geography] + ['Year'], how='outer'), list_df_vars)
+                df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[params['geo']] + ['Year'], how='outer'), list_df_vars)
 
                 list_df_tables.append(df_vars_all)
                 tqdm.write("All variables from table ID " + table + " have been reduced together into one table")
@@ -488,15 +458,15 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
             tqdm.write("Reducing all tables together into one final table...")
             tqdm.write('')
 
-            df_year = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[geography] + ['Year'], how='outer'), list_df_tables)
-            df_year = df_year.set_index(GEO_ID[geography] + ['Year']).reset_index()
-            if geography in ['Block Groups', 'Tracts', 'Counties']:
+            df_year = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[params['geo']] + ['Year'], how='outer'), list_df_tables)
+            df_year = df_year.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+            if params['geo'] in ['Block Groups', 'Tracts', 'Counties']:
                 df_year = df_year.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']]
                                                         , left_on = ['state', 'county']
                                                         , right_on = ['STATEFP', 'COUNTYFP'])
                 df_year.drop(['STATEFP', 'COUNTYFP'], axis=1, inplace=True)
-                df_year = df_year.set_index(GEO_ID[geography] + ['Year']).reset_index()
-            if geography == 'National':
+                df_year = df_year.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+            if params['geo'] == 'National':
                 df_year = df_year.drop('us', axis=1)
 
 
@@ -516,14 +486,14 @@ def get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years
 
 # PUMS ---
 
-def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, margin_of_error, import_tab):
+def get_pums(api_key, df_urls, params):
 
     # Remove 2012-2015 if pulling PUMS tables (they only reported at the state level for PUMS on these years)
     # Create dictionary of variable mappings by year (sometimes the variable name changes over time)
     # Import COUNTYFP mapping
     # Convert to dictionary object for easy state-county combination importing
 
-    df_vars = read_vars_file(sample_type, indicator, years_to_import, estimate)
+    df_vars = read_vars_file(params)
     if 'H' in df_vars['Table Type'].unique():
         table_type = 'H'
         weight = 'WGTP'
@@ -534,7 +504,7 @@ def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, year
     print()
     print('PUMS table roll up: ' + table_type)
 
-    # if margin_of_error == 'Yes':
+    # if params['moe']:
     #     df_vars.loc[(df_vars['ID'].str.contains('WGTP')) & (df_vars['Table Type'] == table_type), 'Include'] = 'Yes'                
     
     df_vars = df_vars[df_vars['Include'] == 'Yes']
@@ -549,18 +519,18 @@ def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, year
     print('PUMS variables to group by (excluding integer based groups): ')
     print(groups2)
     
-    df_vars = df_vars[df_vars['Year'].isin(years_to_import)]
+    df_vars = df_vars[df_vars['Year'].isin(params['years_to_import'])]
     dt_id = df_vars[['ID', 'ID2']].drop_duplicates().set_index('ID').to_dict()['ID2']
             
     dt_vars = {}
-    for year in years_to_import:
-        if margin_of_error == 'Yes': #TODO:, i forget why i the ""== integer" filter is there, probably important?
-            dt_vars[str(year)] = func.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + func.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight] + [weight + str(num) for num in func.sequence(1, 80, 1)]
+    for year in params['years_to_import']:
+        if params['moe']: #TODO:, i forget why i the ""== integer" filter is there, probably important?
+            dt_vars[str(year)] = help.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + help.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight] + [weight + str(num) for num in help.sequence(1, 80, 1)]
         else:
-            dt_vars[str(year)] = func.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + func.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
+            dt_vars[str(year)] = help.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + help.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
 
     # TODO: replace w function
-    df_fips, dt_fips = read_fips_file_pums(import_tab)
+    df_fips, dt_fips = read_fips_file_pums(params)
 
     print()
     print("PUMA's set to import by state: ")
@@ -584,13 +554,13 @@ def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, year
     # import multiple years and PUMAs
     # import all variables
     # combine all years and PUMAs
-    # outer join variables onto ID fields for each geography type
+    # outer join variables onto ID fields for each params['geo'] type
     # calculate margin of error using replicate weights
 
     for state in list(dt_fips.keys()):
         print('State: ' + state)
         list_df_years = []
-        for year in years_to_import:
+        for year in params['years_to_import']:
             print()
             print('Year: ' + str(year))
             list_df_vars = []
@@ -605,9 +575,7 @@ def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, year
                 for variables in tqdm(list_variables):
                     df_pums = get_data(df_urls      = df_urls
                                         , api_key   = api_key
-                                        , estimate  = estimate
-                                        , sample    = sample_type
-                                        , geography = geography
+                                        , params    = params
                                         , variables = 'PUMA,SERIALNO,SPORDER,' + variables
                                         , year      = year
                                         , state     = state
@@ -617,26 +585,26 @@ def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, year
                     list_df_vars.append(df_pums)
                 df_vars_years = ft.reduce(lambda left, right: pd.merge(left, right, on = ['state', 'SERIALNO', 'Year', 'PUMA', 'SPORDER'], how = 'left'), list_df_vars)
                 df_vars_years = df_vars_years.set_index(['state', 'SERIALNO', 'Year', 'PUMA', 'SPORDER']).reset_index()
-                # df_vars_years.columns = ['state', 'SERIALNO', 'Year', 'PUMA', 'SPORDER'] + dt_vars[str(np.max(years_to_import))]
+                # df_vars_years.columns = ['state', 'SERIALNO', 'Year', 'PUMA', 'SPORDER'] + dt_vars[str(np.max(params['years_to_import']))]
                 for id, id2 in dt_id.items():
                     df_vars_years = df_vars_years.rename(columns={id:id2})
                 if (table_type == 'H') & ('SPORDER' in df_vars_years.columns):
                     df_vars_years = df_vars_years[df_vars_years['SPORDER'] == '1']
                 df_vars_years = df_vars_years.drop('SPORDER', axis=1)
-                if margin_of_error == 'Yes':
+                if params['moe']:
                     print('Calculating margin of error using replicate weights...')
                     cols = [col for col in df_vars_years.columns if weight in col]
                     df_vars_years[cols] = df_vars_years[cols].replace('', np.nan).astype(int)
-                    ME_weights = [weight + str(num) for num in func.sequence(1, 80, 1)]
-                    cols = list(df_vars_years.drop(ME_weights, axis=1).columns)
+                    MOE_weights = [weight + str(num) for num in help.sequence(1, 80, 1)]
+                    cols = list(df_vars_years.drop(MOE_weights, axis=1).columns)
                     df_me = pd.melt(df_vars_years, id_vars=cols, var_name='replicates', value_name='replicate_weights')
                     df_me['sq_diff'] = (df_me['replicate_weights'] - df_me[weight])**2
                     df_me = df_me.groupby(cols, as_index=False)['sq_diff'].agg('sum') # Change from sum to 'sum'
                     df_me['variance'] = df_me['sq_diff']*(4/80)
                     df_me['SE'] = np.sqrt(df_me['variance'])
-                    df_me['ME'] = df_me['SE']*1.645
-                    df_me = df_me[cols + ['ME']].drop_duplicates()
-                    df_vars_years = df_vars_years.drop(ME_weights, axis=1)
+                    df_me['MOE'] = df_me['SE']*1.645
+                    df_me = df_me[cols + ['MOE']].drop_duplicates()
+                    df_vars_years = df_vars_years.drop(MOE_weights, axis=1)
                     df_vars_years = df_vars_years.merge(df_me, on=cols, how='left')
                     df_vars_years = df_vars_years.drop_duplicates().reset_index(drop=True)
                 list_df_years.append(df_vars_years)
@@ -663,27 +631,27 @@ def get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, year
 
 # SUBJECT ---
 
-def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab):
+def get_subject(api_key, df_urls, params):
 
-    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=params['import_tab'])
 
-    if import_tab == 'Counties':
-        df_vars, df_fips, dt_fips = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'MSA':
-        df_vars, df_fips, msa_to_import = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'States':
-        df_vars, df_fips, states_to_import = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'National':
-        df_vars = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
+    if params['import_tab'] == 'Counties':
+        df_vars, df_fips, dt_fips = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'MSA':
+        df_vars, df_fips, msa_to_import = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'States':
+        df_vars, df_fips, states_to_import = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'National':
+        df_vars = prep_request_special(df_inputs, params)
 
-    if geography == 'Tracts':
-        GEO_ID[geography] = ['NAME', 'state', 'county', 'tract']
-    if geography == 'Counties':
-        GEO_ID[geography] = ['NAME', 'state', 'county']
-    if geography == 'MSA':
-        GEO_ID[geography] = ['NAME', 'metropolitan statistical area/micropolitan statistical area']
-    if geography == 'States':
-        GEO_ID[geography] = ['NAME', 'state']
+    if params['geo'] == 'Tracts':
+        GEO_ID[params['geo']] = ['NAME', 'state', 'county', 'tract']
+    if params['geo'] == 'Counties':
+        GEO_ID[params['geo']] = ['NAME', 'state', 'county']
+    if params['geo'] == 'MSA':
+        GEO_ID[params['geo']] = ['NAME', 'metropolitan statistical area/micropolitan statistical area']
+    if params['geo'] == 'States':
+        GEO_ID[params['geo']] = ['NAME', 'state']
 
     print("Importing and compiling ACS Subject data from the Census Bureau...")
     print()
@@ -695,18 +663,18 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
     # reduce all tables/variables pulled into one table
 
     file_vars = Path(__file__).parent / 'census.xlsx'
-    df_vars = pd.read_excel(file_vars, sheet_name=sample_type)
+    df_vars = pd.read_excel(file_vars, sheet_name=params['sample'])
 
     list_df_years = []
 
-    for year in tqdm(years_to_import):
+    for year in tqdm(params['years_to_import']):
         try:
             df_vars2 = df_vars.copy()
             df_vars2 = df_vars2[df_vars2['Year'] == year]
-            df_vars2 = df_vars2[(df_vars2['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars2['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False))]
+            df_vars2 = df_vars2[(df_vars2['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) | (df_vars2['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False))]
             df_vars2 = df_vars2[df_vars2['Include'] == 'Yes']
 
-            if margin_of_error == 'Yes':
+            if params['moe']:
                 list_table_vars  = [['NAME'] + df_vars2['ID_Attributes' ].to_list()[x:x+20] for x in range(0, len(df_vars2['ID_Attributes' ].to_list()), 20)]
                 list_table_vars2 = [['NAME'] + df_vars2['ID_Attributes2'].to_list()[x:x+20] for x in range(0, len(df_vars2['ID_Attributes2'].to_list()), 20)]
             else:
@@ -733,59 +701,53 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
                 list_df_states = []
                 tqdm.write("Variables: " + variables)
 
-                if import_tab == 'Counties':
+                if params['import_tab'] == 'Counties':
                     for state in list(dt_fips.keys()):
                         tqdm.write('State: ' + state)
                         try:
                             list_df_states.append(
                                 get_data(df_urls        = df_urls
-                                                , api_key   = api_key
-                                                , estimate  = estimate
-                                                , sample    = sample_type
-                                                , geography = geography
-                                                , variables = variables
-                                                , year      = year
-                                                , state     = state
-                                                , county    = dt_fips[state])
+                                            , api_key   = api_key
+                                            , params    = params
+                                            , variables = variables
+                                            , year      = year
+                                            , state     = state
+                                            , county    = dt_fips[state])
                             )
                         except Exception as e: print(e); traceback.print_exc(); print(); print()
                                 
-                if import_tab == 'MSA':
+                if params['import_tab'] == 'MSA':
                     try:
                         list_df_states.append(
                             get_data(df_urls        = df_urls
-                                            , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
-                                            , variables = variables
-                                            , year      = year
-                                            , msa       = msa_to_import)
+                                        , api_key   = api_key
+                                        , params    = params
+                                        , variables = variables
+                                        , year      = year
+                                        , msa       = msa_to_import)
                         )
                     except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-                if import_tab == 'States':
+                if params['import_tab'] == 'States':
                     for state in states_to_import:
                         tqdm.write('State: ' + state)
                         try:
                             list_df_states.append(
                                 get_data(df_urls        = df_urls
-                                                , api_key   = api_key
-                                                , estimate  = estimate
-                                                , sample    = sample_type
-                                                , geography = geography
-                                                , variables = variables
-                                                , year      = year
-                                                , state     = state)
+                                            , api_key   = api_key
+                                            , params    = params
+                                            , variables = variables
+                                            , year      = year
+                                            , state     = state)
                             )
                         except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 df_states = pd.concat(list_df_states)
-                df_states = df_states.set_index(GEO_ID[geography] + ['Year']).reset_index()
-                df_states.columns = GEO_ID[geography] + ['Year'] + variables2
+                df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+                df_states.columns = GEO_ID[params['geo']] + ['Year'] + variables2
                 list_df_vars.append(df_states)
 
-            df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[geography] + ['Year'], how='outer'), list_df_vars)
+            df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[params['geo']] + ['Year'], how='outer'), list_df_vars)
             list_df_years.append(df_vars_all)
 
         except Exception as e: print(e); traceback.print_exc(); print(); print()
@@ -796,15 +758,15 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
     print()
 
     df_census = pd.concat(list_df_years)
-    if geography == 'Tracts':
+    if params['geo'] == 'Tracts':
         df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on=['state', 'county'], right_on=['STATEFP', 'COUNTYFP'])
         df_census = df_census.drop(['STATEFP', 'COUNTYFP'], axis=1).set_index(['NAME', 'state', 'county', 'COUNTYNAME', 'tract', 'Year']).reset_index()
-    if geography == 'Counties':
+    if params['geo'] == 'Counties':
         df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on=['state', 'county'], right_on=['STATEFP', 'COUNTYFP'])
         df_census = df_census.drop(['STATEFP', 'COUNTYFP'], axis=1).set_index(['NAME', 'state', 'county', 'COUNTYNAME', 'Year']).reset_index()
-    if geography == 'MSA':
+    if params['geo'] == 'MSA':
         df_census = df_census.set_index(['NAME', 'metropolitan statistical area/micropolitan statistical area', 'Year']).reset_index()
-    if geography == 'States':
+    if params['geo'] == 'States':
         df_census = df_census.set_index(['NAME', 'state','Year']).reset_index()
 
     return df_census
@@ -819,18 +781,18 @@ def get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, y
 # Demographic Profile ---
 
 
-def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab):
+def get_dp(api_key, df_urls, params):
 
-    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=params['import_tab'])
 
-    if import_tab == 'Counties':
-        df_vars, df_fips, dt_fips, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'MSA':
-        df_vars, df_fips, msa_to_import, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'States':
-        df_vars, df_fips, states_to_import, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
-    if import_tab == 'National':
-        df_vars, tables = prep_request_special(df_inputs, sample_type, indicator, margin_of_error, import_tab, years_to_import, estimate)
+    if params['import_tab'] == 'Counties':
+        df_vars, df_fips, dt_fips, tables = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'MSA':
+        df_vars, df_fips, msa_to_import, tables = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'States':
+        df_vars, df_fips, states_to_import, tables = prep_request_special(df_inputs, params)
+    if params['import_tab'] == 'National':
+        df_vars, tables = prep_request_special(df_inputs, params)
 
 
     ## Import data and concatenate onto ID fields ##
@@ -844,12 +806,12 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
     # reduce all tables/variables pulled into one table
 
     file_vars = Path(__file__).parent / 'census.xlsx'
-    df_vars = pd.read_excel(file_vars, sheet_name=sample_type)
+    df_vars = pd.read_excel(file_vars, sheet_name=params['sample'])
 
     list_df_years = []
 
 
-    for year in tqdm(years_to_import):
+    for year in tqdm(params['years_to_import']):
 
         list_df_tables = []
         
@@ -859,8 +821,8 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
             tqdm.write("Table ID: " + table)
             tqdm.write('')
 
-            df_table = df_vars[((df_vars['Indicator Name'].str.contains(f'{indicator}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{indicator},', regex=True).replace(np.nan, False))) & (df_vars['Table'] == table) & (df_vars['Year'] == year)]
-            if margin_of_error == 'Yes':
+            df_table = df_vars[((df_vars['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) | (df_vars['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False))) & (df_vars['Table'] == table) & (df_vars['Year'] == year)]
+            if params['moe']:
                 list_table_vars  = [['NAME'] + df_table['ID_Attributes'] .to_list()[x:x+20] for x in range(0, len(df_table['ID_Attributes' ].to_list()), 20)]
                 list_table_vars2 = [['NAME'] + df_table['ID_Attributes2'].to_list()[x:x+20] for x in range(0, len(df_table['ID_Attributes2'].to_list()), 20)]
             else:
@@ -885,75 +847,67 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
                 tqdm.write("Variables: " + variables)
                 list_df_states = []
 
-                if import_tab == 'Counties':
+                if params['import_tab'] == 'Counties':
                     for state in list(dt_fips.keys()):
                         tqdm.write('State: ' + state)
                         try:
                             list_df_states.append(
                                 get_data(df_urls        = df_urls
-                                                , api_key   = api_key
-                                                , estimate  = estimate
-                                                , sample    = sample_type
-                                                , geography = geography
-                                                , variables = variables
-                                                , year      = year
-                                                , state     = state
-                                                , county    = dt_fips[state])
+                                            , api_key   = api_key
+                                            , params    = params
+                                            , variables = variables
+                                            , year      = year
+                                            , state     = state
+                                            , county    = dt_fips[state])
                             )
                         except Exception as e: print(e); traceback.print_exc(); print(); print()
                                 
-                if import_tab == 'MSA':
+                if params['import_tab'] == 'MSA':
                     try:
                         msa_to_import = df_fips[df_fips['Year'] == year]
                         msa_to_import = list(msa_to_import['MSA_ID'].values)
                         msa_to_import = ','.join(msa_to_import)
                         list_df_states.append(
                             get_data(df_urls        = df_urls
-                                            , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
-                                            , variables = variables
-                                            , year      = year
-                                            , msa       = msa_to_import)
+                                        , api_key   = api_key
+                                        , params    = params
+                                        , variables = variables
+                                        , year      = year
+                                        , msa       = msa_to_import)
                         )
                     except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-                if import_tab == 'States':
+                if params['import_tab'] == 'States':
                     for state in states_to_import:
                         tqdm.write('State: ' + state)
                         try:
                             list_df_states.append(
                                 get_data(df_urls        = df_urls
-                                                , api_key   = api_key
-                                                , estimate  = estimate
-                                                , sample    = sample_type
-                                                , geography = geography
-                                                , variables = variables
-                                                , year      = year
-                                                , state     = state)
+                                            , api_key   = api_key
+                                            , params    = params
+                                            , variables = variables
+                                            , year      = year
+                                            , state     = state)
                             )
                         except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-                if import_tab == 'National':
+                if params['import_tab'] == 'National':
                     try:
                         list_df_states.append(
                             get_data(df_urls        = df_urls
-                                            , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
-                                            , variables = variables
-                                            , year      = year)
+                                        , api_key   = api_key
+                                        , params    = params
+                                        , variables = variables
+                                        , year      = year)
                         )
                     except Exception as e: print(e); traceback.print_exc(); print(); print()
 
                 df_states = pd.concat(list_df_states)
-                df_states = df_states.set_index(GEO_ID[geography] + ['Year']).reset_index()
-                df_states.columns = GEO_ID[geography] + ['Year'] + variables2
+                df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+                df_states.columns = GEO_ID[params['geo']] + ['Year'] + variables2
                 list_df_vars.append(df_states)
 
-            df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[geography] + ['Year'], how='outer'), list_df_vars)
+            df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[params['geo']] + ['Year'], how='outer'), list_df_vars)
 
             list_df_tables.append(df_vars_all)
             tqdm.write("All variables from table ID " + table + " have been reduced together into one table")
@@ -963,13 +917,13 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
         tqdm.write("Reducing all tables together into one final table...")
         tqdm.write('')
 
-        df_year = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[geography] + ['Year'], how='outer'), list_df_tables)
-        df_year = df_year.set_index(GEO_ID[geography] + ['Year']).reset_index()
-        if geography in ['Block Groups', 'Tracts', 'Counties']:
+        df_year = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[params['geo']] + ['Year'], how='outer'), list_df_tables)
+        df_year = df_year.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+        if params['geo'] in ['Block Groups', 'Tracts', 'Counties']:
             df_year = df_year.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on=['state', 'county'], right_on=['STATEFP', 'COUNTYFP'])
             df_year.drop(['STATEFP', 'COUNTYFP'], axis=1, inplace=True)
-            df_year = df_year.set_index(GEO_ID[geography] + ['Year']).reset_index()
-        if geography == 'National':
+            df_year = df_year.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+        if params['geo'] == 'National':
             df_year = df_year.drop('us', axis=1)
 
         list_df_years.append(df_year)
@@ -988,25 +942,25 @@ def get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_
 # DEC ---
 
 
-def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, import_tab):
+def get_dec(api_key, df_urls, params):
 
-    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=params['import_tab'])
 
     # Reset years to import for DEC
     # Set DEC variables to import
     # Import COUNTYFP mapping
     # Convert to dictionary object for easy state-county combination importing
 
-    df_vars = read_vars_file(sample_type, indicator, years_to_import, estimate)
+    df_vars = read_vars_file(params)
             
     dt_vars  = {}
     dt_vars2 = {}
-    for year in years_to_import:
-        dt_vars [str(year)] = ['NAME'] + func.unique(df_vars[df_vars['Year'] == year]['ID' ].to_list())
-        dt_vars2[str(year)] = ['NAME'] + func.unique(df_vars[df_vars['Year'] == year]['ID2'].to_list())
+    for year in params['years_to_import']:
+        dt_vars [str(year)] = ['NAME'] + help.unique(df_vars[df_vars['Year'] == year]['ID' ].to_list())
+        dt_vars2[str(year)] = ['NAME'] + help.unique(df_vars[df_vars['Year'] == year]['ID2'].to_list())
 
         
-    if import_tab == 'Counties':
+    if params['import_tab'] == 'Counties':
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype = {'STATEFP':str, 'COUNTYFP':str})
         df_fips = df_fips[df_fips['STATE'].isin(df_inputs['states'].values)]
         df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
@@ -1022,7 +976,7 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
         print('Variables set to import by year:')
         print(dt_vars)
 
-    if import_tab == 'States':
+    if params['import_tab'] == 'States':
     
         # Set MSAs to import
         # Import COUNTYFP mapping
@@ -1056,58 +1010,54 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
 
     list_df_years = []
 
-    for year in tqdm(years_to_import):
+    for year in tqdm(params['years_to_import']):
 
         list_df_states = []
 
-        if import_tab == 'Counties':
+        if params['import_tab'] == 'Counties':
             for state in list(dt_fips.keys()):
                 tqdm.write('State: ' + state)
 
                 try:
                     list_df_states.append(
                         get_data(df_urls        = df_urls
-                                        , api_key   = api_key
-                                        , estimate  = estimate
-                                        , sample    = sample_type
-                                        , geography = geography
-                                        , variables = ','.join(dt_vars[str(year)]) # Should I keep variable org like this?  Then just rename with latest ID names after each pull?  or should I adjust this to ACS style
-                                        , year      = year
-                                        , state     = state
-                                        , county    = dt_fips[state])
+                                    , api_key   = api_key
+                                    , params    = params
+                                    , variables = ','.join(dt_vars[str(year)]) # Should I keep variable org like this?  Then just rename with latest ID names after each pull?  or should I adjust this to ACS style
+                                    , year      = year
+                                    , state     = state
+                                    , county    = dt_fips[state])
                     )
                 except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-        if import_tab == 'States':
+        if params['import_tab'] == 'States':
             for state in states_to_import:
                 tqdm.write('State: ' + state)
                 try:
                     list_df_states.append(
                         get_data(df_urls        = df_urls
-                                        , api_key   = api_key
-                                        , estimate  = estimate
-                                        , sample    = sample_type
-                                        , geography = geography
-                                        , variables = ','.join(dt_vars[str(year)])
-                                        , year      = year
-                                        , state     = state)
+                                    , api_key   = api_key
+                                    , params    = params
+                                    , variables = ','.join(dt_vars[str(year)])
+                                    , year      = year
+                                    , state     = state)
                     )
                 except Exception as e: print(e); traceback.print_exc(); print(); print()
 
         df_states = pd.concat(list_df_states)
-        df_states = df_states.set_index(GEO_ID[geography] + ['Year']).reset_index()
-        df_states.columns = GEO_ID[geography] + ['Year'] + dt_vars2[str(year)][1:]
+        df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
+        df_states.columns = GEO_ID[params['geo']] + ['Year'] + dt_vars2[str(year)][1:]
         list_df_years.append(df_states)
         
     df_census = pd.concat(list_df_years)
 
-    if geography in ['Block Groups', 'Tracts', 'Counties']:
+    if params['geo'] in ['Block Groups', 'Tracts', 'Counties']:
         df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on = ['state', 'county'], right_on = ['STATEFP', 'COUNTYFP'])
-        df_census = df_census.drop(['STATEFP', 'COUNTYFP'], axis=1).set_index(GEO_ID[geography] + ['COUNTYNAME', 'Year']).reset_index()
-    # if geography in ['Block Groups', 'Tracts', 'Counties']:
+        df_census = df_census.drop(['STATEFP', 'COUNTYFP'], axis=1).set_index(GEO_ID[params['geo']] + ['COUNTYNAME', 'Year']).reset_index()
+    # if params['geo'] in ['Block Groups', 'Tracts', 'Counties']:
     #     df_census = df_census.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']], left_on=['state', 'county'], right_on=['STATEFP', 'COUNTYFP'])
     #     df_census.drop(['STATEFP', 'COUNTYFP'], axis=1, inplace=True)
-    #     df_census = df_census.set_index(GEO_ID[geography] + ['Year']).reset_index()
+    #     df_census = df_census.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
 
     return df_census
 
@@ -1119,16 +1069,16 @@ def get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years
 
 # LEHD ---
 
-def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, import_tab, years_to_import):
+def get_lehd(api_key, df_urls, params):
 
-    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=import_tab)
+    df_inputs = pd.read_excel(FILE_INPUTS, sheet_name=params['import_tab'])
 
-    df_vars = read_vars_file(sample_type, indicator, years_to_import, estimate)
+    df_vars = read_vars_file(params)
     
     variables = df_vars['ID'].unique()
     variables = ','.join(variables)
 
-    if indicator == 'Jobs_4':
+    if params['indicator'] == 'Jobs_4':
         variables = variables + '&ownercode=A05'
 
     print()
@@ -1136,7 +1086,7 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
     print(variables)
     print()
 
-    if import_tab == 'Counties':
+    if params['import_tab'] == 'Counties':
         
         # Import COUNTYFP mapping
         # Convert to dictionary object for easy state-county combination importing
@@ -1153,7 +1103,7 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
         print(dt_fips)
         print()
 
-    if import_tab == 'MSA':
+    if params['import_tab'] == 'MSA':
     
         df_inputs['msa'] = df_inputs['msa'].astype("str")
         msa_to_import = list(df_inputs['msa'].values)
@@ -1180,20 +1130,18 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
     print()
 
     list_df_states = []
-    if import_tab == 'Counties':
+    if params['import_tab'] == 'Counties':
 
         print('Importing by state: ' + ', '.join(list(dt_fips.keys())))
         for state in tqdm(list(dt_fips.keys())):
             try:
                 df_state = get_data(df_urls         = df_urls
-                                            , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
-                                            , variables = 'year,'+variables
-                                            , year      = 'timeseries'
-                                            , state     = state
-                                            , county    = dt_fips[state])
+                                        , api_key   = api_key
+                                        , params    = params
+                                        , variables = 'year,'+variables
+                                        , year      = 'timeseries'
+                                        , state     = state
+                                        , county    = dt_fips[state])
                 df_state = df_state.merge(df_fips[['STATEFP', 'COUNTYFP', 'COUNTYNAME']]
                                                 , left_on = ['state', 'county']
                                                 , right_on = ['STATEFP', 'COUNTYFP'])
@@ -1202,20 +1150,18 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
                 list_df_states.append(df_state)
             except Exception as e: print(e); traceback.print_exc(); print(); print()
 
-    if import_tab == 'MSA':
+    if params['import_tab'] == 'MSA':
 
         print('Importing by state: ' + ', '.join(list(dt_fips.keys())))
         for state in tqdm(list(dt_fips.keys())):
             try:
                 df_state = get_data(df_urls         = df_urls
-                                            , api_key   = api_key
-                                            , estimate  = estimate
-                                            , sample    = sample_type
-                                            , geography = geography
-                                            , variables = 'year,'+variables
-                                            , year      = 'timeseries'
-                                            , state     = state
-                                            , msa       = dt_fips[state])
+                                        , api_key   = api_key
+                                        , params    = params
+                                        , variables = 'year,'+variables
+                                        , year      = 'timeseries'
+                                        , state     = state
+                                        , msa       = dt_fips[state])
                 df_state = df_state.merge(df_fips[['STATEFP', 'MSA_ID', 'MSA']], left_on=['state', 'metropolitan statistical area/micropolitan statistical area'], right_on=['STATEFP', 'MSA_ID'])
                 df_state = df_state.drop(['state', 'metropolitan statistical area/micropolitan statistical area'], axis=1)
                 df_state = df_state.set_index(['STATEFP', 'MSA_ID', 'MSA', 'time']).reset_index()
@@ -1233,7 +1179,7 @@ def get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, impo
 
 
 
-def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab):
+def get_data_any(api_key, params):
 
     print(); print(); print()
     start_time = time.time()
@@ -1243,16 +1189,16 @@ def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_
 
 
     ## Request data
-    if sample_type == 'ACS':     df_census = get_acs(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-    if geography == 'PUMA':      df_census = get_pums(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, margin_of_error, import_tab)
-    if sample_type == 'SUBJECT': df_census = get_subject(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-    if sample_type == 'DP':      df_census = get_dp(api_key, df_urls, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
-    if estimate == 'DEC':        df_census = get_dec(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, import_tab)
-    if sample_type == 'LEHD':    df_census = get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, import_tab, years_to_import)
+    if params['sample'] == 'ACS':     df_census = get_acs(api_key, df_urls, params)
+    if params['geo'] == 'PUMA':       df_census = get_pums(api_key, df_urls, params)
+    if params['sample'] == 'SUBJECT': df_census = get_subject(api_key, df_urls, params)
+    if params['sample'] == 'DP':      df_census = get_dp(api_key, df_urls, params)
+    if params['estimate'] == 'DEC':   df_census = get_dec(api_key, df_urls, params)
+    if params['sample'] == 'LEHD':    df_census = get_lehd(api_key, df_urls, params)
 
     # # For CPS Tables
     # if estimate == 'CPS':
-    #     df_census = get_lehd(api_key, df_urls, estimate, sample_type, indicator, geography, import_tab, years_to_import)
+    #     df_census = get_lehd(api_key, df_urls, params['estimate'], params['sample'], params['indicator'], params['geo'], params['import_tab'], params['years_to_import'])
 
 
     ## Calculate time amounted while requesting data
@@ -1280,7 +1226,7 @@ def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_
 
     ## Result
     print()
-    if estimate != 'DEC':
+    if params['estimate'] != 'DEC':
         df_census = df_census.dropna().reset_index(drop=True)
     print('Number of rows/columns: ')
     print(df_census.shape)
@@ -1297,16 +1243,16 @@ def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_
 
 # # CPS ---
 
-# def get_cps(api_key, df_urls, estimate, sample_type, indicator, geography, years_to_import, import_tab):
+# def get_cps(api_key, df_urls, params['estimate'], params['sample'], params['indicator'], params['geo'], params['years_to_import'], params['import_tab']):
 
-#     df_inputs, file_inputs, FILE_AREA = read_inputs_file(import_tab)
+#     df_inputs, file_inputs, FILE_AREA = read_inputs_file(params['import_tab'])
     
-#     df_vars = pd.read_excel(file_inputs, sheet_name=sample_type)
-#     df_vars = df_vars[(df_vars['Year'].isin(years_to_import)) & (df_vars['Indicator Name'].str.contains(indicator).replace(np.nan, False)) & (df_vars['Include'] == 'Yes')]
+#     df_vars = pd.read_excel(file_inputs, sheet_name=params['sample'])
+#     df_vars = df_vars[(df_vars['Year'].isin(params['years_to_import'])) & (df_vars['Indicator Name'].str.contains(params['indicator']).replace(np.nan, False)) & (df_vars['Include'] == 'Yes')]
         
 #     dt_vars = {}
-#     for year in years_to_import:
-#         dt_vars[str(year)] = func.unique(df_vars[df_vars['Year'] == year]['ID'].to_list()) + [weight]
+#     for year in params['years_to_import']:
+#         dt_vars[str(year)] = help.unique(df_vars[df_vars['Year'] == year]['ID'].to_list()) + [weight]
     
 #     # Import COUNTYFP mapping
 #     # Convert to dictionary object for easy state-county combination importing
@@ -1334,14 +1280,14 @@ def get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_
 
 #     for state in list(dt_fips.keys()):
 #         print('State: ' + state)
-#         for year in tqdm(years_to_import):
+#         for year in tqdm(params['years_to_import']):
 #             try:
 #                 list_df.append(
 #                     get_data(df_urls        = df_urls
 #                                     , api_key   = api_key
-#                                     , estimate  = estimate
-#                                     , sample    = sample_type
-#                                     , geography = geography
+#                                     , params['estimate']  = estimate
+#                                     , sample    = params['sample']
+#                                     , params['geo'] = params['geo']
 #                                     , variables = 'HRHHID,HRHHID2,PERRP,'+','.join(dt_vars[str(year)])
 #                                     , year      = year
 #                                     , state     = state

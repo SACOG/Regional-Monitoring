@@ -1,35 +1,32 @@
 
 
-print();print();print()
-
-
-
 '''
 
 This script is the first step in the pipeline to update indicators organized from data at the Census Bureau
 Obtain API Key from the following source
 https://api.census.gov/data/key_signup.html
 
-Request parameters need to be updated using the config folder
+Request parameters need to be updated using census.xlsx in the config folder
+Every data release, the .py files in the config/step0 folder need to be reran
+
+
+RERUN=True/False -> if True, recycles the last API request
+EXPORT=True/False -> if True, exports requested data to desired file path
 
 '''
 
 
 
-rerun=True
-export=True
-mpo='Yes'
-unincorporated='Yes'
+RERUN=False
+EXPORT=True
 
 
 
 
-# Workspace ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+# Workspace -------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 from pathlib import Path
-from xlwt.Workbook import *
 from IPython.display import display
 import sys
 
@@ -40,19 +37,22 @@ PATH_CONFIG  = PATH_CODE / 'config'
 
 FILE_API = PATH_CONFIG / 'api_key.txt'
 
+sys.path.append(str(PATH_CONFIG0))
+import help
+
 sys.path.append(str(PATH_CONFIG))
 import pre
 import get
 
 
-# SharePoint OneDrive paths
+# Network file paths for exporting
 PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
 
 
 
 
-# Main -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Main -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
@@ -63,18 +63,19 @@ if __name__ == '__main__':
 
     # Prepare API request inputs
     yaml_census = pre.load_yaml()
-    project, indicator, sample_type, estimate, geography, years_to_import, year_start, year_end, import_tab, margin_of_error, export_loc, folder, MOE_thresh, num_vars, percentages, weighted_by, metric = pre.api_request_params(yaml_census, rerun)
+    params = pre.api_request_params(yaml_census, RERUN)
 
     # Send API requests
-    df_census = get.get_data_any(api_key, indicator, estimate, sample_type, geography, years_to_import, margin_of_error, import_tab)
+    df_census = get.get_data_any(api_key, params)
     display(df_census)
 
 
     # Export
-    if export:
+    if EXPORT:
 
-        file_out = PATH_ORIG / pre.set_download_name(indicator, estimate, sample_type, geography, margin_of_error)
+        file_out = PATH_ORIG / pre.set_download_name(params)
+        breakpoint()
         df_census.to_csv(file_out, index=False)
-        print('Successfully exported!')
+        print('Successfully EXPORTed!'); help.print2()
 
 

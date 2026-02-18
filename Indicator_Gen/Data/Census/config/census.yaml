@@ -28,7 +28,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Pop_4:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
@@ -37,7 +38,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Pop_6:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
@@ -46,7 +48,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Pop_7:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
@@ -55,7 +58,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Pop_8:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
@@ -64,7 +68,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Pop_9:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
@@ -73,7 +78,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Health_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places'
@@ -82,7 +88,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Broadband_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places\Broadband'
@@ -91,7 +98,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Cost_3:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
@@ -100,7 +108,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Cost_5:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
@@ -109,7 +118,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Income_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
@@ -119,15 +129,7 @@ Indicators:
       number_of_variables: 1
       percentages: 'No'
       weighted_by: 'Households'
-      metric: 'Median Household Income'
-    Income_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
-      folder: 'By Race'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 1
-      percentages: 'No'
-      weighted_by: 'Households'
+      adjust_cpi: True
       metric: 'Median Household Income'
     Income_4:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
@@ -136,7 +138,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Labor_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Labor Force'
@@ -145,7 +148,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Edu_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Education'
@@ -154,7 +158,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Commute_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Next Gen of Mobility Solutions\Commute mode'
@@ -163,7 +168,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Population'
     Cost_6:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
@@ -172,7 +178,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Income_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
@@ -181,7 +188,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Accessibility_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
@@ -190,7 +198,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Accessibility_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
@@ -199,7 +208,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Accessibility_3:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
@@ -208,7 +218,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Accessibility_4:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
@@ -217,7 +228,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Households'
     Jobs_4:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs'
@@ -226,7 +238,8 @@ Indicators:
       MOE_threshold: 
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
+      adjust_cpi: False
       metric: 'Firms'
   
   StoryMaps:
@@ -237,7 +250,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 10
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     Housing_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
@@ -246,7 +259,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     Housing_3:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
@@ -255,7 +268,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
 
   Chamber Study Missions:
@@ -266,7 +279,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_1ab:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -275,7 +288,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -284,7 +297,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_4:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -293,7 +306,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 24
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_5:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -311,7 +324,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_7:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -329,7 +342,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_11:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -338,7 +351,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     Chamber_H_12:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -347,7 +360,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_13:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -356,7 +369,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_14:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -374,7 +387,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_17:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -383,7 +396,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     Chamber_H_18:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -392,7 +405,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     Chamber_H_19:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -401,7 +414,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_20:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -410,7 +423,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     Chamber_H_21:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
@@ -419,7 +432,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
 
   SACSIM:
@@ -430,7 +443,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     SACSIM_2:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
@@ -439,7 +452,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     SACSIM_3:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
@@ -448,7 +461,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     SACSIM_4:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
@@ -457,7 +470,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     SACSIM_5:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
@@ -466,7 +479,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     SACSIM_6:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
@@ -475,273 +488,273 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
 
   RHNA:
     RHNA_POPEMP_1:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: ''
       sample: ''
       MOE_threshold: ''
       number_of_variables: ''
       percentages: ''
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Population by Race'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Race'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_4:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Age'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_5:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Location 1 Year Ago'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_6:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: Employment by Industry'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 8 
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_7:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Resident Employment by Occupation'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_8:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Workers by Class by Workers'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_9:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Workers by Class of Workers, by Place of Work'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_10a:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Workers by Earnings, by Jurisdiction as Place of Residence'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_10b:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Workers by Earnings, by Jurisdiction as Place of Work'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_POPEMP_16:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Owners vs Renters'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_17:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Housing Tenure'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_18a:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Owners - Housing Tenure by Age'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 9
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_18b:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Renters - Housing Tenure by Age'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 9
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_19a:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Owners - Housing Tenure by Year Moved to Current Residence'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_19b:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Renters - Housing Tenure by Year Moved to Current Residence'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_20:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Housing Tenure by Race of Householder'
       sample: 'ACS'
       MOE_threshold: 0.05 
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_22:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Housing Tenure by Housing Type'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_23:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Household Type'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 6
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_POPEMP_24:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Households by Presence of Children'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Occupancy'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Vacancies'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_4:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Housing Units by Year Structure Built'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_5:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Housing Units by Number of Bedrooms'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_6a:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Owners - Substandard Housing Issues'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_6b:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Renters - Substandard Housing Issues'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_7:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Homes Values of Owner-Occupied Units'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_9:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Contract Rents for Renter-Occupied Units'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 7
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_HSG_10:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Median Contract Rent'
       sample: 'ACS'
       MOE_threshold: 0.05
@@ -750,148 +763,148 @@ Indicators:
       weighted_by: 'Households'
       metric: 'Median Contract Rent'
     RHNA_HSG_12:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Households by Income Bracket'
       sample: 'DP'
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_OVER_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Overcrowding by Race'
       sample: 'ACS'
       MOE_threshold: 0.05 
       number_of_variables: 2 
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_OVER_6:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Cost Burden by Tenure'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_OVER_7:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Cost Burden Severity'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_LGFEM_1:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Household Size by Tenure'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 5 
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_LGFEM_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Households by Household Size'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_LGFEM_4:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Housing Tenure by Household Type'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 4
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_LGFEM_5:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Female-Headed Households by Poverty Status'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
     RHNA_SEN_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Senior and Youth Population by Race'
       sample: 'ACS'
       MOE_threshold: 0.05 
       number_of_variables: 3
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_SEN_4:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Disability by Type - Senious (65 and Over)'
       sample: 'ACS'
       MOE_threshold: 0.05 
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_DISAB_1:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Disability by Type'
       sample: 'ACS'
       MOE_threshold: 0.05 
       number_of_variables: 2 
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_DISAB_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Population by Disability Status'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_DISAB_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Labor Force Disability Status'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_ELI_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Poverty Status by Race'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_AFFH_2:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Population Living in High Resource Areas by Race'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     RHNA_AFFH_3:
-      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\RHNA\New Data Collected'
+      sp_location: 'I:\Projects\Josh\RHNA\Data'
       folder: 'Population with Limited English Proficiency'
       sample: 'ACS'
       MOE_threshold: 0.05
       number_of_variables: 2
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
 
   Blueprint:
@@ -969,7 +982,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
-      weighted_by: ''
+      adjust_cpi: False
+      weighted_by: False
       metric: 'Population'
     Total_Households:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Reference\Weights'
@@ -978,7 +992,8 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 1
       percentages: 'No'
-      weighted_by: ''
+      adjust_cpi: False
+      weighted_by: False
       metric: 'Households'
 
   CERF:
@@ -989,7 +1004,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
     WPT_Accessibility_1:
       sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\CERF\We Prosper Together\Transportation Measures'
@@ -998,7 +1013,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
 
   Small Data Requests:
@@ -1009,7 +1024,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
       requested_by: 'Shengyi'
     HouseholdIncome_1:
@@ -1019,7 +1034,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 8
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
       requested_by: 'Shengyi'
     Davis_Pop:
@@ -1029,7 +1044,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 18
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Population'
       requested_by: 'Pete'
     TheObserver_1:
@@ -1039,7 +1054,7 @@ Indicators:
       MOE_threshold: 0.05
       number_of_variables: 5
       percentages: 'Yes'
-      weighted_by: ''
+      weighted_by: False
       metric: 'Households'
       requested_by: 'TheObserver'
 
@@ -1067,21 +1082,19 @@ Samples:
       - Counties
       - MSA
       - Places
-      - ZIP Codes
+      # - ZIP Codes
       - Congressional Districts
       - State Legislative Upper Districts
       - State Legislative Lower Districts
       - States
       - National
-      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
     ACS1:
       geographies_available:
       - Counties
       - MSA
       - Places
       - Congressional Districts
-      - State Legislative Upper Districts
-      - State Legislative Lower Districts
       - States
       - National
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
@@ -1093,21 +1106,19 @@ Samples:
       - Counties
       - MSA
       - Places
-      - ZIP Codes
+      # - ZIP Codes
       - Congressional Districts
       - State Legislative Upper Districts
       - State Legislative Lower Districts
       - States
       - National
-      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
     ACS1:
       geographies_available:
       - Counties
       - MSA
       - Places
       - Congressional Districts
-      - State Legislative Upper Districts
-      - State Legislative Lower Districts
       - States
       - National
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
@@ -1128,21 +1139,19 @@ Samples:
       - Counties
       - MSA
       - Places
-      - ZIP Codes
+      # - ZIP Codes
       - Congressional Districts
       - State Legislative Upper Districts
       - State Legislative Lower Districts
       - States
       - National
-      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
     ACS1:
       geographies_available:
       - Counties
       - MSA
       - Places
       - Congressional Districts
-      - State Legislative Upper Districts
-      - State Legislative Lower Districts
       - States
       - National
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]

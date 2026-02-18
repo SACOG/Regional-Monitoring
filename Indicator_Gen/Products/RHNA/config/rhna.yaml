@@ -1,5 +1,20 @@
 
 
+## TODO
+# Problem: Renaming columns using the "Columns" param
+# Configuring the column names in the YAML file reduces a lot of code and keeps things clean
+# However, some jurisdictions do not have every column available (i.e. POPEMP_2 - Elk Grove only has 2020 and 2023 here)
+# How do resolve this?
+# It doesn't always make sense to fill in missing cols with N/A, especially for a time-series (i.e. just filling in missing 2000 and 2010 will be misleading since there were definitely people in Elk Grove in those years)
+# If I did it that way for some indicators, how do I pop them into the correct order?
+# Also, what I have in the YAML file is the "clean" column names, so how would I call by the original naming convention? And make sure to not fill in missings with the clean name when the original column name is truly there?
+
+# Problem:
+# Using exec from the 2__run_indicators.py file might disrupt all Path(__file__) lines :(
+Path_Data: I:\Projects\Josh\RHNA\Data
+
+
+
 # Population, Employment, and Household Characteristics --------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -10,10 +25,20 @@ POPEMP_1:
   Abbrv: DOF
   Website: https://dof.ca.gov/forecasting/demographics/
   Year(s): 2000-2024
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Geography
+  Geography: Regional Comparison
+  Columns: Year<>[jurisdiction]<>[county]<>SACOG Region<>[jurisdiction] (% Difference from 2000)<>[county] (% Difference from 2000)<>SACOG Region (% Difference from 2000)
+  plot:
+    bar: False
+    line: True
+    format: percent
+    text: False
+    x: Year
+    y: Percent Difference
+    color: Geography
+  word:
+    transpose: False
+    percent: False
+    subgroup: Year
   Notes: 'This indicator shows the total population estimate by year.\n
     The data shown on the graph represents the population for the jurisdiction, county, and region indexed to the population in the year 2000 (or the first year of incorporation).\n
     The data points represent the relative population growth in each of these geographies relative to their populations in 2000 (or the first year of incorporation)'
@@ -25,10 +50,20 @@ POPEMP_2:
   Abbrv: DEC
   Website: https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2000-2020, 2023
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Year 2000<>Year 2010<>Year 2020<>Year 2023
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Year
+    y: Percent of Population
+    color: Race/Ethnicity
+  word:
+    transpose: True
+    percent: False
+    subgroup: Year
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -39,10 +74,25 @@ POPEMP_3:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Regional Comparison
+  Columns: Race/Ethnicity<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Race/Ethnicity
+    value: Population
+    index: Race/Ethnicity
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Race/Ethnicity
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -53,10 +103,20 @@ POPEMP_4:
   Abbrv: DEC
   Website: https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2000-2020, 2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Age Group
+  Geography: Jurisdiction
+  Columns: Age Group<>Year 2000<>Year 2010<>Year 2020<>Year 2023
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Age Group
+    y: Population
+    color: Year
+  word:
+    transpose: False
+    percent: True
+    subgroup: Age Group
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -67,10 +127,25 @@ POPEMP_5:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Location
+  Geography: Regional Comparison
+  Columns: Location 1 Year Ago<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Location 1 Year Ago
+    value: Population
+    index: Location 1 Year Ago
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Location 1 Year Ago
+  word:
+    transpose: False
+    percent: True
+    subgroup: Location 1 Year Ago
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -81,10 +156,25 @@ POPEMP_6:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Industry
+  Geography: Regional Comparison
+  Columns: Industry<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Industry
+    value: Population
+    index: Industry
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Industry
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Industry
   Notes: 'This indicator shows the industries in which residents of the jurisdiction work (whether the job is within the jurisdiction or not).\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -95,10 +185,25 @@ POPEMP_7:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Occupation
+  Geography: Regional Comparison
+  Columns: Occupation<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Occupation
+    value: Population
+    index: Occupation
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Occupation
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Occupation
   Notes: 'This indicator shows the occupations in which jurisidiction residents work (whether within the jurisdiction or not).\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -109,10 +214,25 @@ POPEMP_8:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Class of Worker
+  Geography: Regional Comparison
+  Columns: Class of Worker<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Class of Worker
+    value: Population
+    index: Class of Worker
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Class of Worker
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Class of Worker
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     Data is reported for jurisdiction of residence.'
@@ -124,10 +244,25 @@ POPEMP_9:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Class of Worker
+  Geography: Regional Comparison
+  Columns: Class of Worker<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Class of Worker
+    value: Population
+    index: Class of Worker
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Class of Worker
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Class of Worker
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     Data is reported for the jurisdiction where the job is located (regardless of if the employee also lives in that jurisdiction).'
@@ -139,10 +274,25 @@ POPEMP_10:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Earnings
+  Geography: Jurisdiction
+  Columns: Earnings<>Place of Residence<>Place of Work
+  prod:
+    var: Earnings
+    value: Population
+    index: Earnings
+    pivot: Location
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Earnings
+    y: Population
+    color: Location
+  word:
+    transpose: False
+    percent: True
+    subgroup: Earnings
   Notes: 'This indicator shows the total population estimate for workers 16 years of age and over with earnings, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -153,10 +303,25 @@ POPEMP_11:
   Abbrv: LEHD
   Website: https://lehd.ces.census.gov/data/
   Year(s): 2002-2022
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Industry
+  Geography: Jurisdiction
+  Columns: Year<>Agriculture & Natural Resources<br>Arts, Recreation, & Other<>Construction<>Financial & Leasing<>Government<>Health & Educational Services<>Information<>Manufacturing & Wholesale<>Professional & Managerial Services<>Retail<>Transportation & Utilties
+  prod:
+    var: Industry
+    value: Number of Jobs
+    index: Year
+    pivot: Industry
+  plot:
+    bar: stacked
+    line: False
+    format: count
+    text: False
+    x: Year
+    y: Number of Jobs
+    color: Industry
+  word: ## PROBABLY NEED TO CONSOLIDATE COLUMN NAMES or COLUMNS
+    transpose: False
+    percent: False
+    subgroup: Industry
   Notes: 'The data is tabulated by place of work, regardless of where a worker lives. The source data is provided at the census block level. These are crosswalked to jurisdictions and summarized.\n
     Industry NAICS groupings are as follows:\n
     11, 21->Agriculture & Natural Resources; 71, 72, 81->Arts, Recreation & Other Services; 23->Construction; 52, 53->Financial & Leasing; 92->Government;\n
@@ -168,11 +333,26 @@ POPEMP_12:
   Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Residence Area Characteristic (RAC) files
   Abbrv: LEHD
   Website: https://lehd.ces.census.gov/data/
-  Year(s): 2002-2022
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Industry
+  Year(s): 2002-2023
+  Geography: Jurisdiction
+  Columns: Year<>Agriculture & Natural Resources<br>Arts, Recreation, & Other<>Construction<>Financial & Leasing<>Government<>Health & Educational Services<>Information<>Manufacturing & Wholesale<>Professional & Managerial Services<>Retail<>Transportation & Utilties
+  prod:
+    var: Industry
+    value: Number of Job Holders
+    index: Year
+    pivot: Industry
+  plot:
+    bar: stacked
+    line: False
+    format: count
+    text: False
+    x: Year
+    y: Number of Job Holders
+    color: Industry
+  word: ## PROBABLY NEED TO CONSOLIDATE COLUMN NAMES or COLUMNS
+    transpose: False
+    percent: False
+    subgroup: Industry
   Notes: 'The data is tabulated by place of residence, regardless of location of workplace. The source data is provided at the census block level. These are crosswalked to jurisdictions and summarized.\n
     Industry NAICS groupings are as follows:\n
     11, 21->Agriculture & Natural Resources; 71, 72, 81->Arts, Recreation & Other Services; 23->Construction; 52, 53->Financial & Leasing; 92->Government;\n
@@ -184,11 +364,26 @@ POPEMP_13:
   Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Workplace Area Characteristic (WAC) files and DOF E5 Household Estimates
   Abbrv: LEHD
   Website: https://lehd.ces.census.gov/data/
-  Year(s): 2002-2022
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Geography
+  Year(s): 2002-2023
+  Geography: Regional Comparison
+  Columns: Year<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Geography
+    value: Ratio
+    index: Year
+    pivot: Geography
+  plot:
+    bar: False
+    line: True
+    format: ratio
+    text: False
+    x: Year
+    y: Ratio
+    color: Geography
+  word:
+    transpose: False
+    percent: False
+    subgroup: Geography
   Notes: 'The data is tabulated by place of work, regardless of where a worker lives. The source data is provided at the census block level. These are crosswalked to jurisdictions and summarized.\n
     A similar measure is the ratio of jobs to housing units. However, this jobs-household ratio serves to compare the number of jobs in a jurisdiction to the number of housing units that are actually occupied.\n
     The difference between a jurisdiction jobs-housing ratio and jobs-household ratio will be most pronounced in jurisdictions with high vacancy rates, a high rate of units used for seasonal use, or a high rate of units used as short-term rentals
@@ -202,11 +397,26 @@ POPEMP_14:
   Source: U.S. Census Bureau, Longitudinal Employer-Household Dynamics survey, Residence Area Characteristic (RAC) files, and Workplace Area Characteristic (WAC) files 
   Abbrv: LEHD
   Website: https://lehd.ces.census.gov/data/
-  Year(s): 2002-2022
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Wage Group
+  Year(s): 2002-2023
+  Geography: Jurisdiction
+  Columns: Year<>Earning $1,250 Per Month or Less<>Earning $1,251 to $3,333 Per Month<>Earning Greater than $3,333 Per Month
+  prod:
+    var: Wage Group
+    value: Ratio
+    index: Year
+    pivot: Wage Group
+  plot:
+    bar: False
+    line: True
+    format: ratio
+    text: False
+    x: Year
+    y: Ratio
+    color: Wage Group
+  word:
+    transpose: False
+    percent: False
+    subgroup: Wage Group
   Notes: 'The ratio compares job counts by wage group from two tabulations of LEHD data: Counts by place of work relative to counts by place of residence.'
 
 POPEMP_15:
@@ -216,10 +426,25 @@ POPEMP_15:
   Abbrv: EDD
   Website: https://data.ca.gov/dataset/local-area-unemployment-statistics-laus
   Year(s): 2010-2025
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Geography
+  Geography: Regional Comparison
+  Columns: Year<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Geography
+    value: Unemployment Rate
+    index: Year
+    pivot: Geography
+  plot:
+    bar: False
+    line: True
+    format: percent
+    text: False
+    x: Year
+    y: Unemployment Rate
+    color: Geography
+  word:
+    transpose: False
+    percent: False
+    subgroup: Geography
   Notes: 'This indicator shows the unemployment rate over time.'
 
 POPEMP_16:
@@ -229,10 +454,25 @@ POPEMP_16:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Geography
+  Geography: Regional Comparison
+  Columns: Housing Tenure<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Housing Tenure
+    value: Households
+    index: Housing Tenure
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Housing Tenure
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -243,10 +483,25 @@ POPEMP_17:
   Abbrv: DEC
   Website: https://www.census.gov/programs-surveys/decennial-census.html, https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2000-2020, 2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Housing Tenure
+  Geography: Jurisdiction
+  Columns: Year<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Housing Tenure
+    value: Households
+    index: Year
+    pivot: Housing Tenure
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Year
+    y: Percent of Households
+    color: Housing Tenure
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Year
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The 2023 data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -257,10 +512,25 @@ POPEMP_18:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Age Group
+  Geography: Jurisdiction
+  Columns: Age Group<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Age Group
+    value: Households
+    index: Age Group
+    pivot: Housing Tenure
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Age Group
+    y: Percent of Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Age Group
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -271,10 +541,25 @@ POPEMP_19:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Year Moved to Current Residence
+  Geography: Jurisdiction
+  Columns: Year Moved to Current Residence<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Year Moved to Current Residence
+    value: Households
+    index: Year Moved to Current Residence
+    pivot: Housing Tenure
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Year Moved to Current Residence
+    y: Percent of Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Year Moved to Current Residence
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -285,10 +570,25 @@ POPEMP_20:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Race/Ethnicicty
+    value: Households
+    index: Race/Ethnicicty
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Race/Ethnicity
+    y: Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -299,10 +599,25 @@ POPEMP_21:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Jurisdiction
+  Columns: Income Level<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Housing Tenure
+    value: Households
+    index: Income Level
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Income Level (% of AMI)
+    y: Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.'
 
@@ -313,24 +628,54 @@ POPEMP_22:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Housing Type
+  Geography: Jurisdiction
+  Columns: Housing Type<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Housing Tenure
+    value: Households
+    index: Housing Type
+    pivot: Housing Tenure
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Housing Type
+    y: Percent of Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Housing Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
 POPEMP_23:
   Theme: Population, Employment, and Household Characteristics
-  Title: Household Type
+  Title: Households by Household Type
   Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B11001
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Household Type
+  Geography: Regional Comparison
+  Columns: Household Type<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Household Type
+    value: Households
+    index: Household Type
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Household Type
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Household Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -341,10 +686,25 @@ POPEMP_24:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Household Type
+  Geography: Regional Comparison
+  Columns: Household Type<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Household Type
+    value: Households
+    index: Household Type
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Household Type
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Household Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -355,10 +715,10 @@ POPEMP_25:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Displacement Group
+  word:
+    transpose: False
+    percent: False
+    subgroup: Displacement Group
   Notes: 'Displacement data is available at the census tract level.\n
     Staff aggregated tracts up to jurisdiction level using census 2010 population weights, assigning a tract to jurisdiction in proportion to block level population weights.\n
     Total household count may differ slightly from counts in other tables sourced from jurisdiction level sources.\n
@@ -376,10 +736,25 @@ HSG_1:
   Abbrv: DOF
   Website: https://dof.ca.gov/forecasting/demographics/
   Year(s): 2010, 2020, and 2024
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Housing Type
+  Geography: Regional Comparison
+  Columns: Housing Type<>[jurisdiction] (2010)<>[jurisdiction] (2020)<>[jurisdiction] ([year_max])<>[county] (2010)<>[county] (2020)<>[county] ([year_max])<>SACOG Region (2010)<>SACOG Region (2020)<>SACOG Region ([year_max])
+  prod:
+    var: Housing Type
+    value: Households
+    index: Housing Type
+    pivot: Year
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Housing Type
+    y: Households
+    color: Year
+  word:
+    transpose: False
+    percent: False
+    subgroup: Housing Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data shown on the graph represents the housing type breakout for the jurisdiction in the years 2010, 2020, and 2024.'
 
@@ -390,10 +765,25 @@ HSG_2:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Household Type
+  Geography: Regional Comparison
+  Columns: Occupancy Status<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Occupancy Status
+    value: Households
+    index: Occupancy Status
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Occupancy Status
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Occupancy Status
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -404,10 +794,25 @@ HSG_3:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Vacancy Type
+  Geography: Regional Comparison
+  Columns: Vacancy Type<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Vacancy Type
+    value: Households
+    index: Vacancy Type
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Vacancy Type
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Vacancy Type
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -418,10 +823,25 @@ HSG_4:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Year Built
+  Geography: Jurisdiction
+  Columns: Year Built<>Households
+  prod:
+    var: Year Built
+    value: Households
+    index: Year Built
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: count
+    text: False
+    x: Year Built
+    y: Households
+    color: False
+  word:
+    transpose: False
+    percent: True
+    subgroup: Year Built
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -432,10 +852,25 @@ HSG_5:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Number of Bedrooms
+  Geography: Jurisdiction
+  Columns: Number of Bedrooms<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Number of Bedrooms
+    value: Households
+    index: Number of Bedrooms
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Number of Bedrooms
+    y: Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Number of Bedrooms
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -446,10 +881,25 @@ HSG_6:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Housing Issue
+  Geography: Jurisdiction
+  Columns: Housing Issue<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Housing Issue
+    value: Households
+    index: Housing Issue
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: percent
+    text: True
+    x: Housing Issue
+    y: Percent of Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Housing Issue
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -460,10 +910,25 @@ HSG_7:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Home Value
+  Geography: Jurisdiction
+  Columns: Home Value<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Home Value
+    value: Households
+    index: Home Value
+    pivot: Geography
+  plot:
+    bar: group
+    line: False
+    format: percent
+    text: False
+    x: Geography
+    y: Share of Owner-Occupied Units
+    color: Home Value
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Home Value
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -474,10 +939,25 @@ HSG_8:
   Abbrv: Zillow
   Website: https://www.zillow.com/research/data/
   Year(s): 2001-2025
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Geography
+  Geography: Regional Comparison
+  Columns: Year<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: False
+    value: ZHVI
+    index: Year
+    pivot: Geography
+  plot:
+    bar: False
+    line: True
+    format: dollar
+    text: False
+    x: Year
+    y: ZHVI
+    color: Geography
+  word: 
+    transpose: False
+    percent: False
+    subgroup: Geography
   Notes: 'Zillow describes the ZHVI as a smoothed, seasonally adjusted measure of the typical home value and market changes across a given region and housing type.\n
     The ZHVI reflects the typical value for homes in the 35th to 65th percentile range.\n
     Includes all owner-occpied housing units, including both single-family homes and condominiums.\n
@@ -491,10 +971,25 @@ HSG_9:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Contract Rent
+  Geography: Jurisdiction
+  Columns: Rent Price<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Rent Price
+    value: Households
+    index: Rent Price
+    pivot: Geography
+  plot:
+    bar: group
+    line: False
+    format: percent
+    text: False
+    x: Geography
+    y: Share of Renter-Occupied Units
+    color: Rent Price
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Rent Price
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -504,11 +999,26 @@ HSG_10:
   Source: U.S. Census Bureau, American Community Survey 5-Year Data, Tables B25058, B25056, and B25003
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
-  Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Geography
+  Year(s): 2009-2023
+  Geography: Jurisdiction
+  Columns: Year<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: False
+    value: Median Contract Rent
+    index: Year
+    pivot: Geography
+  plot:
+    bar: False
+    line: True
+    format: dollar
+    text: False
+    x: Year
+    y: Median Contract Rent
+    color: Geography
+  word:
+    transpose: False
+    percent: False
+    subgroup: Geography
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -519,14 +1029,29 @@ HSG_11:
   Abbrv: HCD
   Website: https://www.hcd.ca.gov/planning-and-community-development/housing-elements
   Year(s): 2015-2019
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Income Group
+  Geography: Jurisdiction
+  Columns: Income Group<>Number of Permits
+  prod:
+    var: Income Group
+    value: Number of Permits
+    index: Income Group
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: count
+    text: False
+    x: Income Group
+    y: Number of Permits
+    color: False
+  word:
+    transpose: False
+    percent: False
+    subgroup: Income Group
   Notes: 'This indicator will be updated with the latest RHNA Cycle data at a future date.\n\n
     HCD uses the following definitions for the four income categories:\n
     - Very Low Income: units affordable to households making less than 50% of the Area Median Income for the county in which the jurisdiction is located.\n
-    = Low Income: units affordable to households making between 50% and 80% of the Area Median Income for the county in which the jurisdiction is located.\n
+    - Low Income: units affordable to households making between 50% and 80% of the Area Median Income for the county in which the jurisdiction is located.\n
     - Moderate Income: units affordable to households making between 80% and 120% of the Area Median Income for the county in which the jurisdiction is located.\n
     - Above Moderate Income: units affordable to households making above 120% of the Area Median Income for the county in which the jurisdiction is located.'
 
@@ -542,10 +1067,10 @@ RISK_1:
   Abbrv: CHP
   Website: https://chpc.net/
   Year(s): May 2025
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Risk Level
+  word:
+    transpose: True
+    percent: True
+    subgroup: Risk Level
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     Includes subsidized, affordable developments financed and/or assisted by HUD, CalHFA, LIHTC, HCD, and USDA. A subset of locally financed and/or assisted development are included based on availability of data.\n
     - While California Housing Partnership’s Preservation Database is the state’s most comprehensive source of information on subsidized affordable housing at risk of losing\n
@@ -575,10 +1100,25 @@ OVER_1:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Overcrowding Severity
+  Geography: Jurisdiction
+  Columns: Tenure<>1.01 to 1.5 Occupants Per Room<>More than 1.5 Occupants Per Room
+  prod:
+    var: Overcrowding Severity
+    value: Households
+    index: Housing Tenure
+    pivot: Overcrowding Severity
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Housing Tenure
+    y: Households
+    color: Overcrowding Severity
+  word:
+    transpose: True
+    percent: True
+    subgroup: Overcrowding Severity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
@@ -591,10 +1131,25 @@ OVER_2:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Overcrowding Severity
+  Geography: Jurisdiction
+  Columns: Overcrowding Severity<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Overcrowding Severity
+    value: Households
+    index: Overcrowding Severity
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Overcrowding Severity
+  word:
+    transpose: False
+    percent: True
+    subgroup: Overcrowding Severity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).'
@@ -606,10 +1161,25 @@ OVER_3:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Race/Ethnicity
+    value: Households
+    index: Race/Ethnicity
+    pivot: Geography
+  plot:
+    bar: simple
+    line: False
+    format: percent
+    text: False
+    x: Race/Ethnicity
+    y: Percent of Households
+    color: False
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -620,10 +1190,25 @@ OVER_4:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Jurisdiction
+  Columns: Income Level<>1.01 to 1.5 Occupants Per Room<>More than 1.5 Occupants Per Room
+  prod:
+    var: Overcrowding Severity
+    value: Households
+    index: Income Level
+    pivot: Overcrowding Severity
+  plot:
+    bar: group
+    line: False
+    format: percent
+    text: False
+    x: Income Level (% of AMI)
+    y: Percent of Households
+    color: Overcrowding Severity
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     The Census Bureau defines an overcrowded housing unit as 1.01 or more persons per room (excluding bathrooms and kitchens).\n
@@ -636,10 +1221,25 @@ OVER_5:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Jurisdiction
+  Columns: Income Level<>Less than 30% of Income Used for Housing<>30%-50% of Income Used for Housing<>50%+ of Income Used for Housing<>Not Computed
+  prod:
+    var: Cost Burden
+    value: Households
+    index: Income Level
+    pivot: Cost Burden
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Income Level (% of AMI)
+    y: Percent of Households
+    color: Cost Burden
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
@@ -652,10 +1252,25 @@ OVER_6:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Cost Burden
+  Geography: Jurisdiction
+  Columns: Housing Cost Burden<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Cost Burden
+    value: Households
+    index: Cost Burden
+    pivot: Housing Tenure
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Housing Tenure
+    y: Percent of Households
+    color: Cost Burden
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Cost Burden
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -666,10 +1281,25 @@ OVER_7:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Cost Burden
+  Geography: Regional Comparison
+  Columns: Cost Burden<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Cost Burden
+    value: Households
+    index: Cost Burden
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Cost Burden
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Cost Burden
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
@@ -682,10 +1312,25 @@ OVER_8:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Less than 30% of Income of Used for Housing<>30%-50% of Income Used for Housing<>50%+ of Income Used for Housing<>Not Computed
+  prod:
+    var: Cost Burden
+    value: Households
+    index: Race/Ethnicity
+    pivot: Cost Burden
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Race/Ethnicity
+    y: Percent of Households
+    color: Cost Burden
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
@@ -698,10 +1343,25 @@ OVER_9:
   Abbrv: CHAS
   Website: https://www.huduser.gov/portal/pdrdatas_landing.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Cost Burden
+  Geography: Jurisdiction
+  Columns: Household Size<>Less than 30% of Income of Used for Housing<>30%-50% of Income Used for Housing<>50%+ of Income Used for Housing
+  prod:
+    var: Cost Burden
+    value: Households
+    index: Cost Burden
+    pivot: Household Size
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Household Size
+    y: Percent of Households
+    color: Cost Burden  
+  word:
+    transpose: False
+    percent: True
+    subgroup: Cost Burden
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2021 output is not the individual year of 2021, but the 5 year average of 2017-2021.\n
     HUD defined cost burden households as those whose monthly housing costs exceed 30% of monthly income, while severely cost-burdened households are those whose monthly housing costs exceed 50% of monthly income.\n
@@ -720,10 +1380,12 @@ FARM_1:
   Abbrv: CALPADS
   Website: https://www.cde.ca.gov/ds/ad/filesenrcum.asp
   Year(s): 2020-2024
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Season
+  Geography: Jurisdiction
+  Columns: School Year<>[jurisdiction]<>[county]<>SACOG Region
+  word: 
+    transpose: True
+    percent: False
+    subgroup: Season
   Notes: 'This indicator shows the total population of students from migrant workers.\n
     The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
 
@@ -734,10 +1396,25 @@ FARM_2:
   Abbrv: USDA
   Website: https://www.nass.usda.gov/Publications/AgCensus/2022/index.php, https://agcensus.library.cornell.edu/census_year/2012-census/
   Year(s): 2002-2022
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Year
+  Geography: County
+  Columns: Year<>Permanent<>Seasonal
+  prod:
+    var: Farm Worker
+    value: Number of Farm Workers
+    index: Year
+    pivot: Farm Worker
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Farm Worker
+    y: Number of Farm Workers
+    color: Year
+  word: 
+    transpose: True
+    percent: False
+    subgroup: Year
   Notes: 'Farm workers are considered seasonal if they work on a farm less than 150 days in a year,\n
     while farm workers who work on a farm more than 150 days are considered to be permanent workers for that farm.'
 
@@ -752,10 +1429,25 @@ LGFEM_1:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Household Size
+  Geography: Jurisdiction
+  Columns: Household Size<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Household Size
+    value: Households
+    index: Household Size
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Household Size
+    y: Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Household Size
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -766,10 +1458,25 @@ LGFEM_2:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Household Size
+  Geography: Regional Comparison
+  Columns: Household Size<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Household Size
+    value: Households
+    index: Household Size
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Household Size
+  word:
+    transpose: False
+    percent: True
+    subgroup: Household Size
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -780,10 +1487,25 @@ LGFEM_3:
   Abbrv: CHAS
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Jurisdiction
+  Columns: Household Income Level<>Large Family with 5+ Persons<>All Other Household Types
+  prod:
+    var: Household Size
+    value: Households
+    index: Income Level
+    pivot: Household Size
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Household Size
+    y: Percent of Households
+    color: Income Level (% of AMI)
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -794,10 +1516,25 @@ LGFEM_4:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Household Type
+  Geography: Jurisdiction
+  Columns: Household Type<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Household Type
+    value: Households
+    index: Household Type
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Household Type
+    y: Percent of Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Household Type
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -808,10 +1545,25 @@ LGFEM_5:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Family Status
+  Geography: Jurisdiction
+  Columns: Family Status<>Above Poverty Level<>Below Poverty Level
+  prod:
+    var: Family Status
+    value: Households
+    index: Family Status
+    pivot: Poverty Status
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Family Status
+    y: Percent of Households
+    color: Poverty Status
+  word:
+    transpose: False
+    percent: True
+    subgroup: Family Status
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -827,10 +1579,25 @@ SEN_1:
   Abbrv: CHAS
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Jurisdiction
+  Columns: Income Level<>Owner Occupied<>Renter Occupied
+  prod:
+    var: Income Level
+    value: Households
+    index: Income Level
+    pivot: Housing Tenure
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Income Level (% of AMI)
+    y: Households
+    color: Housing Tenure
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     For this indicators, senior households are those with a householder who is aged 62 or older.'
@@ -842,10 +1609,25 @@ SEN_2:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Age 0-17<>Age 18-64<>Age 65+
+  prod:
+    var: Age Group
+    value: Population
+    index: Race/Ethnicity
+    pivot: Age Group
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Age Group
+    y: Percent of Population
+    color: Race/Ethnicity
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -856,10 +1638,25 @@ SEN_3:
   Abbrv: CHAS
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Jurisdiction
+  Columns: Income Level<>Less than 30% of Income of Used for Housing<>30%-50% of Income Used for Housing<>50%+ of Income Used for Housing
+  prod:
+    var: Income Level
+    value: Households
+    index: Income Level
+    pivot: Cost Burden
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Income Level (% of AMI)
+    y: Percent of Households
+    color: Cost Burden
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     For this indicator, senior households are those with a householder who is aged 62 or older.\n
@@ -873,11 +1670,26 @@ SEN_4:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Disability Type
-  Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+  Geography: Jurisdiction
+  Columns: Disability Type<>Population
+  prod:
+    var: Disability Type
+    value: Population
+    index: Disability Type
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: percent
+    text: False
+    x: Disability Type
+    y: Percent of Population
+    color: False
+  word:
+    transpose: False
+    percent: True
+    subgroup: Disability Type
+  Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     These disabilities are counted separately and are not mutually exclusive, as an individual may report more than one disability.'
 
@@ -894,11 +1706,26 @@ DISAB_1:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Disability Type
-  Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
+  Geography: Jurisdiction
+  Columns: Disability Type<>Population
+  prod:
+    var: Disability Type
+    value: Population
+    index: Disability Type
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: percent
+    text: False
+    x: Disability Type
+    y: Percent of Population
+    color: False
+  word:
+    transpose: False
+    percent: True
+    subgroup: Disability Type
+  Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     These disabilities are counted separately and are not mutually exclusive, as an individual may report more than one disability.'
 
@@ -909,10 +1736,25 @@ DISAB_2:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Disability Type
+  Geography: Regional Comparison
+  Columns: Disability Status<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Disability Status
+    value: Population
+    index: Disability Status
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: Disability Status
+  word:
+    transpose: False
+    percent: True
+    subgroup: Disability Status
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -923,10 +1765,25 @@ DISAB_3:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Disability Status
+  Geography: Jurisdiction
+  Columns: Disabilitiy Status<>Employed<>Unemployed
+  prod:
+    var: Disability Status
+    value: Population
+    index: Employment Status
+    pivot: Disability Status
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Disability Status
+    y: Percent of Population
+    color: Employment Status
+  word:
+    transpose: False
+    percent: True
+    subgroup: Employment Status
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -937,10 +1794,25 @@ DISAB_4:
   Abbrv: DDS
   Website: https://www.dds.ca.gov/transparency/facts-stats/
   Year(s): 2022-2024
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Age Group
+  Geography: Jurisdiction
+  Columns: Age Group<>Population
+  prod:
+    var: Age Group
+    value: Population
+    index: Age Group
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: count
+    text: False
+    x: Age Group
+    y: Population
+    color: False
+  word:
+    transpose: False
+    percent: False
+    subgroup: Age Group
   Notes: 'The California Department of Developmental Services is responsible for overseeing the coordination and delivery of services to more than 330,000 Californias with\n
     developmental disabilities including cerebral palsy, intellectual disability, Down syndrome, autism, epilepsy, and related conditions.\n
     The California Department of Developmental Services provides ZIP code level counts.  To get to jurisdiction-level estimates, ZIP code counts were crosswalked to\n
@@ -953,10 +1825,25 @@ DISAB_5:
   Abbrv: DDS
   Website: https://www.dds.ca.gov/transparency/facts-stats/
   Year(s): 2022-2024
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Residence Type
+  Geography: Jurisdiction
+  Columns: Residence Type<>Population with Disabilities
+  prod:
+    var: Residence Type
+    value: Population
+    index: Residence Type
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: count
+    text: False
+    x: Residence Type
+    y: Population
+    color: False
+  word:
+    transpose: False
+    percent: False
+    subgroup: Residence Type
   Notes: 'The California Department of Developmental Services is responsible for overseeing the coordination and delivery of services to more than 330,000 Californias with\n
     developmental disabilities including cerebral palsy, intellectual disability, Down syndrome, autism, epilepsy, and related conditions.\n
     The California Department of Developmental Services provides ZIP code level counts.  To get to jurisdiction-level estimates, ZIP code counts were crosswalked to\n
@@ -976,10 +1863,25 @@ HOMELS_1:
   Abbrv: HUD
   Website: https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
   Year(s): 2024-
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Household Type
+  Geography: County
+  Columns: Household Type<>Sheltered - Emergency Shelter<>Sheltered - Transitional Housing<>Unsheltered
+  prod:
+    var: Shelter Status
+    value: Households
+    index: Household Type
+    pivot: Shelter Status
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Household Type
+    y: Population
+    color: Shelter Status
+  word: 
+    transpose: False
+    percent: False
+    subgroup: Household Type
   Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
@@ -992,10 +1894,25 @@ HOMELS_2:
   Abbrv: HUD
   Website: https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
   Year(s): 2024-
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: County
+  Columns: Race/Ethnicity<>Homeless Population<>Overall Population
+  prod:
+    var: Race/Ethnicity
+    value: Population
+    index: Race/Ethnicity
+    pivot: False
+  plot:
+    bar: group
+    line: False
+    format: percent
+    text: False
+    x: Race/Ethnicity
+    y: Percent of Population
+    color: Prop
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
@@ -1011,10 +1928,25 @@ HOMELS_3:
   Abbrv: HUD
   Website: https://www.hudexchange.info/programs/coc/coc-homeless-populations-and-subpopulations-reports/
   Year(s): 2024-
-  Word:
-    Table Transpose: False
-    Percent Column: False
-    Subgroup: Characteristic
+  Geography: County
+  Columns: Characteristic<>Sheltered - Emergency Shelter<>Sheltered - Transitional Housing<>Unsheltered
+  prod:
+    var: Shelter Status
+    value: Number of Persons
+    index: Characteristic
+    pivot: Shelter Status
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Shelter Status
+    y: Number of Persons
+    color: Characteristic
+  word: 
+    transpose: False
+    percent: False
+    subgroup: Characteristic
   Notes: 'This data is based on Point-in-Time (PIT) information provided to HUD by CoCs in the application for CoC Homeless Assistance Programs.\n
     The PIT Count provides a count of sheltered and unsheltered homeless persons on a single night during the last ten days in January.\n
     Each Sacramento region county is its own CoC except for combining Yuba and Sutter (combined into a single CoC), and so the data for this table is provided at the county-level (or bi-county for Yuba/Sutter).\n
@@ -1029,10 +1961,25 @@ HOMELS_4:
   Abbrv: CALPADS
   Website: https://www.cde.ca.gov/ds/ad/fileshse.asp
   Year(s): 2020-2024
-  Word:
-    Table Transpose: False # True
-    Percent Column: False
-    Subgroup: School Year
+  Geography: Regional Comparison
+  Columns: School Year<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: School Year
+    value: Population
+    index: Geography
+    pivot: School Year
+  plot:
+    bar: group
+    line: False
+    format: count
+    text: False
+    x: Geography
+    y: Population
+    color: School Year
+  word:
+    transpose: True
+    percent: False
+    subgroup: School Year
   Notes: 'The data used for this table was obtained at the school site level, matched to a file containing school locations, geocoded and assigned to jurisdiction, and finally summarized by geography.'
 
 
@@ -1048,10 +1995,25 @@ ELI_1:
   Abbrv: CHAS
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Income Level
+  Geography: Regional Comparison
+  Columns: Income Level<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: Income Level
+    value: Households
+    index: Income Level
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Households
+    color: Income Level
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Level
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -1062,10 +2024,25 @@ ELI_2:
   Abbrv: CHAS
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2017-2021
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Less Than 30% of AMI<>31%-50% of AMI<>51%-80% of AMI<>81%-100% of AMI<>Greater Than 100% of AMI
+  prod:
+    var: Income Level
+    value: Households
+    index: Race/Ethnicity
+    pivot: Income Level
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Race/Ethnicity
+    y: Percent of Households
+    color: Income Level
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -1076,10 +2053,25 @@ ELI_3:
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Above Poverty Level<>Below Poverty Level
+  prod:
+    var: Poverty Status
+    value: Population
+    index: Race/Ethnicity
+    pivot: Poverty Status
+  plot:
+    bar: simple
+    line: False
+    format: percent
+    text: True
+    x: Race/Ethnicity
+    y: Percent of Population
+    color: False
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total household estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 
@@ -1090,10 +2082,25 @@ ELI_4:
   Abbrv: ACS5
   Website: https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/
   Year(s): 2019-2023
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Income Bracket
+  Geography: Jurisdiction
+  Columns: Income Bracket<>Households
+  prod:
+    var: Income Bracket
+    value: Households
+    index: Income Bracket
+    pivot: False
+  plot:
+    bar: simple
+    line: False
+    format: percent
+    text: True
+    x: Income Bracket
+    y: Percent of Households
+    color: False
+  word:
+    transpose: False
+    percent: True
+    subgroup: Income Bracket
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     This indicator is estimated by allocating the number of households broken out by ACS income brackets (found in table DP03) into the corresponding HCD income brackets using the AMI of the county the jurisdiction resides in.\n
@@ -1119,10 +2126,25 @@ AFFH_1:
   Abbrv: FFIEC
   Website: https://ffiec.cfpb.gov/data-publication/modified-lar/2024
   Year(s): 2024-
-  Word:
-    Table Transpose: False
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>Purchased Loan<>Loan Originated<>Preapproval Request Approved but Not Accepted<>Application Approved but Not Accepted<>Application Withdrawn by Applicant<>Preapproval Request Denied<>Application Denied<>File Closed for Incompleteness
+  prod:
+    var: Mortgage Application Status
+    value: Population
+    index: Race/Ethnicity
+    pivot: Mortgage Application Status
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Race/Ethnicity
+    y: Percent of Population
+    color: Mortgage Application Status
+  word:
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: '“Loan originated” means that the application was accepted a loan was made by a financial institution to the applicant.\n
     “File incomplete or withdrawn” means a loan was not originated because the application was withdrawn before a credit decision was made or the file was closed for incompleteness.\n
     “Application denied” means a loan was not originated because the financial institution did not approve the mortgage application.\n
@@ -1135,10 +2157,25 @@ AFFH_2:
   Abbrv: ACS5
   Website: https://www.treasurer.ca.gov/ctcac/opportunity.asp, https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: Race/Ethnicity
+  Geography: Jurisdiction
+  Columns: Race/Ethnicity<>High Segregation & Poverty<>Low Resource<>Moderate Resource/Moderate Resource (Rapidly Changing)<>High Resource<>High/Highest Resource
+  prod:
+    var: Opportunity Category
+    value: Population
+    index: Race/Ethnicity
+    pivot: Opportunity Category
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Opportunity Category
+    y: Percent of Population
+    color: Race/Ethnicity
+  word: 
+    transpose: False
+    percent: True
+    subgroup: Race/Ethnicity
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.\n
     The TCAC and HCD created the Opportunity Map using reliable and publicly available data sources to identify areas in the state whose characteristics have been shown by research to support\n
@@ -1160,15 +2197,30 @@ AFFH_2:
 
 AFFH_3:
   Theme: Affirmatively Furthering Fair Housing
-  Title: Population with Limited English Proficiency
+  Title: Population with Limited English Proficiency (Age 5 Years and Over)
   Source: U.S. Census Bureau, American Community Survey 5-Year Data, Table B16005
   Abbrv: ACS5
   Website: https://www.census.gov/programs-surveys/acs/data.html
   Year(s): 2019-2023
-  Word:
-    Table Transpose: True
-    Percent Column: True
-    Subgroup: English Proficiency
+  Geography: Regional Comparison
+  Columns: English Proficiency<>[jurisdiction]<>[county]<>SACOG Region
+  prod:
+    var: English Proficiency
+    value: Population
+    index: English Proficiency
+    pivot: Geography
+  plot:
+    bar: stacked
+    line: False
+    format: percent
+    text: True
+    x: Geography
+    y: Percent of Population
+    color: English Proficiency
+  word:
+    transpose: False
+    percent: True
+    subgroup: English Proficiency
   Notes: 'This indicator shows the total population estimate, as well as the percentage.\n
     The data are reported in 5 year rolling averages. For example, the 2023 output is not the individual year of 2023, but the 5 year average of 2019-2023.'
 

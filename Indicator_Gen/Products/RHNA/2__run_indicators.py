@@ -1,17 +1,15 @@
 
 
-
-
 def print2(): print();print()
 def print3(): print();print();print()
 print3()
 
-
+import runpy
 import time
 import warnings
 warnings.filterwarnings('ignore')
 from pathlib import Path
-PATH_PY = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'python'
+PATH_EXEC = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'indicators'
 
 
 
@@ -96,6 +94,9 @@ if __name__ == '__main__':
     ]
 
 
+    # indicators=['POPEMP_11', 'POPEMP_12', 'POPEMP_13', 'POPEMP_14', 'POPEMP_15']
+
+
 
     start_time = time.time()
 
@@ -104,8 +105,8 @@ if __name__ == '__main__':
 
         print2()
         print(indicator)
-        path_run = PATH_PY / f'{indicator}.py'
-        with path_run.open("r") as f: exec(f.read())
+        path_run = PATH_EXEC / f'{indicator}.py'
+        runpy.run_path(str(path_run), run_name="__main__")
         list_indicators.append(indicator)
 
 

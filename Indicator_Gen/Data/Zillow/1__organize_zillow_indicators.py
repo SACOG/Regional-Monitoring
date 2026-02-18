@@ -24,10 +24,9 @@ PATH_GIT = Path(__file__).parent.parent.parent
 PATH_CONFIG0 = PATH_GIT / 'config'
 
 
-# SharePoint OneDrive paths
-PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-PATH_ORIG = PATH_SP / 'Process Revamp' / 'Task 9. Collect new data' / 'Zillow'
-PATH_MAIN = PATH_SP / 'Data'
+# Network paths
+PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data') / 'Zillow'
+PATH_MAIN = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' / 'Data'
 PATH_OUT = PATH_MAIN / 'Vibrant and Inclusive Places' / 'Development' / 'Housing Cost'
 PATH_WEIGHTS = PATH_MAIN / 'Reference' / 'Weights'
 
@@ -255,18 +254,7 @@ def process_mpo(df):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-## Sales Price ---------------------------------------------------------------------------------------------------------------------------------------------------
+## Main ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
@@ -279,17 +267,17 @@ if __name__ == '__main__':
     dt_geo = {
             'Cost_1':
                 {
-                    # 'MSA'          : {'file_in':'Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'       , 'file_out': 'Cost_1 MSA Sales Price Zillow.xlsx'          },
-                    # 'Counties'     : {'file_in':'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'      , 'file_out': 'Cost_1 Counties Sales Price Zillow.xlsx'     },
-                    # 'Cities'       : {'file_in':'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'        , 'file_out': 'Cost_1 Cities Sales Price Zillow.xlsx'       },
-                    # 'Neighborhoods': {'file_in':'Neighborhood_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv', 'file_out': 'Cost_1 Neighborhoods Sales Price Zillow.xlsx'}
+                    'MSA'          : {'file_in':'Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'       , 'file_out': 'Cost_1 MSA Sales Price Zillow.xlsx'          },
+                    'Counties'     : {'file_in':'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'      , 'file_out': 'Cost_1 Counties Sales Price Zillow.xlsx'     },
+                    'Cities'       : {'file_in':'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'        , 'file_out': 'Cost_1 Cities Sales Price Zillow.xlsx'       },
+                    'Neighborhoods': {'file_in':'Neighborhood_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv', 'file_out': 'Cost_1 Neighborhoods Sales Price Zillow.xlsx'},
                     'ZIP Codes'    : {'file_in':'Zip_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'         , 'file_out': 'Cost_1 ZIP Codes Sales Price Zillow.xlsx'    }
                 },
             'Cost_2':
                 {
-                    # 'MSA'      : {'file_in':'Metro_zori_uc_sfrcondomfr_sm_month.csv' , 'file_out': 'Cost_2 MSA Rent Price Zillow.xlsx'      },
-                    # 'Counties' : {'file_in':'County_zori_uc_sfrcondomfr_sm_month.csv', 'file_out': 'Cost_2 Counties Rent Price Zillow.xlsx' },
-                    # 'Cities'   : {'file_in':'City_zori_uc_sfrcondomfr_sm_month.csv'  , 'file_out': 'Cost_2 Cities Rent Price Zillow.xlsx'   }
+                    'MSA'      : {'file_in':'Metro_zori_uc_sfrcondomfr_sm_month.csv' , 'file_out': 'Cost_2 MSA Rent Price Zillow.xlsx'      },
+                    'Counties' : {'file_in':'County_zori_uc_sfrcondomfr_sm_month.csv', 'file_out': 'Cost_2 Counties Rent Price Zillow.xlsx' },
+                    'Cities'   : {'file_in':'City_zori_uc_sfrcondomfr_sm_month.csv'  , 'file_out': 'Cost_2 Cities Rent Price Zillow.xlsx'   },
                     'ZIP Codes': {'file_in':'Zip_zori_uc_sfrcondomfr_sm_month.csv'   , 'file_out': 'Cost_2 ZIP Codes Rent Price Zillow.xlsx'}
                 }
         }

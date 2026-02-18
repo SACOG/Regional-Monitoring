@@ -20,7 +20,7 @@ Export as filegdb
 
 '''
 
-export=False
+EXPORT=False
 
 
 
@@ -34,6 +34,11 @@ import re
 from IPython.display import display
 import warnings
 warnings.filterwarnings('ignore')
+
+
+PATH_IN = Path(r'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\CERF\We Prosper Together\Population')
+PATH_OUT = Path(r'I:\Projects\Josh\Regional Monitoring\Accessibility\shp')
+
 
 def re_remove_post(x, exp = '.'):
     if x == 'nan':
@@ -51,7 +56,6 @@ if __name__ == '__main__':
 
     print(); print()
     print('Importing/processing excel or csv file to merge onto the geospatial layer...')
-    path_in = Path(r'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\CERF\We Prosper Together\Population')
     wkbook = 'Pop_3 Block Groups ACS5_ValleyVision.xlsx'
     sheet_name = 'Block Groups'
     file_in = path_in / wkbook
@@ -103,16 +107,15 @@ if __name__ == '__main__':
 
 
 
-    if export:
+    if EXPORT:
         print(); print()
         print('Exporting to shp...')
-        path_out = Path(r'I:\Projects\Josh\Regional Monitoring\Accessibility\shp')
         shp_out = "pop3_bg_ValleyVision"
-        file_shp = path_out / shp_out
+        file_shp = PATH_OUT / shp_out
         os.makedirs(file_shp, exist_ok=True)
         file_shp_out = file_shp / f'{shp_out}.shp'
         gdf_bg.to_file(file_shp_out)
-        print('Successfully exported shp')
+        print('Successfully EXPORTed shp')
         print();print()
 
 

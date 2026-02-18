@@ -1,3 +1,10 @@
+"""
+Docstring for Indicator_Gen.Data.RITIS.combine_monthly_tables
+Author: Tenoru
+Date: December 2025
+This script calculates system-wide congestion metrics as well as tmc-level metrics for every MONTH available in the specified input directory(PATH IDRIVE) and saves them to csvs in the specified output directories.  
+If using this for Congestion 2 monthly indicator just run master_monthly.py instead.
+"""
 export=False
 
 from pathlib import Path
@@ -45,8 +52,8 @@ vehicle_class = 'Combined'  # Options: 'Truck', 'Pax', 'Combined'
 # Weekdays
 WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
-# Minimum Epochs for Hourly Speed Calculation (Approx. 40% coverage of ~92 epochs)
-MIN_EPOCHS = 35
+#Min Epochs (Approx 10% of 92 epochs which is the same percentage as originaly yearly script)
+MIN_EPOCHS=9
 
 # SharePoint
 PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' 
@@ -293,7 +300,7 @@ for zip_path in zip_files:
 
     # Store results for final summary
     system_metrics = {
-        'month': year_month,
+        'year_or_month': year_month,
         'total_nhs_dirmiles': tot_nhs_dirmiles,
         'congested_miles': congested_miles,
         'pct_miles_congested': pct_dirmi_congested,
@@ -314,7 +321,7 @@ if all_system_metrics:
     print("\n\n*** Summary of All Processed Months ***")
     df_summary = pd.DataFrame(all_system_metrics)
     # Reorder columns for a cleaner look
-    df_summary = df_summary[['month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 
+    df_summary = df_summary[['year_or_month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 
                          'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
     print(df_summary.to_string(index=False, float_format="%.2f"))
 else:
@@ -325,30 +332,20 @@ else:
 # Export
 # ====================================================================    
 # name output file based on vehicle class and date range
-min_time = min(df_summary['month'])
-max_time = max(df_summary['month'])
+min_time = min(df_summary['year_or_month'])
+max_time = max(df_summary['year_or_month'])
 base_filename = f"Final_Congestion_{min_time}_to_{max_time}{tp_dict[vehicle_class]}.csv"
 
 output_path = PATH_FINAL / f"{base_filename}"
-if output_path.exists():
-    print(f"\n*** Skipping {base_filename} ***")
-    print(f"  Output file already exists at: {output_path}")
-    
 
-else:
-    print(f"  ...Exporting to {output_path}")
-    all_final.to_csv(output_path, index=False)
-    print("  Export complete.")
+print(f"  ...Exporting to {output_path}")
+all_final.to_csv(output_path, index=False)
+print("  Export complete.")
 
 # Define the output file name for the monthly summary
 summary_output_filename = f"Summary{base_filename[5:]}"
 summary_output_path = PATH_SUMMARY / summary_output_filename
 
-# Check if the output file already exists
-if summary_output_path.exists():
-    print(f"\n*** Skipping {summary_output_filename} ***")
-    print(f"  Output file already exists at: {summary_output_path}")
-else:
-    print(f"  ...Exporting to {summary_output_filename}")
-    df_summary.to_csv(summary_output_path, index=False)
-    print("  Export complete.")
+print(f"  ...Exporting to {summary_output_filename}")
+df_summary.to_csv(summary_output_path, index=False)
+print("  Export complete.")

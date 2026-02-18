@@ -1,6 +1,6 @@
 Project: Monitoring and Reporting
 Indicator Name: Income_2
-Export Location: Vibrant and Inclusive Places\\Economy\\Income
+Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income
 Folder: Income Categories
 Sample: PUMS
 Estimate: ACS5

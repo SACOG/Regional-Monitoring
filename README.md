@@ -3,7 +3,7 @@ The Regional Progress Report tracks change across economic growth, development, 
 
 This repository contains a majority of the Python code used to collect, process, and interpret the data required for the report and dashbaord.  
 
-__Note from the owner__:  (For the data sources that have an API) The data pipelines built for regional monitoring can be used by anyone who would like to streamline their approach to data collection using an API with Python.  The data processing step is geared towards how SACOG wants to track indicators (specific estimate groupings, inflation adjustments, income brackets, race/ethnicity definitions, ...) but can still be used by others as needed.  I tried to build the pipelines in a simple and user-friendly approach that anyone can use with some practice.
+__Note from the owner__:  (For the data sources that have an API) The data pipelines built for regional monitoring can be used by anyone who would like to streamline their approach to data collection using an API with Python.  The data processing step is geared towards how SACOG wants to track indicators (specific estimate groupings, inflation adjustments, income brackets, race/ethnicity definitions, ...) but can still be used by others as needed.  I tried to build the pipelines in a simple and user-friendly approach that anyone can use with some practice.  I use Visual Studio Code or RStudio for all programming needs.
 
 
 ## Repository organization:
@@ -11,14 +11,10 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
 (1) [__Data__](https://github.com/SACOG/Regional-Monitoring/tree/main/Indicator_Gen/Data):
 - This folder contains all code used to import/process data used for regional monitoring (pipelines for data sources with an API)
 - Each data source has their own folder
-- Data sources with an API available: Census Bureau, BLS, EPA, and EIA
-    - Data pipeline:
-        1) Importing
-        2) Processing
-      
+- Data sources with an API available: Census Bureau, BLS, EPA, and EIA (pipeline includes an importing/processing and supporting .py files)
       *Some code is specific for SACOG needs (i.e. file paths, group by statements, etc...)
 - Data sources without an API available: TIMS, DOF, RTIS, Zillow, ... (technically, Zillow has an API, SACOG just doesn't meet the terms of use requirements)
-      - These data sources typically have one "processing" script, since we have no way of importing the data through an API (we download the data manually and store locally or on our SQL server)
+      *These data sources typically have one "processing" script, since we have no way of importing the data through an API (we download the data manually and store locally or on our SQL server)
 
 (2) [__config__](https://github.com/SACOG/Regional-Monitoring/tree/main/Indicator_Gen/config):
 - These folders contain all necessary files needed to configure a data pipeline located in the data folder
@@ -30,15 +26,12 @@ __Note from the owner__:  (For the data sources that have an API) The data pipel
     - [about.yaml](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/about.yaml) - a _yaml_ file used to create the documentation files associated with each indicator
     - [functions.py](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/functions.py) - a python file with general user defined functions that all data sources utilize
     - [plot.py](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/config/plot.py) - a python file with general user defined functions for standardizing plotly charts
- - Data source __config__ folder:
-    - "data_source.xlsx" - a workbook that initializes the data pipeline (requires user to set which geographies, estimates, years, ... are needed to make the API request) (for example, "census.xlsx" or "bls.xlsx")
-    - "data_source.py" - a python script with user defined functions that the specific data source requires (for example, "census.py" or "bls.py")
+ - Most data sources also have there own __config__ folder which can contain files specific to each data source (.py, .xlsx, or .csv usually) preliminary steps needed for each data release, as well as other helpful documentation.
 
 (3) [__AGOL Dashboard__](https://github.com/SACOG/Regional-Monitoring/tree/main/Indicator_Gen/AGOL%20Dashboard):
-- This folder contains all code that is used to build the plots/charts used in the online public-facing AGOL dashboard
-- The _plotly_ library is used for all data visualizations
+- This folder contains all code that is used to build the plotly plots/charts used in the online public-facing AGOL dashboard
 - Each data source has their own notebook
-- Each plot is exported as an _html_ file to our internal server, which is then linked to the dashboard
+- Each plot is exported as an _html_ file to our internal server, which is then embeded onto the dashboard
 
 
 ## How to use data pipeline for data sources with an API:
@@ -55,7 +48,7 @@ Open the [census.xlsx](https://github.com/SACOG/Regional-Monitoring/blob/main/In
 
 Open the [census.yaml](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/Data/Census/config/census.yaml) file.  This helps organize indicators by project and where to export the file, what sample they come from, the number of variables, whether to calculate percentages by the user defined groups, and what the desired margin of error threshold is.  This config file also has parameters for each sample and geography level, like years available and which geography to use for importing.  The user needs to make sure this is configured properly if setting up a new indicator.
 
-After checking/modifying the configurations files, run the Python script [step01__request_census.py](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/Data/Census/1__request_census.py).  The code imports the configuration files to form the API request.  Here is an example:
+After checking/modifying the configurations files, run the Python script [1__request_census.py](https://github.com/SACOG/Regional-Monitoring/blob/main/Indicator_Gen/Data/Census/1__request_census.py).  The code imports the configuration files to form the API request.  Here is an example:
 1.	Which project are you pulling data for? – __Monitoring and Reporting__
 2.	Which indicator do you need to rerun? – __Commute_1__
 3.	Which estimate do you want to pull data from? – __ACS5__

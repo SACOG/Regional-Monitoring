@@ -1,0 +1,15 @@
+
+Indicators:
+  Monitoring and Reporting:
+    Pop_1:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
+      folder: 'Total Pop'
+      sample: 'DOF'
+    Pop_2:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
+      folder: 'Growth Rate'
+      sample: 'DOF'
+    Pop_5:
+      sp_location: 'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
+      folder: 'CA Regions'
+      sample: 'DOF'

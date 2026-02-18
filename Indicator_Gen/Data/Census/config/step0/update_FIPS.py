@@ -1,7 +1,7 @@
 
 print(); print(); print()
 
-export=False
+EXPORT=True
 
 
 # Workspace -----------------------------------------------------------------------------------------------------------
@@ -42,20 +42,20 @@ with open(FILE_API, 'r') as file:
 
 
 
-year_start = 2023
-year_end   = 2023
-years_to_import = range(year_start, year_end+1)
-years_to_import = [2000, 2010, 2020]
+START_YEAR = 2009
+END_YEAR   = 2024
+years_to_import = range(START_YEAR, END_YEAR+1)
+# years_to_import = [2000, 2010, 2020]
 
 
 
-counties=True
-msa=False
-places=False
-congressional_districts=False
-state_legislative_districts_upper=False
-state_legislative_districts_lower=False
-puma=False
+COUNTIES=False
+MSA=True
+PLACES=False
+CD=False
+SLDU=False
+SLDL=False
+PUMA=False
 
 
 
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 
 
-    if counties:
+    if COUNTIES:
 
         print()
         print('Counties ------------------------------------------------------------------------------------------------------------------------')
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         display(df_counties)
 
 
-        if export:
+        if EXPORT:
             df_counties.to_csv(PATH_CSV / 'CountyFIPS.csv', index=False)
 
 
@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
 
 
-    if msa:
+    if MSA:
 
         print()
         print('MSA ------------------------------------------------------------------------------------------------------------------------')
@@ -202,8 +202,8 @@ if __name__ == '__main__':
 
             
         df_msa['City' ] = df_msa['NAME'].apply(re_extract_city )
-        df_msa['State'] = df_msa['NAME'].apply(re_extract_state)
-        df_msa['Abbrv'] = df_msa['City'] + ', ' + df_msa['State']
+        df_msa['STATE'] = df_msa['NAME'].apply(re_extract_state)
+        df_msa['Abbrv'] = df_msa['City'] + ', ' + df_msa['STATE']
 
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype=str)
         df_fips = post.clean_fips(df_fips)
@@ -262,7 +262,7 @@ if __name__ == '__main__':
         df_msa = df_msa.sort_values(['STATEFP', 'Abbrv', 'Year'], ascending=[True, True, False])
         df_msa = df_msa.dropna()
 
-        if export:
+        if EXPORT:
             df_msa.to_csv(PATH_CSV / 'MSAcodes.csv')
 
 
@@ -276,7 +276,7 @@ if __name__ == '__main__':
 
 
 
-    if places:
+    if PLACES:
 
         print()
         print('Census Designated Places ------------------------------------------------------------------------------------------------------------------------')
@@ -333,7 +333,7 @@ if __name__ == '__main__':
             
         df_cdp['NAME'] = df_cdp['NAME'].apply(func.remove_post_comma)
 
-        if export:
+        if EXPORT:
             df_cdp.to_csv(PATH_CSV / 'CDPcodes.csv', index=False)
 
 
@@ -346,7 +346,7 @@ if __name__ == '__main__':
 
 
 
-    if congressional_districts:
+    if CD:
 
         print()
         print('Congressional Districts ------------------------------------------------------------------------------------------------------------------------')
@@ -398,7 +398,7 @@ if __name__ == '__main__':
         df_cd = df_cd.sort_values(['Year', 'state', 'congressional district'], ascending = [False, True, True])
 
 
-        if export:
+        if EXPORT:
             df_cd.to_csv(PATH_CSV / 'CDcodes.csv')
 
 
@@ -413,7 +413,7 @@ if __name__ == '__main__':
 
 
 
-    if state_legislative_districts_upper:
+    if SLDU:
 
         print()
         print('State Legislative Upper Districts ------------------------------------------------------------------------------------------------------------------------')
@@ -474,7 +474,7 @@ if __name__ == '__main__':
         df_sldu = pd.concat(list_df_states)
         df_sldu  = df_sldu.sort_values(['Year', 'state', 'state legislative district (upper chamber)'], ascending = [False, True, True])
 
-        if export:
+        if EXPORT:
             df_sldu.to_csv(PATH_CSV / 'SLDUcodes.csv')
 
         print()
@@ -484,7 +484,7 @@ if __name__ == '__main__':
 
 
 
-    if state_legislative_districts_lower:
+    if SLDL:
 
         print()
         print('State Legislative Lower Districts ------------------------------------------------------------------------------------------------------------------------')
@@ -548,7 +548,7 @@ if __name__ == '__main__':
         df_sldl = df_sldl.sort_values(['Year', 'state', 'state legislative district (lower chamber)'], ascending = [False, True, True])
 
 
-        if export:
+        if EXPORT:
             df_sldl.to_csv(PATH_CSV / 'SLDLcodes.csv')
 
 
@@ -600,7 +600,7 @@ if __name__ == '__main__':
     #     df_puma = df_puma.merge(df_puma_names, on = ['STATEFP', 'PUMA5CE', 'Years'], how = 'left')
 
 
-    #     if export:
+    #     if EXPORT:
     #         df_puma.to_csv(PATH_CSV / 'PUMAcodes.csv')
 
 

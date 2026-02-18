@@ -1,16 +1,10 @@
 
 
-
-
 '''
 
-Functions:
-
-load_yaml()
-api_request_params()
+Note: pre.py has functions to help the end user set up the API request
 
 '''
-
 
 
 import numpy as np
@@ -87,6 +81,7 @@ def api_request_params(yaml_census, rerun):
         num_vars    = yaml_census['Indicators'][project][indicator]['number_of_variables']
         percentages = yaml_census['Indicators'][project][indicator]['percentages'        ]
         weighted_by = yaml_census['Indicators'][project][indicator]['weighted_by'        ]
+        adjust_cpi  = yaml_census['Indicators'][project][indicator]['adjust_cpi'         ]
         metric      = yaml_census['Indicators'][project][indicator]['metric'             ]
         if sample_type != 'LEHD':
             years_to_import = years_to_import.split(', ')
@@ -97,24 +92,49 @@ def api_request_params(yaml_census, rerun):
 
     else:
 
-        print('---------------------------------------------------------------------------------------------------------------------------------------')
-        print()
-        print('Projects available: ')
-        display(yaml_census['Project']); print()
-        print('Which project are you pulling data for?'); print()
-        project = input()
-        assert project in yaml_census['Project'], 'Unacceptable input, please choose from options displayed above'
-        print()
-        print('---------------------------------------------------------------------------------------------------------------------------------------')
+        while True:
+            try:
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+                print()
+                print('Projects available: ')
+                display(yaml_census['Project']); print()
+                print('Which project are you pulling data for?'); print()
+                project = input()
+                if project in yaml_census['Project']:
+                    print()
+                    break
+                else:
+                    print()
+                    print("Invalid choice. Please try again.")
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(yaml_census['Project'])
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
 
-        print()
-        print('Indicators available:'); print()
-        display(list(yaml_census['Indicators'][project].keys())); print()
-        print('Which indicator do you need to rerun?'); print()
-        indicator = input()
-        assert indicator in list(yaml_census['Indicators'][project].keys()), 'Unacceptable input, please choose from options displayed above'
-        print()
-        print('---------------------------------------------------------------------------------------------------------------------------------------')
+        while True:
+            try:
+                print()
+                print('Indicators available:'); print()
+                display(list(yaml_census['Indicators'][project].keys())); print()
+                print('Which indicator do you need to rerun?'); print()
+                indicator = input()
+                if indicator in list(yaml_census['Indicators'][project].keys()):
+                    print()
+                    break
+                else:
+                    print()
+                    print("Invalid choice. Please try again.")
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(list(yaml_census['Indicators'][project].keys()))
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+                
 
         export_loc  = yaml_census['Indicators'][project][indicator]['sp_location'        ]
         folder      = yaml_census['Indicators'][project][indicator]['folder'             ]
@@ -122,84 +142,150 @@ def api_request_params(yaml_census, rerun):
         num_vars    = yaml_census['Indicators'][project][indicator]['number_of_variables']
         percentages = yaml_census['Indicators'][project][indicator]['percentages'        ]
         weighted_by = yaml_census['Indicators'][project][indicator]['weighted_by'        ]
+        adjust_cpi  = yaml_census['Indicators'][project][indicator]['adjust_cpi'         ]
         metric      = yaml_census['Indicators'][project][indicator]['metric'             ]
 
-        print()
-        display(yaml_census['Indicators'][project][indicator])
-        sample_types = yaml_census['Indicators'][project][indicator]['sample']
-        if isinstance(sample_types, list):
-            print('Samples available:')
-            display(sample_types); print()
-            print('Which sample do you want to pull data from?')
-            sample_type = input()
-            assert sample_type in sample_types, 'Unacceptable input, please choose from options displayed above'
-        else:
-            sample_type = yaml_census['Indicators'][project][indicator]['sample']
-
-        print()
-        print('Estimates available:')
-        display(list(yaml_census['Samples'][sample_type].keys())); print()
-        print('Which estimate do you want to pull data from?'); print()
-        estimate = input()
-        assert estimate in list(yaml_census['Samples'][sample_type].keys()), 'Unacceptable input, please choose from options displayed above'
-        print()
-        print('---------------------------------------------------------------------------------------------------------------------------------------')
-
-
-        print()
-        print('Geographies available:'); print()
-        display(yaml_census['Samples'][sample_type][estimate]['geographies_available']); print()
-        print('Which geography do you want to pull data for?'); print()
-        geography = input()
-        assert geography in yaml_census['Samples'][sample_type][estimate]['geographies_available'], 'Unacceptable input, please choose from options displayed above'
-        print()
-        print('---------------------------------------------------------------------------------------------------------------------------------------')
-
-        print()
-        if sample_type != 'LEHD':
-            print('Years available:')
-            display(yaml_census['Samples'][sample_type][estimate]['years_available']); print()
-            print('Do you want to pull data for all years available?  Select Yes/No: '); print()
-            all_years = input()
-            if all_years == 'Yes':
-                years_to_import = yaml_census['Samples'][sample_type][estimate]['years_available']
-                years = ', '.join([str(year) for year in years_to_import])
-            elif all_years == 'No':
-                print()
-                print('Please type which years you want to pull data from, separated by commas:'); print()
-                years = input()
-                if ',' in years:
-                    years_to_import = years.split(', ')
-                    years_to_import = [int(year) for year in years_to_import]
+        while True:
+            print()
+            # display(yaml_census['Indicators'][project][indicator])
+            sample_types = yaml_census['Indicators'][project][indicator]['sample']
+            try:
+                if isinstance(sample_types, list):
+                    print('Samples available:')
+                    display(sample_types); print()
+                    print('Which sample do you want to pull data from?')
+                    sample_type = input()
+                    if sample_type in sample_types:
+                        print()
+                        break
+                    else:
+                        print()
+                        print("Invalid choice. Please try again.")
+                    print()
+                    print('---------------------------------------------------------------------------------------------------------------------------------------')
                 else:
-                    years_to_import = [int(years)]
-            else:
-                assert all_years in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
-            
-            print()
-            year_end   = np.max(years_to_import)
-            year_start = np.min(years_to_import)
-        else:
-            print()
-            print("LEHD organizes data quarterly and the API requires a 'timeseries' call.")
-            years_to_import = 'timeseries'
-            years = 'timeseries'
-            year = 'timeseries' # TODO: might need to include this on return statement for LEHD
-            print()
+                    sample_type = yaml_census['Indicators'][project][indicator]['sample']
+                    break
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(sample_types)
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
 
+        while True:
+            try:
+                print()
+                print('Estimates available:')
+                display(list(yaml_census['Samples'][sample_type].keys())); print()
+                print('Which estimate do you want to pull data from?'); print()
+                estimate = input()
+                if estimate in list(yaml_census['Samples'][sample_type].keys()):
+                    print()
+                    break
+                else:
+                    print()
+                    print("Invalid choice. Please try again.")
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(list(yaml_census['Samples'][sample_type].keys()))
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+
+        while True:
+            try:
+                print()
+                print('Geographies available:'); print()
+                display(yaml_census['Samples'][sample_type][estimate]['geographies_available']); print()
+                print('Which geography do you want to pull data for?'); print()
+                geography = input()
+                if geography in yaml_census['Samples'][sample_type][estimate]['geographies_available']:
+                    print()
+                    break
+                else:
+                    print()
+                    print("Invalid choice. Please try again.")
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(yaml_census['Samples'][sample_type][estimate]['geographies_available'])
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+
+
+        while True:
+            try:
+                print()
+                if sample_type != 'LEHD':
+                    print('Years available:')
+                    display(yaml_census['Samples'][sample_type][estimate]['years_available']); print()
+                    print('Do you want to pull data for all years available?  Select Yes/No: '); print()
+                    all_years = input()
+                    if all_years == 'Yes':
+                        years_to_import = yaml_census['Samples'][sample_type][estimate]['years_available']
+                        years = ', '.join([str(year) for year in years_to_import])
+                    elif all_years == 'No':
+                        print()
+                        print('Please type which years you want to pull data from, separated by commas:'); print()
+                        years = input()
+                        if ',' in years:
+                            years_to_import = years.split(', ')
+                            years_to_import = [int(year) for year in years_to_import]
+                        else:
+                            years_to_import = [int(years)]
+                    if all_years in ['Yes', 'No']:
+                        print()
+                        year_end   = np.max(years_to_import)
+                        year_start = np.min(years_to_import)
+                        break
+                    else:
+                        print()
+                        print("Invalid choice. Please try again.")
+                else:
+                    print()
+                    print("LEHD organizes data quarterly and the API requires a 'timeseries' call.")
+                    years_to_import = 'timeseries'
+                    years = 'timeseries'
+                    year = 'timeseries' # TODO: might need to include this on return statement for LEHD
+                    print()
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(['Yes', 'No'])
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
+
+            
 
         import_tab = yaml_census['Import Geographies'][geography]
 
         print('---------------------------------------------------------------------------------------------------------------------------------------')
 
-        print()
-        if sample_type not in ['LEHD', 'DEC']:
-            print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
-            margin_of_error = input()
-        else:
-            print(); print('LEHD has margin of error terms available but not through API.  DEC has no margin of error terms available')
-            margin_of_error = 'No'
-        assert margin_of_error in ['Yes', 'No'], "Unacceptable input, please type 'Yes' or 'No'"
+        while True:
+            try:
+                print()
+                if sample_type not in ['LEHD', 'DEC']:
+                    print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
+                    margin_of_error = input()
+                    if margin_of_error in ['Yes', 'No']:
+                        print()
+                        break
+                    else:
+                        print()
+                        print("Invalid choice. Please try again.")
+                else:
+                    print(); print('LEHD has margin of error terms available but not through API.  DEC has no margin of error terms available')
+                    margin_of_error = 'No'
+                    print()
+                    print('---------------------------------------------------------------------------------------------------------------------------------------')
+            except ValueError:
+                print()
+                print("Invalid choice. Please choose from options outlined here: ");print(['Yes', 'No'])
+                print()
+                print('---------------------------------------------------------------------------------------------------------------------------------------')
 
         file_run_set = Path(__file__).parent / 'runs' / f'{indicator}.txt'
         with open(file_run_set, 'w') as f:
@@ -213,33 +299,60 @@ def api_request_params(yaml_census, rerun):
             f.write(f"Years Imported: {years}\n")
             f.write(f"Import Tab: {import_tab}\n")
             f.write(f"Margin of Error: {margin_of_error}\n")
+            
+            
+    if margin_of_error == 'Yes': margin_of_error=True
+    else: margin_of_error=False
 
-    return project, indicator, sample_type, estimate, geography, years_to_import, year_start, year_end, import_tab, margin_of_error, export_loc, folder, MOE_thresh, num_vars, percentages, weighted_by, metric
+    if percentages == 'Yes': percentages=True
+    else: percentages=False
+
+    params = {
+        'project': project,
+        'indicator': indicator,
+        'estimate': estimate,
+        'sample': sample_type,
+        'geo': geography,
+        'years_to_import': years_to_import,
+        'start_year': year_start,
+        'end_year': year_end,
+        'import_tab': import_tab,
+        'moe': margin_of_error,
+        'moe_thresh': MOE_thresh,
+        'num_vars': num_vars,
+        'metric': metric,
+        'pct': percentages,
+        'weight': weighted_by,
+        'adjust_cpi': adjust_cpi,
+        'export_loc': export_loc,
+        'folder': folder
+    }
+
+    return params
 
 
 
+def set_download_name(params):
 
-def set_download_name(indicator, estimate, sample_type, geography, margin_of_error):
-
-    if geography == 'PUMA':
-        estimate = re.sub('ACS', 'PUMS', estimate)
-    if sample_type == 'SUBJECT':
-        estimate = re.sub('ACS', 'SUBJECT', estimate)
-    if sample_type == 'DP':
-        estimate = re.sub('ACS', 'DP', estimate)
+    if params['geo'] == 'PUMA':
+        params['estimate'] = re.sub('ACS', 'PUMS', params['estimate'])
+    if params['sample'] == 'SUBJECT':
+        params['estimate'] = re.sub('ACS', 'SUBJECT', params['estimate'])
+    if params['sample'] == 'DP':
+        params['estimate'] = re.sub('ACS', 'DP', params['estimate'])
     
-    if margin_of_error == 'No':
+    if params['moe'] == 'No':
         end = 'NoME_raw.csv'
     else:
         end = 'raw.csv'
 
-    if sample_type == 'LEHD':
-        export_name = f"{indicator}_{geography}_{sample_type}_{end}"
+    if params['sample'] == 'LEHD':
+        export_name = f"{params['indicator']}_{params['geo']}_{params['sample']}_{end}"
     else:
-        export_name = f"{indicator}_{geography}_{estimate}_{end}"
+        export_name = f"{params['indicator']}_{params['geo']}_{params['estimate']}_{end}"
     
     print(); print()
-    print(f"Exporting {export_name} to the following location: ")
+    print(f"{export_name} can be found in the following folder: ")
     print(PATH_ORIG)
     print()
 

@@ -1,3 +1,10 @@
+"""
+Docstring for Indicator_Gen.Data.RITIS.combine_yearly_tables
+Author: Tenoru
+Date: December 2025
+This script calculates system-wide congestion metrics as well as tmc-level metrics for every YEAR available in the specified input directory and saves them to csvs in the specified output directories.  
+If using this for Congestion 2 monthly indicator just run master_monthly.py instead.
+"""
 export=False
 
 from pathlib import Path
@@ -54,17 +61,14 @@ PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Mon
 PATH_CONGESTION = PATH_SP / 'Data' / 'Safe Equitable Resilient Infrastructure' / 'Congestion'
 PATH_PHED  = PATH_CONGESTION / 'RITIS' / 'PHED'
 PATH_LOTTR = PATH_CONGESTION / 'RITIS' / 'LOTTR'
-#PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
-## Format csv names
-# clean_names.clean_files(PATH_IDRIVE) # Assuming this is a local utility
+clean_names.clean_files(PATH_IDRIVE) 
 
 
 # ====================================================================
-# Functions (Refined)
+# Functions
 # ====================================================================
 
-# Removed 'calc_freeflow_speed' as its logic is now vectorized in 'process_year_optimized'
 
 def process_year_optimized(df_traffic_year, df_tmc, year_str):
     """
@@ -100,10 +104,10 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     # Calculate percentiles efficiently by f_system group
     fw_mask = df_ff['f_system'].isin([1.0, 2.0])
     
-    # Freeways (1,2) -> 85th percentile
+    # Take the 85th percentile of freeway speeds during free-flow period for freeway
     ff_fw = df_ff[fw_mask].groupby('tmc_code', observed=True)['speed'].quantile(0.85)
     
-    # Arterials (other) -> 60th percentile
+    # Take the 60th percentile of arterial speeds during free-flow period for freeway
     ff_art = df_ff[~fw_mask].groupby('tmc_code', observed=True)['speed'].quantile(0.60)
     
     # Combine results
@@ -122,8 +126,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     mask_weekday = df_base['day_of_week'].le(4)
     df_weekday = df_base[mask_weekday].copy()
 
-    # Harmonic Mean calculation: N / Sum(1/v). We calculate sum(1/v) inside agg.
-    # IMPROVEMENT: Calculate sum(1/v) directly inside agg to avoid creating a large 'inv_speed' column.
+    # Harmonic Mean calculation: N / Sum(1/v)
     hourly_agg = df_weekday.groupby(['tmc_code', 'hour'], observed=True)['speed'].agg(
         total_epochs_hr='count',
         sum_inv_speed=lambda x: np.sum(1.0 / x)
@@ -184,7 +187,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     )
     final['year'] = year_str
     
-    # --- System Metrics (CORRECTED) ---
+    # --- System Metrics ---
     valid = (final['havg_spd_worst4hrs'] > -1) & (final['ff_speed_art60thp'] > -1)
     congested = (final['congratio_worst4hrs'] < 0.6) & valid
     
@@ -193,7 +196,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
     obs_used_for_congestion = int(final.loc[final['epochs_worst4hrs'] > 0, 'epochs_worst4hrs'].sum())
     
     sys_metrics = {
-        'year': year_str,
+        'year_or_month': year_str,
         'total_nhs_dirmiles': final.loc[valid, 'miles'].sum(),
         'congested_miles': final.loc[congested, 'miles'].sum(),
         'num_valid_tmcs': valid.sum(),
@@ -206,7 +209,7 @@ def process_year_optimized(df_traffic_year, df_tmc, year_str):
 
 
 # ====================================================================
-# Main Processing Loop (No Changes Needed Here)
+# Main Processing Loop
 # ====================================================================
 
 all_system_metrics = []
@@ -304,9 +307,7 @@ for zip_path in zip_files:
             writer.close()
         print("  Finished partitioning.")
 
-        # -----------------------------------------
-        # STEP 3 *MUST REMAIN INSIDE TEMP DIR BLOCK*
-        # -----------------------------------------
+        # --- 3. Read parquet files to pandas and compute metrics ---
         print("  Loading full year data from partitioned files...")
 
         try:
@@ -333,14 +334,13 @@ for zip_path in zip_files:
     
 
 # ====================================================================
-# Final Summary Output (No Changes Needed Here)
+# Final Summary Output
 # ====================================================================
 
 if all_system_metrics:
     print("\n\n*** Summary of All Processed Years ***")
     df_summary = pd.DataFrame(all_system_metrics)
-    # Ensure this column list matches the keys returned by process_year_optimized
-    df_summary = df_summary[['year', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
+    df_summary = df_summary[['year_or_month', 'total_nhs_dirmiles', 'congested_miles', 'pct_miles_congested', 'tmcs_insufficient_data', 'num_valid_tmcs', 'obs_used_for_congestion']]
     print(df_summary.to_string(index=False, float_format="%.2f"))
     print("\nConcatenating all yearly reports...")
     all_final = pd.concat(all_final_list, ignore_index=True)
@@ -351,26 +351,20 @@ else:
 # ====================================================================
 # Export
 # ====================================================================    
-min_time = min(df_summary['year'])
-max_time = max(df_summary['year'])
+min_time = min(df_summary['year_or_month'])
+max_time = max(df_summary['year_or_month'])
 base_filename = f"Final_Congestion_{min_time}_to_{max_time}_{tp_dict[vehicle_class]}_Yearly.csv"
 
 output_path = PATH_FINAL / f"{base_filename}"
-if output_path.exists():
-    print(f"\n*** Skipping {base_filename} ***")
-    print(f"  Output file already exists at: {output_path}")
-else:
-    print(f"  ...Exporting to {output_path}")
-    all_final.to_csv(output_path, index=False)
-    print("  Export complete.")
+
+print(f"  ...Exporting to {output_path}")
+all_final.to_csv(output_path, index=False)
+print("  Export complete.")
 
 summary_output_filename = f"Summary{base_filename[5:]}"
 summary_output_path = PATH_SUMMARY / summary_output_filename
 
-if summary_output_path.exists():
-    print(f"\n*** Skipping {summary_output_filename} ***")
-    print(f"  Output file already exists at: {summary_output_path}")
-else:
-    print(f"  ...Exporting to {summary_output_filename}")
-    df_summary.to_csv(summary_output_path, index=False)
-    print("  Export complete.")
+
+print(f"  ...Exporting to {summary_output_filename}")
+df_summary.to_csv(summary_output_path, index=False)
+print("  Export complete.")

@@ -3,7 +3,7 @@ print(); print(); print()
 
 
 
-export=True
+EXPORT=True
 
 
 
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     print('URL table: ')
     display(df_url)
 
-    if export:
+    if EXPORT:
         file_csv = PATH_CSV / 'census_url.csv'
         df_url.to_csv(file_csv, index=False)
 

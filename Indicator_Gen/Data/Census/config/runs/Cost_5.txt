@@ -2,9 +2,9 @@ Project: Monitoring and Reporting
 Indicator Name: Cost_5
 Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost
 Folder: Home Ownership
-Sample: DEC
-Estimate: DEC
-Geography: Counties
-Years Imported: 2000
-Import Tab: Counties
-Margin of Error: No
+Sample: ACS
+Estimate: ACS1
+Geography: National
+Years Imported: 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+Import Tab: States
+Margin of Error: Yes

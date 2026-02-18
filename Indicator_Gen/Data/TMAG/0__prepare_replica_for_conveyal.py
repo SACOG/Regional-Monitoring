@@ -8,12 +8,11 @@ Conveyal requires simple shapefiles (speed needs to be in MPH, only necessary co
 '''
 
 
-export=False
+EXPORT=False
 
 
 # Workspace -------------------------------------------------------------------------------------------------------------------------------------------
 
-# Packages
 from pathlib import Path
 import os
 import pandas as pd
@@ -23,12 +22,10 @@ from scipy.stats import hmean
 from IPython.display import display
 
 
-# File paths
-path_rep = Path(r'I:\Projects\Josh\Geospatial Data\Replica\qtr-hourly-speeds_2024')
-path_con = Path(r'I:\Projects\Josh\Geospatial Data\Conveyal')
+PATH_REP = Path(r'I:\Projects\Josh\Geospatial Data\Replica\qtr-hourly-speeds_2024')
+PATH_CON = Path(r'I:\Projects\Josh\Geospatial Data\Conveyal')
 
 
-# User defined functions
 def clean_replica_for_conveyal(gdf):
 
     crs_ft = 'EPSG:2226'
@@ -58,7 +55,7 @@ def clean_replica_for_conveyal(gdf):
 
 if __name__ == '__main__':
 
-    list_folders = [folder for folder in path_rep.iterdir() if folder.is_dir()]
+    list_folders = [folder for folder in PATH_REP.iterdir() if folder.is_dir()]
     list_gdf = []
 
     for folder in tqdm(list_folders):
@@ -72,20 +69,20 @@ if __name__ == '__main__':
         gdf = clean_replica_for_conveyal(gdf)
         list_gdf.append(gdf)
 
-        if export:
-            path_con_new = path_con / f'{shapefile.stem}__clean'
-            os.makedirs(path_con_new, exist_ok=True)
-            shapefile_out = path_con_new / f'{shapefile.stem}__clean.shp'
+        if EXPORT:
+            PATH_CON_new = PATH_CON / f'{shapefile.stem}__clean'
+            os.makedirs(PATH_CON_new, exist_ok=True)
+            shapefile_out = PATH_CON_new / f'{shapefile.stem}__clean.shp'
             gdf.to_file(shapefile_out)
 
 
     gdf = pd.concat(list_gdf)
     display(gdf.head(3))
 
-    if export:
-        path_con_new = path_con / 'Replica_11__clean'
-        os.makedirs(path_con_new, exist_ok=True)
-        shapefile_out = path_con_new / 'Replica_11__clean.shp'
+    if EXPORT:
+        PATH_CON_new = PATH_CON / 'Replica_11__clean'
+        os.makedirs(PATH_CON_new, exist_ok=True)
+        shapefile_out = PATH_CON_new / 'Replica_11__clean.shp'
         gdf.to_file(shapefile_out)
 
 
