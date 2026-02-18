@@ -1,10 +1,13 @@
 
 
+# TODO:
+# write_ABOUT functions need work on specificity - being able to adjust easily what to label the params['geo']
+
+
 from pathlib import Path
 import pandas as pd
 import re
 from datetime import date
-from xlwt.Workbook import *
 import yaml
 
 from time import perf_counter as perf
@@ -14,9 +17,8 @@ import sqlalchemy as sqla
 
 
 PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
-PATH_CODE    = PATH_GIT / 'Data' / 'Census'
 PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
+PATH_CONFIG  = PATH_GIT / 'Data' / 'Census' / 'config'
 PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
 
@@ -25,12 +27,12 @@ PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 
 
 
-# Writes about page for each indicator
-def write_about(sample_type, indicator, year_start, year_end, geography=None, MOE_thresh=None, estimate=None):
+# Writes about page for each params['indicator']
+def write_about(params):
 
     '''
-    User defined function to create/export about documentation for each indicator
-    Inputs: yaml file, specific indicator inputs (geography, sample type, ...), data frame to export, file paths, ...
+    User defined function to create/export about documentation for each params['indicator']
+    Inputs: yaml file, specific params['indicator'] inputs (params['geo'], sample type, ...), data frame to export, file paths, ...
     Uses user defined inputs to organize .yaml file subset into pandas data frame then exports to excel file sheet
     '''
 
@@ -41,32 +43,35 @@ def write_about(sample_type, indicator, year_start, year_end, geography=None, MO
     
     try:
         with open(path_yaml, 'r') as yaml_file:
-            dt_about = yaml.load(yaml_file, Loader=yaml.SafeLoader)
+            yaml_about = yaml.load(yaml_file, Loader=yaml.SafeLoader)
     except FileNotFoundError:
         print(f"Error: The file at {path_yaml} does not exist.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
-    if estimate is None:
-        df = pd.DataFrame.from_dict(dt_about[sample_type][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
-    elif sample_type == 'LEHD':
-        df = pd.DataFrame.from_dict(dt_about[sample_type][estimate][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
+    if params['estimate'] is None:
+        df = pd.DataFrame([yaml_about[params['sample']][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+    elif params['sample'] == 'LEHD':
+        df = pd.DataFrame([yaml_about[params['sample']][params['estimate']][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
     else:
-        df = pd.DataFrame.from_dict(dt_about[estimate][sample_type][indicator]).T.reset_index().rename(columns = {'index': 'Indicator', 0: indicator})
+        df = pd.DataFrame.from_dict([yaml_about[params['estimate']][params['sample']][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
 
 
-    df.loc[df['Indicator'] == 'Last Updated', indicator] = date.today().strftime('%Y-%m-%d')
-    df.loc[df['Indicator'] == 'Year(s)'     , indicator] = f"{year_start}-{year_end}"
-    if MOE_thresh is not None:
-        df.loc[df['Indicator'] == 'Margin of Error Limit', indicator] = MOE_thresh
+    df.loc[df['Indicator'] == 'Last Updated', params['indicator']] = date.today().strftime('%Y-%m-%d')
+    df.loc[df['Indicator'] == 'Year(s)'     , params['indicator']] = f"{params['start_year']}-{params['end_year']}"
+    if params['moe_thresh'] is not None:
+        df.loc[df['Indicator'] == 'Margin of Error Limit', params['indicator']] = params['moe_thresh']
 
 
     # Old:
-    if geography is not None:
-        df.loc[df['Indicator'] == 'Geography', indicator] = geography
+    if params['geo']:
+        df.loc[df['Indicator'] == 'Geography', params['indicator']] = params['geo']
+
+    if params['geo'] == 'Places':
+        df.loc[df['Indicator'] == 'Geography', params['indicator']] = 'Census Designated Places (Jurisdictions)'
 
     # ## New:
-    # if geography is not None:
+    # if params['geo'] is not None:
     #     dt_geo = {
     #         'Cost_3'      : {'MPO':'Six County Sacramento Region'},
     #         'Cost_5'      : {'MPO':'Six County Sacramento Region'},
@@ -79,10 +84,10 @@ def write_about(sample_type, indicator, year_start, year_end, geography=None, MO
     #                     'Jurisdictions': 'Cities (in California)'                                   }
     #     }
 
-    #     if indicator in dt_geo.keys():
-    #         df.loc[df['Indicator'] == 'Geography', indicator] = dt_geo[indicator][geography]
+    #     if params['indicator'] in dt_geo.keys():
+    #         df.loc[df['Indicator'] == 'Geography', params['indicator']] = dt_geo[params['indicator']][params['geo']]
     #     else:
-    #         df.loc[df['Indicator'] == 'Geography', indicator] = geography
+    #         df.loc[df['Indicator'] == 'Geography', params['indicator']] = params['geo']
 
 
     # Split notes into rows, for visual clarity in about
@@ -94,10 +99,10 @@ def write_about(sample_type, indicator, year_start, year_end, geography=None, MO
     # Finally, we split the notes
     def split_notes(df):
         row_notes = df[df['Indicator'] == 'Notes'].copy()
-        notes = row_notes[indicator].values[0]
+        notes = row_notes[params['indicator']].values[0]
         
         lines = notes.split('\\n')
-        rows_new = [{'Indicator': 'Notes' if i == 0 else '', indicator: line} for i, line in enumerate(lines) if line]
+        rows_new = [{'Indicator': 'Notes' if i == 0 else '', params['indicator']: line} for i, line in enumerate(lines) if line]
         
         df_new = pd.DataFrame(rows_new)
         df_filtered = df[df['Indicator'] != 'Notes']
@@ -110,8 +115,6 @@ def write_about(sample_type, indicator, year_start, year_end, geography=None, MO
     df = split_notes(df)
 
     return df
-
-
 
 
 
@@ -164,71 +167,5 @@ def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
     
     return df
 
-
-
-
-
-# Miscellaneous ----------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-# Unique values - a substitute for list(set(x))
-def unique(list_a):
- 
-    # initialize a null list
-    # traverse for all elements
-        # check if exists in unique_list or not
-
-    unique_list = []
-    for x in list_a:
-        if x not in unique_list:
-            unique_list.append(x)
-
-    return unique_list
-
-
-def setdiff(list_a, list_b):
-    set_a = set(list_a)
-    set_b = set(list_b)
-    in_list_a_but_not_in_list_b = set_a.difference(set_b)
-    return in_list_a_but_not_in_list_b
-
-
-
-# Function to create list of values inbetween range
-def sequence(r1, r2, step):
-    return [item for item in range(r1, r2+1, step)]
-
-
-
-# Remove anything before/after specified string, use regular expression (currently set to remove everything after the first period)
-def remove_post_comma(x, exp=','):
-    try: x = x.split(exp, 1)[0]
-    except: pass
-    return x
-def remove_pre_comma(x, exp=','):
-    try: x = x.split(exp, 1)[1]
-    except: pass
-    return x
-
-
-
-# Moves column to position after specified column
-def move_column_after(df, col_to_move, after_col):
-
-    # Get a list of all column names
-    # Find the index of the column to move and the index of the column to move it after
-    # Remove the column to move from its current position
-    # Insert the column at the new position
-    # Reorder the DataFrame columns using the updated list
-
-    cols = list(df.columns)
-    col_idx = cols.index(col_to_move)
-    after_col_idx = cols.index(after_col)
-    cols.pop(col_idx)
-    cols.insert(after_col_idx + 1, col_to_move)
-
-    return df[cols]
 
 

@@ -8,8 +8,8 @@ the working copy from the Process Map folder
 print(); print()
 
 
-# update = 'About'
-update = 'RHNA'
+# UPDATE = 'About'
+UPDATE = 'RHNA'
 
 
 
@@ -17,13 +17,7 @@ update = 'RHNA'
 
 
 import pandas as pd
-import getpass
 from pathlib import Path
-import os
-import xlwt
-from xlwt.Workbook import *
-from pandas import ExcelWriter
-import xlsxwriter
 import shutil
 from tqdm import tqdm
 import time
@@ -43,6 +37,8 @@ def update_excel_copy(file_master, file_copy):
     with pd.ExcelWriter(file_copy, engine='openpyxl') as writer:
 
         for sheet_name in tqdm(workbook_master.sheet_names):
+            if sheet_name == 'RISK_1':
+                continue
             df = workbook_master.parse(sheet_name)
             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
@@ -56,30 +52,33 @@ def update_excel_copy(file_master, file_copy):
 
 
 if __name__ == '__main__':
-    
 
-    path_sp = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
-
-  
     ## (1)
-    if update == 'About':
+    if UPDATE == 'About':
 
-        path_in = path_sp  / 'Process Revamp' / 'Task 6. Process Map'
-        path_out = path_sp / 'Data'
+        PATH_SP = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
+
+        path_in = PATH_SP  / 'Process Revamp' / 'Task 6. Process Map'
+        path_out = PATH_SP / 'Data'
 
         file_master = path_in  / 'About Indicators.xlsx'
         file_copy   = path_out / 'About Indicators.xlsx'
         update_excel_copy(file_master, file_copy)
 
     ## (2)
-    if update == 'RHNA':
+    if UPDATE == 'RHNA':
+
+        PATH_LOCAL = Path(r'C:\Users\jfontes\Documents\Projects\Local\RHNA\Final Products')
+        PATH_SP = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA' / 'Cycle7' / 'Final Products' 
+
         dict_ = {
             # 'El Dorado' : ['Placerville', 'South Lake Tahoe', 'Unincorporated'],
             # 'Placer'    : ['Auburn', 'Colfax', 'Lincoln', 'Loomis', 'Rocklin', 'Roseville', 'Unincorporated'],
             # 'Sacramento': ['Citrus Heights', 'Elk Grove', 'Folsom', 'Galt', 'Isleton', 'Rancho Cordova', 'Sacramento', 'Unincorporated'],
+            'Sacramento': ['Folsom'],
             # 'Sutter'    : ['Live Oak', 'Yuba City', 'Unincorporated'],
             # 'Yolo'      : ['Davis', 'West Sacramento', 'Winters', 'Woodland', 'Unincorporated'],
-            'Yuba'      : ['Marysville', 'Wheatland', 'Unincorporated']
+            # 'Yuba'      : ['Marysville', 'Wheatland', 'Unincorporated']
         }
 
         for county in dict_.keys():
@@ -89,14 +88,10 @@ if __name__ == '__main__':
             for jurisdiction in tqdm(dict_[county], position=0):
 
                 tqdm.write(jurisdiction)
-
-                path_in = Path(r'C:\Users\jfontes\Documents\Projects\General\RHNA\Final Products')
                 
-                file_master = path_in / county / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
-                file_copy   = path_sp / 'Products' / 'RHNA' / 'Cycle7' / 'Final Products' / county / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
+                file_master = PATH_LOCAL / county / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
+                file_copy   = PATH_SP / county / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
 
                 shutil.copy(file_master, file_copy)
 
                 time.sleep(20)
-
-
