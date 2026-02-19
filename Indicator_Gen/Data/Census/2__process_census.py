@@ -174,16 +174,6 @@ if __name__ == '__main__':
 
 
 
-    ## LEHD ----------
-
-    if params['sample'] == 'LEHD':
-        if params['geo'] == 'Counties':
-            df_census, df_mpo = post.lehd_processing(df_census, params)
-            display(df_census.head(3), df_mpo.head(3))
-        if params['geo'] == 'MSA':
-            df_census = post.lehd_processing(df_census, params)
-            display(df_census.head(3))
-
 
 help.print3()
 
