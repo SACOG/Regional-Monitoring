@@ -34,7 +34,7 @@ UNINCORPORATED=False
 
 ABOUT=True
 UPDATE=False
-SERVER=False
+SERVER=True
 
 
 
@@ -98,9 +98,6 @@ if __name__ == '__main__':
     # Import requested data
     file_in = PATH_ORIG / pre.set_download_name(params)
     df_census = pd.read_csv(file_in)
-    df_census = df_census.rename(columns={'ME':'MOE'})
-    if params['estimate'] != 'DEC':
-        df_census = df_census.dropna().reset_index(drop=True)
     display(df_census.head())
     help.print2()
 

@@ -288,10 +288,11 @@ def acs_merge_weights(df, params):
         file_weights = PATH_WEIGHTS / f'Total_{params['weight']} {params['geo']} {params['estimate']}.xlsx' # _ChamberStudy2026.xlsx
         df_weight = pd.read_excel(file_weights, sheet_name=GEO_SHEETS[params['geo']])
 
-        if params['geo'] == 'MSA': field_id = 'MSA_ID'
+        if params['geo'] == 'MSA': field_id = 'MSA ID'
         else: field_id = 'NAME'
-        
-        df_weight = df_weight[[field_id, 'Year','Race/Ethnicity', params['weight']]]
+
+        df_weight = df_weight[[field_id, 'Year','Race/Ethnicity', params['weight']]].rename(columns={'MSA ID':'MSA_ID'})
+        if params['geo'] == 'MSA': field_id = 'MSA_ID'
         if params['weight'] == 'Population':
             conditions = [
                             (df_weight["Race/Ethnicity"] == 'All'                                           ),
@@ -489,6 +490,7 @@ def acs_calculate_unincorporated(df, params):
 
 
 
+
 def acs_aggregate(df, params):
 
 
@@ -517,7 +519,7 @@ def acs_aggregate(df, params):
     if params['geo'] == 'Places':
         df = acs_calculate_unincorporated(df, params)
 
-    df = df.drop_duplicates()
+    df = df.drop_duplicates().reset_index(drop=True)
     df = df.replace([np.inf, -np.inf, 0], np.nan)
 
     if params['pct']:
@@ -525,7 +527,6 @@ def acs_aggregate(df, params):
             df['Percent'] = df['Total'] / df[df['Race/Ethnicity'] != 'All'].groupby(GEOID_CLEAN[params['geo']] + ['Year'])['Total'].transform('sum')
         if params['num_vars'] > 1:
             df['Percent'] = df['Total'] / df.groupby(GEOID_CLEAN[params['geo']] + ['Year', 'Race/Ethnicity'])['Total'].transform('sum')
-
 
     return df
 
@@ -564,9 +565,9 @@ def sort_table(df, params):
     df = df.drop(['Race/Ethnicity_sort', 'Sort'], axis=1).reset_index(drop=True)
     if 'Percent' in df.columns:
         df = help.move_column_after(df, 'Percent', 'Total')
-    if params['project'] == 'Monitoring and Reporting':
-        if params['geo'] not in ['MSA', 'Places']:
-            df = df.drop('NAME', axis=1)
+    # if params['project'] == 'Monitoring and Reporting':
+    #     if params['geo'] not in ['MSA', 'Places']:
+    #         df = df.drop('NAME', axis=1)
     df = df.rename(columns={'Total': params['metric'], 'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio', 'MSA_ID':'MSA ID'})
 
     return df
@@ -591,7 +592,6 @@ def acs_main(df, params, df_vars):
     
     df = acs_merge_vars_labels(df, params, df_vars)
     df = acs_moe_reshape(df, params)
-
     df = help.clean_fips(df)
 
     if params['adjust_cpi']:
