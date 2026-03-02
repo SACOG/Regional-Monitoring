@@ -123,11 +123,6 @@ def main():
     print(f"Vehicle Class: {vehicle_class}")
     print(f"{'='*70}")
     
-    # Step 1: Create current year table from monthly zips
-    print("\n[STEP 1/4] Creating yearly table from monthly data...")
-    if not run_script(create_yearly_script, 'create_current_year_table.py'):
-        print("\n✗ Pipeline stopped: Could not create yearly table")
-        sys.exit(1)
     
     time.sleep(2)
     

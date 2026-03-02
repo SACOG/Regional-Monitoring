@@ -1,0 +1,171 @@
+# EPA Indicators Configuration
+
+# Projects and their associated indicators
+Project:
+  - 'Monitoring and Reporting'
+  - 'Air Quality'
+
+# Indicator definitions by API source
+Indicators:
+
+  # ===============================================
+  # AQI API Source
+  # ===============================================
+  AQI:
+    Health_3:
+      display_name: 'Air Quality Index (AQI) - Daily Maximum'
+      sp_location: 'Vibrant and Inclusive Places\People and Community\Healthy Places\Health_3 AQI'
+      folder: 'AQI Daily'
+      api_source: 'AQI'
+      root_url: 'https://aqs.epa.gov/data/api/'
+      email: 'tenoru@sacog.org'
+      data_endpoint: 'dailyData'
+      geo_type: 'CBSA'
+      year_range:
+        min: 1999
+        max: 2024
+      available_pollutants:
+        - code: '88101'
+          name: 'PM2.5 (Fine Particulate Matter)'
+        - code: '44201'
+          name: 'Ozone (O3)'
+        - code: '42401'
+          name: 'Nitrogen Dioxide (NO2)'
+        - code: '42602'
+          name: 'Nitrogen Oxide (NOx)'
+        - code: '14129'
+          name: 'Lead (Pb)'
+      available_geographies:
+        - code: '40900'
+          name: 'Sacramento--Roseville, CA (Sacramento MSA)'
+        - code: '49700'
+          name: 'Yuba City, CA (Yuba City MSA)'
+        - code: '39300'
+          name: 'Modesto, CA (Modesto MSA)'
+      processing:
+        aqi_categories:
+          - min: 0
+            max: 50
+            label: 'Good'
+          - min: 51
+            max: 100
+            label: 'Moderate'
+          - min: 101
+            max: 150
+            label: 'Unhealthy for Sensitive Groups'
+          - min: 151
+            max: 200
+            label: 'Unhealthy'
+          - min: 201
+            max: 300
+            label: 'Very Unhealthy'
+          - min: 301
+            max: 500
+            label: 'Hazardous'
+
+    Health_4:
+      display_name: 'Air Quality Index (AQI) - Annual Average'
+      sp_location: 'Vibrant and Inclusive Places\People and Community\Healthy Places\Health_4 AQI'
+      folder: 'AQI Annual'
+      api_source: 'AQI'
+      root_url: 'https://aqs.epa.gov/data/api/'
+      email: 'tenoru@sacog.org'
+      data_endpoint: 'annualData'
+      geo_type: 'CBSA'
+      year_range:
+        min: 1999
+        max: 2024
+      available_pollutants:
+        - code: '88101'
+          name: 'PM2.5 (Fine Particulate Matter)'
+        - code: '44201'
+          name: 'Ozone (O3)'
+        - code: '42401'
+          name: 'Nitrogen Dioxide (NO2)'
+        - code: '14129'
+          name: 'Lead (Pb)'
+      available_geographies:
+        - code: '40900'
+          name: 'Sacramento--Roseville, CA (Sacramento MSA)'
+        - code: '49700'
+          name: 'Yuba City, CA (Yuba City MSA)'
+      processing:
+        aqi_categories:
+          - min: 0
+            max: 50
+            label: 'Good'
+          - min: 51
+            max: 100
+            label: 'Moderate'
+          - min: 101
+            max: 150
+            label: 'Unhealthy for Sensitive Groups'
+          - min: 151
+            max: 200
+            label: 'Unhealthy'
+          - min: 201
+            max: 300
+            label: 'Very Unhealthy'
+          - min: 301
+            max: 500
+            label: 'Hazardous'
+
+  # ===============================================
+  # CAM API Source (Clean Air Markets)
+  # ===============================================
+  CAM:
+    Emissions_1:
+      display_name: 'Power Plant Emissions - SO2 and NOx'
+      sp_location: 'Environmental Quality\Air Quality\Emissions\Power Plants'
+      folder: 'CAM Power Plant Emissions'
+      api_source: 'CAM'
+      root_url: 'https://api.epa.gov/easey/emissions-mgmt/'
+      email: 'tenoru@sacog.org'
+      data_endpoint: 'emissions'
+      geo_type: 'facility'
+      year_range:
+        min: 1990
+        max: 2024
+      available_pollutants:
+        - code: 'SO2'
+          name: 'Sulfur Dioxide (SO2)'
+        - code: 'NOx'
+          name: 'Nitrogen Oxides (NOx)'
+      available_geographies:
+        - code: 'Counties'
+          name: 'Counties'
+        - code: 'States'
+          name: 'States (California only)'
+        - code: 'National'
+          name: 'National (USA)'
+      processing:
+        notes: 'CAM data pipeline not fully implemented yet'
+
+    Emissions_2:
+      display_name: 'Industrial Emissions - Multiple Pollutants'
+      sp_location: 'Environmental Quality\Air Quality\Emissions\Industrial'
+      folder: 'CAM Industrial Emissions'
+      api_source: 'CAM'
+      root_url: 'https://api.epa.gov/easey/emissions-mgmt/'
+      email: 'tenoru@sacog.org'
+      data_endpoint: 'emissions'
+      geo_type: 'facility'
+      year_range:
+        min: 1990
+        max: 2024
+      available_pollutants:
+        - code: 'SO2'
+          name: 'Sulfur Dioxide (SO2)'
+        - code: 'NOx'
+          name: 'Nitrogen Oxides (NOx)'
+        - code: 'CO2'
+          name: 'Carbon Dioxide (CO2)'
+        - code: 'PM'
+          name: 'Particulate Matter (PM)'
+      available_geographies:
+        - code: 'Counties'
+          name: 'Counties'
+        - code: 'States'
+          name: 'States (California only)'
+      processing:
+        notes: 'CAM data pipeline not fully implemented yet'
