@@ -49,8 +49,8 @@ except Exception as e:
 # Header
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.title("📊 Census Data Pipeline")
-    st.markdown("Download data directly - no CLI needed")
+    st.title(" Census Data Pipeline")
+    
 
 st.markdown("---")
 
