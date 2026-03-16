@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 import sys
 
-st.set_page_config(page_title="Census Data Request", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Census Data Request", layout="wide")
 
 st.markdown("""
 <style>
@@ -61,18 +61,18 @@ with col_settings:
     st.header("📋 Configure")
     
     # 1. Project
-    st.subheader("1️⃣ Project")
+    st.subheader("Project")
     projects = yaml_config['Project']
     project = st.selectbox("Which project?", projects, key="proj")
     
     # 2. Indicator
-    st.subheader("2️⃣ Indicator")
+    st.subheader("Indicator")
     indicators = list(yaml_config['Indicators'].get(project, {}).keys())
     indicator = st.selectbox("Which indicator?", indicators, key="ind")
     indicator_config = yaml_config['Indicators'][project][indicator]
     
     # 3. Sample
-    st.subheader("3️⃣ Sample Type")
+    st.subheader("Sample Type")
     sample_options = indicator_config.get('sample', 'ACS')
     if isinstance(sample_options, str):
         sample_options = [sample_options]
@@ -84,17 +84,17 @@ with col_settings:
         sample_type = st.selectbox("Which sample?", sample_options, key="samp")
     
     # 4. Estimate
-    st.subheader("4️⃣ Estimate")
+    st.subheader("Estimate")
     available_estimates = list(yaml_config['Samples'][sample_type].keys())
     estimate = st.selectbox("Which estimate?", available_estimates, key="est")
     
     # 5. Geography
-    st.subheader("5️⃣ Geography")
+    st.subheader("Geography")
     available_geos = yaml_config['Samples'][sample_type][estimate].get('geographies_available', [])
     geography = st.selectbox("Which geography?", available_geos, key="geo")
     
     # 6. Years
-    st.subheader("6️⃣ Years")
+    st.subheader("Years")
     available_years = yaml_config['Samples'][sample_type][estimate].get('years_available', [])
     
     if available_years == ['timeseries']:
@@ -117,7 +117,7 @@ with col_settings:
             years_to_import = [available_years[year_idx]]
     
     # 7. MOE
-    st.subheader("7️⃣ Margin of Error")
+    st.subheader("Margin of Error")
     if sample_type not in ['DEC', 'LEHD']:
         include_moe = st.checkbox("Include MOE?", True, key="moe")
     else:
@@ -206,15 +206,15 @@ with col_btn1:
                 f.write(f"Import Tab: {import_tab}\n")
                 f.write(f"Margin of Error: {'Yes' if include_moe else 'No'}\n")
             
-            st.success(f"✅ Config: {log_file.name}")
+            st.success(f" Config: {log_file.name}")
             
             # Download
             status_placeholder = st.empty()
-            status_placeholder.text("🔄 Downloading...")
+            status_placeholder.text(" Downloading...")
             
             df_census = get.get_data_any(api_key, params)
             
-            st.success("✅ Downloaded!")
+            st.success(" Downloaded!")
             
             col_i1, col_i2, col_i3 = st.columns(3)
             with col_i1:
@@ -242,11 +242,11 @@ with col_btn1:
             st.error(f"❌ Error: {str(e)}")
 
 with col_btn2:
-    if st.button("🔄 Reset", use_container_width=True, key="reset"):
+    if st.button(" Reset", use_container_width=True, key="reset"):
         st.rerun()
 
 with st.sidebar:
-    st.header("ℹ️ Info")
+    st.header(" Info")
     st.markdown("""
     ### Workflow:
     1. Select parameters
@@ -256,7 +256,7 @@ with st.sidebar:
     5. Run processing
     """)
     
-    with st.expander("📊 Stats"):
+    with st.expander(" Stats"):
         st.write(f"**Indicators:** {sum(len(p) for p in yaml_config['Indicators'].values())}")
         st.write(f"**Projects:** {len(projects)}")
 
