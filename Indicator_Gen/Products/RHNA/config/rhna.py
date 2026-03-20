@@ -1,15 +1,5 @@
 
 
-def print2(): print();print()
-def print3(): print();print();print()
-
-
-
-
-EXPORT=True
-
-
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -34,6 +24,12 @@ from openpyxl.styles import Font
 from openpyxl.styles import Border, Side
 border_thin = Side(style='thin')
 # pip install kaleido==0.1.0.post1
+
+
+
+
+
+EXPORT=True
 
 
 PATH_DATA    = Path(r'I:\Projects\Josh\RHNA\Data')
@@ -97,7 +93,7 @@ def dof_import(indicator):
     
     workbooks = os.listdir(PATH_DATA)
     workbooks = [workbook for workbook in workbooks if indicator in workbook]
-    print(); print()
+    print('\n'*2)
     print('Workbooks to import: ', workbooks)     
 
     path_places   = PATH_DATA / f'RHNA_{indicator} Places DOF.xlsx'  
@@ -186,12 +182,12 @@ def chas_import(PATH_DATA, indicator):
     
     workbooks = os.listdir(PATH_DATA)
     workbooks = [workbook for workbook in workbooks if f'RHNA_{indicator}' in workbook]
-    print(); print()
+    print('\n'*2)
     print('Workbooks to import: ', workbooks)
     
-    path_places   = PATH_DATA / f'RHNA_{indicator} Places ACS5.xlsx'  
+    path_places   = PATH_DATA / f'RHNA_{indicator} Places ACS5.xlsx'
     path_counties = PATH_DATA / f'RHNA_{indicator} Counties ACS5.xlsx'
-    path_mpo      = PATH_DATA / f'RHNA_{indicator} MPO ACS5.xlsx'     
+    path_mpo      = PATH_DATA / f'RHNA_{indicator} MPO ACS5.xlsx'
     
     df_places   = pd.read_excel(path_places  , sheet_name='Places'  )
     df_counties = pd.read_excel(path_counties, sheet_name='Counties')
@@ -300,7 +296,9 @@ def hmda_import(years, counties, dtypes):
     '''
     Years can only be from 2018, to 2024. County codes can be found by using the online tool: https://ffiec.cfpb.gov/data-browser/data/2023?category=counties. 
     '''
-    print(''); print('Importing data from HDMA...'); print('')
+    print()
+    print('Importing data from HDMA...')
+    print()
 
     list_df = []
 
@@ -512,19 +510,32 @@ def acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, v
         df_plot = df_places_sub[df_places_sub['Geography'] == jurisdiction]
         df_prod = df_plot.pivot_table(index=['Geography', variable], columns=columns, values=values).reset_index()
 
-        if indicator == 'POPEMP_10': vars_to_sort = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
-        if indicator == 'POPEMP_18': vars_to_sort = ['Age 15-24', 'Age 25-34', 'Age 35-44', 'Age 45-54', 'Age 55-59', 'Age 60-64', 'Age 65-74', 'Age 75-84', 'Age 85+']
-        if indicator == 'POPEMP_19': vars_to_sort = ['Moved in 1999 or earlier', 'Moved in 2000 to 2009', 'Moved in 2010 to 2017', 'Moved in 2018 to 2020', 'Moved in 2021 or later']
-        if indicator == 'POPEMP_22': vars_to_sort = ['Detached single-family homes', 'Attached single-family homes', 'Multi-family housing', 'Mobile homes', 'Boat, RV, van, or other']
-        if indicator == 'HSG_5': vars_to_sort = ['0 bedrooms', '1 bedroom', '2 bedrooms', '3-4 bedrooms', '5 or more bedrooms']
-        if indicator == 'HSG_6': vars_to_sort = ['Lacking kitchen facilities', 'Lacking plumbing facilities']
-        if indicator == 'OVER_6': vars_to_sort = ['0%-30% of income used for housing', '30%-50% of income used for housing', '50% or more of income used for housing', 'Not computed']
-        if indicator == 'LGFEM_1': vars_to_sort = ['1 person household', '2 person household', '3 person household', '4 person household', '5 or more person household']
-        if indicator == 'LGFEM_4': vars_to_sort = ['Married-couple family', 'Female-headed family household', 'Male-headed family household', 'Householders living alone', 'Other non-family households']
-        if indicator == 'LGFEM_5': vars_to_sort = ['Female-headed households without children', 'Female-headed households with children']
-        if indicator == 'SEN_2': vars_to_sort = ['Age 0-17', 'Age 18-64', 'Age 65+']
-        if indicator == 'DISAB_3': vars_to_sort = ['With a disability', 'No disability']
-        if indicator in ['POPEMP_20', 'ELI_3']: vars_to_sort = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or other Pacific Islander', 'Hispanic or Latino', 'Some other race', 'Two or more races', 'White (NH)']
+        if indicator == 'POPEMP_10':
+            vars_to_sort = ['Less than $10k', '$10k to $25k', '$25k to $50k', '$50k to $75k', '$75k or more']
+        if indicator == 'POPEMP_18':
+            vars_to_sort = ['Age 15-24', 'Age 25-34', 'Age 35-44', 'Age 45-54', 'Age 55-59', 'Age 60-64', 'Age 65-74', 'Age 75-84', 'Age 85+']
+        if indicator == 'POPEMP_19':
+            vars_to_sort = ['Moved in 1999 or earlier', 'Moved in 2000 to 2009', 'Moved in 2010 to 2017', 'Moved in 2018 to 2020', 'Moved in 2021 or later']
+        if indicator == 'POPEMP_22':
+            vars_to_sort = ['Detached single-family homes', 'Attached single-family homes', 'Multi-family housing', 'Mobile homes', 'Boat, RV, van, or other']
+        if indicator == 'HSG_5':
+            vars_to_sort = ['0 bedrooms', '1 bedroom', '2 bedrooms', '3-4 bedrooms', '5 or more bedrooms']
+        if indicator == 'HSG_6':
+            vars_to_sort = ['Lacking kitchen facilities', 'Lacking plumbing facilities']
+        if indicator == 'OVER_6':
+            vars_to_sort = ['0%-30% of income used for housing', '30%-50% of income used for housing', '50% or more of income used for housing', 'Not computed']
+        if indicator == 'LGFEM_1':
+            vars_to_sort = ['1 person household', '2 person household', '3 person household', '4 person household', '5 or more person household']
+        if indicator == 'LGFEM_4':
+            vars_to_sort = ['Married-couple family', 'Female-headed family household', 'Male-headed family household', 'Householders living alone', 'Other non-family households']
+        if indicator == 'LGFEM_5':
+            vars_to_sort = ['Female-headed households without children', 'Female-headed households with children']
+        if indicator == 'SEN_2':
+            vars_to_sort = ['Age 0-17', 'Age 18-64', 'Age 65+']
+        if indicator == 'DISAB_3':
+            vars_to_sort = ['With a disability', 'No disability']
+        if indicator in ['POPEMP_20', 'ELI_3']:
+            vars_to_sort = ['American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or other Pacific Islander', 'Hispanic or Latino', 'Some other race', 'Two or more races', 'White (NH)']
 
         df_prod['Sort'] = pd.Categorical(df_prod[variable], vars_to_sort)
         df_prod = df_prod.sort_values(['Sort']).drop(['Geography', 'Sort'], axis=1)
@@ -607,8 +618,6 @@ def acs_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, v
     return df_prod, df_pct
 
 
-
-
 def main_acs(indicator, params):
 
     df_places, df_counties, df_mpo = acs_import(indicator)
@@ -627,11 +636,12 @@ def main_acs(indicator, params):
         df_counties.loc[df_counties['Cost Burden']=='50% or more of income used for housing', 'Cost Burden'] = '50%+ of income used for housing'
         df_mpo     .loc[df_mpo     ['Cost Burden']=='50% or more of income used for housing', 'Cost Burden'] = '50%+ of income used for housing'
 
+
     counties = df_counties['Geography'].unique()
 
     for county in counties:
 
-        print2()
+        print()
         print(county)
         time.sleep(2)
 
@@ -678,7 +688,7 @@ def sort_plot(df_plot, indicator, jurisdiction):
 
     if indicator in ['POPEMP_21', 'POPEMP_23', 'POPEMP_24', 'HSG_2', 'HSG_7', 'HSG_9', 'HSG_11', 'OVER_3', 'OVER_4', 'OVER_5', 'OVER_7',
                      'OVER_8', 'LGFEM_1', 'LGFEM_2', 'LGFEM_3', 'LGFEM_4', 'LGFEM_5', 'SEN_1', 'SEN_3', 'SEN_4', 'DISAB_1', 'DISAB_5',
-                     'HOMELS_1', 'HOMELS_2', 'ELI_2', 'ELI_3', 'ELI_4', 'AFFH_1', 'AFFH_3']:
+                     'HOMELS_1', 'HOMELS_2', 'ELI_2', 'ELI_3', 'ELI_4', 'AFFH_1', 'AFFH_3', 'POPEMP_25']:
         if indicator == 'POPEMP_23':
             df_plot['Household Type'] = df_plot['Household Type'].str.replace(' households', '')
         if indicator == 'POPEMP_24':
@@ -747,7 +757,7 @@ def sort_plot(df_plot, indicator, jurisdiction):
             }
             df_plot['Household Size'] = df_plot['Household Size'].map(var_map)
         if indicator == 'LGFEM_2':
-            df_plot['Sort'] = pd.Categorical(df_plot['Household Size'], ["1 person households", "2 person households", "3-4 person Households", "5 or more person households"])
+            df_plot['Sort'] = pd.Categorical(df_plot['Household Size'], ["1 person households", "2 person households", "3-4 person households", "5 or more person households"])
             df_plot = df_plot.sort_values('Sort').drop('Sort', axis=1)
         if indicator == 'LGFEM_4':
             var_map = {
@@ -841,6 +851,15 @@ def sort_plot(df_plot, indicator, jurisdiction):
                 , 'Population 5 years and over who speak english "not well" or "not at all"': 'Speak english "not well" or "not at all"'
             }
             df_plot['English Proficiency'] = df_plot['English Proficiency'].map(var_map)
+        if indicator == 'POPEMP_25':
+            var_map = {
+                'At Risk of or Experiencing Exclusion': 'At Risk of or<br>Experiencing Exclusion'
+                , 'Susceptible to or Experiencing Displacement':'Susceptible to or<br>Experiencing Displacement'
+                , 'At Risk of or Experiencing Gentrification': 'At Risk of or<br>Experiencing Gentrification'
+                , 'Stable Moderate/Mixed Income':'Stable Moderate/Mixed<br>Income'
+                , 'Other':'Other'
+            }
+            df_plot['Typology'] = df_plot['Typology'].map(var_map)
         
         if 'Sort' in df_plot.columns:
             df_plot = df_plot.drop('Sort', axis=1)
@@ -875,16 +894,12 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
         , 'Other race or multiple races': '#7E587E'
         , 'Black or African American': '#FBB117'
         , 'Asian': '#9DC209'
-        , 'Hispanic or Latino': '#1E90FF'
-        , 'White (NH)': '#151B54'
 
         , 'American Indian or<br>Alaska Native': '#E56717'
         , 'Native Hawaiian or<br>other Pacific Islander': '#006A4E'
         , 'Other race or<br>multiple races': '#7E587E'
         , 'Black or<br>African American': '#FBB117'
-        , 'Asian': '#9DC209'
         , 'Hispanic or<br>Latino': '#1E90FF'
-        , 'White (NH)': '#151B54'
 
         , 'American Indian,<br>Alaska Native,<br>or Indigenous': '#E56717'
         , 'Asian or<br>Asian American': '#9DC209'
@@ -938,16 +953,11 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
         , 'Place of residence': '#9DC209'
         , 'Place of work': '#1F45FC'
 
-        , 'Agriculture & Natural Resources': '#151B54'
         , 'Arts, Recreation, & Other': '#E56717'
-        , 'Construction': '#1E90FF'
         , 'Financial & Leasing': '#7FFFD4'
         , 'Government': "#906E3E"
-        , 'Health & Educational Services': '#008000'
-        , 'Information': '#7E587E'
         , 'Manufacturing & Wholesale': '#9DC209'
         , 'Professional & Managerial Services': '#CC7A8B'
-        , 'Retail': '#FBB117'
         , 'Transportation & Utilities': '#620C4B'
 
         , 'Earnings &#36;1,250/month or less': '#151B54'
@@ -1031,7 +1041,6 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
 
         , "Emergency Shelter":"#151B54"
         , "Transitional Housing": "#1E90FF"
-        , 'Unsheltered': "#9DC209"
 
         , 'Share of homeless population': '#9DC209'
         , 'Share of overall population': '#1F45FC'
@@ -1065,6 +1074,17 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
         , 'Speak english "well" or "very well"': '#1F45FC'
         , 'Speak english "not well" or "not at all"': '#9DC209'
 
+        , 'At Risk of or Experiencing Exclusion': '#151B54'
+        , 'Susceptible to or Experiencing Displacement':'#1E90FF'
+        , 'At Risk of or Experiencing Gentrification': '#9DC209'
+        , 'Stable Moderate/Mixed Income':'#FBB117'
+
+        , "1 bedroom":"#151B54"
+        , "2 bedrooms":"#1E90FF"
+        , "3 bedrooms":"#9DC209"
+        , "4 bedrooms":"#FBB117"
+        , "5+ bedrooms":"#E56717"
+
     }
 
     df_plot = sort_plot(df_plot, indicator, jurisdiction)
@@ -1085,11 +1105,16 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
             range_min = df_plot[params['y']].min()-4
             range_max = df_plot[params['y']].max()+4
             range_diff = abs(range_max-range_min)
-            if range_diff <= 10: dtick=1
-            elif (range_diff > 10) & (range_diff <= 50):   dtick=5
-            elif (range_diff > 50) & (range_diff <= 100):  dtick=10
-            elif (range_diff > 100) & (range_diff <= 200): dtick=25
-            else: dtick=50
+            if range_diff <= 10:
+                dtick=1
+            elif (range_diff > 10) & (range_diff <= 50):
+                dtick=5
+            elif (range_diff > 50) & (range_diff <= 100):
+                dtick=10
+            elif (range_diff > 100) & (range_diff <= 200):
+                dtick=25
+            else:
+                dtick=50
             fig.update_yaxes(ticksuffix='%', dtick=dtick, range=[range_min, range_max])
         if indicator in ['POPEMP_13', 'POPEMP_14']:
             if df_plot[params['y']].max() > 2.2:
@@ -1142,8 +1167,6 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
 
 
 
-
-
 def plot_rhna(fig, county, jurisdiction, indicator, params):
 
     PLOTLY_FONT_FAMILY='Microsoft YaHei'
@@ -1168,15 +1191,15 @@ def plot_rhna(fig, county, jurisdiction, indicator, params):
                         'ELI_1', 'AFFH_3', 'FARM_2', 'LGFEM_1', 'SEN_2']:
         fig.update_layout(xaxis_title=None)
     
-    if jurisdiction == 'Sacramento': fig.show(config=PLOTLY_CONFIG)
+    if jurisdiction == 'Sacramento':
+        fig.show(config=PLOTLY_CONFIG)
     
     if EXPORT:
         file_png  = path_plots / f'RHNA_{indicator}.png'
         try:
             fig.write_image(file=file_png , engine='kaleido', scale=1, width=1000, height=500)
-        except: pass
-
-
+        except Exception as e:
+            e
 
 
 
@@ -1188,8 +1211,10 @@ def export_rhna_temp(county, jurisdiction, indicator):
 
         path_juris = PATH_OUT / county.replace(' County', '') / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
 
-        if os.path.isfile(path_juris): wb = openpyxl.load_workbook(path_juris)
-        else: wb = openpyxl.Workbook()
+        if os.path.isfile(path_juris):
+            wb = openpyxl.load_workbook(path_juris)
+        else:
+            wb = openpyxl.Workbook()
 
         if indicator not in wb.sheetnames:
             wb.create_sheet(indicator)
@@ -1200,13 +1225,14 @@ def export_rhna_temp(county, jurisdiction, indicator):
         ws = wb[indicator]
 
         df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator]['Title'], 'The data used for this indicator is not available for this jurisdiction']})
-        if indicator == 'POPEMP_25': df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator]['Title'], 'This indicator is still a work in progress']})
+        if indicator == 'POPEMP_25':
+            df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator]['Title'], 'This indicator is still a work in progress']})
 
-        for r in dataframe_to_rows(df_out, index=False, header=False): ws.append(r)
+        for r in dataframe_to_rows(df_out, index=False, header=False):
+            ws.append(r)
         ws['A1'].font = Font(bold=True, size=14)
 
         wb.save(path_juris)
-
 
 
 
@@ -1224,13 +1250,16 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
             try:
                 path_plot = path_plots / f'RHNA_{indicator}.png'
                 img = Image(path_plot)
-            except:
+            except Exception as e:
+                e
                 pass
             
             path_juris = PATH_OUT / county.replace(' County', '') / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
 
-            if os.path.isfile(path_juris): wb = openpyxl.load_workbook(path_juris)
-            else: wb = openpyxl.Workbook()
+            if os.path.isfile(path_juris):
+                wb = openpyxl.load_workbook(path_juris)
+            else:
+                wb = openpyxl.Workbook()
 
             if indicator not in wb.sheetnames:
                 wb.create_sheet(indicator)
@@ -1244,7 +1273,8 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
             # if df_pct is not None: df_pct.columns = [col.title() for col in df_pct.columns if 'SACOG' not in col]
 
             df_prod.to_csv(path_tables / f'{indicator}_prod.csv', index=False)
-            if df_pct is not None: df_pct.to_csv(path_tables / f'{indicator}_pct.csv', index=False)
+            if df_pct is not None:
+                df_pct.to_csv(path_tables / f'{indicator}_pct.csv', index=False)
 
             df_prod2 = df_prod.reset_index().T.reset_index().T.drop(0, axis=1)
             if df_pct is not None:
@@ -1252,9 +1282,14 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
             df_title = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
             df_title.iloc[0, 0] = f'{indicator}: {params['Title']}'
             df_subtitle1 = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
-            if indicator in ['FARM_2']: df_subtitle1.iloc[0, 0] = f'Total: {county} County'
-            elif indicator in ['HSG_11']: df_subtitle1.iloc[0, 0] = f'Total: {jurisdiction}'
-            else: df_subtitle1.iloc[0, 0] = 'Total'
+            if indicator in ['FARM_2', 'HOMELS_1']:
+                df_subtitle1.iloc[0, 0] = f'Total: {county} County'
+            if indicator in ['HSG_11']:
+                df_subtitle1.iloc[0, 0] = f'Total: {jurisdiction}'
+            if 'Value' in params.keys():
+                df_subtitle1.iloc[0, 0] = f'Total: {params['Value']}' # TODO: make sure this is working correctly, i.e. "Total: Households" or "Total: Population" (or should it be "Total: Individuals")
+            else:
+                df_subtitle1.iloc[0, 0] = 'Total'
             if df_pct is not None:
                 df_subtitle2 = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
                 df_subtitle2.iloc[0, 0] = 'Percent'
@@ -1279,10 +1314,13 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
             df_source   .columns = df_prod2.columns
             df_years    .columns = df_prod2.columns
             df_notes    .columns = df_prod2.columns[:2]
-            if df_pct is not None: df_subtitle2.columns = df_prod2.columns
+            if df_pct is not None:
+                df_subtitle2.columns = df_prod2.columns
 
-            if df_pct is not None: df_out = pd.concat([df_title, df_subtitle1, df_prod2, df_subtitle2, df_pct2, df_space1, df_space2, df_source, df_years, df_notes])
-            else: df_out = pd.concat([df_title, df_subtitle1, df_prod2, df_space1, df_space2, df_source, df_years, df_notes])
+            if df_pct is not None:
+                df_out = pd.concat([df_title, df_subtitle1, df_prod2, df_subtitle2, df_pct2, df_space1, df_space2, df_source, df_years, df_notes])
+            else:
+                df_out = pd.concat([df_title, df_subtitle1, df_prod2, df_space1, df_space2, df_source, df_years, df_notes])
             
             for r in dataframe_to_rows(df_out, index=False, header=False): ws.append(r)
                 
@@ -1324,218 +1362,37 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
                                 else:
                                     cell.value = int(cell.value)
                                     cell.number_format = format_numbers
-                        except: pass
+                        except Exception as e:
+                            e
+                            pass
                 for cell in col:
                     try:
                         if len(str(cell.value)) > max_length:
                             max_length = len(str(cell.value))
-                    except: pass
+                    except Exception as e:
+                        e
                 adjusted_width = (max_length + 1) * 1.1
                 if column in ['A', 'B']:
-                    if column == 'A': ws.column_dimensions[column].width = 20
-                    else: ws.column_dimensions[column].width = 35
-                else: ws.column_dimensions[column].width = adjusted_width
+                    if column == 'A':
+                        ws.column_dimensions[column].width = 20
+                    else:
+                        ws.column_dimensions[column].width = 35
+                else:
+                    ws.column_dimensions[column].width = adjusted_width
 
             try:
                 row_num = df_out.shape[0] + 4
                 ws.add_image(img, f'B{row_num}') # 21 (style 1)
-            except: pass
+            except Exception as e:
+                e
             wb.save(path_juris)
         except Exception as e:
-                    print(e); traceback.print_exc(); print()
+                    print(e)
+                    traceback.print_exc()
+                    print()
                     export_rhna_temp(county, jurisdiction, indicator)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def make_fig(indicator, df_plot, x, y, color, county, jurisdiction):
-
-#     color_discrete_map  = {
-    
-#         'SACOG Region': '#9DC209'
-#         , f'{county} County': '#1E90FF'
-#         , jurisdiction: '#FBB117'
-
-#         , 'American Indian or Alaska Native (NH)': '#E56717'
-#         , 'Native Hawaiian or other Pacific Islander (NH)': '#006A4E'
-#         , 'Other race or multiple races (NH)': '#7E587E'
-#         , 'Black or African American (NH)': '#FBB117'
-#         , 'Asian (NH)': '#9DC209'
-#         , 'Hispanic or Latino': '#1E90FF'
-#         , 'White (NH)': '#151B54'
-
-#         , 'American Indian or<br>Alaska Native': '#E56717'
-#         , 'Native Hawaiian or<br>other Pacific Islander': '#006A4E'
-#         , 'Other race or<br>multiple races': '#7E587E'
-#         , 'Black or<br>African American': '#FBB117'
-#         , 'Asian': '#9DC209'
-#         , 'Hispanic or<br>Latino': '#1E90FF'
-#         , 'White (NH)': '#151B54'
-
-#         , '2000': '#151B54'
-#         , '2010': '#1E90FF'
-#         , '2020': '#9DC209'
-#         , '2023': '#FBB117'
-#         , '2024': '#FBB117'
-
-#         , 'Same house': '#151B54'
-#         , 'Same city or town': '#1E90FF'
-#         , 'Same county': '#9DC209'
-#         , 'Elsewhere in CA': '#FBB117'
-#         , 'Elsewhere in U.S.': '#7E587E'
-#         , 'Abroad': '#DC381F'
-
-#         , 'Agriculture & Natural Resources': '#151B54'
-#         , 'Construction': '#1E90FF'
-#         , 'Manufacturing, Wholesale, & Transportation': '#9DC209'
-#         , 'Retail': '#FBB117'
-#         , 'Information': '#7E587E'
-#         , 'Finance & Professional Services': '#7FFFD4'
-#         , 'Health & Educational Services': '#008000'
-#         , 'Other': '#DC381F'
-
-#         , 'Management, Business, Science, and Arts occupations': '#151B54'
-#         , 'Service occupations': '#1E90FF'
-#         , 'Sales and Office occupations': '#9DC209'
-#         , 'Natural Resources, Construction, and Maintenance occupations': '#FBB117'
-#         , 'Production, Transportation, and Material Moving occupations': '#7E587E'
-
-#         , 'Private company workers': '#151B54'
-#         , 'Self-employed workers': '#7E587E'
-#         , 'Private not-for-profit workers': '#1E90FF'
-#         , 'Local and state government workers': '#9DC209'
-#         , 'Federal government workers': '#FBB117'
-#         , 'Unpaid family workers': '#7FFFD4'
-
-#         , 'Place of residence': '#9DC209'
-#         , 'Place of work': '#151B54'
-
-#         , 'Agriculture & Natural Resources': '#151B54'
-#         , 'Arts, Recreation, & Other': '#E56717'
-#         , 'Construction': '#1E90FF'
-#         , 'Financial & Leasing': '#7FFFD4'
-#         , 'Government': "#906E3E"
-#         , 'Health & Educational Services': '#008000'
-#         , 'Information': '#7E587E'
-#         , 'Manufacturing & Wholesale': '#9DC209'
-#         , 'Professional & Managerial Services': '#CC7A8B'
-#         , 'Retail': '#FBB117'
-#         , 'Transportation & Utilities': '#620C4B'
-
-#         , 'Earnings &#36;1,250/month or less': '#151B54'
-#         , 'Earnings &#36;1,251/month to &#36;3,333/month': '#1E90FF'
-#         , 'Earnings greater than &#36;3,333/month': '#9DC209'
-
-#         , 'Renter occupied': '#9DC209'
-#         , 'Owner occupied': '#151B54'
-
-#         , 'Female-headed family': '#9DC209'
-#         , 'Male-headed family': '#1E90FF'
-#         , 'Married-couple family': '#151B54'
-#         , 'Other non-family': '#7E587E'
-#         , 'Single-person': '#FBB117'
-
-#         , 'No children': '#151B54'
-#         , 'One or more children under 18': '#9DC209'
-
-#         , "Occupied":"#151B54"
-#         , "Vacant": "#9DC209"
-
-#         , "For rent":"#151B54"
-#         , "For sale only":"#DC381F"
-#         , "For seasonal, recreational, or occasional use":"#1E90FF"
-#         , "Other vacant":"#9DC209"
-#         , "Rented, not occupied":"#7E587E"
-#         , "Sold, not occupied":"#FBB117"
-#         , "For migrant workers":"#006A4E"
-
-#         , "Less than &#36;250k":"#151B54"
-#         , "&#36;250k-&#36;500k":"#1E90FF"
-#         , "&#36;500k-&#36;750k":"#9DC209"
-#         , "&#36;750k-&#36;1M":"#FBB117"
-#         , "&#36;1M-&#36;1.5M":"#7E587E"
-#         , "&#36;1.5M-&#36;2M":"#DC381F"
-#         , "&#36;2M+":"#006A4E"
-#     }
-
-#     if indicator in ['POPEMP_1', 'POPEMP_13', 'POPEMP_14', 'POPEMP_15']:
-#         fig = px.line(df_plot, x=x, y=y, color=color, color_discrete_map=color_discrete_map, markers=True)
-#         if indicator == 'POPEMP_1':
-#             range_min = df_plot[y].min()-4
-#             range_max = df_plot[y].max()+4
-#             range_diff = abs(range_max-range_min)
-#             if range_diff <= 10: dtick=1
-#             elif (range_diff > 10) & (range_diff <= 50):   dtick=5
-#             elif (range_diff > 50) & (range_diff <= 100):  dtick=10
-#             elif (range_diff > 100) & (range_diff <= 200): dtick=25
-#             else: dtick=50
-#             fig.update_yaxes(ticksuffix='%', dtick=dtick, range=[range_min, range_max])
-#         if indicator in ['POPEMP_13', 'POPEMP_14']:
-#             if df_plot[y].max() > 2.2:
-#                 fig.update_yaxes(dtick=1, range=[0, 3.25])
-#             else:
-#                 fig.update_yaxes(dtick=0.5, range=[0, 2.25])
-#         if indicator == 'POPEMP_15':
-#             fig.update_yaxes(ticksuffix='%', dtick=5, range=[0, 21])
-#         fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgrey')
-#         fig.update_xaxes(dtick=2, range=[df_plot[x].min()-0.5, df_plot[x].max()+0.5])
-
-#     elif indicator in ['POPEMP_4', 'POPEMP_10', 'POPEMP_11', 'POPEMP_12', 'POPEMP_20', 'POPEMP_21', 'HSG_1', 'HSG_5']:
-#         if indicator in ['POPEMP_11', 'POPEMP_12']:
-#             fig = px.bar(df_plot, x=x, y=y, color=color, color_discrete_map=color_discrete_map)
-#         else:
-#             fig = px.bar(df_plot, x=x, y=y, color=color, color_discrete_map=color_discrete_map, barmode='group')
-#         if indicator in ['HSG_7']:
-#             fig.update_yaxes(ticksuffix='%')
-#         else:
-#             fig.update_yaxes(tickformat=',.0f')
-#         if indicator == 'POPEMP_10':
-#             fig.update_xaxes(tickvals=[0, 1, 2, 3, 4], ticktext=['Less than &#36;10k', '&#36;10k to &#36;25k', '&#36;25k to &#36;50k', '&#36;50k to &#36;75k', '&#36;75k or more'])
-#     elif indicator in ['HSG_4']:
-#         fig = px.bar(df_plot, x=x, y=y)
-#         fig.update_traces(marker_color='#1E90FF')
-#         fig.update_yaxes(tickformat=',.0f')
-#     else:
-#         if indicator in ['POPEMP_23', 'POPEMP_24', 'HSG_2']:
-#             if indicator == 'POPEMP_23':
-#                 df_plot['Household Type'] = df_plot['Household Type'].str.replace(' households', '')
-#             elif indicator == 'POPEMP_24':
-#                 var_map = {
-#                     'Households with no children': 'No children'
-#                     , 'Households with 1 or more children under 18': "One or more children under 18"
-#                 }
-#                 df_plot['Household Type'] = df_plot['Household Type'].map(var_map)
-#             elif indicator == 'HSG_2':
-#                 var_map = {
-#                     'Occupied housing units': 'Occupied',
-#                     'Vacant housing units': 'Vacant'
-#                 }
-#                 df_plot['Occupancy Status'] = df_plot['Occupancy Status'].map(var_map)
-#         if indicator in ['HSG_6']: text_limit=0
-#         else: text_limit=5
-#         df_plot['text'] = np.where(df_plot[y] >= text_limit, df_plot[y].astype(str)+'%', '')
-#         fig = px.bar(df_plot, x=x, y=y, color=color, color_discrete_map=color_discrete_map, text='text')
-#         if indicator in ['HSG_6']:
-#             fig.update_yaxes(ticksuffix='%')
-#         else:
-#             fig.update_yaxes(dtick=25, ticksuffix='%', range=[0,102])
-#         fig.update_traces(textfont_color='white')
-    
-#     fig.update_layout(legend={'traceorder': 'reversed'})
-#     fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgrey')
-
-#     return fig  
 
 
 

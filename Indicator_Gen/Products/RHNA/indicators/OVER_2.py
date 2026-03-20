@@ -6,7 +6,7 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
@@ -18,7 +18,9 @@ INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 
-FILE_CHAS = PATH_DATA / f'HUD_CHAS_2017thru2021.csv'
+FILE_CHAS = PATH_DATA / 'HUD_CHAS_2017thru2021.csv'
+
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
@@ -64,7 +66,7 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(2)
 

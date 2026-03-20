@@ -5,7 +5,7 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
@@ -19,6 +19,7 @@ params = yaml_file[INDICATOR]
 FILE_CHAS = PATH_DATA / f'HUD_CHAS_2017thru2021.csv'
 FILE_AREA = Path(__file__).parent.parent.parent.parent / 'config' / 'area_codes.xlsx'
 
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
@@ -90,5 +91,5 @@ if __name__ == '__main__':
 
             fig = rhna.make_fig(INDICATOR, params, df_plot, county, jurisdiction)
             rhna.plot_rhna(fig, county, jurisdiction, INDICATOR, params)
-            rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod)
+            rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod, df_pct)
 

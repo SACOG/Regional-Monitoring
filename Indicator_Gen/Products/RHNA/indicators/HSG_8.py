@@ -49,8 +49,8 @@ FILE_AREA = Path(__file__).parent.parent.parent.parent / 'config' / 'area_codes.
 FILE_ZHVI_CITIES = PATH_DATA / f'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
 FILE_ZHVI_COUNTIES = PATH_DATA / f'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
 
-FILE_WEIGHTS_CDP = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Data' / 'Reference' / 'Weights' / 'Total_Population Places ACS5.xlsx'  
-FILE_WEIGHTS_COUNTIES = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Data' / 'Reference' / 'Weights' / 'Total_Population Counties ACS5.xlsx'
+FILE_WEIGHTS_CDP = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Data' / 'Reference' / 'Weights' / 'Total_Households Places ACS5.xlsx'  
+FILE_WEIGHTS_COUNTIES = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Data' / 'Reference' / 'Weights' / 'Total_Households Counties ACS5.xlsx'
 
 
 if __name__ == '__main__':
@@ -65,9 +65,6 @@ if __name__ == '__main__':
 
     df_w_cities   = extrapolate_weights(df_w_cities  )
     df_w_counties = extrapolate_weights(df_w_counties)
-
-    df_w_cities  ['Households'] = df_w_cities  ['Population'].copy()
-    df_w_counties['Households'] = df_w_counties['Population'].copy()
 
     df_codes = df_codes[df_codes['MPO'] == 'SACOG'][['NAME', 'Incorporated']].drop_duplicates().rename(columns={'NAME':'Geography'}).reset_index(drop=True)
     df_codes['Geography'] = df_codes['Geography'].str.replace(' city', '')
@@ -123,7 +120,7 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(2)
 

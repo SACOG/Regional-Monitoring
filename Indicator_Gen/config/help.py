@@ -1,14 +1,6 @@
 
 
 '''
-Print functions just because I like using the terminal for work/QC and need more space between code outputs so that I don't get confused
-'''
-def print2(): print(); print()
-def print3(): print(); print(); print()
-
-
-
-'''
 Before using Python, I coded in R for years so the next few functions just makes things a tad easier in my brain
 '''
 
@@ -86,16 +78,16 @@ This function standardizes the FIPS format for various FIPS codes
 def clean_fips(df):
         
         print('Cleaning FIPS codes to standard format...')
-        
-        if 'STATEFP' in df.columns:                          df['STATEFP'                         ] = df['STATEFP'                         ].astype(str).apply('{:0>2}'.format)
-        if 'State FIPS' in df.columns:                       df['State FIPS'                      ] = df['State FIPS'                      ].astype(str).apply('{:0>2}'.format)
+        if 'Tract ID' in df.columns:                         df['Tract ID'                        ] = df['Tract ID'                        ].astype(str).apply('{:0>6}'.format)
         if 'Place ID' in df.columns:                         df['Place ID'                        ] = df['Place ID'                        ].astype(str).apply('{:0>5}'.format)
         if 'COUNTYFP' in df.columns:                         df['COUNTYFP'                        ] = df['COUNTYFP'                        ].astype(str).apply('{:0>3}'.format)
         if 'County FIPS' in df.columns:                      df['County FIPS'                     ] = df['County FIPS'                     ].astype(str).apply('{:0>3}'.format)
         if 'Congressional District' in df.columns:           df['Congressional District'          ] = df['Congressional District'          ].astype(str).apply('{:0>2}'.format)
         if 'State Legislative Upper District' in df.columns: df['State Legislative Upper District'] = df['State Legislative Upper District'].astype(str).apply('{:0>3}'.format)
         if 'State Legislative Lower District' in df.columns: df['State Legislative Lower District'] = df['State Legislative Lower District'].astype(str).apply('{:0>3}'.format)
-
+        if 'STATEFP' in df.columns:                          df['STATEFP'                         ] = df['STATEFP'                         ].astype(str).apply('{:0>2}'.format)
+        if 'State FIPS' in df.columns:                       df['State FIPS'                      ] = df['State FIPS'                      ].astype(str).apply('{:0>2}'.format)
+        
         return df
 
 

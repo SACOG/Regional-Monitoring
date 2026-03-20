@@ -1,28 +1,5 @@
 
 
-def print2(): print(); print()
-
-
-
-export=True
-
-
-
-ACS=False
-PUMS=False
-SUBJECT=False
-DP=False
-DEC=True
-LEHD=False
-CPS=False
-
-
-year_end=2024
-
-
-
-
-print2()
 
 
 # Workspace ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -32,9 +9,15 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 from IPython.display import display
-import urllib.request, json
+import urllib.request
+import json
 import sys
 
+sys.path.append(str(Path(__file__).parent.parent.parent.parent.parent/'config'))
+import help
+
+sys.path.append(str(Path(__file__).parent.parent))
+import get
 
 PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
 PATH_CODE    = PATH_GIT / 'Data' / 'Census'
@@ -43,12 +26,6 @@ PATH_CONFIG  = PATH_CODE / 'config'
 PATH_CSV = PATH_CONFIG / 'step0' / 'csv'
 
 FILE_API = PATH_CONFIG / 'api_key.txt'
-
-sys.path.append(str(PATH_CONFIG0))
-import functions as func
-
-sys.path.append(str(PATH_CONFIG))
-import get
 
 
 def import_dec_vars(year, sample):
@@ -73,14 +50,40 @@ with open(FILE_API, 'r') as file:
 
 # Main ------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+
+EXPORT=True
+
+
+
+ACS=False
+PUMS=False
+SUBJECT=True
+DP=False
+DEC=False
+LEHD=False
+CPS=False
+
+
+END_YEAR=2024
+
+
+
+
+
+
 if __name__ == '__main__':
+    
+    print('\n'*2)
+
 
 
     if ACS:
 
-        print2()
+        print('\n'*2)
         print('ACS ------------------------------------------------------------------------------------------------------------------------')
-        print2()
+        print('\n'*2)
 
         ## ACS5 ---
         ## Organize list of all variables from all years into one nice table
@@ -88,7 +91,7 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        years_to_import = func.sequence(2020, 2020, 1)
+        years_to_import = [2020]
         list_df = []
 
         for year in tqdm(years_to_import):
@@ -117,8 +120,7 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        # years_to_import = func.sequence(2005, year_end, 1)
-        years_to_import = func.sequence(2019, 2023, 1)
+        years_to_import = help.sequence(2005, END_YEAR, 1)
         years_to_import.remove(2020)
         list_df = []
 
@@ -175,10 +177,7 @@ if __name__ == '__main__':
 
         display(df_acs.head())
 
-
-        ## Exporting to Git ---
-
-        if export:
+        if EXPORT:
             df_acs.to_csv(PATH_CSV / 'ACS.csv', index=False)
 
 
@@ -187,9 +186,9 @@ if __name__ == '__main__':
 
     if PUMS:
 
-        print2()
+        print('\n'*2)
         print('PUMS ------------------------------------------------------------------------------------------------------------------------')
-        print2()
+        print('\n'*2)
 
 
         ## PUMS1 ---
@@ -202,10 +201,10 @@ if __name__ == '__main__':
             # append to list
         # concatenate all data frames together
 
-        print2()
+        print('\n'*2)
         print('Importing PUMS variables tables by year...'); print()
 
-        years = func.sequence(2005, year_end, 1)
+        years = help.sequence(2005, END_YEAR, 1)
         years.remove(2020)
         list_df_pums = []
 
@@ -245,7 +244,7 @@ if __name__ == '__main__':
 
         # concatenate all data frames together
 
-        print2()
+        print('\n'*2)
         print('Cleaned PUMS variables table:'); print()
 
         list_df_years = []
@@ -316,10 +315,10 @@ if __name__ == '__main__':
             # append to list
         # concatenate all data frames together
 
-        print2()
+        print('\n'*2)
         print('Importing PUMS variables tables by year...'); print()
 
-        years = func.sequence(2020, 2020, 1)
+        years = help.sequence(2020, 2020, 1)
         list_df_pums = []
 
         for year in tqdm(years):
@@ -357,7 +356,7 @@ if __name__ == '__main__':
 
         # concatenate all data frames together
 
-        print2()
+        print('\n'*2)
         print('Cleaned PUMS variables table:'); print()
 
         list_df_years = []
@@ -417,7 +416,7 @@ if __name__ == '__main__':
 
 
 
-        ## Combining ---
+        # Combining
 
         df_pums1 = df_pums1[df_pums1['Year'] != 2020]
         df_pums5 = df_pums5[df_pums5['Year'] == 2020]
@@ -438,9 +437,7 @@ if __name__ == '__main__':
         df_pums = df_pums.set_index('Year').reset_index()
         display(df_pums.head())
 
-
-        ## Exporting to Git ---
-        if export:
+        if EXPORT:
             df_pums.to_csv(PATH_CSV / 'PUMS.csv', index=False)
 
 
@@ -450,9 +447,9 @@ if __name__ == '__main__':
 
     if SUBJECT:
             
-        print2()
+        print('\n'*2)
         print('SUBJECT ------------------------------------------------------------------------------------------------------------------------')
-        print2()
+        print('\n'*2)
 
         ## ACS5 ---
         ## Organize list of all variables from all years into one nice table
@@ -460,7 +457,7 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        years_to_import = func.sequence(2020, 2020, 1)
+        years_to_import = [2020]
         list_df = []
 
         for year in tqdm(years_to_import):
@@ -491,7 +488,7 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        years_to_import = func.sequence(2010, year_end, 1)
+        years_to_import = help.sequence(2010, END_YEAR, 1)
         years_to_import.remove(2020)
         list_df = []
 
@@ -517,7 +514,7 @@ if __name__ == '__main__':
 
 
 
-        ## Combining ---
+        # Combining
 
         df_acs1 = df_acs1[df_acs1['Year'] != 2020]
         df_acs5 = df_acs5[df_acs5['Year'] == 2020]
@@ -528,7 +525,7 @@ if __name__ == '__main__':
         df_acs = df_acs.reset_index(drop=True)
 
         df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['Attributes']
-        df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(ME_split)
+        df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(get.moe_split)
 
         display(df_acs.head())
 
@@ -553,10 +550,7 @@ if __name__ == '__main__':
         display(df_acs.head())
 
 
-
-        ## Exporting to Git ---
-
-        if export:
+        if EXPORT:
             df_acs.to_csv(PATH_CSV / 'SUBJECT.csv', index=False)
 
 
@@ -568,9 +562,9 @@ if __name__ == '__main__':
 
     if DP:
 
-        print2()
+        print('\n'*2)
         print('DP ------------------------------------------------------------------------------------------------------------------------')
-        print2()
+        print('\n'*2)
 
         ## ACS5 ---
         ## Organize list of all variables from all years into one nice table
@@ -578,7 +572,7 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        years_to_import = func.sequence(2020, 2020, 1)
+        years_to_import = help.sequence(2020, 2020, 1)
         list_df = []
 
         for year in tqdm(years_to_import):
@@ -607,8 +601,8 @@ if __name__ == '__main__':
         # Use urllib package to make request to Census API (requesting for table of all variables sampled on the given year)
         # Do some cleaning, reshaping, etc... to make nice for use in data pipelines
 
-        years_to_import = func.sequence(2005, year_end, 1)
-        # years_to_import = func.sequence(2019, 2021, 1)
+        years_to_import = help.sequence(2005, END_YEAR, 1)
+        # years_to_import = help.sequence(2019, 2021, 1)
         years_to_import.remove(2020)
         list_df = []
 
@@ -641,7 +635,7 @@ if __name__ == '__main__':
         df_acs = df_acs.reset_index(drop=True)
 
         df_acs['ID_Attributes'] = df_acs['ID'] + ',' + df_acs['Attributes']
-        df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(ME_split)
+        df_acs['ID_Attributes'] = df_acs['ID_Attributes'].apply(get.moe_split)
 
         display(df_acs.head())
 
@@ -666,9 +660,7 @@ if __name__ == '__main__':
         display(df_acs.head())
 
 
-        ## Exporting to Git ---
-
-        if export:
+        if EXPORT:
             df_acs.to_csv(PATH_CSV / 'DP.csv', index=False)
 
 
@@ -678,13 +670,13 @@ if __name__ == '__main__':
 
     if DEC:
 
-        print2()
+        print('\n'*2)
         print('DEC ------------------------------------------------------------------------------------------------------------------------')
-        print2()
+        print('\n'*2)
 
 
 
-        ## Importing ---
+        # Importing
 
         df_dec_2000_sf1 = import_dec_vars(2000, 'sf1')
         df_dec_2000_sf3 = import_dec_vars(2000, 'sf3')
@@ -694,7 +686,7 @@ if __name__ == '__main__':
 
 
 
-        ## Combining ---
+        # Combining
 
         df_dec = pd.concat([df_dec_2000_sf1, df_dec_2000_sf3, df_dec_2010_sf1, df_dec_2020_dp, df_dec_2020_dhc])
         df_dec['Label_clean'] = df_dec['label'].str.replace('Estimate!!', '')
@@ -709,20 +701,18 @@ if __name__ == '__main__':
         df_dec = df_dec.rename(columns={'label':'Label', 'concept':'Table Name', 'group':'Table'})
         df_dec = df_dec[['Year', 'Table', 'ID', 'Label', 'Table Name', 'predicateType', 'Indicator Name', 'Include', 'estimate', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
 
-
-        ## Exporting to Git ---
-        if export:
+        if EXPORT:
             df_dec.to_csv(PATH_CSV / 'DEC.csv', index=False)
 
 
 
     if LEHD:
 
-        print2()
+        print('\n'*2)
         print('LEHD ------------------------------------------------------------------------------------------------------------------------')
-        print2()
+        print('\n'*2)
 
-        ## Importing ---
+        # Importing
 
         with urllib.request.urlopen("https://api.census.gov/data/timeseries/qwi/rh/variables.json") as url:
             dict_lehd_rh = json.load(url)
@@ -750,7 +740,7 @@ if __name__ == '__main__':
 
 
 
-        ## Combining ---
+        # Combining
 
         file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='LEHD'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
@@ -760,9 +750,9 @@ if __name__ == '__main__':
         df_vars.head()
 
 
-        ## Exporting to Git ---
+        # Exporting to Git
 
-        if export:
+        if EXPORT:
             df_vars.to_csv(PATH_CSV / 'LEHD.csv', index=False)
 
 
@@ -770,9 +760,9 @@ if __name__ == '__main__':
 
     # if CPS:
 
-    #     print2()
+    #     print('\n'*2)
     #     print('CPS ------------------------------------------------------------------------------------------------------------------------')
-    #     print2()
+    #     print('\n'*2)
 
     #     ## Importing ---
 
@@ -786,12 +776,12 @@ if __name__ == '__main__':
     #         # append to list
     #     # concatenate all data frames together
 
-    #     print2()
+    #     print('\n'*2)
     #     print('Importing CPS variables tables by year...'); print()
 
     #     year_start = 2009
-    #     year_end   = year_end
-    #     years = range(year_start, year_end+1)
+    #     END_YEAR   = END_YEAR
+    #     years = range(year_start, END_YEAR+1)
 
     #     list_df_cps = []
 
@@ -803,7 +793,7 @@ if __name__ == '__main__':
     #                 url_to_import = f"https://api.census.gov/data/{year}/cps/foodsec/aug/variables.json"
     #             if year in [2000]:
     #                 url_to_import = f"https://api.census.gov/data/{year}/cps/foodsec/sep/variables.json"
-    #             if year in func.sequence(2001, year_end, 1):
+    #             if year in help.sequence(2001, END_YEAR, 1):
     #                 url_to_import = f"https://api.census.gov/data/{year}/cps/foodsec/dec/variables.json"
                     
     #             with urllib.request.urlopen(url_to_import) as url:
@@ -838,7 +828,7 @@ if __name__ == '__main__':
     #     # concatenate all data frames together
 
 
-    #     print2()
+    #     print('\n'*2)
     #     print('Cleaned CPS variables table:'); print()
 
     #     list_df_years = []
@@ -924,7 +914,7 @@ if __name__ == '__main__':
 
 
     #     ## Exporting to Git ---
-    #     if export:
+    #     if EXPORT:
     #         file_out = path_csv / 'CPS.csv'
     #         df_cps.to_csv(file_out, index=False)
 

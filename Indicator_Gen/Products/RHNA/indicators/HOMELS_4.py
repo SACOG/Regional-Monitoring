@@ -84,6 +84,7 @@ if __name__ == '__main__':
     # print(len(gdf_edu[gdf_edu['cdscode'].isna()]['SchoolName'].unique())) # some schools are missing
     gdf_edu['Homeless Student Enrollment'] = gdf_edu['Homeless Student Enrollment'].replace('*', '0')
     gdf_edu['Homeless Student Enrollment'] = gdf_edu['Homeless Student Enrollment'].astype(int)
+    breakpoint()
 
     # Roll up enrollment to SACOG region and county level enrollment totals
     df_counties = gdf_edu.groupby(['AcademicYear', 'County Name'], as_index=False)['Homeless Student Enrollment'].sum()
@@ -135,7 +136,7 @@ if __name__ == '__main__':
 
     for county in counties:
 
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(2)
 

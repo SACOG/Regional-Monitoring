@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: RHNA_POPEMP_4b
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Age
+Sample: SUBJECT
+Estimate: ACS5
+Geography: Places
+Years Imported: 2023
+Import Tab: States
+Margin of Error: Yes

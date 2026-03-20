@@ -1,5 +1,10 @@
 
 
+
+## TODO:
+# Weird crosswalk issue with the female utility workers
+
+
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))

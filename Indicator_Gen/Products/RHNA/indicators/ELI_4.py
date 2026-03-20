@@ -1,17 +1,20 @@
 
 
+## TODO
+# Include 1 year county AMI from HCD
+
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
 from IPython.display import display
-import warnings; warnings.filterwarnings("ignore")
-
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
+import warnings
+warnings.filterwarnings("ignore")
+
 yaml_file = rhna.load_yaml()
 
 PATH_DATA = Path(yaml_file['Path_Data'])
@@ -113,7 +116,16 @@ if __name__ == '__main__':
             , 'High income: >120 pct of AMI': [ami*1.2, ami*10]
         }
 
-        rhna.print2()
+        dt_hcd_brackets_clean = {
+            'Acutely low income: 0-15 pct of AMI': f'Less than ${ami*0.15:,.0f}'
+            , 'Extremely low income: 15-30 pct of AMI': f'${ami*0.15:,.0f}-${ami*0.3:,.0f}'
+            , 'Very low income: 30-50 pct of AMI': f'${ami*0.3:,.0f}-${ami*0.5:,.0f}'
+            , 'Lower income: 50-80 pct of AMI': f'${ami*0.5:,.0f}-${ami*0.8:,.0f}'
+            , 'Moderate income: 80 to 120 pct of AMI': f'${ami*0.8:,.0f}-${ami*1.2:,.0f}'
+            , 'High income: >120 pct of AMI': f'${ami*1.2:,.0f} or greater'
+        }
+
+        print('\n'*2)
         print(county)
 
         print('County AMI: ', ami)
@@ -147,11 +159,12 @@ if __name__ == '__main__':
                     list_df_var_places.append(df_sub_places_all)
 
             df2 = pd.concat(list_df_var_places)
+            df2['HCD_brack_clean'] = df2['HCD_var'].map(dt_hcd_brackets_clean)
 
             if round(df['Households'].sum()) != round(df2['HH_adj'].sum()):
                 tqdm.write(f'Something wrong - Before: {df['Households'].sum()}, After: {df2['HH_adj'].sum()}')
 
-            df = df2.groupby(['HCD_var'], as_index=False).agg(HH_adj=('HH_adj', 'sum'))
+            df = df2.groupby(['HCD_var', 'HCD_brack_clean'], as_index=False).agg(HH_adj=('HH_adj', 'sum'))
 
             sort_hcd = ['Acutely low income: 0-15 pct of AMI', 'Extremely low income: 15-30 pct of AMI', 'Very low income: 30-50 pct of AMI', 'Lower income: 50-80 pct of AMI', 'Moderate income: 80 to 120 pct of AMI', 'High income: >120 pct of AMI']
             df['HCD_var_sort'] = pd.Categorical(df['HCD_var'], sort_hcd)
@@ -170,9 +183,9 @@ if __name__ == '__main__':
             choices = ['Acutely low income', 'Extremely low income', 'Very low income', 'Lower income', 'Moderate income', 'High income']
             df['HCD_var'] = np.select(conditions, choices, default='no')
 
-            df = df.rename(columns={'HCD_var':'Income Bracket', 'HH_adj':'Households'})
-            df_prod = df[['Income Bracket', 'Households']]
-            df_pct  = df[['Income Bracket', 'Percent']]
+            df = df.rename(columns={'HCD_var':'Income Bracket', 'HCD_brack_clean':'Income Range', 'HH_adj':'Households'})
+            df_prod = df[['Income Bracket', 'Income Range', 'Households']]
+            df_pct  = df[['Income Bracket', 'Income Range', 'Percent']]
 
             df_plot = df_pct.copy()
             df_plot['Percent of Households'] = round(df_plot['Percent']*100, 1)

@@ -26,17 +26,6 @@ SERVER=True
 '''
 
 
-RERUN=False
-EXPORT=True
-
-MPO=False
-UNINCORPORATED=False
-
-ABOUT=True
-UPDATE=False
-SERVER=True
-
-
 
 # Workspace -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -44,8 +33,14 @@ SERVER=True
 import pandas as pd
 from pathlib import Path
 from IPython.display import display
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 import sys
+
+sys.path.append(str(Path(__file__).parent/'config'))
+import pre
+import get
+import post
+
 
 PATH_GIT = Path(__file__).parent.parent.parent
 PATH_CONFIG0 = PATH_GIT / 'config'
@@ -56,14 +51,9 @@ FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
 FILE_CPI = PATH_CONFIG0 / 'CPI_IAF.xlsx'
 FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
 
-sys.path.append(str(PATH_CONFIG0))
-import help; help.print3()
 
-sys.path.append(str(PATH_CONFIG))
-import pre
-import get
-import post
-
+print('\n'*3)
+warnings.filterwarnings("ignore")
 
 # Network file paths for importing/exporting
 PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
@@ -71,8 +61,24 @@ PATH_SERVER = Path(r'\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data')
 
 
 
-
 ## Main ----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+RERUN=True
+EXPORT=True
+
+MPO=False
+UNINCORPORATED=True
+
+ABOUT=False
+UPDATE=False
+SERVER=False
+
+
+
+
 
 if __name__ == '__main__':
 
@@ -83,10 +89,14 @@ if __name__ == '__main__':
     yaml_census = pre.load_yaml()
     params = pre.api_request_params(yaml_census, RERUN)
 
-    if params['geo']=='Counties': params['mpo']=MPO
-    else: params['mpo']=False
-    if params['geo']=='Places': params['unincorporated']=UNINCORPORATED
-    else: params['unincorporated']=False
+    if params['geo']=='Counties':
+        params['mpo']=MPO
+    else:
+        params['mpo']=False
+    if params['geo']=='Places':
+        params['unincorporated']=UNINCORPORATED
+    else:
+        params['unincorporated']=False
     params['about']=ABOUT
     params['update']=UPDATE
     params['export']=EXPORT
@@ -99,9 +109,8 @@ if __name__ == '__main__':
     file_in = PATH_ORIG / pre.set_download_name(params)
     df_census = pd.read_csv(file_in)
     display(df_census.head())
-    help.print2()
-
-
+    print('\n'*2)
+    
 
 
     ## ACS, DP, SUBJECT, DEC ----------
@@ -175,6 +184,6 @@ if __name__ == '__main__':
 
 
 
-help.print3()
+print('\n'*3)
 
 

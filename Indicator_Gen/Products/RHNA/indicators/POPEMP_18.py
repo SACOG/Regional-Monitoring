@@ -1,5 +1,17 @@
 
 
+import pandas as pd
+from pathlib import Path
+from tqdm import tqdm
+import time
+import warnings
+
+
+import sys
+sys.path.append(str(Path(__file__).parent.parent/'config'))
+import rhna
+yaml_file = rhna.load_yam
+
 def re_remove_post(x, exp = ':'):
     try: x = str(x.split(exp, 1)[0])
     except: pass
@@ -11,23 +23,11 @@ def re_remove_pre(x, exp = ':  '):
     return x
 
 
-import pandas as pd
-from pathlib import Path
-from tqdm import tqdm
-import time
-import warnings; warnings.filterwarnings("ignore")
-
-
-import sys
-sys.path.append(str(Path(__file__).parent.parent/'config'))
-import rhna
-yaml_file = rhna.load_yaml()
-
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
-
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(2)
 

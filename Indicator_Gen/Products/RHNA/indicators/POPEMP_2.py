@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 
 import sys
@@ -17,6 +17,7 @@ PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
@@ -50,7 +51,7 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        rhna.print2()
+        print('\n'*2)
         print(county); print()
         time.sleep(2)
 

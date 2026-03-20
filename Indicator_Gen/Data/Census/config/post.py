@@ -21,6 +21,15 @@ import os
 import re
 from IPython.display import display
 
+import sys
+sys.path.append(str(Path(__file__).parent.parent.parent.parent/'config'))
+import functions as func
+import help
+
+sys.path.append(str(Path(__file__).parent/'config'))
+import get
+
+
 PATH_GIT = Path(__file__).parent.parent.parent.parent
 PATH_CONFIG0 = PATH_GIT / 'config'
 PATH_CONFIG  = PATH_GIT / 'Data' / 'Census' / 'config'
@@ -38,13 +47,6 @@ PATH_ABOUT = PATH_SP / 'Process Revamp' / 'Task 6. Process Map'
 PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
-import sys
-sys.path.append(str(PATH_CONFIG0))
-import functions as func
-import help
-
-sys.path.append(str(PATH_CONFIG))
-import get
 
 
 
@@ -137,6 +139,8 @@ def acs_convert_to_nan(df):
     df = df.replace( -555555555.0 , np.nan)
     df = df.replace('-999999999.0', np.nan)
     df = df.replace( -999999999.0 , np.nan)
+    df = df.replace('-888888888.0', np.nan)
+    df = df.replace( -888888888.0 , np.nan)
     df = df.replace('null', np.nan)
     df = df.dropna(axis=1, how='all')
 
@@ -206,7 +210,8 @@ def acs_moe_reshape(df, params):
         df = df[list(df.drop(['Total'], axis=1).columns) + ['Total']]
 
     cols_to_keep = ['Estimate ID'] + GEOID_CLEAN[params['geo']] + ['Year', 'Variable', 'Race/Ethnicity', 'Sort', 'Total']
-    if params['moe']: cols_to_keep = cols_to_keep + ['MOE']
+    if params['moe']:
+        cols_to_keep = cols_to_keep + ['MOE']
     df = df[cols_to_keep]
 
     df['Total'] = df['Total'].fillna(0) # TODO: quality control on this step, does it make sense to do this?
@@ -284,15 +289,21 @@ def acs_merge_weights(df, params):
     if params['weight']:
 
         print('Merging weights (population or household estimates) onto main dataset for future aggregation step...')
-
-        file_weights = PATH_WEIGHTS / f'Total_{params['weight']} {params['geo']} {params['estimate']}.xlsx' # _ChamberStudy2026.xlsx
+        if params['sample'] == 'SUBJECT':
+            weights_estimate = params['estimate'].replace('SUBJECT', 'ACS')
+            file_weights = PATH_WEIGHTS / f'Total_{params['weight']} {params['geo']} {weights_estimate}.xlsx' # _ChamberStudy2026.xlsx
+        else:
+            file_weights = PATH_WEIGHTS / f'Total_{params['weight']} {params['geo']} {params['estimate']}.xlsx' # _ChamberStudy2026.xlsx
         df_weight = pd.read_excel(file_weights, sheet_name=GEO_SHEETS[params['geo']])
 
-        if params['geo'] == 'MSA': field_id = 'MSA ID'
-        else: field_id = 'NAME'
+        if params['geo'] == 'MSA':
+            field_id = 'MSA ID'
+        else:
+            field_id = 'NAME'
 
         df_weight = df_weight[[field_id, 'Year','Race/Ethnicity', params['weight']]].rename(columns={'MSA ID':'MSA_ID'})
-        if params['geo'] == 'MSA': field_id = 'MSA_ID'
+        if params['geo'] == 'MSA':
+            field_id = 'MSA_ID'
         if params['weight'] == 'Population':
             conditions = [
                             (df_weight["Race/Ethnicity"] == 'All'                                           ),
@@ -406,7 +417,8 @@ def acs_calculate_unincorporated(df, params):
             if params['sample'] == 'DP':
                 params['estimate'] = re.sub('DP', 'ACS', params['estimate'])
 
-            if params['indicator'] == 'Income_1':
+
+            if params['indicator'] in ['Income_1', 'RHNA_POPEMP_26']:
 
                 ## Need to include weighted average of unincorporated areas properly for things like income
                 # County Average Household Income = ((Unincorporated Average Household Income)*(Unincorporated Population) + (Incorporated Average Household Income)*(Incorporated Population)) / (County Population)
@@ -416,12 +428,22 @@ def acs_calculate_unincorporated(df, params):
                 # Calculate incorporated average household income and total households
                 # Import total households in county
                 # Subtact total incorporated county households from total county households to get total unincorporated county households
+                if params['indicator'] == 'Income_1':
+                    est = 'Median Household Income'
+                if params['indicator'] == 'RHNA_POPEMP_26':
+                    est = 'Median Age'
 
                 df_counties = pd.read_excel(file_counties, sheet_name='Counties')
-                df_counties = df_counties[['County Name', 'Year', 'Race/Ethnicity', 'Median Household Income', 'Margin of Error']].rename(columns={'Median Household Income':'Median Household Income County', 'Margin of Error':'MOE County'})
-                
+
+
+                if params['moe']:
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', est, 'Margin of Error']
+                else:
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', est]
+                df_counties = df_counties[cols].rename(columns={est:f'{est} County', 'Margin of Error':'MOE County'})
+
                 df_inc1 = df.groupby(['County Name', 'Year', 'Race/Ethnicity', 'Variable'], as_index=False, sort=False).apply(lambda x: acs_rollup(x, params))
-                df_inc1 = df_inc1.drop(['Variable', params['weight']], axis=1).rename(columns={'Total':'Median Household Income Inc', 'MOE':'MOE Inc'})
+                df_inc1 = df_inc1.drop(['Variable', params['weight']], axis=1).rename(columns={'Total':f'{est} Inc', 'MOE':'MOE Inc'})
                 file_cdp_pop = PATH_WEIGHTS / f'Total_{params['weight']} {params['geo']} {params['estimate']}.xlsx'
                 df_inc_pop = pd.read_excel(file_cdp_pop, sheet_name=GEO_SHEETS[params['geo']])
                 df_inc_pop = df_inc_pop[['County Name', 'Place ID', 'NAME', 'Year','Race/Ethnicity', params['weight']]]
@@ -431,34 +453,42 @@ def acs_calculate_unincorporated(df, params):
                 list_cdp_inc['NAME'] = list_cdp_inc['NAME'].str.replace(' town', '')
                 list_cdp_inc = list(list_cdp_inc.NAME.unique())
                 df_inc_pop = df_inc_pop[df_inc_pop['NAME'].isin(list_cdp_inc)]
-                df_inc_pop = df_inc_pop.groupby(['County Name', 'Year', 'Race/Ethnicity'], as_index=False)['Households'].sum()
+                df_inc_pop = df_inc_pop.groupby(['County Name', 'Year', 'Race/Ethnicity'], as_index=False)[params['weight']].sum()
 
-                file_cdp_pop = PATH_WEIGHTS / f'Total_{params['weight']} Counties {params['estimate']}.xlsx'
-                df_counties_pop = pd.read_excel(file_cdp_pop, sheet_name='Counties')
+                file_counties_pop = PATH_WEIGHTS / f'Total_{params['weight']} Counties {params['estimate']}.xlsx'
+                df_counties_pop = pd.read_excel(file_counties_pop, sheet_name='Counties')
                 df_counties_pop = df_counties_pop[['County Name', 'Year','Race/Ethnicity', params['weight']]]
 
-                df_all_households = df_counties_pop.merge(df_inc_pop.rename(columns={'Households':'Households Inc'}), on=['County Name', 'Year', 'Race/Ethnicity'])
-                df_all_households['Households Uninc'] = df_all_households['Households'] - df_all_households['Households Inc']
+                df_all_weight = df_counties_pop.merge(df_inc_pop.rename(columns={params['weight']:f'{params['weight']} Inc'}), on=['County Name', 'Year', 'Race/Ethnicity'])
+                df_all_weight[f'{params['weight']} Uninc'] = df_all_weight[params['weight']] - df_all_weight[f'{params['weight']} Inc']
 
-                df_all_income = df_counties.merge(df_inc1, on=['County Name', 'Year', 'Race/Ethnicity'])
-                df_all = df_all_income.merge(df_all_households, on=['County Name', 'Year', 'Race/Ethnicity'])
+                df_all_est = df_counties.merge(df_inc1, on=['County Name', 'Year', 'Race/Ethnicity'])
+                df_all = df_all_est.merge(df_all_weight, on=['County Name', 'Year', 'Race/Ethnicity'])
 
-                def calculate_uninc_income(county_income, county_households, incorp_income, incorp_households, unincorp_households):
-                    try: unincorp_income = ((county_income)*(county_households) - (incorp_income)*(incorp_households)) / (unincorp_households)
-                    except: unincorp_income = 999999
+                def calculate_uninc_est(county_est, county_weight, incorp_est, incorp_weight, unincorp_weight):
+                    try:
+                        unincorp_income = ((county_est)*(county_weight) - (incorp_est)*(incorp_weight)) / (unincorp_weight)
+                    except Exception as e:
+                        print('Quite exceptional!', e)
+                        unincorp_income = 999999
                     return unincorp_income
                 
-                def calculate_uninc_income_me(county_me, county_hh, incorp_me, incorp_hh, uninc_hh):
+                def calculate_uninc_est_me(county_me, county_hh, incorp_me, incorp_hh, uninc_hh):
                     try:
                         term1 = (county_hh / uninc_hh)**2 * county_me**2
                         term2 = (incorp_hh / uninc_hh)**2 * incorp_me**2
                         return np.sqrt(term1 + term2)
-                    except:
+                    except Exception as e:
+                        print('Quite exceptional!', e)
                         return np.nan
-                df_all['Median Household Income Uninc'] = df_all.apply(lambda x: calculate_uninc_income(x['Median Household Income County'], x['Households'], x['Median Household Income Inc'], x['Households Inc'], x['Households Uninc']), axis=1)
-                if params['moe']: df_all['Median Household Income Uninc MOE'] = df_all.apply(lambda x: calculate_uninc_income_me(x['MOE County'], x['Households'], x['MOE Inc'], x['Households Inc'], x['Households Uninc']), axis=1)
-                df_uninc = df_all[['County Name', 'Year', 'Race/Ethnicity', 'Median Household Income Uninc', 'Median Household Income Uninc MOE', 'Households Uninc']].rename(columns={'Median Household Income Uninc':'Total', 'Median Household Income Uninc MOE':'MOE', 'Households Uninc':'Households'})
-                df_uninc[['State FIPS', 'Variable', 'Place ID', 'NAME', 'Sort']] = '06', 'Median household income in the past 12 months (in inflation-adjusted dollars by year)', 'Unincorporated', 'Unincorporated', 1
+                df_all[f'{est} Uninc'] = df_all.apply(lambda x: calculate_uninc_est(x[f'{est} County'], x[params['weight']], x[f'{est} Inc'], x[f'{params['weight']} Inc'], x[f'{params['weight']} Uninc']), axis=1)
+                if params['moe']:
+                    df_all[f'{est} Uninc MOE'] = df_all.apply(lambda x: calculate_uninc_est_me(x['MOE County'], x[params['weight']], x['MOE Inc'], x[f'{params['weight']} Inc'], x[f'{params['weight']} Uninc']), axis=1)
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', f'{est} Uninc', f'{est} Uninc MOE', f'{params['weight']} Uninc']
+                else:
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', f'{est} Uninc', f'{params['weight']} Uninc']
+                df_uninc = df_all[cols].rename(columns={f'{est} Uninc':'Total', f'{est} Uninc MOE':'MOE', f'{params['weight']} Uninc':params['weight']})
+                df_uninc[['State FIPS', 'Variable', 'Place ID', 'NAME', 'Sort']] = '06', est, 'Unincorporated', 'Unincorporated', 1
                 df_uninc = calculate_ME_ratio(df_uninc, params)
                 df = pd.concat([df, df_uninc])
 
@@ -498,12 +528,10 @@ def acs_aggregate(df, params):
 
     df = df.groupby(GEOID_CLEAN[params['geo']] + ['Year', 'Race/Ethnicity', 'Variable', 'Sort'], as_index=False, sort=False).apply(lambda x: acs_rollup(x, params))
 
-
     if params['indicator'] == 'Income_4':
         df_all = df[df['Year'].isin([2009, 2010, 2011, 2012])].groupby(GEOID_CLEAN[params['geo']] + ['Year', 'Variable', 'Sort'], as_index=False, sort=False).apply(lambda x: acs_rollup(x, params))
         df_all.loc[:, 'Race/Ethnicity'] = 'All'
         df = pd.concat([df, df_all])
-    
 
     if params['moe']:
         df = calculate_ME_ratio(df, params)
@@ -581,7 +609,9 @@ def acs_main(df, params, df_vars):
     Main function to used process requested ACS data
     '''
 
-    print(); print('Post processing for ACS data:'); print()
+    print()
+    print('Post processing for ACS data:')
+    print()
 
     df = acs_convert_to_nan(df)
 
@@ -606,11 +636,11 @@ def acs_main(df, params, df_vars):
     df = acs_aggregate(df, params)
     df = sort_table(df, params)
 
-    help.print2()
+    print('\n'*2)
     time.sleep(5)
     print('Final table:')
     display(df)
-    help.print2()
+    print('\n'*2)
     time.sleep(5)
 
     return df
@@ -619,7 +649,7 @@ def acs_main(df, params, df_vars):
 
 def acs_export(df, params):
 
-    help.print2()
+    print('\n'*2)
     workbooks = set_workbook_name(params)
 
     path_out_sp = Path(params['export_loc']) / f"{params['indicator']} {params['folder']}"
@@ -938,7 +968,9 @@ def pums_aggregate(df_census, params, weight, groups):
     df_mpo      = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_mpo     ).reset_index()
 
     if params['moe']:
-        sqrtsumsq  = lambda x: np.sqrt(np.sum(x**2))
+        def sqrtsumsq(x):
+            return np.sqrt(np.sum(x**2))
+        # sqrtsumsq = lambda x: np.sqrt(np.sum(x**2))
         df_puma    .loc[df_puma    ['MOE'] < 0, 'MOE'] = np.nan
         df_counties.loc[df_counties['MOE'] < 0, 'MOE'] = np.nan
         df_msa     .loc[df_msa     ['MOE'] < 0, 'MOE'] = np.nan
@@ -1372,18 +1404,22 @@ def pums_main(df, params, weight, df_vars):
     df_puma, df_counties, df_msa, df_mpo, groups = pums_aggregate(df, params, weight, groups)
     df_puma, df_counties, df_msa, df_mpo = pums_rename(params, groups, df_puma, df_counties, df_msa, df_mpo)
 
-    help.print2()
+    print('\n'*2)
     time.sleep(5)
-    print('Final tables:'); print()
+    print('Final tables:')
+    print()
     print('PUMA')
-    display(df_puma); print()
+    display(df_puma)
+    print()
     print('Counties')
-    display(df_counties); print()
+    display(df_counties)
+    print()
     print('MSA')
-    display(df_msa); print()
+    display(df_msa)
+    print()
     print('MPO')
-    display(df_mpo); print()
-    help.print2()
+    display(df_mpo)
+    print('\n'*3)
     time.sleep(5)
 
 
@@ -1395,14 +1431,16 @@ def pums_main(df, params, weight, df_vars):
 
 def pums_export(df_puma, df_counties, df_msa, df_mpo, params):
 
-    help.print2()
+    print('\n'*2)
     workbooks = set_workbook_name(params)
 
     path_out_sp = Path(params['export_loc']) / f"{params['indicator']} {params['folder']}"
     if params['project'] != 'Monitoring and Reporting':
         path_out_sp = Path(params['export_loc'])
-    if params['project'] == 'Monitoring and Reporting' and params['server']: paths = [PATH_SERVER, path_out_sp]
-    else: paths = [path_out_sp]
+    if params['project'] == 'Monitoring and Reporting' and params['server']:
+        paths = [PATH_SERVER, path_out_sp]
+    else:
+        paths = [path_out_sp]
 
     for path_ in paths:            
 
@@ -1552,8 +1590,10 @@ def set_workbook_name(params):
 
     workbooks = []
 
-    if params['sample'] == 'SUBJECT': params['estimate'] = re.sub('ACS', 'SUBJECT', params['estimate'])
-    if params['sample'] == 'DP': params['estimate'] = re.sub('ACS', 'DP', params['estimate'])
+    if params['sample'] == 'SUBJECT':
+        params['estimate'] = re.sub('ACS', 'SUBJECT', params['estimate'])
+    if params['sample'] == 'DP':
+        params['estimate'] = re.sub('ACS', 'DP', params['estimate'])
 
     if params['geo'] == 'PUMA':
         params['estimate'] = re.sub('ACS', 'PUMS', params['estimate'])
@@ -1562,11 +1602,15 @@ def set_workbook_name(params):
         workbooks.append(f"{params['indicator']} MSA {params['estimate']}.xlsx")
         workbooks.append(f"{params['indicator']} MPO {params['estimate']}.xlsx")
                 
-    if params['geo'] == 'Counties': workbooks.append(f"{params['indicator']} {params['geo']} {params['estimate']}.xlsx")
-    if params['mpo']: workbooks.append(f"{params['indicator']} MPO {params['estimate']}.xlsx")
+    if params['geo'] == 'Counties':
+        workbooks.append(f"{params['indicator']} {params['geo']} {params['estimate']}.xlsx")
+    if params['mpo']:
+        workbooks.append(f"{params['indicator']} MPO {params['estimate']}.xlsx")
     else:
-        if params['sample'] == 'LEHD': workbooks.append(f"{params['indicator']} {params['geo']} {params['sample']}.xlsx")
-        else: workbooks.append(f"{params['indicator']} {params['geo']} {params['estimate']}.xlsx")
+        if params['sample'] == 'LEHD':
+            workbooks.append(f"{params['indicator']} {params['geo']} {params['sample']}.xlsx")
+        else:
+            workbooks.append(f"{params['indicator']} {params['geo']} {params['estimate']}.xlsx")
 
     print()
 
@@ -1606,11 +1650,16 @@ def export_indicator(df, params):
 
     writer = pd.ExcelWriter(params['path_wb'], engine='xlsxwriter')
     
-    if params['geo'] == 'Congressional Districts': sheet_geo = 'CD'
-    elif params['geo'] == 'State Legislative Lower Districts': sheet_geo = 'SLDL'
-    elif params['geo'] == 'State Legislative Upper Districts': sheet_geo = 'SLDU'
-    elif 'MPO' in str(params['path_wb']): sheet_geo = 'MPO'
-    else: sheet_geo = params['geo']
+    if params['geo'] == 'Congressional Districts':
+        sheet_geo = 'CD'
+    elif params['geo'] == 'State Legislative Lower Districts':
+        sheet_geo = 'SLDL'
+    elif params['geo'] == 'State Legislative Upper Districts':
+        sheet_geo = 'SLDU'
+    elif 'MPO' in str(params['path_wb']):
+        sheet_geo = 'MPO'
+    else:
+        sheet_geo = params['geo']
 
     if params['about']:
         if params['geo']=='Counties' and params['mpo']:
@@ -1622,63 +1671,41 @@ def export_indicator(df, params):
     df.to_excel(writer, sheet_name=sheet_geo, index=False, header=True)
     workbook = writer.book
     
-    format_numbers = workbook.add_format({'num_format': '#,##0' })
-    formet_percent = workbook.add_format({'num_format': '0.0%'  })
-    formet_dollars = workbook.add_format({'num_format': '$#,##0'})
+    format_numbers_0 = workbook.add_format({'num_format': '#,##0'  })
+    format_percent   = workbook.add_format({'num_format': '0.0%'   })
+    format_dollars   = workbook.add_format({'num_format': '$#,##0' })
+    format_numbers_1 = workbook.add_format({'num_format': '#,##0.0'})
 
     worksheet = writer.sheets[sheet_geo]
-    
-    try:
-        idx_col = df.columns.get_loc('Population')
-        worksheet.set_column(idx_col, idx_col, 10, format_numbers)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Households')
-        worksheet.set_column(idx_col, idx_col, 10, format_numbers)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Housing Units')
-        worksheet.set_column(idx_col, idx_col, 10, format_numbers)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Margin of Error')
-        worksheet.set_column(idx_col, idx_col, 10, format_numbers)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Percent')
-        worksheet.set_column(idx_col, idx_col, 10, formet_percent)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Margin of Error Ratio')
-        worksheet.set_column(idx_col, idx_col, 10, formet_percent)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Median Household Income')
-        worksheet.set_column(idx_col, idx_col, 10, formet_dollars)
-        idx_col = df.columns.get_loc('Margin of Error')
-        worksheet.set_column(idx_col, idx_col, 10, formet_dollars)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Median Household Income')
-        worksheet.set_column(idx_col, idx_col, 10, formet_dollars)
-        idx_col = df.columns.get_loc('Regional Median Household Income')
-        worksheet.set_column(idx_col, idx_col, 10, formet_dollars)
-        idx_col = df.columns.get_loc('Percent of Regional Median Household Income')
-        worksheet.set_column(idx_col, idx_col, 10, formet_percent)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Total Population')
-        worksheet.set_column(idx_col, idx_col, 10, format_numbers)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Birth Rate Per 1,000 People')
-        worksheet.set_column(idx_col, idx_col, 10, formet_percent)
-    except: pass
-    try:
-        idx_col = df.columns.get_loc('Marriage Rate Per 1,000 People')
-        worksheet.set_column(idx_col, idx_col, 10, formet_percent)
-    except: pass
 
+    dt_formats = {
+        'Population': format_numbers_0
+        , 'Households': format_numbers_0
+        , 'Housing Units': format_numbers_0
+        , 'Percent': format_percent
+        , 'Margin of Error Ratio': format_percent
+        , 'Median Household Income': format_dollars
+        , 'Regional Median Household Income': format_dollars
+        , 'Percent of Regional Median Household Income': format_percent
+        , 'Total Population': format_numbers_0
+        , 'Total Households': format_numbers_0
+        , 'Birth Rate Per 1,000 People': format_percent
+        , 'Marriage Rate Per 1,000 People': format_percent
+        , 'Median Age': format_numbers_1
+    }
+
+    for col, format in dt_formats.items():           
+        try:
+            idx_col = df.columns.get_loc(col)
+            worksheet.set_column(idx_col, idx_col, 10, format)
+            if col in ['Median Household Income']:
+                try:
+                    idx_col = df.columns.get_loc('Margin of Error')
+                    worksheet.set_column(idx_col, idx_col, 10, format_dollars)
+                except Exception as e:
+                    e
+        except Exception as e:
+            e
 
     worksheet.autofit()
     

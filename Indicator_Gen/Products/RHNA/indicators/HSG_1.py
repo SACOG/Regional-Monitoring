@@ -1,11 +1,14 @@
 
 
+## TODO:
+# Calculate percentages table as well
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
@@ -15,6 +18,9 @@ yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
+
+
+warnings.filterwarnings("ignore")
 
 
 if __name__ == '__main__':

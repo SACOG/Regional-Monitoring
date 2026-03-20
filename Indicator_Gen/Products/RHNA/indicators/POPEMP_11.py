@@ -1,11 +1,6 @@
 
 
 
-def re_remove_pre(x, exp = '('):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
-    return x
-
 
 import numpy as np
 import pandas as pd
@@ -21,6 +16,12 @@ sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
 yaml_file = rhna.load_yaml()
 
+
+def re_remove_pre(x, exp = '('):
+    try: x = str(x.split(exp, 1)[1])
+    except: pass
+    return x
+    
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
@@ -47,7 +48,7 @@ if __name__ == '__main__':
     job_sectors = ['CNS01', 'CNS02', 'CNS03', 'CNS04', 'CNS05', 'CNS06', 'CNS07', 'CNS08', 'CNS09', 'CNS10', 'CNS11', 'CNS12', 'CNS13', 'CNS14', 'CNS15', 'CNS16', 'CNS17', 'CNS18', 'CNS19', 'CNS20']
 
 
-    rhna.print2()
+    print('\n'*2)
     print('Importing Workplace Area Characteristic (WAC) data by year from zip files stored online found here:  https://lehd.ces.census.gov/data/lodes/LODES8/ca/wac/')
     print()
 
@@ -94,6 +95,7 @@ if __name__ == '__main__':
         list_df.append(df)
 
     df = pd.concat(list_df).reset_index(drop=True)
+    df['Percent'] = df['Number of Jobs'] / df.groupby(['Year', 'COUNTY', 'JURIS'])['Number of Jobs'].transform('sum')
 
     print()
     print('Data for all years: ')
@@ -104,7 +106,7 @@ if __name__ == '__main__':
 
     for county in counties:
 
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(1)
 
@@ -115,8 +117,10 @@ if __name__ == '__main__':
             tqdm.write(jurisdiction)
 
             df_prod = df_sub[df_sub['JURIS'] == jurisdiction].drop('COUNTY', axis=1).pivot_table(index='Year', columns='Industry', values='Number of Jobs').reset_index()
+            df_pct  = df_sub[df_sub['JURIS'] == jurisdiction].drop('COUNTY', axis=1).pivot_table(index='Year', columns='Industry', values='Percent'       ).reset_index()
+
             df_plot = df_sub[df_sub['JURIS'] == jurisdiction]
 
             fig = rhna.make_fig(INDICATOR, params, df_plot, county, jurisdiction)
             rhna.plot_rhna(fig, county, jurisdiction, INDICATOR, params)
-            rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod)
+            rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod, df_pct)

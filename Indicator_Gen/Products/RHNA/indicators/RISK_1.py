@@ -1,6 +1,10 @@
 
 
 
+## TODO:
+# Recreate chelsea/arianna's table in excel
+# Also include sacramento county and regional comparison in excel?
+# Make sure to populate report with estimates
 
 
 import pandas as pd

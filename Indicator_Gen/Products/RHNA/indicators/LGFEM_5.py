@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
@@ -26,6 +26,7 @@ def re_remove_pre(x, exp = ':  '):
     except: pass
     return x
 
+warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
@@ -49,7 +50,7 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        print();print()
+        print('\n'*2)
         print(county)
         time.sleep(2)
 

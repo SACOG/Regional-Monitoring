@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(2); print()
 

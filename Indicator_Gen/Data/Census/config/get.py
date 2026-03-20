@@ -204,7 +204,8 @@ def moe_split(text):
         pattern = re.compile('.*E$|.*M$')
         text = ','.join([est for est in estimates if pattern.match(est)])
         return text
-    except:
+    except Exception as e:
+        print('Quite exceptional!', e)
         return text
 
 
@@ -400,7 +401,10 @@ def get_acs(api_key, df_urls, params):
                                                 , state     = state
                                                 , county    = dt_fips[state])
                                 )
-                            except Exception as e: print(e); traceback.print_exc(); print(); print()
+                            except Exception as e:
+                                print('Quite exceptional!', e)
+                                traceback.print_exc()
+                                print('\n'*2)
                                     
                     if params['import_tab'] == 'MSA':
                         try:
@@ -415,7 +419,10 @@ def get_acs(api_key, df_urls, params):
                                             , year      = year
                                             , msa       = msa_to_import)
                             )
-                        except Exception as e: print(e); traceback.print_exc(); print(); print()
+                        except Exception as e:
+                            print('Quite exceptional!', e)
+                            traceback.print_exc()
+                            print('\n'*2)
 
                     if params['import_tab'] == 'States':
                         for state in states_to_import:
@@ -429,7 +436,10 @@ def get_acs(api_key, df_urls, params):
                                               , year      = year
                                               , state     = state)
                                 )
-                            except Exception as e: print(e); traceback.print_exc(); print(); print()
+                            except Exception as e:
+                                print('Quite exceptional!', e)
+                                traceback.print_exc()
+                                print('\n'*2)
 
                     if params['import_tab'] == 'National':
                         try:
@@ -440,7 +450,10 @@ def get_acs(api_key, df_urls, params):
                                             , variables = variables
                                             , year      = year)
                             )
-                        except Exception as e: print(e); traceback.print_exc(); print(); print()
+                        except Exception as e:
+                            print('Quite exceptional!', e)
+                            traceback.print_exc()
+                            print('\n'*2)
 
                     df_states = pd.concat(list_df_states)
                     df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
@@ -471,7 +484,10 @@ def get_acs(api_key, df_urls, params):
 
 
             list_df_years.append(df_year)
-        except Exception as e: print(e); traceback.print_exc(); print(); print()
+        except Exception as e:
+            print('Quite exceptional!', e)
+            traceback.print_exc()
+            print('\n'*2)
 
     df_census = pd.concat(list_df_years)
     df_census = df_census.drop_duplicates().reset_index(drop=True)
@@ -529,7 +545,6 @@ def get_pums(api_key, df_urls, params):
         else:
             dt_vars[str(year)] = help.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'].str.contains('group'))]['ID'].to_list()) + help.unique(df_vars[(df_vars['Year'] == year) & (df_vars['Data Type'] == 'integer')]['ID'].to_list()) + [weight]
 
-    # TODO: replace w function
     df_fips, dt_fips = read_fips_file_pums(params)
 
     print()
@@ -714,7 +729,10 @@ def get_subject(api_key, df_urls, params):
                                             , state     = state
                                             , county    = dt_fips[state])
                             )
-                        except Exception as e: print(e); traceback.print_exc(); print(); print()
+                        except Exception as e:
+                            print('Quite exceptional!', e)
+                            traceback.print_exc()
+                            print('\n'*2)
                                 
                 if params['import_tab'] == 'MSA':
                     try:
@@ -726,7 +744,10 @@ def get_subject(api_key, df_urls, params):
                                         , year      = year
                                         , msa       = msa_to_import)
                         )
-                    except Exception as e: print(e); traceback.print_exc(); print(); print()
+                    except Exception as e:
+                        print('Quite exceptional!', e)
+                        traceback.print_exc()
+                        print('\n'*2)
 
                 if params['import_tab'] == 'States':
                     for state in states_to_import:
@@ -740,7 +761,10 @@ def get_subject(api_key, df_urls, params):
                                             , year      = year
                                             , state     = state)
                             )
-                        except Exception as e: print(e); traceback.print_exc(); print(); print()
+                        except Exception as e:
+                            print('Quite exceptional!', e)
+                            traceback.print_exc()
+                            print('\n'*2)
 
                 df_states = pd.concat(list_df_states)
                 df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
@@ -750,7 +774,10 @@ def get_subject(api_key, df_urls, params):
             df_vars_all = ft.reduce(lambda left, right: pd.merge(left, right, on = GEO_ID[params['geo']] + ['Year'], how='outer'), list_df_vars)
             list_df_years.append(df_vars_all)
 
-        except Exception as e: print(e); traceback.print_exc(); print(); print()
+        except Exception as e:
+            print('Quite exceptional!', e)
+            traceback.print_exc()
+            print('\n'*2)
 
 
     print()
@@ -860,7 +887,10 @@ def get_dp(api_key, df_urls, params):
                                             , state     = state
                                             , county    = dt_fips[state])
                             )
-                        except Exception as e: print(e); traceback.print_exc(); print(); print()
+                        except Exception as e:
+                            print('Quite exceptional!', e)
+                            traceback.print_exc()
+                            print('\n'*2)
                                 
                 if params['import_tab'] == 'MSA':
                     try:
@@ -875,7 +905,10 @@ def get_dp(api_key, df_urls, params):
                                         , year      = year
                                         , msa       = msa_to_import)
                         )
-                    except Exception as e: print(e); traceback.print_exc(); print(); print()
+                    except Exception as e:
+                        print('Quite exceptional!', e)
+                        traceback.print_exc()
+                        print('\n'*2)
 
                 if params['import_tab'] == 'States':
                     for state in states_to_import:
@@ -889,7 +922,10 @@ def get_dp(api_key, df_urls, params):
                                             , year      = year
                                             , state     = state)
                             )
-                        except Exception as e: print(e); traceback.print_exc(); print(); print()
+                        except Exception as e:
+                            print('Quite exceptional!', e)
+                            traceback.print_exc()
+                            print('\n'*2)
 
                 if params['import_tab'] == 'National':
                     try:
@@ -900,7 +936,10 @@ def get_dp(api_key, df_urls, params):
                                         , variables = variables
                                         , year      = year)
                         )
-                    except Exception as e: print(e); traceback.print_exc(); print(); print()
+                    except Exception as e:
+                        print('Quite exceptional!', e)
+                        traceback.print_exc()
+                        print('\n'*2)
 
                 df_states = pd.concat(list_df_states)
                 df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
@@ -1028,7 +1067,10 @@ def get_dec(api_key, df_urls, params):
                                     , state     = state
                                     , county    = dt_fips[state])
                     )
-                except Exception as e: print(e); traceback.print_exc(); print(); print()
+                except Exception as e:
+                    print('Quite exceptional!', e)
+                    traceback.print_exc()
+                    print('\n'*2)
 
         if params['import_tab'] == 'States':
             for state in states_to_import:
@@ -1042,7 +1084,10 @@ def get_dec(api_key, df_urls, params):
                                     , year      = year
                                     , state     = state)
                     )
-                except Exception as e: print(e); traceback.print_exc(); print(); print()
+                except Exception as e:
+                    print('Quite exceptional!', e)
+                    traceback.print_exc()
+                    print('\n'*2)
 
         df_states = pd.concat(list_df_states)
         df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
@@ -1148,7 +1193,10 @@ def get_lehd(api_key, df_urls, params):
                 df_state = df_state.drop(['state', 'county'], axis=1)
                 df_state = df_state.set_index(['STATEFP', 'COUNTYFP', 'COUNTYNAME', 'year', 'time']).reset_index()
                 list_df_states.append(df_state)
-            except Exception as e: print(e); traceback.print_exc(); print(); print()
+            except Exception as e:
+                print('Quite exceptional!', e)
+                traceback.print_exc()
+                print('\n'*2)
 
     if params['import_tab'] == 'MSA':
 
@@ -1166,7 +1214,10 @@ def get_lehd(api_key, df_urls, params):
                 df_state = df_state.drop(['state', 'metropolitan statistical area/micropolitan statistical area'], axis=1)
                 df_state = df_state.set_index(['STATEFP', 'MSA_ID', 'MSA', 'time']).reset_index()
                 list_df_states.append(df_state)
-            except Exception as e: print(e); traceback.print_exc(); print(); print()
+            except Exception as e:
+                print('Quite exceptional!', e)
+                traceback.print_exc()
+                print('\n'*2)
     df_census = pd.concat(list_df_states)
     df_census = df_census.rename(columns = {'year':'Year'})
     df_census = df_census.drop_duplicates(subset=['MSA_ID', 'time', 'Year', 'firmage', 'Emp']).reset_index(drop=True)
@@ -1181,7 +1232,7 @@ def get_lehd(api_key, df_urls, params):
 
 def get_data_any(api_key, params):
 
-    print(); print(); print()
+    print('\n'*3)
     start_time = time.time()
 
     ## Import Census Bureau data to url mapping table
@@ -1189,12 +1240,18 @@ def get_data_any(api_key, params):
 
 
     ## Request data
-    if params['sample'] == 'ACS':     df_census = get_acs(api_key, df_urls, params)
-    if params['geo'] == 'PUMA':       df_census = get_pums(api_key, df_urls, params)
-    if params['sample'] == 'SUBJECT': df_census = get_subject(api_key, df_urls, params)
-    if params['sample'] == 'DP':      df_census = get_dp(api_key, df_urls, params)
-    if params['estimate'] == 'DEC':   df_census = get_dec(api_key, df_urls, params)
-    if params['sample'] == 'LEHD':    df_census = get_lehd(api_key, df_urls, params)
+    if params['sample'] == 'ACS':
+        df_census = get_acs(api_key, df_urls, params)
+    if params['geo'] == 'PUMA':
+        df_census = get_pums(api_key, df_urls, params)
+    if params['sample'] == 'SUBJECT':
+        df_census = get_subject(api_key, df_urls, params)
+    if params['sample'] == 'DP':
+        df_census = get_dp(api_key, df_urls, params)
+    if params['estimate'] == 'DEC':
+        df_census = get_dec(api_key, df_urls, params)
+    if params['sample'] == 'LEHD':
+        df_census = get_lehd(api_key, df_urls, params)
 
     # # For CPS Tables
     # if estimate == 'CPS':

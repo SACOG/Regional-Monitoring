@@ -2,39 +2,69 @@
 
 
 from pathlib import Path
-
-
-PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
-
+import pandas as pd
+import numpy as np
+import time
+from tqdm import tqdm
 import sys
-sys.path.append(str(PATH_CONFIG))
+sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-FILE_YAML = rhna.load_yaml()
+yaml_file = rhna.load_yaml()
 
+
+PATH_DATA = Path(yaml_file['Path_Data'])
+INDICATOR = Path(__file__).stem
+params = yaml_file[INDICATOR]
+
+PATH_TYP = PATH_DATA / r'POPEMP_25\emp25_data\outputs\typologies'
 
 
 if __name__ == '__main__':
+    
+    
+    df = pd.read_csv(PATH_TYP / 'jurisdiction_typology_summary.csv')
+    df = df[df['Typology']!='Totals'].reset_index(drop=True)
+    df.columns = ['County', 'Jurisdiction', 'Typology', 'Owner occupied', 'Renter occupied']
 
-        
-    indicator = 'RHNA_POPEMP_25'
-    source='temp'
+    df = df.melt(id_vars=['County', 'Jurisdiction', 'Typology'], var_name='Housing Tenure', value_name='Households')
+    df = df.pivot_table(index=['County', 'Jurisdiction', 'Housing Tenure'], columns='Typology', values = 'Households').reset_index()
+    df = df.fillna(0)
+    df = df.melt(id_vars=['County', 'Jurisdiction', 'Housing Tenure'], var_name='Typology', value_name='Households')
+    df = df.pivot_table(index=['County', 'Jurisdiction', 'Typology'], columns='Housing Tenure', values = 'Households').reset_index()
+    df = df.replace(0, np.nan)
 
-    counties = ['El Dorado', 'Placer', 'Sacramento', 'Sutter', 'Yolo', 'Yuba']
+    df['sort'] = pd.Categorical(df['Typology'], [
+        'Susceptible to or Experiencing Displacement'
+        , 'At Risk of or Experiencing Exclusion'
+        , 'At Risk of or Experiencing Gentrification'
+        , 'Stable Moderate/Mixed Income'
+        , 'Other'
+    ])
+    df = df.sort_values(['County', 'Jurisdiction', 'sort'], ascending=[True, True, True]).drop('sort', axis=1).reset_index(drop=True)
 
-    dt_juris = {
-        'El Dorado': ['Placerville', 'South Lake Tahoe', 'Unincorporated'],
-        'Placer': ['Auburn', 'Colfax', 'Lincoln', 'Loomis', 'Rocklin', 'Roseville', 'Unincorporated'],
-        'Sacramento': ['Citrus Heights', 'Elk Grove', 'Folsom', 'Galt', 'Isleton', 'Rancho Cordova', 'Sacramento', 'Unincorporated'],
-        'Sutter': ['Live Oak', 'Yuba City', 'Unincorporated'],
-        'Yolo': ['Davis', 'West Sacramento', 'Winters', 'Woodland', 'Unincorporated'],
-        'Yuba': ['Marysville', 'Wheatland', 'Unincorporated']
-    }
+    counties = df['County'].unique()
 
-
-    print()
     for county in counties:
+        
+        print('\n'*2)
         print(county)
-        for jurisdiction in dt_juris[county]:
-            rhna.export_rhna_temp(county, jurisdiction, indicator)
+        time.sleep(2)
+
+        df_sub = df[df['County'] == county]
+        jurisdictions = df_sub['Jurisdiction'].unique()
+        
+        for jurisdiction in tqdm(jurisdictions):
+
+            tqdm.write(jurisdiction)
+
+            df_plot = df_sub[df_sub['Jurisdiction']==jurisdiction].drop(['County', 'Jurisdiction'], axis=1).melt(id_vars='Typology', var_name='Housing Tenure', value_name='Households')
+            df_prod = df_sub[df_sub['Jurisdiction']==jurisdiction].drop(['County', 'Jurisdiction'], axis=1)
+
+            fig = rhna.make_fig(INDICATOR, params, df_plot, county, jurisdiction)
+            rhna.plot_rhna(fig, county, jurisdiction, INDICATOR, params)
+            rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod)
+
+
+    breakpoint()
 
 

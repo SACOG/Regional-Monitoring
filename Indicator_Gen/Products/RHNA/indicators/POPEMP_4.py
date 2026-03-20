@@ -45,8 +45,9 @@ if __name__ == '__main__':
 
     for county in counties:
         
-        rhna.print2()
-        print(county); print()
+        print('\n'*2)
+        print(county)
+        print()
         time.sleep(2)
 
         df_places_sub = df_places[df_places['County Name'] == county].drop('County Name', axis=1)

@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     for geography in geographies:
         
-        rhna.print2()
+        print('\n'*2)
         df_sub = df[df['Geography'] == geography]
 
         counties = geographies_to_counties[geography]

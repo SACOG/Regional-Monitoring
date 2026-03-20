@@ -6,6 +6,7 @@
 
 from pathlib import Path
 import pandas as pd
+import geopandas as gpd
 import re
 from datetime import date
 import yaml
@@ -167,5 +168,35 @@ def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
     
     return df
 
+
+
+
+
+def sqlqry_to_gdf(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):   
+
+    driver = get_odbc_driver()  
+
+    conn_str = f"DRIVER={driver};" \
+        f"SERVER={servername};" \
+        f"DATABASE={dbname};" \
+        f"Trusted_Connection={trustedconn}"
+        
+    conn_str = urllib.parse.quote_plus(conn_str)
+    engine = sqla.create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
+       
+    start_time = perf()
+
+    # create SQL table from the dataframe
+    print("Executing query. Results loading into dataframe...")
+    gdf = gpd.read_postgis(query_str, engine, geom_col="geometry")
+    srid = int(gdf["srid"].iloc[0])
+    gdf = gdf.set_crs(epsg=srid)
+    gdf = gdf.drop('srid', axis=1)
+    rowcnt = gdf.shape[0]
+    
+    et_mins = round((perf() - start_time) / 60, 2)
+    print(f"Successfully executed query in {et_mins} minutes. {rowcnt} rows loaded into dataframe.")
+    
+    return gdf
 
 

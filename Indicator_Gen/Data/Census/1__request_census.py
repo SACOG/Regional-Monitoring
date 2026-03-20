@@ -10,15 +10,10 @@ Request parameters need to be updated using census.xlsx in the config folder
 Every data release, the .py files in the config/step0 folder need to be reran
 
 
-RERUN=True/False -> if True, recycles the last API request
+RERUN=True/False -> if True, recycles parameters from the most recent API request
 EXPORT=True/False -> if True, exports requested data to desired file path
 
 '''
-
-
-
-RERUN=False
-EXPORT=True
 
 
 
@@ -30,19 +25,16 @@ from pathlib import Path
 from IPython.display import display
 import sys
 
+sys.path.append(str(Path(__file__).parent/'config'))
+import pre
+import get
+
 PATH_GIT = Path(__file__).parent.parent.parent
 PATH_CODE    = PATH_GIT / 'Data' / 'Census'
 PATH_CONFIG0 = PATH_GIT / 'config'
 PATH_CONFIG  = PATH_CODE / 'config'
 
 FILE_API = PATH_CONFIG / 'api_key.txt'
-
-sys.path.append(str(PATH_CONFIG0))
-import help
-
-sys.path.append(str(PATH_CONFIG))
-import pre
-import get
 
 
 # Network file paths for exporting
@@ -53,6 +45,12 @@ PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data
 
 
 # Main -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+RERUN=False
+EXPORT=True
+
 
 
 if __name__ == '__main__':
@@ -75,6 +73,7 @@ if __name__ == '__main__':
 
         file_out = PATH_ORIG / pre.set_download_name(params)
         df_census.to_csv(file_out, index=False)
-        print('Successfully EXPORTed!'); help.print2()
+        print('Successfully EXPORTed!')
+        print('\n'*2)
 
 

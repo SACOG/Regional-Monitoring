@@ -97,8 +97,10 @@ def api_request_params(yaml_census, rerun):
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
                 print()
                 print('Projects available: ')
-                display(yaml_census['Project']); print()
-                print('Which project are you pulling data for?'); print()
+                display(yaml_census['Project'])
+                print()
+                print('Which project are you pulling data for?')
+                print()
                 project = input()
                 if project in yaml_census['Project']:
                     print()
@@ -110,7 +112,8 @@ def api_request_params(yaml_census, rerun):
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(yaml_census['Project'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(yaml_census['Project'])
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -118,8 +121,10 @@ def api_request_params(yaml_census, rerun):
             try:
                 print()
                 print('Indicators available:'); print()
-                display(list(yaml_census['Indicators'][project].keys())); print()
-                print('Which indicator do you need to rerun?'); print()
+                display(list(yaml_census['Indicators'][project].keys()))
+                print()
+                print('Which indicator do you need to rerun?')
+                print()
                 indicator = input()
                 if indicator in list(yaml_census['Indicators'][project].keys()):
                     print()
@@ -131,7 +136,8 @@ def api_request_params(yaml_census, rerun):
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(list(yaml_census['Indicators'][project].keys()))
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(list(yaml_census['Indicators'][project].keys()))
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
                 
@@ -168,7 +174,8 @@ def api_request_params(yaml_census, rerun):
                     break
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(sample_types)
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(sample_types)
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -176,8 +183,10 @@ def api_request_params(yaml_census, rerun):
             try:
                 print()
                 print('Estimates available:')
-                display(list(yaml_census['Samples'][sample_type].keys())); print()
-                print('Which estimate do you want to pull data from?'); print()
+                display(list(yaml_census['Samples'][sample_type].keys()))
+                print()
+                print('Which estimate do you want to pull data from?')
+                print()
                 estimate = input()
                 if estimate in list(yaml_census['Samples'][sample_type].keys()):
                     print()
@@ -189,16 +198,20 @@ def api_request_params(yaml_census, rerun):
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(list(yaml_census['Samples'][sample_type].keys()))
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(list(yaml_census['Samples'][sample_type].keys()))
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
         while True:
             try:
                 print()
-                print('Geographies available:'); print()
-                display(yaml_census['Samples'][sample_type][estimate]['geographies_available']); print()
-                print('Which geography do you want to pull data for?'); print()
+                print('Geographies available:')
+                print()
+                display(yaml_census['Samples'][sample_type][estimate]['geographies_available'])
+                print()
+                print('Which geography do you want to pull data for?')
+                print()
                 geography = input()
                 if geography in yaml_census['Samples'][sample_type][estimate]['geographies_available']:
                     print()
@@ -210,7 +223,8 @@ def api_request_params(yaml_census, rerun):
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(yaml_census['Samples'][sample_type][estimate]['geographies_available'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(yaml_census['Samples'][sample_type][estimate]['geographies_available'])
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -220,15 +234,18 @@ def api_request_params(yaml_census, rerun):
                 print()
                 if sample_type != 'LEHD':
                     print('Years available:')
-                    display(yaml_census['Samples'][sample_type][estimate]['years_available']); print()
-                    print('Do you want to pull data for all years available?  Select Yes/No: '); print()
+                    display(yaml_census['Samples'][sample_type][estimate]['years_available'])
+                    print()
+                    print('Do you want to pull data for all years available?  Select Yes/No: ')
+                    print()
                     all_years = input()
                     if all_years == 'Yes':
                         years_to_import = yaml_census['Samples'][sample_type][estimate]['years_available']
                         years = ', '.join([str(year) for year in years_to_import])
                     elif all_years == 'No':
                         print()
-                        print('Please type which years you want to pull data from, separated by commas:'); print()
+                        print('Please type which years you want to pull data from, separated by commas:')
+                        print()
                         years = input()
                         if ',' in years:
                             years_to_import = years.split(', ')
@@ -254,7 +271,8 @@ def api_request_params(yaml_census, rerun):
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(['Yes', 'No'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(['Yes', 'No'])
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -268,7 +286,8 @@ def api_request_params(yaml_census, rerun):
             try:
                 print()
                 if sample_type not in ['LEHD', 'DEC']:
-                    print('Do you want to pull the Margin of Error estimates?  Select Yes/No: '); print()
+                    print('Do you want to pull the Margin of Error estimates?  Select Yes/No: ')
+                    print()
                     margin_of_error = input()
                     if margin_of_error in ['Yes', 'No']:
                         print()
@@ -277,13 +296,15 @@ def api_request_params(yaml_census, rerun):
                         print()
                         print("Invalid choice. Please try again.")
                 else:
-                    print(); print('LEHD has margin of error terms available but not through API.  DEC has no margin of error terms available')
+                    print()
+                    print('LEHD has margin of error terms available but not through API.  DEC has no margin of error terms available')
                     margin_of_error = 'No'
                     print()
-                    print('---------------------------------------------------------------------------------------------------------------------------------------')
+                    break
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(['Yes', 'No'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(['Yes', 'No'])
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -301,11 +322,15 @@ def api_request_params(yaml_census, rerun):
             f.write(f"Margin of Error: {margin_of_error}\n")
             
             
-    if margin_of_error == 'Yes': margin_of_error=True
-    else: margin_of_error=False
+    if margin_of_error == 'Yes':
+        margin_of_error=True
+    else:
+        margin_of_error=False
 
-    if percentages == 'Yes': percentages=True
-    else: percentages=False
+    if percentages == 'Yes':
+        percentages=True
+    else:
+        percentages=False
 
     params = {
         'project': project,
@@ -324,7 +349,7 @@ def api_request_params(yaml_census, rerun):
         'pct': percentages,
         'weight': weighted_by,
         'adjust_cpi': adjust_cpi,
-        'export_loc': export_loc,
+        'export_loc': Path.home()/export_loc,
         'folder': folder
     }
 

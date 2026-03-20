@@ -1,11 +1,4 @@
 
-
-## TODO: Start Here
-def re_remove_pre(x, exp = '('):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
-    return x
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -13,21 +6,31 @@ from tqdm import tqdm
 import time
 import io
 from IPython.display import display
-
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
+
+
+def re_remove_pre(x, exp = '('):
+    try:
+        x = str(x.split(exp, 1)[1])
+    except Exception as e:
+        print(f"Quite exceptional! {e}")
+    return x
+
+
 yaml_file = rhna.load_yaml()
 
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
+PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
+
 
 FILE_LODES = Path(r'I:\Projects\Josh\Regional Monitoring') / 'LEHD_LODESmappings.xlsx'
 FILE_CW = Path(r'I:\Projects\Josh\Geospatial Data') / 'crosswalks' / 'Census_2020_BG_Jurisdiction.csv'
 
-BASE_YEAR = 2002
+BASE_YEAR = 2002 # 2002
 END_YEAR = 2023
 
 
@@ -47,7 +50,7 @@ if __name__ == '__main__':
 
     years = range(BASE_YEAR, END_YEAR+1, 1)
 
-    rhna.print2()
+    print('\n'*2)
     print('Importing Workplace Area Characteristic (WAC) data by year from zip files stored online found here:  https://lehd.ces.census.gov/data/lodes/LODES8/ca/wac/')
     print()
 
@@ -89,7 +92,7 @@ if __name__ == '__main__':
     df_wac = df_wac.reset_index(drop=True)
 
 
-    rhna.print2()
+    print('\n'*2)
     print('Importing Residential Area Characteristic (RAC) data by year from zip files stored online found here:  https://lehd.ces.census.gov/data/lodes/LODES8/ca/rac/')
     print()
 
@@ -133,6 +136,9 @@ if __name__ == '__main__':
     df = df_wac.merge(df_rac, on=['Year', 'COUNTY', 'JURIS', 'Wage Group'], how='left')
     df['Ratio'] = df['num_jobs_wac'] / df['num_jobs_rac']
 
+    df_mpo = df.groupby(['Year', 'Wage Group'], as_index=False).agg(num_jobs_wac=('num_jobs_wac', 'sum'), num_jobs_rac=('num_jobs_rac', 'sum'))
+    df_mpo['Ratio'] = df_mpo['num_jobs_wac'] / df_mpo['num_jobs_rac']
+
     df = df.drop(['num_jobs_wac', 'num_jobs_rac'], axis=1)
 
     print()
@@ -144,7 +150,7 @@ if __name__ == '__main__':
 
     for county in counties:
 
-        rhna.print2()
+        print('\n'*2)
         print(county)
         time.sleep(1)
 
@@ -161,6 +167,9 @@ if __name__ == '__main__':
             df_plot = df_sub.copy()
             df_plot = df_plot[df_plot['JURIS'] == jurisdiction]
 
+            path_tables = PATH_OUT / county.replace(' County', '') / jurisdiction / 'tables'
+            df_mpo.to_csv(path_tables / f'{INDICATOR}_prod_mpo.csv', index=False)
+            
             fig = rhna.make_fig(INDICATOR, params, df_plot, county, jurisdiction)
             rhna.plot_rhna(fig, county, jurisdiction, INDICATOR, params)
             rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod)

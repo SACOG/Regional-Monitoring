@@ -1,5 +1,6 @@
 
 
+
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
@@ -33,7 +34,7 @@ if __name__ == '__main__':
 
     for county in counties:
 
-        rhna.print2()
+        print('\n'*2)
         print(county)
 
         df_sub = df_hcd[df_hcd['COUNTY'] == county]

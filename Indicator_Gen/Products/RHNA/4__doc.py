@@ -1,9 +1,5 @@
 
 
-
-
-
-
 '''
 This script converts the RHNA housing cycle excel data product from a Microsoft Excel '.xlsx' file to a Microsoft Word '.docx' file
 
@@ -12,10 +8,6 @@ Good news - very organized and streamlined way of finding/replacing text in temp
 Bad news - cannot insert tables/plots into template word doc, would need to have tables pre-made then use find/replace for text in tables
 would need to copy/paste plots :(
 '''
-
-
-## TODO:
-# How do we want to report on the "year" for the ACS 5 year data?
 
 
 
@@ -27,24 +19,20 @@ from tqdm import tqdm
 import traceback
 import win32com.client
 
-
-PATH_PROD = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
-PATH_CONFIG = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'config'
-FILE_WORD_TEMP = PATH_PROD.parent / 'TEMPLATE_RHNA_Jurisdiction.docx'
-
 import sys
-sys.path.append(str(PATH_CONFIG))
+sys.path.append(str(Path(__file__).parent/'config'))
 import word
 import rhna
-FILE_YAML = rhna.load_yaml()
-rhna.print2()
 
+
+PATH_PROD = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
+FILE_WORD_TEMP = PATH_PROD.parent / 'TEMPLATE_RHNA_Jurisdiction.docx'
+
+FILE_YAML = rhna.load_yaml()
 
 
 ACS_YEAR_MAX = 2023
 CHAS_YEAR_MAX = 2021
-
-
 
 
 def create_find_replace_dictionary(indicator, county, jurisdiction):
@@ -81,71 +69,127 @@ def create_find_replace_dictionary(indicator, county, jurisdiction):
         dt_find_replace[f'[{indicator}_year_max]'] = year_max
         dt_find_replace[f'[{indicator}_year_min]'] = year_min
 
-    if indicator == 'POPEMP_1':  dt_find_replace = word.popemp_1(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
-    if indicator == 'POPEMP_2':  dt_find_replace = word.popemp_2(dt_find_replace, df_prod, df_pct, year_max, year_min)
-    if indicator == 'POPEMP_4':  dt_find_replace = word.popemp_4(dt_find_replace, df_prod)
-    if indicator == 'POPEMP_5':  dt_find_replace = word.popemp_5(dt_find_replace, df_prod, jurisdiction)
-    if indicator == 'POPEMP_6':  dt_find_replace = word.popemp_6(dt_find_replace, df_pct, jurisdiction, county)
-    if indicator == 'POPEMP_11': dt_find_replace = word.popemp_11(dt_find_replace, df_prod, year_max, year_min)
-    if indicator == 'POPEMP_12': dt_find_replace = word.popemp_12(dt_find_replace, df_prod, year_max)
-    if indicator == 'POPEMP_13': dt_find_replace = word.popemp_13(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
-    if indicator == 'POPEMP_15': dt_find_replace = word.popemp_15(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
-    if indicator == 'POPEMP_16': dt_find_replace = word.popemp_16(dt_find_replace, df_prod, df_pct, jurisdiction, county)
-    if indicator == 'POPEMP_18': dt_find_replace = word.popemp_18(dt_find_replace, df_prod)
-    if indicator == 'POPEMP_20': dt_find_replace = word.popemp_20(dt_find_replace, df_pct)
-    if indicator == 'POPEMP_21': dt_find_replace = word.popemp_21(dt_find_replace, df_pct)
-    if indicator == 'POPEMP_22': dt_find_replace = word.popemp_22(dt_find_replace, df_pct)
-    if indicator == 'POPEMP_23': dt_find_replace = word.popemp_23(dt_find_replace, df_prod, df_pct, jurisdiction)
-    if indicator == 'HSG_1':     dt_find_replace = word.hsg_1(dt_find_replace, df_prod, jurisdiction, county)
-    if indicator == 'HSG_2':     dt_find_replace = word.hsg_2(dt_find_replace, df_pct, jurisdiction)
-    if indicator == 'HSG_3':     dt_find_replace = word.hsg_3(dt_find_replace, df_pct, jurisdiction)
-    if indicator == 'HSG_4':     dt_find_replace = word.hsg_4(dt_find_replace, df_prod, df_pct)
-    if indicator == 'HSG_5':     dt_find_replace = word.hsg_5(dt_find_replace, df_prod)
-    if indicator == 'HSG_6':     dt_find_replace = word.hsg_6(dt_find_replace, df_pct)
-    if indicator == 'HSG_7':     dt_find_replace = word.hsg_7(dt_find_replace, df_pct, jurisdiction)
-    if indicator == 'HSG_8':     dt_find_replace = word.hsg_8(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min)
-    if indicator == 'HSG_9':     dt_find_replace = word.hsg_9(dt_find_replace, df_pct, jurisdiction, county)
-    if indicator == 'HSG_10':    dt_find_replace = word.hsg_10(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min)
-    if indicator == 'HSG_11':    dt_find_replace = word.hsg_11(dt_find_replace, df_prod)
-    if indicator == 'OVER_1':    dt_find_replace = word.over_1(dt_find_replace, df_pct)
-    if indicator == 'OVER_3':    dt_find_replace = word.over_3(dt_find_replace, df_pct, jurisdiction)
-    if indicator == 'OVER_4':    dt_find_replace = word.over_4(dt_find_replace, df_pct)
-    if indicator == 'OVER_5':    dt_find_replace = word.over_5(dt_find_replace, df_prod, df_pct)
-    if indicator == 'OVER_6':    dt_find_replace = word.over_6(dt_find_replace, df_pct)
-    if indicator == 'OVER_8':    dt_find_replace = word.over_8(dt_find_replace, df_pct)
-    if indicator == 'OVER_9':    dt_find_replace = word.over_9(dt_find_replace, df_pct)
-    if indicator == 'FARM_1':    dt_find_replace = word.farm_1(dt_find_replace, df_prod, jurisdiction)
-    if indicator == 'FARM_2':    dt_find_replace = word.farm_2(dt_find_replace, df_prod)
-    if indicator == 'LGFEM_1':   dt_find_replace = word.lgfem_1(dt_find_replace, df_pct)
-    if indicator == 'LGFEM_2':   dt_find_replace = word.lgfem_2(dt_find_replace, df_pct, jurisdiction)
-    if indicator == 'LGFEM_3':   dt_find_replace = word.lgfem_3(dt_find_replace, df_pct)
-    if indicator == 'LGFEM_4':   dt_find_replace = word.lgfem_4(dt_find_replace, df_prod)
-    if indicator == 'LGFEM_5':   dt_find_replace = word.lgfem_5(dt_find_replace, df_pct)
-    if indicator == 'SEN_1':     dt_find_replace = word.sen_1(dt_find_replace, df_pct)
-    if indicator == 'SEN_2':     dt_find_replace = word.sen_2(dt_find_replace, df_pct)
-    if indicator == 'SEN_3':     dt_find_replace = word.sen_3(dt_find_replace, df_pct)
-    if indicator == 'DISAB_2':   dt_find_replace = word.disab_2(dt_find_replace, df_pct, jurisdiction)
-    if indicator == 'DISAB_4':   dt_find_replace = word.disab_4(dt_find_replace, df_prod)
-    if indicator == 'DISAB_5':   dt_find_replace = word.disab_5(dt_find_replace, df_prod)
-    if indicator == 'HOMELS_1':  dt_find_replace = word.homels_1(dt_find_replace, df_prod)
-    if indicator == 'HOMELS_2':  dt_find_replace = word.homels_2(dt_find_replace, df_prod, df_pct)
-    if indicator == 'HOMELS_3':  dt_find_replace = word.homels_3(dt_find_replace, df_prod)
-    if indicator == 'HOMELS_4':  dt_find_replace = word.homels_4(dt_find_replace, df_prod, jurisdiction, county)
-    if indicator == 'ELI_1':     dt_find_replace = word.eli_1(dt_find_replace, df_prod, jurisdiction)
-    if indicator == 'ELI_3':     dt_find_replace = word.eli_3(dt_find_replace, df_pct)
-    if indicator == 'AFFH_3':    dt_find_replace = word.affh_3(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'POPEMP_1':  
+        dt_find_replace = word.popemp_1(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
+    if indicator == 'POPEMP_2':  
+        dt_find_replace = word.popemp_2(dt_find_replace, df_prod, df_pct)
+    if indicator == 'POPEMP_4':  
+        dt_find_replace = word.popemp_4(dt_find_replace, df_prod)
+    if indicator == 'POPEMP_5':  
+        dt_find_replace = word.popemp_5(dt_find_replace, df_prod, jurisdiction)
+    if indicator == 'POPEMP_6':  
+        dt_find_replace = word.popemp_6(dt_find_replace, df_pct, jurisdiction, county)
+    if indicator == 'POPEMP_11': 
+        dt_find_replace = word.popemp_11(dt_find_replace, df_prod, year_max, year_min)
+    if indicator == 'POPEMP_12': 
+        dt_find_replace = word.popemp_12(dt_find_replace, df_prod, year_max)
+    if indicator == 'POPEMP_13': 
+        dt_find_replace = word.popemp_13(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
+    if indicator == 'POPEMP_14':
+        dt_find_replace = word.popemp_14(dt_find_replace, df_prod, year_max, county, jurisdiction)
+    if indicator == 'POPEMP_15': 
+        dt_find_replace = word.popemp_15(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
+    if indicator == 'POPEMP_16':
+        dt_find_replace = word.popemp_16(dt_find_replace, df_prod, df_pct, jurisdiction, county)
+    if indicator == 'POPEMP_18':
+        dt_find_replace = word.popemp_18(dt_find_replace, df_prod)
+    if indicator == 'POPEMP_20':
+        dt_find_replace = word.popemp_20(dt_find_replace, df_pct)
+    if indicator == 'POPEMP_21': 
+        dt_find_replace = word.popemp_21(dt_find_replace, df_pct)
+    if indicator == 'POPEMP_22': 
+        dt_find_replace = word.popemp_22(dt_find_replace, df_pct)
+    if indicator == 'POPEMP_23': 
+        dt_find_replace = word.popemp_23(dt_find_replace, df_prod, df_pct, jurisdiction)
+    if indicator == 'POPEMP_25': 
+        dt_find_replace = word.popemp_25(dt_find_replace, df_prod)
+    if indicator == 'HSG_1':     
+        dt_find_replace = word.hsg_1(dt_find_replace, df_prod, jurisdiction, county)
+    if indicator == 'HSG_2':     
+        dt_find_replace = word.hsg_2(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'HSG_3':     
+        dt_find_replace = word.hsg_3(dt_find_replace, df_pct, county, jurisdiction)
+    if indicator == 'HSG_4':     
+        dt_find_replace = word.hsg_4(dt_find_replace, df_prod, df_pct)
+    if indicator == 'HSG_5':     
+        dt_find_replace = word.hsg_5(dt_find_replace, df_prod)
+    if indicator == 'HSG_6':     
+        dt_find_replace = word.hsg_6(dt_find_replace, df_pct)
+    if indicator == 'HSG_7':     
+        dt_find_replace = word.hsg_7(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'HSG_8':     
+        dt_find_replace = word.hsg_8(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min)
+    if indicator == 'HSG_9':     
+        dt_find_replace = word.hsg_9(dt_find_replace, df_pct, jurisdiction, county)
+    if indicator == 'HSG_10':    
+        dt_find_replace = word.hsg_10(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min)
+    if indicator == 'HSG_11':    
+        dt_find_replace = word.hsg_11(dt_find_replace, df_prod)
+    if indicator == 'OVER_1':    
+        dt_find_replace = word.over_1(dt_find_replace, df_pct)
+    if indicator == 'OVER_3':    
+        dt_find_replace = word.over_3(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'OVER_4':    
+        dt_find_replace = word.over_4(dt_find_replace, df_pct)
+    if indicator == 'OVER_5':    
+        dt_find_replace = word.over_5(dt_find_replace, df_prod, df_pct)
+    if indicator == 'OVER_6':
+        dt_find_replace = word.over_6(dt_find_replace, df_pct)
+    if indicator == 'OVER_8':
+        dt_find_replace = word.over_8(dt_find_replace, df_pct)
+    if indicator == 'OVER_9':
+        dt_find_replace = word.over_9(dt_find_replace, df_pct)
+    if indicator == 'FARM_1':
+        dt_find_replace = word.farm_1(dt_find_replace, df_prod, jurisdiction)
+    if indicator == 'FARM_2':
+        dt_find_replace = word.farm_2(dt_find_replace, df_prod)
+    if indicator == 'LGFEM_1':
+        dt_find_replace = word.lgfem_1(dt_find_replace, df_pct)
+    if indicator == 'LGFEM_2':   
+        dt_find_replace = word.lgfem_2(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'LGFEM_3':
+        dt_find_replace = word.lgfem_3(dt_find_replace, df_pct)
+    if indicator == 'LGFEM_4':
+        dt_find_replace = word.lgfem_4(dt_find_replace, df_prod)
+    if indicator == 'LGFEM_5':   
+        dt_find_replace = word.lgfem_5(dt_find_replace, df_pct)
+    if indicator == 'SEN_1':
+        dt_find_replace = word.sen_1(dt_find_replace, df_pct)
+    if indicator == 'SEN_2':
+        dt_find_replace = word.sen_2(dt_find_replace, df_pct)
+    if indicator == 'SEN_3':
+        dt_find_replace = word.sen_3(dt_find_replace, df_pct)
+    if indicator == 'DISAB_2':
+        dt_find_replace = word.disab_2(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'DISAB_4':
+        dt_find_replace = word.disab_4(dt_find_replace, df_prod)
+    if indicator == 'DISAB_5':
+        dt_find_replace = word.disab_5(dt_find_replace, df_prod)
+    if indicator == 'HOMELS_1':
+        dt_find_replace = word.homels_1(dt_find_replace, df_prod)
+    if indicator == 'HOMELS_2':
+        dt_find_replace = word.homels_2(dt_find_replace, df_prod, df_pct)
+    if indicator == 'HOMELS_3':
+        dt_find_replace = word.homels_3(dt_find_replace, df_prod)
+    if indicator == 'HOMELS_4':
+        dt_find_replace = word.homels_4(dt_find_replace, df_prod, jurisdiction, county)
+    if indicator == 'ELI_1':
+        dt_find_replace = word.eli_1(dt_find_replace, df_prod, df_pct, jurisdiction)
+    if indicator == 'ELI_3':     
+        dt_find_replace = word.eli_3(dt_find_replace, df_pct)
+    if indicator == 'ELI_4':     
+        dt_find_replace = word.eli_4(dt_find_replace, df_pct)
+    if indicator == 'AFFH_2':    
+        dt_find_replace = word.affh_2(dt_find_replace, df_prod)
+    if indicator == 'AFFH_3':    
+        dt_find_replace = word.affh_3(dt_find_replace, df_pct, jurisdiction)
 
 
     return dt_find_replace
 
 
 
-
-
-
 # Main ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 
 
 
@@ -165,6 +209,7 @@ indicators = [
     , 'POPEMP_21'
     , 'POPEMP_22'
     , 'POPEMP_23'
+    , 'POPEMP_25'
     , 'HSG_1'
     , 'HSG_2'
     , 'HSG_3'
@@ -202,20 +247,17 @@ indicators = [
     , 'HOMELS_4'
     , 'ELI_1'
     , 'ELI_3'
+    , 'ELI_4'
+    , 'AFFH_2'
     , 'AFFH_3'
     ]
 
 
-
-
-TEST_RUN=False
-# indicators = ['HSG_1']
-
-
+TEST_RUN=True
+indicators = ['HSG_8']
 
 
 if __name__ == '__main__':
-
 
     word_app = win32com.client.DispatchEx('Word.Application')
     word_app.Visible = False
@@ -223,22 +265,25 @@ if __name__ == '__main__':
     wd_replace=2
     wd_find_wrap=1
 
-
     dt_errors = {}
 
-
     for folder in PATH_PROD.iterdir():
-        # if folder.stem != 'Sacramento':
-        #     continue
-        rhna.print2()
-        county = folder.stem; print(county); rhna.print2()
+        if folder.stem != 'Sacramento':
+            continue
+        print('\n'*2)
+        county = folder.stem
+        print(county)
+        print('\n'*2)
         dt_errors[county] = {}
 
         path_county = PATH_PROD / county
         for folder in path_county.iterdir():
-            # if folder.stem not in ['Folsom']:
-            #     continue
-            jurisdiction = folder.stem; rhna.print3(); print(jurisdiction); print()
+            if folder.stem not in ['Folsom']:
+                continue
+            jurisdiction = folder.stem
+            print('\n'*3)
+            print(jurisdiction)
+            print()
             dt_errors[county][jurisdiction] = {}
 
             path_juris = path_county / jurisdiction
@@ -277,19 +322,25 @@ if __name__ == '__main__':
                                     Wrap=wd_find_wrap,
                                     Format=True
                                 )
+                                
                             except Exception as e:
-                                print(e); traceback.print_exc(); print()
+                                print(e)
+                                traceback.print_exc()
+                                print()
                                 dt_errors[county][jurisdiction][indicator][str_find] = str_replace
                     except Exception as e:
-                        print(e); traceback.print_exc(); print()
+                        print(e)
+                        traceback.print_exc()
+                        print()
                         dt_errors[county][jurisdiction][indicator]['error'] = e
-
 
                 word_app.ActiveDocument.SaveAs(str(file_doc))
                 word_app.ActiveDocument.Close(SaveChanges=False)
 
             except Exception as e:
-                print(e); traceback.print_exc(); print()
+                print(e)
+                traceback.print_exc()
+                print()
                 word_app.ActiveDocument.Close(SaveChanges=False)
 
 breakpoint()
