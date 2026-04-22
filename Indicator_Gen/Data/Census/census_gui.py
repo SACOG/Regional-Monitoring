@@ -11,8 +11,7 @@ import numpy as np
 from pathlib import Path
 from datetime import datetime
 import sys
-
-
+import importlib.util
 
 st.markdown("""
 <style>
@@ -24,64 +23,77 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ===============================================
-# LOAD CONFIG & AREA CODES
+# LOAD CONFIG & AREA CODES — only once per session
 # ===============================================
 
-try:
-    path_code = Path(__file__).parent
-    path_config = path_code / 'config'
-    path_config0 = path_code.parent.parent / 'config'
-    path_yaml = path_config / 'census.yaml'
-    
-    with open(path_yaml, 'r') as f:
-        yaml_config = yaml.load(f, Loader=yaml.SafeLoader)
-    
-    # Load area_codes.xlsx
-    area_codes_file = path_config0 / 'area_codes.xlsx'
-    df_states = pd.read_excel(area_codes_file, sheet_name='StateNames')[['STATE', 'Postal']]
-    df_counties = pd.read_excel(area_codes_file, sheet_name='CountyFIPS')[['STATE', 'COUNTYNAME']]
-    df_msa = pd.read_excel(area_codes_file, sheet_name='MSAcodes')[['State', 'MSA']].drop_duplicates()
-    
-    runs_dir = path_config / 'runs'
-    runs_dir.mkdir(parents=True, exist_ok=True)
-    
-    sys.path.append(str(path_config))
-    import importlib.util
-    from pathlib import Path
+if '_census_config_loaded' not in st.session_state:
+    try:
+        path_code    = Path(__file__).parent
+        path_config  = path_code / 'config'
+        path_config0 = path_code.parent.parent / 'config'
+        path_yaml    = path_config / 'census.yaml'
 
-    _census_config = Path(__file__).parent / "config"
+        with open(path_yaml, 'r') as f:
+            st.session_state._census_yaml_config = yaml.load(f, Loader=yaml.SafeLoader)
 
-    def _load(name):
-        key = f"_census_module_{name}"
-        if key not in st.session_state:
-            spec = importlib.util.spec_from_file_location(
-                f"census_{name}",
-                _census_config / f"{name}.py"
-            )
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-            st.session_state[key] = mod
-        return st.session_state[key]
+        area_codes_file = path_config0 / 'area_codes.xlsx'
+        st.session_state._census_df_states   = pd.read_excel(area_codes_file, sheet_name='StateNames')[['STATE', 'Postal']]
+        st.session_state._census_df_counties = pd.read_excel(area_codes_file, sheet_name='CountyFIPS')[['STATE', 'COUNTYNAME']]
+        st.session_state._census_df_msa      = pd.read_excel(area_codes_file, sheet_name='MSAcodes')[['State', 'MSA']].drop_duplicates()
 
-    pre  = _load("pre")
-    get  = _load("get")
-    post = _load("post")
-    
-    sys.path.append(str(path_config0))
-    
-    with open(path_config / 'api_key.txt', 'r') as f:
-        api_key = f.read().strip()
-    
-except Exception as e:
-    st.error(f"❌ Error loading configuration: {str(e)}")
-    st.stop()
+        runs_dir = path_config / 'runs'
+        runs_dir.mkdir(parents=True, exist_ok=True)
+        st.session_state._census_runs_dir    = runs_dir
+        st.session_state._census_path_config = path_config
+
+        with open(path_config / 'api_key.txt', 'r') as f:
+            st.session_state._census_api_key = f.read().strip()
+
+        # Load pipeline modules under unique names so they never collide with BLS
+        _census_config_dir = path_config
+
+        def _load(name):
+            key = f"_census_module_{name}"
+            if key not in st.session_state:
+                spec = importlib.util.spec_from_file_location(
+                    f"census_{name}",
+                    _census_config_dir / f"{name}.py"
+                )
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                st.session_state[key] = mod
+            return st.session_state[key]
+
+        _load("pre")
+        _load("get")
+        _load("post")
+
+        st.session_state._census_config_loaded = True
+
+    except Exception as e:
+        st.error(f"❌ Error loading configuration: {str(e)}")
+        import traceback
+        st.error(traceback.format_exc())
+        st.stop()
+
+# Pull everything from session state — safe on every rerun
+yaml_config = st.session_state._census_yaml_config
+df_states   = st.session_state._census_df_states
+df_counties = st.session_state._census_df_counties
+df_msa      = st.session_state._census_df_msa
+runs_dir    = st.session_state._census_runs_dir
+path_config = st.session_state._census_path_config
+api_key     = st.session_state._census_api_key
+pre         = st.session_state._census_module_pre
+get         = st.session_state._census_module_get
+post        = st.session_state._census_module_post
 
 # ===============================================
 # INITIALIZE SESSION STATE
 # ===============================================
 
 if 'census_step' not in st.session_state:
-    st.session_state.census_step = 'configure'  # 'configure', 'downloaded', 'processed'
+    st.session_state.census_step = 'configure'
 if 'census_df_raw' not in st.session_state:
     st.session_state.census_df_raw = None
 if 'census_df_processed' not in st.session_state:
@@ -284,9 +296,9 @@ if st.session_state.census_step == 'configure':
                 moe_bool = True if include_moe else False
                 pct_bool = True if indicator_config.get('percentages') == 'Yes' else False
                 cpi_bool = True if indicator_config.get('adjust_cpi') == 'Yes' else False
-                
-                weighted_by = indicator_config.get('weighted_by', '')
 
+                weighted_by = indicator_config.get('weighted_by', '')
+                
                 params = {
                     'project': project,
                     'indicator': indicator,
@@ -298,7 +310,7 @@ if st.session_state.census_step == 'configure':
                     'end_year': year_end,
                     'import_tab': import_tab,
                     'moe': moe_bool,
-                    'mpo': geography_level == 'MPO',
+                    'mpo': geography_level in ['Counties', 'Tracts', 'Block Groups'],
                     'moe_thresh': float(indicator_config.get('MOE_threshold', 0.05)),
                     'num_vars': int(indicator_config.get('number_of_variables')),
                     'metric': indicator_config.get('metric'),
@@ -342,6 +354,8 @@ if st.session_state.census_step == 'configure':
                 
             except Exception as e:
                 st.error(f"❌ Error downloading data: {str(e)}")
+                import traceback
+                st.error(traceback.format_exc())
 
 # ===============================================
 # STEP 2: DATA DOWNLOADED - SHOW EXPORT OPTIONS
@@ -368,7 +382,6 @@ elif st.session_state.census_step == 'downloaded':
     
     col_export1, col_export2 = st.columns(2)
     
-    # Option 1: Download Raw
     with col_export1:
         csv_raw = st.session_state.census_df_raw.to_csv(index=False)
         st.download_button(
@@ -380,13 +393,11 @@ elif st.session_state.census_step == 'downloaded':
         )
         st.caption("Direct from Census API")
     
-    # Option 2: Process
     with col_export2:
         if st.button("⚙️ Process & Download", use_container_width=True, key="process_btn"):
             st.session_state.census_step = 'processing'
             st.rerun()
     
-    # Reset button
     st.markdown("---")
     if st.button("🔄 Start Over", use_container_width=True):
         st.session_state.census_step = 'configure'
@@ -401,28 +412,24 @@ elif st.session_state.census_step == 'downloaded':
 
 elif st.session_state.census_step == 'processing':
     
-    st.info("⚙️ Processing data through 2__process_census.py pipeline...")
+    st.info("⚙️ Processing data through pipeline...")
     
     try:
         df_census = st.session_state.census_df_raw
-        params = st.session_state.census_params
+        params    = st.session_state.census_params
         timestamp = st.session_state.census_timestamp
         
         with st.spinner("🔄 This may take 1-5 minutes depending on data size..."):
             
-            # Read variables
             df_vars = get.read_vars_file(params)
             
-            # Process based on sample type
             if params['sample'] in ['ACS', 'DP', 'SUBJECT', 'DEC']:
-                
                 df_processed = post.acs_main(df_census, params, df_vars)
                 st.session_state.census_df_processed = df_processed
                 st.session_state.census_step = 'processed'
                 st.rerun()
             
             elif params['sample'] in ['PUMS', 'FOODSEC']:
-                
                 if params['sample'] == 'PUMS':
                     if 'H' in df_vars['Table Type'].unique():
                         weight = 'WGTP'
@@ -431,10 +438,10 @@ elif st.session_state.census_step == 'processing':
                     
                     df_puma, df_counties, df_msa, df_mpo = post.pums_main(df_census, params, weight, df_vars)
                     
-                    st.session_state.df_puma = df_puma
-                    st.session_state.df_counties = df_counties
-                    st.session_state.df_msa = df_msa
-                    st.session_state.census_step = 'processed_pums'
+                    st.session_state.census_df_puma     = df_puma
+                    st.session_state.census_df_counties = df_counties
+                    st.session_state.census_df_msa      = df_msa
+                    st.session_state.census_step        = 'processed_pums'
                     st.rerun()
             
             else:
@@ -442,7 +449,6 @@ elif st.session_state.census_step == 'processing':
     
     except Exception as e:
         st.error(f"❌ Processing error: {str(e)}")
-        st.error("Traceback:")
         import traceback
         st.error(traceback.format_exc())
         
@@ -452,7 +458,7 @@ elif st.session_state.census_step == 'processing':
             st.rerun()
 
 # ===============================================
-# STEP 4: PROCESSED DATA - SHOW DOWNLOAD
+# STEP 4: PROCESSED DATA
 # ===============================================
 
 elif st.session_state.census_step == 'processed':
@@ -506,11 +512,11 @@ elif st.session_state.census_step == 'processed_pums':
     )
     
     if geo_option == 'Counties':
-        df_to_download = st.session_state.df_counties
+        df_to_download = st.session_state.census_df_counties
     elif geo_option == 'MSA':
-        df_to_download = st.session_state.df_msa
+        df_to_download = st.session_state.census_df_msa
     else:
-        df_to_download = st.session_state.df_puma
+        df_to_download = st.session_state.census_df_puma
     
     col_i1, col_i2 = st.columns(2)
     with col_i1:
