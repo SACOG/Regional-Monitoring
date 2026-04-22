@@ -30,7 +30,7 @@ st.markdown("""
 try:
     path_code = Path(__file__).parent
     path_config = path_code / 'config'
-    path_config0 = path_code.parent / 'config'
+    path_config0 = path_code.parent.parent / 'config'
     path_yaml = path_config / 'census.yaml'
     
     with open(path_yaml, 'r') as f:
