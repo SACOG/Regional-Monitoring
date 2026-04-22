@@ -46,9 +46,26 @@ try:
     runs_dir.mkdir(parents=True, exist_ok=True)
     
     sys.path.append(str(path_config))
-    import pre
-    import get
-    import post
+    import importlib.util
+    from pathlib import Path
+
+    _census_config = Path(__file__).parent / "config"
+
+    def _load(name):
+        key = f"_census_module_{name}"
+        if key not in st.session_state:
+            spec = importlib.util.spec_from_file_location(
+                f"census_{name}",
+                _census_config / f"{name}.py"
+            )
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            st.session_state[key] = mod
+        return st.session_state[key]
+
+    pre  = _load("pre")
+    get  = _load("get")
+    post = _load("post")
     
     sys.path.append(str(path_config0))
     
@@ -63,16 +80,16 @@ except Exception as e:
 # INITIALIZE SESSION STATE
 # ===============================================
 
-if 'step' not in st.session_state:
-    st.session_state.step = 'configure'  # 'configure', 'downloaded', 'processed'
-if 'df_raw' not in st.session_state:
-    st.session_state.df_raw = None
-if 'df_processed' not in st.session_state:
-    st.session_state.df_processed = None
-if 'params' not in st.session_state:
-    st.session_state.params = None
-if 'timestamp' not in st.session_state:
-    st.session_state.timestamp = None
+if 'census_step' not in st.session_state:
+    st.session_state.census_step = 'configure'  # 'configure', 'downloaded', 'processed'
+if 'census_df_raw' not in st.session_state:
+    st.session_state.census_df_raw = None
+if 'census_df_processed' not in st.session_state:
+    st.session_state.census_df_processed = None
+if 'census_params' not in st.session_state:
+    st.session_state.census_params = None
+if 'census_timestamp' not in st.session_state:
+    st.session_state.census_timestamp = None
 
 # ===============================================
 # HEADER
@@ -89,7 +106,7 @@ st.markdown("---")
 # STEP 1: CONFIGURATION
 # ===============================================
 
-if st.session_state.step == 'configure':
+if st.session_state.census_step == 'configure':
     
     col_settings, col_preview = st.columns([1, 1])
     
@@ -316,10 +333,10 @@ if st.session_state.step == 'configure':
                     df_census = get.get_data_any(api_key, params)
                 
                 # Store in session state
-                st.session_state.df_raw = df_census
-                st.session_state.params = params
-                st.session_state.timestamp = timestamp
-                st.session_state.step = 'downloaded'
+                st.session_state.census_df_raw = df_census
+                st.session_state.census_params = params
+                st.session_state.census_timestamp = timestamp
+                st.session_state.census_step = 'downloaded'
                 
                 st.rerun()
                 
@@ -330,21 +347,21 @@ if st.session_state.step == 'configure':
 # STEP 2: DATA DOWNLOADED - SHOW EXPORT OPTIONS
 # ===============================================
 
-elif st.session_state.step == 'downloaded':
+elif st.session_state.census_step == 'downloaded':
     
     st.success("✅ Data downloaded successfully!")
     
     col_i1, col_i2, col_i3 = st.columns(3)
     with col_i1:
-        st.metric("Rows", len(st.session_state.df_raw))
+        st.metric("Rows", len(st.session_state.census_df_raw))
     with col_i2:
-        st.metric("Columns", len(st.session_state.df_raw.columns))
+        st.metric("Columns", len(st.session_state.census_df_raw.columns))
     with col_i3:
-        if 'Year' in st.session_state.df_raw.columns:
-            st.metric("Years", len(st.session_state.df_raw['Year'].unique()))
+        if 'Year' in st.session_state.census_df_raw.columns:
+            st.metric("Years", len(st.session_state.census_df_raw['Year'].unique()))
     
     st.subheader("Raw Data Preview")
-    st.dataframe(st.session_state.df_raw.head(10), use_container_width=True)
+    st.dataframe(st.session_state.census_df_raw.head(10), use_container_width=True)
     
     st.markdown("---")
     st.subheader("📥 Export Options")
@@ -353,11 +370,11 @@ elif st.session_state.step == 'downloaded':
     
     # Option 1: Download Raw
     with col_export1:
-        csv_raw = st.session_state.df_raw.to_csv(index=False)
+        csv_raw = st.session_state.census_df_raw.to_csv(index=False)
         st.download_button(
             label="💾 Download Raw CSV",
             data=csv_raw,
-            file_name=f"{st.session_state.params['indicator']}_{st.session_state.params['geo']}_{st.session_state.params['estimate']}_raw_{st.session_state.timestamp}.csv",
+            file_name=f"{st.session_state.census_params['indicator']}_{st.session_state.census_params['geo']}_{st.session_state.census_params['estimate']}_raw_{st.session_state.census_timestamp}.csv",
             mime="text/csv",
             key="download_raw_btn"
         )
@@ -366,30 +383,30 @@ elif st.session_state.step == 'downloaded':
     # Option 2: Process
     with col_export2:
         if st.button("⚙️ Process & Download", use_container_width=True, key="process_btn"):
-            st.session_state.step = 'processing'
+            st.session_state.census_step = 'processing'
             st.rerun()
     
     # Reset button
     st.markdown("---")
     if st.button("🔄 Start Over", use_container_width=True):
-        st.session_state.step = 'configure'
-        st.session_state.df_raw = None
-        st.session_state.df_processed = None
-        st.session_state.params = None
+        st.session_state.census_step = 'configure'
+        st.session_state.census_df_raw = None
+        st.session_state.census_df_processed = None
+        st.session_state.census_params = None
         st.rerun()
 
 # ===============================================
 # STEP 3: PROCESSING
 # ===============================================
 
-elif st.session_state.step == 'processing':
+elif st.session_state.census_step == 'processing':
     
     st.info("⚙️ Processing data through 2__process_census.py pipeline...")
     
     try:
-        df_census = st.session_state.df_raw
-        params = st.session_state.params
-        timestamp = st.session_state.timestamp
+        df_census = st.session_state.census_df_raw
+        params = st.session_state.census_params
+        timestamp = st.session_state.census_timestamp
         
         with st.spinner("🔄 This may take 1-5 minutes depending on data size..."):
             
@@ -400,8 +417,8 @@ elif st.session_state.step == 'processing':
             if params['sample'] in ['ACS', 'DP', 'SUBJECT', 'DEC']:
                 
                 df_processed = post.acs_main(df_census, params, df_vars)
-                st.session_state.df_processed = df_processed
-                st.session_state.step = 'processed'
+                st.session_state.census_df_processed = df_processed
+                st.session_state.census_step = 'processed'
                 st.rerun()
             
             elif params['sample'] in ['PUMS', 'FOODSEC']:
@@ -417,7 +434,7 @@ elif st.session_state.step == 'processing':
                     st.session_state.df_puma = df_puma
                     st.session_state.df_counties = df_counties
                     st.session_state.df_msa = df_msa
-                    st.session_state.step = 'processed_pums'
+                    st.session_state.census_step = 'processed_pums'
                     st.rerun()
             
             else:
@@ -431,33 +448,33 @@ elif st.session_state.step == 'processing':
         
         st.markdown("---")
         if st.button("⬅️ Back to Download Options"):
-            st.session_state.step = 'downloaded'
+            st.session_state.census_step = 'downloaded'
             st.rerun()
 
 # ===============================================
 # STEP 4: PROCESSED DATA - SHOW DOWNLOAD
 # ===============================================
 
-elif st.session_state.step == 'processed':
+elif st.session_state.census_step == 'processed':
     
     st.success("✅ Processing complete!")
     
     col_i1, col_i2 = st.columns(2)
     with col_i1:
-        st.metric("Processed Rows", len(st.session_state.df_processed))
+        st.metric("Processed Rows", len(st.session_state.census_df_processed))
     with col_i2:
-        st.metric("Processed Columns", len(st.session_state.df_processed.columns))
+        st.metric("Processed Columns", len(st.session_state.census_df_processed.columns))
     
     st.subheader("Processed Data Preview")
-    st.dataframe(st.session_state.df_processed.head(10), use_container_width=True)
+    st.dataframe(st.session_state.census_df_processed.head(10), use_container_width=True)
     
     st.markdown("---")
     
-    csv_processed = st.session_state.df_processed.to_csv(index=False)
+    csv_processed = st.session_state.census_df_processed.to_csv(index=False)
     st.download_button(
         label="💾 Download Processed CSV",
         data=csv_processed,
-        file_name=f"{st.session_state.params['indicator']}_{st.session_state.params['geo']}_{st.session_state.params['estimate']}_processed_{st.session_state.timestamp}.csv",
+        file_name=f"{st.session_state.census_params['indicator']}_{st.session_state.census_params['geo']}_{st.session_state.census_params['estimate']}_processed_{st.session_state.census_timestamp}.csv",
         mime="text/csv",
         key="download_processed_btn"
     )
@@ -465,17 +482,17 @@ elif st.session_state.step == 'processed':
     st.markdown('<div class="success-box"><strong>✅ Processed data ready to download!</strong></div>', unsafe_allow_html=True)
     
     if st.button("🔄 Start Over"):
-        st.session_state.step = 'configure'
-        st.session_state.df_raw = None
-        st.session_state.df_processed = None
-        st.session_state.params = None
+        st.session_state.census_step = 'configure'
+        st.session_state.census_df_raw = None
+        st.session_state.census_df_processed = None
+        st.session_state.census_params = None
         st.rerun()
 
 # ===============================================
 # STEP 5: PROCESSED PUMS DATA
 # ===============================================
 
-elif st.session_state.step == 'processed_pums':
+elif st.session_state.census_step == 'processed_pums':
     
     st.success("✅ PUMS Processing complete!")
     
@@ -510,7 +527,7 @@ elif st.session_state.step == 'processed_pums':
     st.download_button(
         label="💾 Download Processed CSV",
         data=csv_pums,
-        file_name=f"{st.session_state.params['indicator']}_{geo_option}_{st.session_state.params['estimate']}_processed_{st.session_state.timestamp}.csv",
+        file_name=f"{st.session_state.census_params['indicator']}_{geo_option}_{st.session_state.census_params['estimate']}_processed_{st.session_state.census_timestamp}.csv",
         mime="text/csv",
         key="download_pums_btn"
     )
@@ -518,8 +535,8 @@ elif st.session_state.step == 'processed_pums':
     st.markdown('<div class="success-box"><strong>✅ Processed PUMS data ready to download!</strong></div>', unsafe_allow_html=True)
     
     if st.button("🔄 Start Over"):
-        st.session_state.step = 'configure'
-        st.session_state.df_raw = None
+        st.session_state.census_step = 'configure'
+        st.session_state.census_df_raw = None
         st.rerun()
 
 # ===============================================
@@ -528,16 +545,16 @@ elif st.session_state.step == 'processed_pums':
 
 with st.sidebar:
     st.header("ℹ️ Status")
-    if st.session_state.step == 'configure':
+    if st.session_state.census_step == 'configure':
         st.write("**Current Step:** Configuration")
-    elif st.session_state.step == 'downloaded':
+    elif st.session_state.census_step == 'downloaded':
         st.write("**Current Step:** Data Downloaded")
         st.write("Choose export option")
-    elif st.session_state.step == 'processing':
+    elif st.session_state.census_step == 'processing':
         st.write("**Current Step:** Processing...")
-    elif st.session_state.step == 'processed':
+    elif st.session_state.census_step == 'processed':
         st.write("**Current Step:** Ready to Download")
-    elif st.session_state.step == 'processed_pums':
+    elif st.session_state.census_step == 'processed_pums':
         st.write("**Current Step:** PUMS Ready to Download")
 
 st.markdown("---")

@@ -5,10 +5,26 @@ from pathlib import Path
 import sys
 from datetime import datetime
 
-# Import your backend modules
-import pre
-import get
-import post
+import importlib.util
+from pathlib import Path
+
+_bls_config = Path(__file__).parent
+
+def _load(name):
+    key = f"_bls_module_{name}"
+    if key not in st.session_state:
+        spec = importlib.util.spec_from_file_location(
+            f"bls_{name}",
+            _bls_config / f"{name}.py"
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        st.session_state[key] = mod
+    return st.session_state[key]
+
+pre  = _load("pre")
+get  = _load("get")
+post = _load("post")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. SETUP & UTILITIES
@@ -28,23 +44,23 @@ def load_api_key():
 # 2. SESSION STATE INITIALIZATION
 # ═══════════════════════════════════════════════════════════════════════════
 
-if 'step' not in st.session_state:
-    st.session_state.step = 'configure'
-if 'params' not in st.session_state:
-    st.session_state.params = None
-if 'df_raw' not in st.session_state:
-    st.session_state.df_raw = None
-if 'df_processed' not in st.session_state:
-    st.session_state.df_processed = None
-if 'df_meta' not in st.session_state:
-    st.session_state.df_meta = None
+if 'bls_step' not in st.session_state:
+    st.session_state.bls_step = 'configure'
+if 'bls_params' not in st.session_state:
+    st.session_state.bls_params = None
+if 'bls_df_raw' not in st.session_state:
+    st.session_state.bls_df_raw = None
+if 'bls_df_processed' not in st.session_state:
+    st.session_state.bls_df_processed = None
+if 'bls_df_meta' not in st.session_state:
+    st.session_state.bls_df_meta = None
 
 def reset_app():
-    st.session_state.step = 'configure'
-    st.session_state.params = None
-    st.session_state.df_raw = None
-    st.session_state.df_processed = None
-    st.session_state.df_meta = None
+    st.session_state.bls_step = 'configure'
+    st.session_state.bls_params = None
+    st.session_state.bls_df_raw = None
+    st.session_state.bls_df_processed = None
+    st.session_state.bls_df_meta = None
     st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -117,7 +133,7 @@ def show_configuration():
             st.error("Please select at least one year.")
             return
 
-        st.session_state.params = {
+        st.session_state.bls_params = {
             'Project': project,
             'Indicator': indicator,
             'Survey': survey,
@@ -134,7 +150,7 @@ def show_configuration():
             'SP Folder': folder
         }
         
-        st.session_state.step = 'fetching'
+        st.session_state.bls_step = 'fetching'
         st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -146,7 +162,7 @@ def do_fetch():
     if not api_key: st.stop()
     
     yaml_bls = pre.load_yaml()
-    params = st.session_state.params
+    params = st.session_state.bls_params
 
     with st.status("Fetching data from BLS API...", expanded=True) as status:
         df_raw = get.get_data_any(api_key, params, yaml_bls)
@@ -157,15 +173,15 @@ def do_fetch():
             if st.button("Back"): reset_app()
             return
             
-        st.session_state.df_raw = df_raw
+        st.session_state.bls_df_raw = df_raw
         status.update(label="✅ Fetch Complete!", state="complete")
         
-    st.session_state.step = 'view_raw'
+    st.session_state.bls_step = 'view_raw'
     st.rerun()
 
 def show_raw_data():
-    params = st.session_state.params
-    df_raw = st.session_state.df_raw
+    params = st.session_state.bls_params
+    df_raw = st.session_state.bls_df_raw
     
     st.title("📥 Step 2: Raw API Data")
     st.subheader(f"Indicator: {params['Indicator']} | Survey: {params['Survey']}")
@@ -182,7 +198,7 @@ def show_raw_data():
         
     with col2:
         if st.button("⚙️ Process Data", type="primary", use_container_width=True):
-            st.session_state.step = 'processing'
+            st.session_state.bls_step = 'processing'
             st.rerun()
             
     with col3:
@@ -194,46 +210,46 @@ def show_raw_data():
 # ═══════════════════════════════════════════════════════════════════════════
 
 def do_process():
-    params = st.session_state.params
-    df_raw = st.session_state.df_raw
+    params = st.session_state.bls_params
+    df_raw = st.session_state.bls_df_raw
     yaml_bls = pre.load_yaml()
     indicator = params['Indicator']
     
     with st.status("Running Post-Processing...", expanded=True) as status:
         # 1. Base Processing (Extracts metadata and basic formats)
         df_base, df_meta = post.proc_bls(df_raw, params, yaml_bls)
-        st.session_state.df_meta = df_meta
+        st.session_state.bls_df_meta = df_meta
         
         # 2. Indicator-Specific Routing (from your 2__process_BLS.py)
         if indicator == 'Jobs_1':
             df_final = post.jobs_1(df_base, params['Percentages'], params['Geography'])
-            st.session_state.df_processed = df_final
+            st.session_state.bls_df_processed = df_final
             
         elif indicator == 'Jobs_2':
             df_msa, df_mpo = post.jobs_2(df_base, params['Percentages'], params['Geography'], df_meta)
-            st.session_state.df_processed = (df_msa, df_mpo)
+            st.session_state.bls_df_processed = (df_msa, df_mpo)
             
         elif indicator == 'Jobs_3':
             df_1, df_2 = post.jobs_3(df_base)
-            st.session_state.df_processed = (df_1, df_2)
+            st.session_state.bls_df_processed = (df_1, df_2)
             
         elif indicator == 'Labor_2':
             df_final = post.labor_2(df_base)
-            st.session_state.df_processed = df_final
+            st.session_state.bls_df_processed = df_final
             
         else:
             # Fallback if no specific processing exists
-            st.session_state.df_processed = df_base
+            st.session_state.bls_df_processed = df_base
             
         status.update(label="✅ Processing Complete!", state="complete")
         
-    st.session_state.step = 'view_processed'
+    st.session_state.bls_step = 'view_processed'
     st.rerun()
 
 def show_processed_data():
-    params = st.session_state.params
-    df_proc = st.session_state.df_processed
-    df_meta = st.session_state.df_meta
+    params = st.session_state.bls_params
+    df_proc = st.session_state.bls_df_processed
+    df_meta = st.session_state.bls_df_meta
     
     st.title("✅ Step 3: Processed Data")
     st.subheader(f"Final output for {params['Indicator']}")
@@ -273,13 +289,13 @@ def show_processed_data():
 # MAIN ROUTER
 # ═══════════════════════════════════════════════════════════════════════════
 
-if st.session_state.step == 'configure':
+if st.session_state.bls_step == 'configure':
     show_configuration()
-elif st.session_state.step == 'fetching':
+elif st.session_state.bls_step == 'fetching':
     do_fetch()
-elif st.session_state.step == 'view_raw':
+elif st.session_state.bls_step == 'view_raw':
     show_raw_data()
-elif st.session_state.step == 'processing':
+elif st.session_state.bls_step == 'processing':
     do_process()
-elif st.session_state.step == 'view_processed':
+elif st.session_state.bls_step == 'view_processed':
     show_processed_data()
