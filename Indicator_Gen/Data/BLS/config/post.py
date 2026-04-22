@@ -37,7 +37,7 @@ from IPython.display import display
 import sys
 
 PATH_GIT = Path(__file__).parent.parent.parent.parent
-PATH_CODE    = PATH_GIT / 'Data' / 'Census'
+PATH_CODE    = PATH_GIT / 'Data' / 'BLS'
 PATH_CONFIG0 = PATH_GIT / 'config'
 PATH_CONFIG  = PATH_CODE / 'config'
 

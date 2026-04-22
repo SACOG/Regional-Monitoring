@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 import sys
 
-st.set_page_config(page_title="Census Data Request", layout="wide")
+
 
 st.markdown("""
 <style>
@@ -268,6 +268,8 @@ if st.session_state.step == 'configure':
                 pct_bool = True if indicator_config.get('percentages') == 'Yes' else False
                 cpi_bool = True if indicator_config.get('adjust_cpi') == 'Yes' else False
                 
+                weighted_by = indicator_config.get('weighted_by', '')
+
                 params = {
                     'project': project,
                     'indicator': indicator,
@@ -279,11 +281,12 @@ if st.session_state.step == 'configure':
                     'end_year': year_end,
                     'import_tab': import_tab,
                     'moe': moe_bool,
+                    'mpo': geography_level == 'MPO',
                     'moe_thresh': float(indicator_config.get('MOE_threshold', 0.05)),
                     'num_vars': int(indicator_config.get('number_of_variables')),
                     'metric': indicator_config.get('metric'),
                     'pct': pct_bool,
-                    'weight': str(indicator_config.get('weighted_by', '')),
+                    'weight': weighted_by if weighted_by not in [False, 'False', 'No', '', None] else '',
                     'adjust_cpi': cpi_bool,
                     'export_loc': indicator_config.get('sp_location', ''),
                     'folder': indicator_config.get('folder', ''),
