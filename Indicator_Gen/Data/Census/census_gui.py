@@ -109,7 +109,7 @@ if 'census_timestamp' not in st.session_state:
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.title("📊 Census Data Pipeline")
+    st.title(" Census Data Pipeline")
     st.markdown("Download & Process")
 
 st.markdown("---")
@@ -123,21 +123,21 @@ if st.session_state.census_step == 'configure':
     col_settings, col_preview = st.columns([1, 1])
     
     with col_settings:
-        st.header("📋 Configure")
+        st.header(" Configure")
         
         # Project
-        st.subheader("1️⃣ Project")
+        st.subheader(" Project")
         projects = yaml_config['Project']
         project = st.selectbox("Which project?", projects, key="proj")
         
         # Indicator
-        st.subheader("2️⃣ Indicator")
+        st.subheader(" Indicator")
         indicators = list(yaml_config['Indicators'].get(project, {}).keys())
         indicator = st.selectbox("Which indicator?", indicators, key="ind")
         indicator_config = yaml_config['Indicators'][project][indicator]
         
         # Sample
-        st.subheader("3️⃣ Sample Type")
+        st.subheader(" Sample Type")
         sample_options = indicator_config.get('sample', 'ACS')
         if isinstance(sample_options, str):
             sample_options = [sample_options]
@@ -149,20 +149,20 @@ if st.session_state.census_step == 'configure':
             sample_type = st.selectbox("Which sample?", sample_options, key="samp")
         
         # Estimate
-        st.subheader("4️⃣ Estimate")
+        st.subheader(" Estimate")
         available_estimates = list(yaml_config['Samples'][sample_type].keys())
         estimate = st.selectbox("Which estimate?", available_estimates, key="est")
         
         # Geography Level
-        st.subheader("5️⃣ Geography Level")
+        st.subheader(" Geography Level")
         available_geos = yaml_config['Samples'][sample_type][estimate].get('geographies_available', [])
         geography_level = st.selectbox("Which level?", available_geos, key="geo_level")
         
         # Specific Geographies
-        st.subheader("6️⃣ Select Specific Geographies")
+        st.subheader(" Select Specific Geographies")
         
         selected_geographies = []
-        
+        do_mpo_rollup = False  # Initialize MPO rollup option
         if geography_level == 'National':
             st.info("**National Coverage - All USA**")
             selected_geographies = ['*']
@@ -185,6 +185,16 @@ if st.session_state.census_step == 'configure':
                     key="counties_select"
                 )
                 selected_geographies = selected_counties
+
+                # MPO rollup — only offer if all selected counties are SACOG
+                SACOG_COUNTIES = {'Sacramento', 'Placer', 'El Dorado', 'Yolo', 'Sutter', 'Yuba'}
+                non_sacog = [c for c in selected_counties if c not in SACOG_COUNTIES]
+
+                if non_sacog:
+                    st.warning(f"⚠️ MPO rollup unavailable — non-SACOG counties selected: {', '.join(non_sacog)}")
+                    do_mpo_rollup = False
+                else:
+                    do_mpo_rollup = st.checkbox("Roll up counties to MPO (SACOG only)?", value=False, key="mpo_rollup")
         
         elif geography_level == 'MSA':
             msa_list = sorted(df_msa['MSA'].dropna().unique())
@@ -218,7 +228,7 @@ if st.session_state.census_step == 'configure':
             selected_geographies = [geography_level]
         
         # Years
-        st.subheader("7️⃣ Years")
+        st.subheader(" Years")
         available_years = yaml_config['Samples'][sample_type][estimate].get('years_available', [])
         
         if available_years == ['timeseries']:
@@ -241,7 +251,7 @@ if st.session_state.census_step == 'configure':
                 years_to_import = [available_years[year_idx]]
         
         # MOE
-        st.subheader("8️⃣ Margin of Error")
+        st.subheader(" Margin of Error")
         if sample_type not in ['DEC', 'LEHD']:
             include_moe = st.checkbox("Include MOE?", True, key="moe")
         else:
@@ -250,7 +260,7 @@ if st.session_state.census_step == 'configure':
     
     # Preview
     with col_preview:
-        st.header("📊 Preview")
+        st.header(" Preview")
         st.markdown('<div class="info-box"><strong>Configuration Summary</strong></div>', unsafe_allow_html=True)
         
         if isinstance(years_to_import, list):
@@ -278,7 +288,7 @@ if st.session_state.census_step == 'configure':
     # Download Button
     st.markdown("---")
     
-    if st.button("⬇️ DOWNLOAD DATA NOW", use_container_width=True, key="download_btn"):
+    if st.button(" DOWNLOAD DATA NOW", use_container_width=True, key="download_btn"):
         if not selected_geographies:
             st.error("❌ Please select at least one geography")
         else:
@@ -310,7 +320,7 @@ if st.session_state.census_step == 'configure':
                     'end_year': year_end,
                     'import_tab': import_tab,
                     'moe': moe_bool,
-                    'mpo': geography_level in ['Counties', 'Tracts', 'Block Groups'],
+                    'mpo': do_mpo_rollup,
                     'moe_thresh': float(indicator_config.get('MOE_threshold', 0.05)),
                     'num_vars': int(indicator_config.get('number_of_variables')),
                     'metric': indicator_config.get('metric'),
@@ -338,7 +348,7 @@ if st.session_state.census_step == 'configure':
                     f.write(f"Import Tab: {import_tab}\n")
                     f.write(f"Margin of Error: {'Yes' if include_moe else 'No'}\n")
                 
-                st.success(f"✅ Configuration saved to: {log_file.name}")
+                st.success(f" Configuration saved to: {log_file.name}")
                 
                 # Download data
                 with st.spinner("🔄 Downloading data from Census API... This may take 1-5 minutes"):
@@ -363,7 +373,7 @@ if st.session_state.census_step == 'configure':
 
 elif st.session_state.census_step == 'downloaded':
     
-    st.success("✅ Data downloaded successfully!")
+    st.success(" Data downloaded successfully!")
     
     col_i1, col_i2, col_i3 = st.columns(3)
     with col_i1:
@@ -378,14 +388,14 @@ elif st.session_state.census_step == 'downloaded':
     st.dataframe(st.session_state.census_df_raw.head(10), use_container_width=True)
     
     st.markdown("---")
-    st.subheader("📥 Export Options")
+    st.subheader(" Export Options")
     
     col_export1, col_export2 = st.columns(2)
     
     with col_export1:
         csv_raw = st.session_state.census_df_raw.to_csv(index=False)
         st.download_button(
-            label="💾 Download Raw CSV",
+            label=" Download Raw CSV",
             data=csv_raw,
             file_name=f"{st.session_state.census_params['indicator']}_{st.session_state.census_params['geo']}_{st.session_state.census_params['estimate']}_raw_{st.session_state.census_timestamp}.csv",
             mime="text/csv",
@@ -394,7 +404,7 @@ elif st.session_state.census_step == 'downloaded':
         st.caption("Direct from Census API")
     
     with col_export2:
-        if st.button("⚙️ Process & Download", use_container_width=True, key="process_btn"):
+        if st.button(" Process & Download", use_container_width=True, key="process_btn"):
             st.session_state.census_step = 'processing'
             st.rerun()
     
@@ -412,7 +422,7 @@ elif st.session_state.census_step == 'downloaded':
 
 elif st.session_state.census_step == 'processing':
     
-    st.info("⚙️ Processing data through pipeline...")
+    st.info(" Processing data through pipeline...")
     
     try:
         df_census = st.session_state.census_df_raw
@@ -453,7 +463,7 @@ elif st.session_state.census_step == 'processing':
         st.error(traceback.format_exc())
         
         st.markdown("---")
-        if st.button("⬅️ Back to Download Options"):
+        if st.button(" Back to Download Options"):
             st.session_state.census_step = 'downloaded'
             st.rerun()
 
@@ -463,7 +473,7 @@ elif st.session_state.census_step == 'processing':
 
 elif st.session_state.census_step == 'processed':
     
-    st.success("✅ Processing complete!")
+    st.success(" Processing complete!")
     
     col_i1, col_i2 = st.columns(2)
     with col_i1:
@@ -478,7 +488,7 @@ elif st.session_state.census_step == 'processed':
     
     csv_processed = st.session_state.census_df_processed.to_csv(index=False)
     st.download_button(
-        label="💾 Download Processed CSV",
+        label=" Download Processed CSV",
         data=csv_processed,
         file_name=f"{st.session_state.census_params['indicator']}_{st.session_state.census_params['geo']}_{st.session_state.census_params['estimate']}_processed_{st.session_state.census_timestamp}.csv",
         mime="text/csv",
@@ -487,7 +497,7 @@ elif st.session_state.census_step == 'processed':
     
     st.markdown('<div class="success-box"><strong>✅ Processed data ready to download!</strong></div>', unsafe_allow_html=True)
     
-    if st.button("🔄 Start Over"):
+    if st.button(" Start Over"):
         st.session_state.census_step = 'configure'
         st.session_state.census_df_raw = None
         st.session_state.census_df_processed = None
@@ -500,7 +510,7 @@ elif st.session_state.census_step == 'processed':
 
 elif st.session_state.census_step == 'processed_pums':
     
-    st.success("✅ PUMS Processing complete!")
+    st.success(" PUMS Processing complete!")
     
     st.subheader("Select Geography Level to Download")
     
@@ -531,16 +541,16 @@ elif st.session_state.census_step == 'processed_pums':
     
     csv_pums = df_to_download.to_csv(index=False)
     st.download_button(
-        label="💾 Download Processed CSV",
+        label=" Download Processed CSV",
         data=csv_pums,
         file_name=f"{st.session_state.census_params['indicator']}_{geo_option}_{st.session_state.census_params['estimate']}_processed_{st.session_state.census_timestamp}.csv",
         mime="text/csv",
         key="download_pums_btn"
     )
     
-    st.markdown('<div class="success-box"><strong>✅ Processed PUMS data ready to download!</strong></div>', unsafe_allow_html=True)
+    st.markdown('<div class="success-box"><strong> Processed PUMS data ready to download!</strong></div>', unsafe_allow_html=True)
     
-    if st.button("🔄 Start Over"):
+    if st.button(" Start Over"):
         st.session_state.census_step = 'configure'
         st.session_state.census_df_raw = None
         st.rerun()
@@ -550,7 +560,7 @@ elif st.session_state.census_step == 'processed_pums':
 # ===============================================
 
 with st.sidebar:
-    st.header("ℹ️ Status")
+    st.header(" Status")
     if st.session_state.census_step == 'configure':
         st.write("**Current Step:** Configuration")
     elif st.session_state.census_step == 'downloaded':
