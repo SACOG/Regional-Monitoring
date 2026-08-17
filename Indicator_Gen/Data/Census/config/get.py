@@ -162,13 +162,37 @@ def get_data(
 
 
 
+def geo_selection(params, key, df_inputs):
+
+    '''
+    The geographies the user picked on the dashboard, falling back to the matching column
+    in census.xlsx when nothing was passed.
+
+    The dashboard sends its selections through params; scripts that call these functions
+    directly still drive off the sheets in the workbook, so both keep working.
+    '''
+
+    picked = params.get(key)
+    if picked:
+        return list(picked)
+    if key in df_inputs.columns:
+        return list(df_inputs[key].dropna().values)
+    return []
+
+
 def read_vars_file(params):
 
     df_vars = pd.read_excel(FILE_INPUTS, sheet_name=params['sample'])
+
+    # '&' binds tighter than '|', so writing this as one expression silently applied the
+    # Include and Year filters to only the second name match — group the names first
+    matches_indicator = (
+        (df_vars['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) |
+        (df_vars['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False))
+        )
     df_vars = df_vars[
-        (df_vars['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) | 
-        (df_vars['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False)) &
-        (df_vars['Include'] == 'Yes') & (df_vars['Year'].isin(params['years_to_import']))
+        matches_indicator
+        & (df_vars['Include'] == 'Yes') & (df_vars['Year'].isin(params['years_to_import']))
         ]
 
     if params['sample'] == 'LEHD':
@@ -185,7 +209,7 @@ def read_fips_file_pums(params):
     df_fips_pums = pd.read_excel(FILE_AREA, sheet_name='PUMAcodes' , dtype={'STATEFP':str, 'COUNTYFP':str, 'TRACTCE':str, 'PUMA5CE':str})
 
     df_fips = df_fips.merge(df_fips_pums[['STATEFP', 'COUNTYFP', 'PUMA5CE']].drop_duplicates(), on = ['STATEFP', 'COUNTYFP'])
-    df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
+    df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs))) & (df_fips['COUNTYNAME'].isin(geo_selection(params, 'counties', df_inputs)))]
 
     dt_fips = df_fips[['STATEFP', 'PUMA5CE']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['PUMA5CE'].apply(list).to_dict()
     for key in list(dt_fips.keys()):
@@ -227,21 +251,21 @@ def prep_request_special(df_inputs, params):
     if params['import_tab'] == 'Counties':
         
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
-        df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
+        df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs))) & (df_fips['COUNTYNAME'].isin(geo_selection(params, 'counties', df_inputs)))]
 
         dt_fips = df_fips[['STATEFP', 'COUNTYFP']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['COUNTYFP'].apply(list).to_dict()
         for key in list(dt_fips.keys()):
             dt_fips[key] = ",".join(dt_fips[key])
-    
+
         print()
         print('Counties set to import by state:')
         print(dt_fips)
         print()
-        
+
 
     if params['import_tab'] == 'MSA':
-    
-        msa_to_import = list(df_inputs['msa'].values)
+
+        msa_to_import = geo_selection(params, 'msa', df_inputs)
         df_fips = pd.read_excel(FILE_AREA, sheet_name='MSAcodes', dtype={'MSA_ID':object})
         df_fips = df_fips[['Year', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates().reset_index(drop=True)
         df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
@@ -260,9 +284,9 @@ def prep_request_special(df_inputs, params):
         # Convert to dictionary object for easy state-county combination importing
 
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':object, 'COUNTYFP':object})
-        df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values))]
+        df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs)))]
         states_to_import = [str(state) for state in df_fips['STATEFP'].unique()]
-        
+
         print()
         print("States set to import:")
         print(states_to_import)
@@ -718,13 +742,20 @@ def get_subject(api_key, df_urls, params):
                                 
                 if params['import_tab'] == 'MSA':
                     try:
+                        # The API expects numeric MSA IDs; msa_to_import holds the short
+                        # names, which come back as an empty response
+                        msa_ids = df_fips[df_fips['Year'] == year]
+                        if msa_ids.empty:
+                            msa_ids = df_fips
+                        msa_ids = ','.join([str(msa) for msa in msa_ids['MSA_ID'].values])
+                        tqdm.write('MSA IDs: ' + msa_ids)
                         list_df_states.append(
                             get_data(df_urls        = df_urls
                                         , api_key   = api_key
                                         , params    = params
                                         , variables = variables
                                         , year      = year
-                                        , msa       = msa_to_import)
+                                        , msa       = msa_ids)
                         )
                     except Exception as e: print(e); traceback.print_exc(); print(); print()
 
@@ -962,16 +993,31 @@ def get_dec(api_key, df_urls, params):
         
     if params['import_tab'] == 'Counties':
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype = {'STATEFP':str, 'COUNTYFP':str})
-        df_fips = df_fips[df_fips['STATE'].isin(df_inputs['states'].values)]
-        df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
+        df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs))) & (df_fips['COUNTYNAME'].isin(geo_selection(params, 'counties', df_inputs)))]
 
-        dt_fips = df_fips[['STATEFP', 'COUNTYFP']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['COUNTYFP'].apply(list).to_dict()    
+        dt_fips = df_fips[['STATEFP', 'COUNTYFP']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['COUNTYFP'].apply(list).to_dict()
         for key in list(dt_fips.keys()):
             dt_fips[key] = ",".join(dt_fips[key])
-        
+
         print()
         print('Counties set to import by state:')
         print(dt_fips)
+        print()
+        print('Variables set to import by year:')
+        print(dt_vars)
+
+    if params['import_tab'] == 'MSA':
+
+        # Decennial supports MSA on the API, but this branch was never written, so the
+        # request list came back empty and the concat below raised
+        msa_to_import = geo_selection(params, 'msa', df_inputs)
+        df_fips = pd.read_excel(FILE_AREA, sheet_name='MSAcodes', dtype={'MSA_ID':object})
+        df_fips = df_fips[['Year', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates().reset_index(drop=True)
+        df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
+
+        print()
+        print("MSA set to import:")
+        print(msa_to_import)
         print()
         print('Variables set to import by year:')
         print(dt_vars)
@@ -983,9 +1029,9 @@ def get_dec(api_key, df_urls, params):
         # Convert to dictionary object for easy state-county combination importing
 
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
-        df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values))]
+        df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs)))]
         states_to_import = [str(state) for state in df_fips['STATEFP'].unique()]
-    
+
         print()
         print("States set to import:")
         print(states_to_import)
@@ -1044,6 +1090,23 @@ def get_dec(api_key, df_urls, params):
                     )
                 except Exception as e: print(e); traceback.print_exc(); print(); print()
 
+        if params['import_tab'] == 'MSA':
+            try:
+                msa_ids = df_fips[df_fips['Year'] == year]
+                if msa_ids.empty:
+                    msa_ids = df_fips
+                msa_ids = ','.join([str(msa) for msa in msa_ids['MSA_ID'].values])
+                tqdm.write('MSA IDs: ' + msa_ids)
+                list_df_states.append(
+                    get_data(df_urls        = df_urls
+                                , api_key   = api_key
+                                , params    = params
+                                , variables = ','.join(dt_vars[str(year)])
+                                , year      = year
+                                , msa       = msa_ids)
+                )
+            except Exception as e: print(e); traceback.print_exc(); print(); print()
+
         df_states = pd.concat(list_df_states)
         df_states = df_states.set_index(GEO_ID[params['geo']] + ['Year']).reset_index()
         df_states.columns = GEO_ID[params['geo']] + ['Year'] + dt_vars2[str(year)][1:]
@@ -1092,21 +1155,20 @@ def get_lehd(api_key, df_urls, params):
         # Convert to dictionary object for easy state-county combination importing
 
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':object, 'COUNTYFP':object})
-        df_fips = df_fips[(df_fips['STATE'].isin(df_inputs['states'].values)) & (df_fips['COUNTYNAME'].isin(df_inputs['counties'].values))]
+        df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs))) & (df_fips['COUNTYNAME'].isin(geo_selection(params, 'counties', df_inputs)))]
 
         dt_fips = df_fips[['STATEFP', 'COUNTYFP']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['COUNTYFP'].apply(list).to_dict()
         for key in list(dt_fips.keys()):
             dt_fips[key] = ",".join(dt_fips[key])
-    
+
         print()
         print('Counties set to import by state:')
         print(dt_fips)
         print()
 
     if params['import_tab'] == 'MSA':
-    
-        df_inputs['msa'] = df_inputs['msa'].astype("str")
-        msa_to_import = list(df_inputs['msa'].values)
+
+        msa_to_import = [str(msa) for msa in geo_selection(params, 'msa', df_inputs)]
         df_fips = pd.read_excel(FILE_AREA, sheet_name='MSAcodes', dtype={'STATEFP':object, 'MSA_ID':object})
         df_fips = df_fips[['Year', 'STATEFP', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates()
         df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]

@@ -1133,8 +1133,9 @@ Samples:
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
   SUBJECT:
     ACS5:
+      # Subject tables are not published below tract level - the API rejects block groups
+      # with "unknown/unsupported geography hierarchy"
       geographies_available:
-      - Block Groups
       - Tracts
       - Counties
       - MSA
@@ -1145,7 +1146,9 @@ Samples:
       - State Legislative Lower Districts
       - States
       - National
-      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      # Subject table variables in census.xlsx stop at 2023, so offering 2024 returned an
+      # empty pull. Extend both lists once the 2024 variables are added to the workbook.
+      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
     ACS1:
       geographies_available:
       - Counties
@@ -1154,7 +1157,7 @@ Samples:
       - Congressional Districts
       - States
       - National
-      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
   LEHD: # Samples should maybe be QWI but gonna do RE, SA, SE
     RE: 
       geographies_available:

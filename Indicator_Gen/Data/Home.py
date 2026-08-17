@@ -83,7 +83,7 @@ h1, h2, h3, h4, p, span, div, label { font-family: 'DM Sans', sans-serif !import
 
 .hero-sub {
     font-size: 1.05rem;
-    color: #64748b;
+    color: #94a3b8;
     max-width: 520px;
     width: 100%;
     margin: 0 auto 2.5rem;
@@ -107,7 +107,7 @@ h1, h2, h3, h4, p, span, div, label { font-family: 'DM Sans', sans-serif !import
     font-weight: 600;
     letter-spacing: .15em;
     text-transform: uppercase;
-    color: #475569;
+    color: #8b98ab;
     text-align: center;
     margin-bottom: 1.8rem;
 }
@@ -179,7 +179,7 @@ h1, h2, h3, h4, p, span, div, label { font-family: 'DM Sans', sans-serif !import
 
 .card-desc {
     font-size: .88rem;
-    color: #64748b;
+    color: #94a3b8;
     line-height: 1.65;
     margin: 0 0 1.5rem;
 }
@@ -260,7 +260,7 @@ div[data-testid="stButton"] > button {
 
 .stat-label {
     font-size: .75rem;
-    color: #475569;
+    color: #8b98ab;
     text-transform: uppercase;
     letter-spacing: .1em;
     font-weight: 500;
@@ -271,7 +271,7 @@ div[data-testid="stButton"] > button {
     text-align: center;
     padding: 2rem 0 .5rem;
     font-size: .75rem;
-    color: #334155;
+    color: #7d8899;
     border-top: 1px solid rgba(255,255,255,.04);
 }
 

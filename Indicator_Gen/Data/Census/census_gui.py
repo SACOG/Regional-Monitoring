@@ -39,7 +39,7 @@ if '_census_config_loaded' not in st.session_state:
         area_codes_file = path_config0 / 'area_codes.xlsx'
         st.session_state._census_df_states   = pd.read_excel(area_codes_file, sheet_name='StateNames')[['STATE', 'Postal']]
         st.session_state._census_df_counties = pd.read_excel(area_codes_file, sheet_name='CountyFIPS')[['STATE', 'COUNTYNAME']]
-        st.session_state._census_df_msa      = pd.read_excel(area_codes_file, sheet_name='MSAcodes')[['State', 'MSA']].drop_duplicates()
+        st.session_state._census_df_msa      = pd.read_excel(area_codes_file, sheet_name='MSAcodes')[['State', 'MSA', 'Abbrv']].drop_duplicates()
 
         runs_dir = path_config / 'runs'
         runs_dir.mkdir(parents=True, exist_ok=True)
@@ -87,6 +87,23 @@ api_key     = st.session_state._census_api_key
 pre         = st.session_state._census_module_pre
 get         = st.session_state._census_module_get
 post        = st.session_state._census_module_post
+
+# ===============================================
+# HELPERS
+# ===============================================
+
+def config_number(value, default):
+    """
+    Read a numeric setting out of census.yaml.
+
+    Several indicators have the key present but the cell blank, which comes back as
+    None — dict.get()'s default only covers a missing key, so it does not help here.
+    """
+    try:
+        return type(default)(value)
+    except (TypeError, ValueError):
+        return default
+
 
 # ===============================================
 # INITIALIZE SESSION STATE
@@ -141,7 +158,17 @@ if st.session_state.census_step == 'configure':
         sample_options = indicator_config.get('sample', 'ACS')
         if isinstance(sample_options, str):
             sample_options = [sample_options]
-        
+
+        # Some indicators have a blank sample in census.yaml, which used to fail further
+        # down with an unhelpful KeyError on the Samples lookup
+        sample_options = [s for s in sample_options if s in yaml_config['Samples']]
+        if not sample_options:
+            st.error(
+                f"**{indicator}** has no usable sample type set in census.yaml, so it cannot "
+                "be downloaded. Choose a different indicator, or fill in its `sample` field."
+            )
+            st.stop()
+
         if len(sample_options) == 1:
             sample_type = sample_options[0]
             st.info(f"**{sample_type}**")
@@ -162,6 +189,11 @@ if st.session_state.census_step == 'configure':
         st.subheader(" Select Specific Geographies")
         
         selected_geographies = []
+        # Tracked separately from selected_geographies so they can be passed through to the
+        # request layer — get.py filters FIPS codes on these
+        selected_states   = []
+        selected_counties = []
+        selected_msa      = []
         do_mpo_rollup = False  # Initialize MPO rollup option
         if geography_level == 'National':
             st.info("**National Coverage - All USA**")
@@ -197,8 +229,11 @@ if st.session_state.census_step == 'configure':
                     do_mpo_rollup = st.checkbox("Roll up counties to MPO (SACOG only)?", value=False, key="mpo_rollup")
         
         elif geography_level == 'MSA':
-            msa_list = sorted(df_msa['MSA'].dropna().unique())
-            selected_msa = st.multiselect("Select MSA(s):", msa_list, default=['Sacramento, CA'], key="msa_select")
+            # get.py matches MSAs on the short 'Abbrv' form ("Sacramento, CA"), not the long
+            # 'MSA' form ("Sacramento-Roseville-Folsom, CA Metro Area"), so offer that form here
+            msa_list = sorted(df_msa['Abbrv'].dropna().unique())
+            msa_default = [m for m in ['Sacramento, CA'] if m in msa_list]
+            selected_msa = st.multiselect("Select MSA(s):", msa_list, default=msa_default, key="msa_select")
             selected_geographies = selected_msa
         
         elif geography_level == 'Block Groups':
@@ -319,10 +354,15 @@ if st.session_state.census_step == 'configure':
                     'start_year': year_start,
                     'end_year': year_end,
                     'import_tab': import_tab,
+                    # The geographies picked above. get.py falls back to the sheets in
+                    # census.xlsx when these are empty, so direct script callers are unaffected.
+                    'states': selected_states,
+                    'counties': selected_counties,
+                    'msa': selected_msa,
                     'moe': moe_bool,
                     'mpo': do_mpo_rollup,
-                    'moe_thresh': float(indicator_config.get('MOE_threshold', 0.05)),
-                    'num_vars': int(indicator_config.get('number_of_variables')),
+                    'moe_thresh': config_number(indicator_config.get('MOE_threshold'), 0.05),
+                    'num_vars': config_number(indicator_config.get('number_of_variables'), 1),
                     'metric': indicator_config.get('metric'),
                     'pct': pct_bool,
                     'weight': weighted_by if weighted_by not in [False, 'False', 'No', '', None] else '',
@@ -374,7 +414,11 @@ if st.session_state.census_step == 'configure':
 elif st.session_state.census_step == 'downloaded':
     
     st.success(" Data downloaded successfully!")
-    
+
+    if st.session_state.get('census_processing_error'):
+        st.error(st.session_state.census_processing_error)
+        st.session_state.census_processing_error = None
+
     col_i1, col_i2, col_i3 = st.columns(3)
     with col_i1:
         st.metric("Rows", len(st.session_state.census_df_raw))
@@ -439,23 +483,30 @@ elif st.session_state.census_step == 'processing':
                 st.session_state.census_step = 'processed'
                 st.rerun()
             
-            elif params['sample'] in ['PUMS', 'FOODSEC']:
-                if params['sample'] == 'PUMS':
-                    if 'H' in df_vars['Table Type'].unique():
-                        weight = 'WGTP'
-                    else:
-                        weight = 'PWGTP'
-                    
-                    df_puma, df_counties, df_msa, df_mpo = post.pums_main(df_census, params, weight, df_vars)
-                    
-                    st.session_state.census_df_puma     = df_puma
-                    st.session_state.census_df_counties = df_counties
-                    st.session_state.census_df_msa      = df_msa
-                    st.session_state.census_step        = 'processed_pums'
-                    st.rerun()
-            
+            elif params['sample'] == 'PUMS':
+                if 'H' in df_vars['Table Type'].unique():
+                    weight = 'WGTP'
+                else:
+                    weight = 'PWGTP'
+
+                df_puma, df_counties, df_msa, df_mpo = post.pums_main(df_census, params, weight, df_vars)
+
+                st.session_state.census_df_puma     = df_puma
+                st.session_state.census_df_counties = df_counties
+                st.session_state.census_df_msa      = df_msa
+                st.session_state.census_step        = 'processed_pums'
+                st.rerun()
+
             else:
-                st.warning(f"Processing not implemented for {params['sample']}")
+                # Previously this printed a warning and left the page stranded on the
+                # processing step with no way forward. Send the user back to the export
+                # options, where the raw download is still available.
+                st.session_state.census_processing_error = (
+                    f"Processing is not built for {params['sample']} data yet. "
+                    "The raw download below is unaffected."
+                )
+                st.session_state.census_step = 'downloaded'
+                st.rerun()
     
     except Exception as e:
         st.error(f"❌ Processing error: {str(e)}")
