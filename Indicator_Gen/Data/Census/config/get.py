@@ -190,13 +190,18 @@ def read_vars_file(params):
         (df_vars['Indicator Name'].str.contains(f'{params['indicator']}$', regex=True).replace(np.nan, False)) |
         (df_vars['Indicator Name'].str.contains(f'{params['indicator']},', regex=True).replace(np.nan, False))
         )
-    df_vars = df_vars[
-        matches_indicator
-        & (df_vars['Include'] == 'Yes') & (df_vars['Year'].isin(params['years_to_import']))
-        ]
+    keep = matches_indicator & (df_vars['Include'] == 'Yes')
 
+    # LEHD is a quarterly timeseries, so its sheet has no Year column to filter on
+    if 'Year' in df_vars.columns:
+        keep = keep & (df_vars['Year'].isin(params['years_to_import']))
+
+    df_vars = df_vars[keep]
+
+    # this previously discarded its own result, so all three LEHD estimates' variables
+    # were sent to whichever endpoint was being called
     if params['sample'] == 'LEHD':
-        df_vars[df_vars['Sample'] == params['estimate']]
+        df_vars = df_vars[df_vars['Sample'] == params['estimate']]
 
     return df_vars
 
@@ -1155,12 +1160,14 @@ def get_lehd(api_key, df_urls, params):
         # Import COUNTYFP mapping
         # Convert to dictionary object for easy state-county combination importing
 
-        df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':object, 'COUNTYFP':object})
+        # read as str, like the other fetchers do - object dtype leaves these as ints,
+        # which ','.join then rejects
+        df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype={'STATEFP':str, 'COUNTYFP':str})
         df_fips = df_fips[(df_fips['STATE'].isin(geo_selection(params, 'states', df_inputs))) & (df_fips['COUNTYNAME'].isin(geo_selection(params, 'counties', df_inputs)))]
 
         dt_fips = df_fips[['STATEFP', 'COUNTYFP']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['COUNTYFP'].apply(list).to_dict()
         for key in list(dt_fips.keys()):
-            dt_fips[key] = ",".join(dt_fips[key])
+            dt_fips[key] = ",".join(str(v) for v in dt_fips[key])
 
         print()
         print('Counties set to import by state:')
@@ -1170,13 +1177,18 @@ def get_lehd(api_key, df_urls, params):
     if params['import_tab'] == 'MSA':
 
         msa_to_import = [str(msa) for msa in geo_selection(params, 'msa', df_inputs)]
-        df_fips = pd.read_excel(FILE_AREA, sheet_name='MSAcodes', dtype={'STATEFP':object, 'MSA_ID':object})
+        # the MSAcodes sheet names this column 'State FIPS', not 'STATEFP'. Both keys must
+        # be strings or the merge against the API response silently matches nothing.
+        df_fips = pd.read_excel(FILE_AREA, sheet_name='MSAcodes', dtype={'State FIPS':str, 'MSA_ID':str})
+        df_fips = df_fips.rename(columns={'State FIPS':'STATEFP'})
+        df_fips['STATEFP'] = df_fips['STATEFP'].astype(str).str.zfill(2)
+        df_fips['MSA_ID']  = df_fips['MSA_ID'].astype(str)
         df_fips = df_fips[['Year', 'STATEFP', 'MSA_ID', 'MSA', 'Abbrv']].drop_duplicates()
         df_fips = df_fips[df_fips['Abbrv'].isin(msa_to_import)]
 
-        dt_fips = df_fips[['STATEFP', 'MSA_ID']].drop_duplicates().drop_duplicates().reset_index(drop=True).groupby('STATEFP')['MSA_ID'].apply(list).to_dict()
+        dt_fips = df_fips[['STATEFP', 'MSA_ID']].drop_duplicates().reset_index(drop=True).groupby('STATEFP')['MSA_ID'].apply(list).to_dict()
         for key in list(dt_fips.keys()):
-            dt_fips[key] = ",".join(dt_fips[key])
+            dt_fips[key] = ",".join(str(v) for v in dt_fips[key])
     
         print()
         print("MSA IDs set to import by state:")
@@ -1232,7 +1244,10 @@ def get_lehd(api_key, df_urls, params):
             except Exception as e: print(e); traceback.print_exc(); print(); print()
     df_census = pd.concat(list_df_states)
     df_census = df_census.rename(columns = {'year':'Year'})
-    df_census = df_census.drop_duplicates(subset=['MSA_ID', 'time', 'Year', 'firmage', 'Emp']).reset_index(drop=True)
+
+    # this used to hardcode MSA_ID/firmage/Emp, which do not all exist on the county path
+    subset = [col for col in ['MSA_ID', 'COUNTYFP', 'time', 'Year', 'firmage', 'Emp'] if col in df_census.columns]
+    df_census = df_census.drop_duplicates(subset=subset or None).reset_index(drop=True)
 
     return df_census
 
