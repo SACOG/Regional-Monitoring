@@ -895,8 +895,9 @@ def get_dp(api_key, df_urls, params):
                                 
                 if params['import_tab'] == 'MSA':
                     try:
+                        # MSA_ID comes back as int for some rows, which ','.join rejects
                         msa_to_import = df_fips[df_fips['Year'] == year]
-                        msa_to_import = list(msa_to_import['MSA_ID'].values)
+                        msa_to_import = [str(msa) for msa in msa_to_import['MSA_ID'].values]
                         msa_to_import = ','.join(msa_to_import)
                         list_df_states.append(
                             get_data(df_urls        = df_urls

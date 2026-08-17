@@ -1100,8 +1100,9 @@ Samples:
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
   DP:
     ACS5:
+      # Data profiles are not published below tract level - the API rejects block groups
+      # with "unknown/unsupported geography hierarchy"
       geographies_available:
-      - Block Groups
       - Tracts
       - Counties
       - MSA
@@ -1112,7 +1113,9 @@ Samples:
       - State Legislative Lower Districts
       - States
       - National
-      years_available: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      # The DP sheet in census.xlsx currently defines variables for 2023 only. Extend both
+      # lists as earlier years are added back to the workbook.
+      years_available: [2023]
     ACS1:
       geographies_available:
       - Counties
@@ -1121,7 +1124,7 @@ Samples:
       - Congressional Districts
       - States
       - National
-      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      years_available: [2023]
   PUMS:
     ACS5:
       geographies_available:
@@ -1158,22 +1161,35 @@ Samples:
       - States
       - National
       years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
-  LEHD: # Samples should maybe be QWI but gonna do RE, SA, SE
-    RE: 
-      geographies_available:
-      - Counties
-      - MSA
-      years_available: ['timeseries']
-    SA: 
-      geographies_available:
-      - Counties
-      - MSA
-      years_available: ['timeseries']
-    SE: 
-      geographies_available:
-      - Counties
-      - MSA
-      years_available: ['timeseries']
+  # LEHD is unfinished and is hidden from the dashboard until it is completed. The code in
+  # get.py and the LEHD sheet in census.xlsx are both left in place. To finish it:
+  #   1. The LEHD sheet has no 'Year' column, which read_vars_file() requires.
+  #   2. The URL sheet has no LEHD rows, so there is no endpoint to call. The QWI
+  #      timeseries endpoints are live and are the likely target:
+  #      https://api.census.gov/data/timeseries/qwi/{sa,se,rh}
+  #   3. The estimate code disagrees: 'RE' here, but 'RH' in both the LEHD sheet and the
+  #      assertion in get.py:74. Two of three say RH.
+  #   4. get_lehd() reads MSAcodes['STATEFP']; that column is named 'State FIPS'.
+  #   5. The closing drop_duplicates() hardcodes MSA_ID/firmage/Emp, so the Counties path
+  #      raises even once the above are fixed.
+  #   6. Only two variables are defined per estimate.
+  #   7. post.py has no LEHD processing, so 'Process & Download' has nothing to run.
+  # LEHD:
+  #   RH:
+  #     geographies_available:
+  #     - Counties
+  #     - MSA
+  #     years_available: ['timeseries']
+  #   SA:
+  #     geographies_available:
+  #     - Counties
+  #     - MSA
+  #     years_available: ['timeseries']
+  #   SE:
+  #     geographies_available:
+  #     - Counties
+  #     - MSA
+  #     years_available: ['timeseries']
 
 
 Import Geographies:
