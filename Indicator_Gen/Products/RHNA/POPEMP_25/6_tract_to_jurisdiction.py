@@ -98,9 +98,12 @@ city_name = 'SACOG'
 
 
 print('Importing GIS layers:')
-print('Jurisdictions...'); gdf_jurisdictions = gpd.read_file(GDB, layer=FC_JURISDICTIONS)
-print('Census Tracts...'); gdf_tracts        = gpd.read_file(GDB, layer=FC_TRACTS       )
-print('Blocks...'       ); gdf_blocks        = gpd.read_file(GDB, layer=FC_BLOCKS       ) # may take a few minutes to import
+print('Jurisdictions...')
+gdf_jurisdictions = gpd.read_file(GDB, layer=FC_JURISDICTIONS)
+print('Census Tracts...')
+gdf_tracts = gpd.read_file(GDB, layer=FC_TRACTS)
+print('Blocks...')
+gdf_blocks = gpd.read_file(GDB, layer=FC_BLOCKS) # may take a few minutes to import
 
 print("Importing typology data")
 df_typol = pd.read_csv(output_path+'/typologies/'+city_name+'_typology_output.csv',dtype={'FIPS':str,'rhu_24':int,'ohu_24':int})
@@ -114,8 +117,6 @@ clean_typ_overlay = typ_overlay_merge[['Countyname', 'GEOCODE', 'typ_cat', 'ohu_
 clean_typ_overlay['COUNTY'] = clean_typ_overlay['COUNTY'].str.replace(' County', '')
 clean_typ_overlay.loc[clean_typ_overlay['JURIS'].str.contains('County'), 'JURIS'] = 'Unincorporated'
 
-breakpoint()
-
 
 
 # =============================================================================
@@ -127,7 +128,8 @@ print("Preparing block population...")
 gdf_blocks = gdf_blocks.rename(columns={'GEOID': 'BLOCK_GEOID', 'POP100': 'POP'})
 gdf_blocks = gdf_blocks[['BLOCK_GEOID', 'POP', 'geometry']].copy()
 gdf_blocks['POP'] = gdf_blocks['POP'].fillna(0)
-if gdf_blocks.crs.is_geographic: gdf_blocks = gdf_blocks.to_crs(gdf_tracts.crs)
+if gdf_blocks.crs.is_geographic:
+    gdf_blocks = gdf_blocks.to_crs(gdf_tracts.crs)
 
 
 # =============================================================================
@@ -181,7 +183,8 @@ clean_typ_overlay['pop_scalar'] = clean_typ_overlay['pop_scalar'].fillna(1)
 
 
 print("Scaling housing counts...")
-for col in ['ohu_24','rhu_24','hh_24']: clean_typ_overlay[col] = clean_typ_overlay[col] * clean_typ_overlay['pop_scalar']
+for col in ['ohu_24','rhu_24','hh_24']:
+    clean_typ_overlay[col] = clean_typ_overlay[col] * clean_typ_overlay['pop_scalar']
 
 
 

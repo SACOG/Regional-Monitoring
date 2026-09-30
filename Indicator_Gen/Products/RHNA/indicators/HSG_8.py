@@ -6,6 +6,9 @@ from pathlib import Path
 from tqdm import tqdm
 import time
 from IPython.display import display
+import sys
+sys.path.append(str(Path(__file__).parent.parent/'config'))
+import rhna
 
 
 def extrapolate_weights(df):
@@ -35,9 +38,6 @@ def extrapolate_weights(df):
     return df
 
 
-import sys
-sys.path.append(str(Path(__file__).parent.parent/'config'))
-import rhna
 yaml_file = rhna.load_yaml()
 
 PATH_DATA = Path(yaml_file['Path_Data'])
@@ -46,11 +46,11 @@ params = yaml_file[INDICATOR]
 
 
 FILE_AREA = Path(__file__).parent.parent.parent.parent / 'config' / 'area_codes.xlsx'
-FILE_ZHVI_CITIES = PATH_DATA / f'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
-FILE_ZHVI_COUNTIES = PATH_DATA / f'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
+FILE_ZHVI_CITIES = PATH_DATA / 'City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
+FILE_ZHVI_COUNTIES = PATH_DATA / 'County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
 
-FILE_WEIGHTS_CDP = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Data' / 'Reference' / 'Weights' / 'Total_Households Places ACS5.xlsx'  
-FILE_WEIGHTS_COUNTIES = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Data' / 'Reference' / 'Weights' / 'Total_Households Counties ACS5.xlsx'
+FILE_WEIGHTS_CDP = Path(r'I:\Projects\Josh\Regional Monitoring\weights') / 'Total_Households Places ACS5.xlsx'  
+FILE_WEIGHTS_COUNTIES = Path(r'I:\Projects\Josh\Regional Monitoring\weights') / 'Total_Households Counties ACS5.xlsx'
 
 
 if __name__ == '__main__':
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     df_codes['Geography'] = df_codes['Geography'].str.replace(' CDP' , '')
     df_codes['Geography'] = df_codes['Geography'].str.replace(' town', '')
 
-    df_w_cities = df_w_cities[df_w_cities['Race_Ethnicity'] == 'All'][['NAME', 'Year', 'Households']].rename(columns={'NAME':'Geography'})
+    df_w_cities = df_w_cities[df_w_cities['Race/Ethnicity'] == 'All'][['NAME', 'Year', 'Households']].rename(columns={'NAME':'Geography'})
 
     df_places = df_places.rename(columns={'RegionName':'Geography'})
     df_places = df_places[df_places['CountyName'].isin(['El Dorado County', 'Placer County', 'Sacramento County', 'Sutter County', 'Yolo County', 'Yuba County'])]
@@ -86,7 +86,9 @@ if __name__ == '__main__':
     df_places = df_places.dropna(subset=['Households', 'ZHVI']).reset_index(drop=True)
     df_places.loc[df_places['Incorporated'] != 'Yes', 'Geography'] = 'Unincorporated'
 
-    wm = lambda x: np.average(x, weights = df_places.loc[x.index, "Households"])
+    def wm(x):
+        return np.average(x, weights = df_places.loc[x.index, "Households"])
+    # wm = lambda x: np.average(x, weights = df_places.loc[x.index, "Households"])
     df_places = df_places.groupby(['CountyName', 'Geography', 'Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
     df_places = df_places.sort_values(['CountyName', 'Geography', 'Year'], ascending=[True, True, True]).reset_index(drop=True)
 
@@ -106,11 +108,15 @@ if __name__ == '__main__':
     df_counties = df_counties.dropna(subset=['Households', 'ZHVI']).reset_index(drop=True)
     df_mpo = df_counties.copy()
 
-    wm = lambda x: np.average(x, weights = df_counties.loc[x.index, "Households"])
+    def wm(x):
+        return np.average(x, weights = df_counties.loc[x.index, "Households"])
+    # wm = lambda x: np.average(x, weights = df_counties.loc[x.index, "Households"])
     df_counties = df_counties.groupby(['Geography', 'Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
     df_counties = df_counties.sort_values(['Geography', 'Year'], ascending=[True, True]).reset_index(drop=True)
 
-    wm = lambda x: np.average(x, weights = df_mpo.loc[x.index, "Households"])
+    def wm(x):
+        return np.average(x, weights = df_mpo.loc[x.index, "Households"])
+    # wm = lambda x: np.average(x, weights = df_mpo.loc[x.index, "Households"])
     df_mpo = df_mpo.groupby(['Year'], as_index=False).agg(ZHVI=('ZHVI', wm))
     df_mpo = df_mpo.sort_values(['Year'], ascending=[True]).reset_index(drop=True)
     df_mpo['Geography'] = 'SACOG Region'

@@ -14,16 +14,32 @@ INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
-PATH_GEO = Path(r'I:\Projects\Josh\RHNA\Geospatial Data')
 
 def remove_subtext(x):
     x = x[:-1]
     return x
 
 
+def proc_homeless_table(file):
+
+    df = pd.read_excel(file, skiprows=2)
+
+    cols_to_keep = ['Unnamed: 0', 'Unnamed: 4', 'Unnamed: 6', 'Unnamed: 12']
+    df = df[cols_to_keep].rename(columns={'Unnamed: 0':'Household Type', 'Unnamed: 4':'Sheltered - Emergency Shelter', 'Unnamed: 6':'Sheltered - Transitional Housing', 'Unnamed: 12':'Unsheltered'})
+    df = df.dropna()
+    str_to_keep = 'Persons in households without children|Persons in households with at least one adult and one child|Persons in households with only children'
+    df = df[df['Household Type'].str.contains(str_to_keep)]
+    df['Household Type'] = df['Household Type'].apply(remove_subtext)
+
+    df['Geography'] = files_to_geography[file.stem]
+    df = df.set_index('Geography').reset_index()
+
+    return df
+
+
 if __name__ == '__main__':
 
-    path_in = PATH_GEO / 'HUD'
+    path_in = PATH_DATA / 'HUD'
     files = [f for f in path_in.iterdir() if f.is_file()]
     files = [f for f in files if '.xlsx' in str(f)]
 
@@ -37,19 +53,7 @@ if __name__ == '__main__':
 
     list_df = []
     for file in tqdm(files):
-        df = pd.read_excel(file, skiprows=2)
-
-        cols_to_keep = ['Unnamed: 0', 'Unnamed: 4', 'Unnamed: 6', 'Unnamed: 12']
-        df = df[cols_to_keep].rename(columns={'Unnamed: 0':'Household Type', 'Unnamed: 4':'Sheltered - Emergency Shelter', 'Unnamed: 6':'Sheltered - Transitional Housing', 'Unnamed: 12':'Unsheltered'})
-
-        df = df.dropna()
-        str_to_keep = 'Persons in households without children|Persons in households with at least one adult and one child|Persons in households with only children'
-        df = df[df['Household Type'].str.contains(str_to_keep)]
-        df['Household Type'] = df['Household Type'].apply(remove_subtext)
-
-        df['Geography'] = files_to_geography[file.stem]
-        df = df.set_index('Geography').reset_index()
-        
+        df = proc_homeless_table(file)
         list_df.append(df)
     df = pd.concat(list_df)
 

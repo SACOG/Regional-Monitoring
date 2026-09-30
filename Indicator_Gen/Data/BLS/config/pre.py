@@ -1,21 +1,5 @@
 
 
-
-def print2(): print(); print()
-
-
-
-'''
-
-Functions:
-
-load_yaml()
-api_request_params()
-
-'''
-
-
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -25,10 +9,7 @@ import yaml
 from IPython.display import display
 
 
-PATH_GIT = Path(__file__).parent.parent.parent.parent
-PATH_CODE    = PATH_GIT / 'Data' / 'BLS'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
+PATH_CONFIG  = Path(__file__).parent
 PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
 
@@ -51,7 +32,7 @@ def load_yaml():
 
 def api_request_params(yaml_bls, rerun):
     
-    print2()
+    print('\n'*2)
     print('BLS import parameters:')
     print()
 
@@ -69,7 +50,9 @@ def api_request_params(yaml_bls, rerun):
         most_recent = sorted(list(dt_mod.keys()), reverse=True)[0]
         file_run = dt_mod[most_recent]
         df_run = pd.read_csv(file_run, sep=': ', names=['Parameter', 'Input'])
-        print(); display(df_run); print()
+        print()
+        display(df_run)
+        print()
 
         def remove_colon(x):
             return x.replace(':', '')
@@ -78,14 +61,6 @@ def api_request_params(yaml_bls, rerun):
         project   = df_run[df_run['Parameter'] == 'Project'  ]['Input'].values[0]
         indicator = df_run[df_run['Parameter'] == 'Indicator']['Input'].values[0]
         survey    = df_run[df_run['Parameter'] == 'Survey'   ]['Input'].values[0]
-
-        # if survey in ['SM', 'CE', 'EN']:
-        #     data_type_text = df_run[df_run['Parameter'] == 'Data Type']['Input'].values[0]
-        #     if survey in ['EN']:
-        #         size_code_text  = df_run[df_run['Parameter'] == 'Employer Size' ]['Input'].values[0]
-        #         owner_code_text = df_run[df_run['Parameter'] == 'Ownership Type']['Input'].values[0]
-        # if survey in ['LA']:
-        #     measure_type_text = df_run[df_run['Parameter'] == 'Measure Type']['Input'].values[0]
         data_type_text = df_run[df_run['Parameter'] == 'Data Type']['Input'].values[0]
         size_code_text  = df_run[df_run['Parameter'] == 'Employer Size' ]['Input'].values[0]
         owner_code_text = df_run[df_run['Parameter'] == 'Ownership Type']['Input'].values[0]
@@ -95,7 +70,6 @@ def api_request_params(yaml_bls, rerun):
         years_to_import = df_run[df_run['Parameter'] == 'Years Imported'      ]['Input'].values[0]
 
         export_loc  = yaml_bls['Indicators'][project][indicator]['sp_location']
-        folder      = yaml_bls['Indicators'][project][indicator]['folder'     ]
         percentages = yaml_bls['Indicators'][project][indicator]['percentages']
         weighted_by = yaml_bls['Indicators'][project][indicator]['weighted_by']
 
@@ -114,8 +88,10 @@ def api_request_params(yaml_bls, rerun):
                 print()
                 print('Projects available: ')
                 projects = yaml_bls['Project']
-                display(projects); print()
-                print('Which project are you pulling data for?'); print()
+                display(projects)
+                print()
+                print('Which project are you pulling data for?')
+                print()
                 project = input()
                 if project in projects:
                     print()
@@ -125,7 +101,8 @@ def api_request_params(yaml_bls, rerun):
                     print("Invalid choice. Please try again.")
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(projects)
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(projects)
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -133,10 +110,13 @@ def api_request_params(yaml_bls, rerun):
         while True:
             try:
                 print()
-                print('Indicators available:'); print()
+                print('Indicators available:')
+                print()
                 indicators = list(yaml_bls['Indicators'][project].keys())
-                display(indicators); print()
-                print('Which indicator do you need to rerun?'); print()
+                display(indicators)
+                print()
+                print('Which indicator do you need to rerun?')
+                print()
                 indicator = input()
                 if indicator in indicators:
                     print()
@@ -146,12 +126,12 @@ def api_request_params(yaml_bls, rerun):
                     print("Invalid choice. Please try again.")
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(indicators)
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(indicators)
                 print()
         print('---------------------------------------------------------------------------------------------------------------------------------------')
 
         export_loc  = yaml_bls['Indicators'][project][indicator]['sp_location']
-        folder      = yaml_bls['Indicators'][project][indicator]['folder'     ]
         percentages = yaml_bls['Indicators'][project][indicator]['percentages']
         weighted_by = yaml_bls['Indicators'][project][indicator]['weighted_by']
 
@@ -163,7 +143,8 @@ def api_request_params(yaml_bls, rerun):
                 surveys = yaml_bls['Indicators'][project][indicator]['survey']
                 if isinstance(surveys, list):
                     print('Surveys available:')
-                    display(surveys); print()
+                    display(surveys)
+                    print()
                     print('Which survey do you want to pull data from?')
                     survey = input()            
                 else:
@@ -176,7 +157,8 @@ def api_request_params(yaml_bls, rerun):
                     print("Invalid choice. Please try again.")
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(surveys)
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(surveys)
                 print()
         print('---------------------------------------------------------------------------------------------------------------------------------------')
 
@@ -185,10 +167,13 @@ def api_request_params(yaml_bls, rerun):
         if survey in ['SM', 'CE', 'EN']:
             while True:
                 try:
-                    print('Data types available:'); print()
+                    print('Data types available:')
+                    print()
                     data_types = yaml_bls['Surveys'][survey]['data_type']
-                    display(data_types); print()
-                    print('Which data type do you want to request?'); print()
+                    display(data_types)
+                    print()
+                    print('Which data type do you want to request?')
+                    print()
                     data_type_text = input()
                     if data_type_text in data_types:
                         print()
@@ -198,7 +183,8 @@ def api_request_params(yaml_bls, rerun):
                         print("Invalid choice. Please try again.")
                 except ValueError:
                     print()
-                    print("Invalid choice. Please choose from options outlined here: ");print(data_types)
+                    print("Invalid choice. Please choose from options outlined here: ")
+                    print(data_types)
                     print()
         else:
             data_type_text=None
@@ -208,10 +194,13 @@ def api_request_params(yaml_bls, rerun):
             while True:
                 try:
                     print()
-                    print('Employer sizes available:'); print()
+                    print('Employer sizes available:')
+                    print()
                     size_types = yaml_bls['Surveys'][survey]['size_type']
-                    display(size_types); print()
-                    print('Which employer size category do you want to request?'); print()
+                    display(size_types)
+                    print()
+                    print('Which employer size category do you want to request?')
+                    print()
                     size_code_text = input()
                     if size_code_text in size_types:
                         print()
@@ -221,7 +210,8 @@ def api_request_params(yaml_bls, rerun):
                         print("Invalid choice. Please try again.")
                 except ValueError:
                     print()
-                    print("Invalid choice. Please choose from options outlined here: ");print(size_types)
+                    print("Invalid choice. Please choose from options outlined here: ")
+                    print(size_types)
                     print()
         else:
             size_code_text=None
@@ -231,10 +221,13 @@ def api_request_params(yaml_bls, rerun):
             while True:
                 try:
                     print()
-                    print('Ownership categories available:'); print()
+                    print('Ownership categories available:')
+                    print()
                     owner_types = yaml_bls['Surveys'][survey]['owner_type']
-                    display(owner_types); print()
-                    print('Which ownership category do you want to request?'); print()
+                    display(owner_types)
+                    print()
+                    print('Which ownership category do you want to request?')
+                    print()
                     owner_code_text = input()
                     if owner_code_text in owner_types:
                         print()
@@ -244,7 +237,8 @@ def api_request_params(yaml_bls, rerun):
                         print("Invalid choice. Please try again.")
                 except ValueError:
                     print()
-                    print("Invalid choice. Please choose from options outlined here: ");print(owner_types)
+                    print("Invalid choice. Please choose from options outlined here: ")
+                    print(owner_types)
                     print()
         else:
             owner_code_text=None
@@ -253,10 +247,13 @@ def api_request_params(yaml_bls, rerun):
         if survey in ['LA']:
             while True:
                 try:
-                    print('Measure types available:'); print()
+                    print('Measure types available:')
+                    print()
                     measure_types = yaml_bls['Surveys'][survey]['measure_type']
-                    display(measure_types); print()
-                    print('Which measure type do you want to request?'); print()
+                    display(measure_types)
+                    print()
+                    print('Which measure type do you want to request?')
+                    print()
                     measure_type_text = input()
                     if measure_type_text in measure_types:
                         print()
@@ -266,7 +263,8 @@ def api_request_params(yaml_bls, rerun):
                         print("Invalid choice. Please try again.")
                 except ValueError:
                     print()
-                    print("Invalid choice. Please choose from options outlined here: ");print(measure_types)
+                    print("Invalid choice. Please choose from options outlined here: ")
+                    print(measure_types)
                     print()
         else:
             measure_type_text=None
@@ -281,7 +279,8 @@ def api_request_params(yaml_bls, rerun):
         while True:
             try:
                 print()
-                print('Do you want seasonally adjusted estimates?  Select Yes/No: '); print()
+                print('Do you want seasonally adjusted estimates?  Select Yes/No: ')
+                print()
                 seasonal_adj = input()
                 if seasonal_adj == 'Yes':
                     seasonal_code = 'S'
@@ -295,7 +294,8 @@ def api_request_params(yaml_bls, rerun):
                     print("Invalid choice. Please try again.")
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(['U', 'S'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(['U', 'S'])
                 print()
         print()
         print('---------------------------------------------------------------------------------------------------------------------------------------')
@@ -305,10 +305,13 @@ def api_request_params(yaml_bls, rerun):
         while True:
             try:
                 print()
-                print('Geographies available:'); print()
+                print('Geographies available:')
+                print()
                 geographies = yaml_bls['Surveys'][survey]['geographies_available']
-                display(geographies); print()
-                print('Which geography do you want to pull data for?'); print()
+                display(geographies)
+                print()
+                print('Which geography do you want to pull data for?')
+                print()
                 geography = input()
                 if geography in geographies:
                     print()
@@ -318,7 +321,8 @@ def api_request_params(yaml_bls, rerun):
                     print("Invalid choice. Please try again.")
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(['U', 'S'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(['U', 'S'])
                 print()
 
         print()
@@ -328,15 +332,18 @@ def api_request_params(yaml_bls, rerun):
             try:
                 print()
                 print('Years available:')
-                display(yaml_bls['Surveys'][survey]['years_available']); print()
-                print('Do you want to pull data for all years available?  Select Yes/No: '); print()
+                display(yaml_bls['Surveys'][survey]['years_available'])
+                print()
+                print('Do you want to pull data for all years available?  Select Yes/No: ')
+                print()
                 all_years = input()
                 if all_years == 'Yes':
                     years_to_import = yaml_bls['Surveys'][survey]['years_available']
                     years = ', '.join([str(year) for year in years_to_import])
                 if all_years == 'No':
                     print()
-                    print('Please type which years you want to pull data from, separated by commas:'); print()
+                    print('Please type which years you want to pull data from, separated by commas:')
+                    print()
                     years = input()
                     if ',' in years:
                         years_to_import = years.split(', ')
@@ -351,7 +358,8 @@ def api_request_params(yaml_bls, rerun):
                     print("Invalid choice. Please try again.")
             except ValueError:
                 print()
-                print("Invalid choice. Please choose from options outlined here: ");print(['U', 'S'])
+                print("Invalid choice. Please choose from options outlined here: ")
+                print(['U', 'S'])
                 print()
         
         print()
@@ -368,7 +376,6 @@ def api_request_params(yaml_bls, rerun):
             f.write(f"Project: {project}\n")
             f.write(f"Indicator: {indicator}\n")
             f.write(f"Export Location: {export_loc}\n")
-            f.write(f"Folder: {folder}\n")
             f.write(f"Survey: {survey}\n")
             f.write(f"Data Type: {data_type_text}\n")
             f.write(f"Employer Size: {size_code_text}\n")
@@ -392,7 +399,6 @@ def api_request_params(yaml_bls, rerun):
         'Owner Code': owner_code_text,
         'Measure Type': measure_type_text,
         'Export Location': export_loc,
-        'SP Folder': folder
     }
 
     return dt_result
@@ -405,7 +411,7 @@ def set_download_name(indicator, geography):
     end = 'raw'
     export_name = f"{indicator}_{geography}_BLS_{end}.csv"
     
-    print2()
+    print('\n'*2)
     print(f"Exporting {export_name} to the following location: ")
     print(PATH_ORIG)
     print()

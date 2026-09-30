@@ -5,7 +5,6 @@ from pathlib import Path
 from tqdm import tqdm
 import time
 
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
@@ -19,8 +18,8 @@ params = yaml_file[INDICATOR]
 
 if __name__ == '__main__':
 
-    df_places2 = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx', sheet_name='Places')
-    df_places1 = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places DEC.xlsx' , sheet_name='Places')
+    df_places2 = pd.read_excel(PATH_DATA / f'{INDICATOR} Places ACS5.xlsx', sheet_name='Places')
+    df_places1 = pd.read_excel(PATH_DATA / f'{INDICATOR} Places DEC.xlsx' , sheet_name='Places')
 
     df_places1['NAME'] = df_places1['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places1['NAME'] = df_places1['NAME'].str.replace(' city, California', '', regex=True)

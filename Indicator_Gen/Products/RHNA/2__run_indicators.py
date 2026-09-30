@@ -1,16 +1,12 @@
 
 
-def print2(): print();print()
-def print3(): print();print();print()
-print3()
-
 import runpy
 import time
 import warnings
-warnings.filterwarnings('ignore')
 from pathlib import Path
 PATH_EXEC = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Products' / 'RHNA' / 'indicators'
 
+warnings.filterwarnings('ignore')
 
 
 if __name__ == '__main__':
@@ -42,6 +38,8 @@ if __name__ == '__main__':
         , 'POPEMP_23'
         , 'POPEMP_24'
         , 'POPEMP_25'
+        , 'POPEMP_27'
+        , 'POPEMP_28'
         , 'HSG_1'
         , 'HSG_2'
         , 'HSG_3'
@@ -50,9 +48,11 @@ if __name__ == '__main__':
         , 'HSG_6' # Colfax, Galt, Live Oak, Winters
         , 'HSG_7'
         , 'HSG_8' # South Lake Tahoe
-        , 'HSG_9' 
+        , 'HSG_9'
         , 'HSG_10'
         , 'HSG_11'
+        , 'HSG_12'
+        , 'HSG_13'
         , 'RISK_1'
         , 'OVER_1' # South Lake Tahoe
         , 'OVER_2' # South Lake Tahoe
@@ -65,6 +65,10 @@ if __name__ == '__main__':
         , 'OVER_9'
         , 'FARM_1'
         , 'FARM_2'
+        , 'FARM_3'
+        , 'FARM_4'
+        , 'FARM_5'
+        , 'FARM_6'
         , 'LGFEM_1'
         , 'LGFEM_2'
         , 'LGFEM_3'
@@ -87,41 +91,33 @@ if __name__ == '__main__':
         , 'ELI_2' # South Lake Tahoe
         , 'ELI_3'
         , 'ELI_4'
+        , 'ELI_5'
         , 'AFFH_1'
         , 'AFFH_2'
         , 'AFFH_3'
+        , 'AFFH_5'
         # , 'HHPROJ_1'
     ]
-
-
-    # indicators=['POPEMP_11', 'POPEMP_12', 'POPEMP_13', 'POPEMP_14', 'POPEMP_15']
-
-
 
     start_time = time.time()
 
     list_indicators = []
     for indicator in indicators:
 
-        print2()
-        print(indicator)
+        print(f'\n\n{indicator}')
         path_run = PATH_EXEC / f'{indicator}.py'
         runpy.run_path(str(path_run), run_name="__main__")
         list_indicators.append(indicator)
 
 
-    print2()
-    print('Finished!! Now go outside.')
-    print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---')
-    print2()
-    # takes 45 min to process all indicators
-
+    print('\n\nFinished!! Now go outside.')
+    print(f'Process complete.  It took --- {round((time.time() - start_time)/60, 1)} minutes ---\n\n')
+    # for local exports, takes about 1 hour 15 minutes (74.5 minutes last run)
 
 
     # Check indicators
-    print2()
-    print('Indicators processed: '); print()
+    print('\n\nIndicators processed: \n')
     print(list_indicators)
-    print3()
+    print('\n'*3)
 
 

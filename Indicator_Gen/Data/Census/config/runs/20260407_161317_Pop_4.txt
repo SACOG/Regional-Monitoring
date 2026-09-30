@@ -1,0 +1,9 @@
+Project: Monitoring and Reporting
+Indicator Name: Pop_4
+Sample: ACS
+Estimate: ACS5
+Geography Level: Counties
+Selected Geographies: El Dorado, Placer, Sacramento, Sutter, Yolo, Yuba
+Years Imported: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+Import Tab: Counties
+Margin of Error: Yes

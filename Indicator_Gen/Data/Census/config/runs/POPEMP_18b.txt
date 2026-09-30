@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: POPEMP_18b
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Renters - Housing Tenure by Age
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

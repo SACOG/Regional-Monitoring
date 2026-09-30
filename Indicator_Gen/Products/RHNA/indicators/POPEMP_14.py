@@ -162,7 +162,7 @@ if __name__ == '__main__':
 
             df_prod = df_sub[df_sub['JURIS'] == jurisdiction].drop('COUNTY', axis=1)
             df_prod = df_prod.pivot_table(index='Year', columns='Wage Group', values='Ratio').reset_index()
-            # df_prod.columns = ['Year', 'Earnings $1,250/month or less', 'Earnings $1,251/month to $3,333/month', 'Earnings greater than $3,333/month']
+            df_prod.columns = ['Year', 'Earnings $1,250/month or less', 'Earnings $1,251/month to $3,333/month', 'Earnings greater than $3,333/month']
 
             df_plot = df_sub.copy()
             df_plot = df_plot[df_plot['JURIS'] == jurisdiction]

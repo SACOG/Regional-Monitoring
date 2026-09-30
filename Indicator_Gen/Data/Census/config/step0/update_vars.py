@@ -58,8 +58,8 @@ EXPORT=True
 
 
 ACS=False
-PUMS=False
-SUBJECT=True
+PUMS=True
+SUBJECT=False
 DP=False
 DEC=False
 LEHD=False
@@ -158,9 +158,10 @@ if __name__ == '__main__':
         display(df_acs.head())
 
 
-        file_acs = PATH_CONFIG / 'census.xlsx'; sheet_name='ACS'
+        file_acs = PATH_CONFIG / 'census.xlsx'
+        sheet_name='ACS'
         df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
-        df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID2', 'ID_Attributes2']]
+        df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race/Ethnicity', 'ID2', 'ID_Attributes2']]
 
         df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
         df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]
@@ -170,7 +171,7 @@ if __name__ == '__main__':
 
         df_acs = pd.concat([df_acs1, df_acs2])
 
-        df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes', 'ID2', 'ID_Attributes2']]
+        df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race/Ethnicity', 'ID_Attributes', 'ID2', 'ID_Attributes2']]
         df_acs = df_acs.drop_duplicates()
         df_acs = df_acs.sort_values(['Table', 'Indicator Name', 'Year', 'ID'], ascending = [True, True, False, True])
         df_acs = df_acs.reset_index(drop=True)
@@ -202,7 +203,8 @@ if __name__ == '__main__':
         # concatenate all data frames together
 
         print('\n'*2)
-        print('Importing PUMS variables tables by year...'); print()
+        print('Importing PUMS variables tables by year...')
+        print()
 
         years = help.sequence(2005, END_YEAR, 1)
         years.remove(2020)
@@ -245,7 +247,8 @@ if __name__ == '__main__':
         # concatenate all data frames together
 
         print('\n'*2)
-        print('Cleaned PUMS variables table:'); print()
+        print('Cleaned PUMS variables table:')
+        print()
 
         list_df_years = []
 
@@ -296,7 +299,8 @@ if __name__ == '__main__':
                 df_pums_vars['Year'] = year
                 
                 list_df_years.append(df_pums_vars)
-            except Exception as e: print(e)
+            except Exception as e:
+                print(e)
 
         df_pums1 = pd.concat(list_df_years)
         df_pums1 = df_pums1.sort_values(['ID', 'Value1', 'Year'], ascending = [True, True, False])
@@ -316,7 +320,8 @@ if __name__ == '__main__':
         # concatenate all data frames together
 
         print('\n'*2)
-        print('Importing PUMS variables tables by year...'); print()
+        print('Importing PUMS variables tables by year...')
+        print()
 
         years = help.sequence(2020, 2020, 1)
         list_df_pums = []
@@ -331,7 +336,8 @@ if __name__ == '__main__':
                     df_pums = pd.DataFrame.from_dict(dict_pums['variables']).T.reset_index().rename(columns = {'index':'ID'})
                     df_pums['Year'] = year
                     list_df_pums.append(df_pums)
-            except Exception as e: print(e)
+            except Exception as e:
+                print(e)
             
         df_pums = pd.concat(list_df_pums)
         df_pums = df_pums.dropna(subset=["values"]).reset_index(drop=True)
@@ -357,7 +363,8 @@ if __name__ == '__main__':
         # concatenate all data frames together
 
         print('\n'*2)
-        print('Cleaned PUMS variables table:'); print()
+        print('Cleaned PUMS variables table:')
+        print()
 
         list_df_years = []
 
@@ -408,7 +415,8 @@ if __name__ == '__main__':
                 df_pums_vars['Year'] = year
                 
                 list_df_years.append(df_pums_vars)
-            except Exception as e: print(e)
+            except Exception as e:
+                print(e)
 
         df_pums5 = pd.concat(list_df_years)
         df_pums5 = df_pums5.sort_values(['ID', 'Value1', 'Year'], ascending = [True, True, False])
@@ -428,7 +436,8 @@ if __name__ == '__main__':
         df_pums = df_pums.reset_index(drop=True)
 
 
-        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='PUMS'
+        file_config = PATH_CONFIG / 'census.xlsx'
+        sheet_name='PUMS'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name, dtype={'Value1':'str'})
         df_config = df_config[['ID', 'Value1', 'Indicator Name', 'Include', 'ID2', 'Description2', 'Data Type', 'Table Type']]
 
@@ -529,9 +538,10 @@ if __name__ == '__main__':
 
         display(df_acs.head())
 
-        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='SUBJECT'
+        file_config = PATH_CONFIG / 'census.xlsx'
+        sheet_name='SUBJECT'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
-        df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
+        df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race/Ethnicity', 'ID_Attributes2', 'ID2']]
 
         df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
         df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]
@@ -541,7 +551,7 @@ if __name__ == '__main__':
 
         df_acs = pd.concat([df_acs1, df_acs2])
 
-        df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes']]
+        df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race/Ethnicity', 'ID_Attributes']]
         df_acs = df_acs.drop_duplicates()
         df_acs = df_acs.sort_values(['Table', 'Year', 'ID'], ascending = [True, False, True])
         df_acs = df_acs.reset_index(drop=True)
@@ -640,9 +650,10 @@ if __name__ == '__main__':
         display(df_acs.head())
 
 
-        file_acs = PATH_CONFIG / 'census.xlsx'; sheet_name='ACS'
+        file_acs = PATH_CONFIG / 'census.xlsx'
+        sheet_name='ACS'
         df_config = pd.read_excel(file_acs, sheet_name=sheet_name)
-        df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes2', 'ID2']]
+        df_config = df_config[['Year', 'ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race/Ethnicity', 'ID_Attributes2', 'ID2']]
 
         df_acs1 = df_acs[df_acs['Year'] == df_acs['Year'].max()]
         df_acs2 = df_acs[df_acs['Year']  < df_acs['Year'].max()]
@@ -652,7 +663,7 @@ if __name__ == '__main__':
 
         df_acs = pd.concat([df_acs1, df_acs2])
 
-        df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity', 'ID_Attributes', 'ID_Attributes2', 'ID2']]
+        df_acs = df_acs[['Table', 'ID', 'Attributes', 'Label', 'Table Name', 'Year', 'Indicator Name', 'Include', 'Label_clean', 'Variable', 'Sort', 'Race/Ethnicity', 'ID_Attributes', 'ID_Attributes2', 'ID2']]
         df_acs = df_acs.drop_duplicates()
         df_acs = df_acs.sort_values(['Table', 'Indicator Name', 'Year', 'ID'], ascending = [True, True, False, True])
         df_acs = df_acs.reset_index(drop=True)
@@ -693,13 +704,14 @@ if __name__ == '__main__':
         df_dec['Label_clean'] = df_dec['Label_clean'].str.replace('!!', ' ')
         df_dec['Label_clean'] = df_dec['Label_clean'].str.replace(':', '')
 
-        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='DEC'
+        file_config = PATH_CONFIG / 'census.xlsx'
+        sheet_name='DEC'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
-        df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race_Ethnicity']]
+        df_config = df_config[['ID', 'Indicator Name', 'Include', 'Variable', 'Sort', 'Race/Ethnicity']]
 
         df_dec = df_dec.merge(df_config, on=['ID'], how='left')
         df_dec = df_dec.rename(columns={'label':'Label', 'concept':'Table Name', 'group':'Table'})
-        df_dec = df_dec[['Year', 'Table', 'ID', 'Label', 'Table Name', 'predicateType', 'Indicator Name', 'Include', 'estimate', 'Label_clean', 'Variable', 'Sort', 'Race_Ethnicity']]
+        df_dec = df_dec[['Year', 'Table', 'ID', 'Label', 'Table Name', 'predicateType', 'Indicator Name', 'Include', 'estimate', 'Label_clean', 'Variable', 'Sort', 'Race/Ethnicity']]
 
         if EXPORT:
             df_dec.to_csv(PATH_CSV / 'DEC.csv', index=False)
@@ -742,7 +754,8 @@ if __name__ == '__main__':
 
         # Combining
 
-        file_config = PATH_CONFIG / 'census.xlsx'; sheet_name='LEHD'
+        file_config = PATH_CONFIG / 'census.xlsx'
+        sheet_name='LEHD'
         df_config = pd.read_excel(file_config, sheet_name=sheet_name)
         df_config = df_config[['Table', 'ID', 'Indicator Name', 'Include', 'Sample']]
 

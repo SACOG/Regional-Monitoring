@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: HSG_4
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Housing Units by Year Structure Built
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

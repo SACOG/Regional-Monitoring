@@ -6,13 +6,15 @@ import geopandas as gpd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
+warnings.filterwarnings("ignore")
 
+
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
@@ -25,6 +27,8 @@ PATH_GDB = Path(r"I:\Projects\Josh\Geospatial Data\aa_ArcPro\GeospatialData_V2.g
 FC_ZCTA = 'GISOWNER_ZCTA_2020'
 FC_JURISDICTIONS = 'GISOWNER_CityCounty'
 
+
+ACS_YEAR=2023
 
 if __name__ == '__main__':
 
@@ -48,7 +52,7 @@ if __name__ == '__main__':
     df_cdds.loc[df_cdds['JURIS'].str.contains('County'), 'JURIS'] = 'Unincorporated'
 
     df_w = pd.read_excel(FILE_WEIGHTS)
-    df_w = df_w[(df_w['Race_Ethnicity'] == 'All') & (df_w['Year'] == 2023)].reset_index(drop=True)
+    df_w = df_w[(df_w['Race_Ethnicity'] == 'All') & (df_w['Year'] == ACS_YEAR)].reset_index(drop=True)
     df_w = df_w[['County Name', 'NAME', 'Population']].rename(columns={'County Name':'COUNTY', 'NAME':'JURIS', 'Population':'Total Population'})
 
     df_cdds = df_cdds.merge(df_w, on=['COUNTY', 'JURIS'], how='left')

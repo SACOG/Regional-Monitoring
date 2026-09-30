@@ -10,18 +10,24 @@ import warnings
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
+warnings.filterwarnings("ignore")
 
+
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
-FILE_CHAS = PATH_DATA / 'HUD_CHAS_2017thru2021.csv'
 
-warnings.filterwarnings("ignore")
+
+ACS_YEAR = 2022
+START_YEAR = ACS_YEAR-4
+
 
 if __name__ == '__main__':
 
+
+    FILE_CHAS = PATH_DATA / f'HUD_CHAS_{START_YEAR}thru{ACS_YEAR}.csv'
     df_chas = pd.read_csv(FILE_CHAS, dtype=str)
     df_chas['Households'] = df_chas['Households'].astype(int)
     df_chas = df_chas.rename(columns={'Race Ethnicity':'Race/Ethnicity'})

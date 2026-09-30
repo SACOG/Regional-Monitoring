@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: LGFEM_1
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Household Size by Tenure
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

@@ -1,13 +1,11 @@
 
 
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
 from IPython.display import display
-
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
@@ -19,7 +17,7 @@ INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 FILE_AREA = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'config' / 'area_codes.xlsx'
-FILE_EMPLOYMENT = Path.home() / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents' / 'Products' / 'RHNA'  / 'New Data Collected' / f'laborforceandunemployment_monthly_2025422.csv'
+FILE_EMPLOYMENT = PATH_DATA / 'laborforceandunemployment_monthly_2026213.csv'
 
 
 if __name__ == '__main__':
@@ -45,7 +43,9 @@ if __name__ == '__main__':
     df_places = df_places[df_places['MPO'] == 'SACOG']
     df_places.loc[df_places['Incorporated'] != 'Yes', 'Geography'] = 'Unincorporated'
 
-    wm = lambda x: np.average(x, weights = df_places.loc[x.index, "Labor Force"])
+    def wm(x):
+        return np.average(x, weights = df_places.loc[x.index, "Labor Force"])
+    # wm = lambda x: np.average(x, weights = df_places.loc[x.index, "Labor Force"])
     df_places = df_places.groupby(['County Name', 'Geography', 'Year'], as_index=False).agg(unemployment_rate=('Unemployment Rate', wm))
     df_places['County Name'] = df_places['County Name'] + ' County'
 
@@ -53,10 +53,12 @@ if __name__ == '__main__':
     df_counties = df_counties[df_counties['Year'] >= 2010]
     df_mpo = df_counties.copy()
 
-    wm = lambda x: np.average(x, weights = df_counties.loc[x.index, "Labor Force"])
+    def wm(x):
+        return np.average(x, weights = df_counties.loc[x.index, "Labor Force"])
     df_counties = df_counties.groupby(['Geography', 'Year'], as_index=False).agg(unemployment_rate=('Unemployment Rate', wm))
-
-    wm = lambda x: np.average(x, weights = df_mpo.loc[x.index, "Labor Force"])
+    
+    def wm(x):
+        return np.average(x, weights = df_mpo.loc[x.index, "Labor Force"])
     df_mpo = df_mpo.groupby(['Year'], as_index=False).agg(unemployment_rate=('Unemployment Rate', wm))
     df_mpo['Geography'] = 'SACOG Region'
 

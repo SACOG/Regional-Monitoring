@@ -5,21 +5,30 @@ import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
+warnings.filterwarnings("ignore")
 
+
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
-FILE_CHAS = PATH_DATA / f'HUD_CHAS_2017thru2021.csv'
+FILE_AREA = Path(__file__).parent.parent.parent.parent / 'config' / 'area_codes.xlsx'
+
+
+
+ACS_YEAR = 2022
+START_YEAR = ACS_YEAR-4
 
 
 if __name__ == '__main__':
+
+    FILE_CHAS = PATH_DATA / f'HUD_CHAS_{START_YEAR}thru{ACS_YEAR}.csv'
     
     df_chas = pd.read_csv(FILE_CHAS, dtype=str)
     df_chas['Households'] = df_chas['Households'].astype(int)
@@ -86,7 +95,8 @@ if __name__ == '__main__':
         
         print('\n'*2)
         print(county)
-        time.sleep(2); print()
+        time.sleep(2)
+        print()
 
         df_chas_sub = df_chas[df_chas['County Name'] == county]
         jurisdictions = df_chas_sub['name'].unique()

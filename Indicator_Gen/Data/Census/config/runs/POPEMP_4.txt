@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: POPEMP_4
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Age
+Sample: DEC
+Estimate: DEC
+Geography: Places
+Years Imported: 2000, 2010, 2020
+Import Tab: States
+Margin of Error: No

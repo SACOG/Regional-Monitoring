@@ -10,14 +10,16 @@ from IPython.display import display
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
 
 def re_remove_pre(x, exp = '('):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
+    try:
+        x = str(x.split(exp, 1)[1])
+    except Exception as e:
+        e
     return x
 
 
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]

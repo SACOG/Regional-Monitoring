@@ -1,0 +1,263 @@
+osm_id,name,highway,lts
+609204495,Capitol Mall,secondary,2
+609204496,Capitol Mall,secondary,2
+306823622,Capitol Mall,secondary,2
+790446006,Capitol Mall,secondary,2
+1029504764,Capitol Mall,secondary,2
+535145125,Capitol Mall,secondary,2
+535145128,Capitol Mall,secondary,2
+543061718,Capitol Mall,secondary,2
+1031945657,Capitol Mall,secondary,2
+1034724501,Capitol Mall,secondary,2
+535145125,Capitol Mall,secondary,2
+535145128,Capitol Mall,secondary,2
+543061718,Capitol Mall,secondary,2
+1034724501,Capitol Mall,secondary,2
+25355096,Capitol Mall,secondary,2
+185578629,Capitol Mall,secondary,2
+306823622,Capitol Mall,secondary,2
+790446006,Capitol Mall,secondary,2
+1029504764,Capitol Mall,secondary,2
+1029504765,Capitol Mall,secondary,2
+185578630,Capitol Mall,secondary,2
+543061718,Capitol Mall,secondary,2
+1034724501,Capitol Mall,secondary,2
+1034724502,Capitol Mall,secondary,2
+543061718,Capitol Mall,secondary,2
+1034724501,Capitol Mall,secondary,2
+543061717,Capitol Mall,secondary,2
+609204495,Capitol Mall,secondary,2
+1032548729,Capitol Mall,secondary,2
+1032548733,Capitol Mall,secondary,2
+543061717,Capitol Mall,secondary,2
+609204495,Capitol Mall,secondary,2
+609204496,Capitol Mall,secondary,2
+543061717,Capitol Mall,secondary,2
+609204495,Capitol Mall,secondary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531700,2nd Avenue,tertiary,2
+10531709,2nd Avenue,residential,2
+10531709,2nd Avenue,residential,2
+543261274,2nd Avenue,tertiary,2
+543261274,2nd Avenue,tertiary,2
+543287479,2nd Avenue,tertiary,2
+543287479,2nd Avenue,tertiary,2
+543287479,2nd Avenue,tertiary,2
+567267944,2nd Avenue,tertiary,2
+567267944,2nd Avenue,tertiary,2
+895411931,2nd Avenue,tertiary,2
+10524111,27th Avenue,tertiary,2
+10524111,27th Avenue,tertiary,2
+10524506,Del Rio Road,tertiary,2
+10524506,Del Rio Road,tertiary,2
+10524506,Del Rio Road,tertiary,2
+10524506,Del Rio Road,tertiary,2
+10524506,Del Rio Road,tertiary,2
+10524506,Del Rio Road,tertiary,2
+10524506,Del Rio Road,tertiary,2
+560644903, ,service,2
+560644904, ,service,2
+560644906, ,service,2
+560644907, ,service,2
+560644910, ,service,2
+586163978,27th Avenue,residential,2
+586163978,27th Avenue,residential,2
+10515246,Farmgate Way,tertiary,1
+10528044,Kingswood Drive,tertiary,1
+867265501,Kingswood Drive,tertiary,1
+867265501,Kingswood Drive,tertiary,1
+867265502,Kingswood Drive,tertiary,1
+867265503,Kingswood Drive,tertiary,1
+867265503,Kingswood Drive,tertiary,1
+968804068,Primrose Drive,tertiary,1
+183523994,E Street,tertiary,3
+183523994,E Street,tertiary,3
+225294914,E Street,tertiary,3
+547654890,E Street,tertiary,3
+547654890,E Street,tertiary,3
+548218032,E Street,tertiary,3
+548218032,E Street,tertiary,3
+980807583,E Street,tertiary,3
+980807583,E Street,tertiary,3
+980807583,E Street,tertiary,3
+980807583,E Street,tertiary,3
+1001037175,Mc Kinley Boulevard,tertiary,2
+1001037175,Mc Kinley Boulevard,tertiary,2
+1001037175,Mc Kinley Boulevard,tertiary,2
+1001037175,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10512347,Mc Kinley Boulevard,tertiary,2
+10515373,Elvas Avenue,tertiary,2
+10515373,Elvas Avenue,tertiary,2
+10515373,Elvas Avenue,tertiary,2
+10515373,Elvas Avenue,tertiary,2
+10515373,Elvas Avenue,tertiary,2
+183523992,C Street,tertiary,2
+183523992,C Street,tertiary,2
+183523992,C Street,tertiary,2
+183523992,C Street,tertiary,2
+498945536, ,service,2
+617539889,Mc Kinley Boulevard,tertiary,2
+311316826,10th Street,tertiary,2
+311316826,10th Street,tertiary,2
+579594101,10th Street,tertiary,2
+62102760,13th Street,service,1
+658852408,10th Street,tertiary,2
+658852408,10th Street,tertiary,2
+694148470,10th Street,tertiary,2
+694148471,10th Street,tertiary,2
+694148471,10th Street,tertiary,2
+149469827,Mack Road,secondary,4
+149469827,Mack Road,secondary,4
+149469827,Mack Road,secondary,4
+149469827,Mack Road,secondary,4
+149469827,Mack Road,secondary,4
+149469828,Mack Road,secondary,4
+149469828,Mack Road,secondary,4
+149469828,Mack Road,secondary,4
+149469828,Mack Road,secondary,4
+149469828,Mack Road,secondary,4
+149469828,Mack Road,secondary,4
+149469831,Mack Road,secondary,4
+149469831,Mack Road,secondary,4
+149469831,Mack Road,secondary,4
+149469831,Mack Road,secondary,4
+149469832,Mack Road,secondary,4
+149469836,Mack Road,secondary,4
+149469836,Mack Road,secondary,4
+149469839,Mack Road,secondary,4
+149469853, ,secondary_link,4
+149469853, ,secondary_link,4
+149469856, ,secondary_link,4
+546536920,Alta Valley Drive,secondary,4
+600123817,Mack Road,secondary,4
+600123817,Mack Road,secondary,4
+600123818,Mack Road,secondary,4
+600123821,Mack Road,secondary,4
+600123821,Mack Road,secondary,4
+617500464,Mack Road,secondary,4
+617500464,Mack Road,secondary,4
+617500465,Mack Road,secondary,4
+978319808,Mack Road,secondary,4
+978319809,Mack Road,secondary,4
+978319810,Mack Road,secondary,4
+978319810,Mack Road,secondary,4
+978335485,Mack Road,secondary,4
+978335486,Mack Road,secondary,4
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+10533630,Bamford Drive,tertiary,2
+37272175,Brookfield Drive,tertiary,2
+37272175,Brookfield Drive,tertiary,2
+37272175,Brookfield Drive,tertiary,2
+37272175,Brookfield Drive,tertiary,2
+37272175,Brookfield Drive,tertiary,2
+37272175,Brookfield Drive,tertiary,2
+868969975,Brookfield Drive,tertiary,2
+868969975,Brookfield Drive,tertiary,2
+10502152,Lindale Drive,tertiary,1
+319364287,Chandler Drive,tertiary,1
+617539816,Chandler Drive,tertiary,1
+1046399344,Calvine Road,secondary,4
+31985919,Cosumnes River Boulevard,secondary,4
+503597829,Calvine Road,secondary,4
+540650997,Calvine Road,secondary,4
+540650997,Calvine Road,secondary,4
+543339211,Calvine Road,secondary,4
+543339211,Calvine Road,secondary,4
+992200647,Cosumnes River Boulevard,secondary,4
+992200648,Calvine Road,secondary,4
+992200648,Calvine Road,secondary,4
+992200662,Calvine Road,secondary,4
+992200662,Calvine Road,secondary,4
+992200662,Calvine Road,secondary,4
+1034420020,Elk Grove Boulevard,secondary,4
+1034420020,Elk Grove Boulevard,secondary,4
+503863213,Elk Grove Boulevard,secondary,4
+503863213,Elk Grove Boulevard,secondary,4
+503863214,Elk Grove Boulevard,secondary,4
+532925726, ,secondary_link,4
+532925727, ,secondary_link,4
+532925727, ,secondary_link,4
+536164566,Elk Grove Boulevard,secondary,4
+536190391,Elk Grove Boulevard,secondary,4
+536190391,Elk Grove Boulevard,secondary,4
+660410154,Elk Grove Boulevard,secondary,4
+978658646,Elk Grove Boulevard,secondary,4
+978658647,Elk Grove Boulevard,secondary,4
+981220898,Elk Grove Boulevard,secondary,4
+997157794,Elk Grove Boulevard,secondary,4
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+10521867,29th Street,tertiary,2
+885408828,29th Street,tertiary,2
+885408828,29th Street,tertiary,2
+885408829,29th Street,tertiary,2
+885408829,29th Street,tertiary,2
+885408829,29th Street,tertiary,2
+885408829,29th Street,tertiary,2
+885408829,29th Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2
+981538761,Amherst Street,tertiary,2

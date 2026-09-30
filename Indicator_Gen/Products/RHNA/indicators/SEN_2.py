@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
-    df_places = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx')
+    df_places = pd.read_excel(PATH_DATA / f'{INDICATOR} Places ACS5.xlsx')
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
     df_places = df_places.rename(columns={'NAME':'Geography', 'Variable': 'Age Group', 'Race_Ethnicity':'Race/Ethnicity', 'Percentage':'Percent'})

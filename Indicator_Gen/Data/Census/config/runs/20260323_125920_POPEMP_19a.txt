@@ -1,0 +1,9 @@
+Project: RHNA
+Indicator Name: POPEMP_19a
+Sample: ACS
+Estimate: ACS5
+Geography Level: Counties
+Selected Geographies: Sacramento, Placer, El Dorado, Sutter, Yolo, Yuba
+Years Imported: 2024
+Import Tab: Counties
+Margin of Error: Yes

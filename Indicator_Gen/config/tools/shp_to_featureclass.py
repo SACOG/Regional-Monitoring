@@ -1,36 +1,31 @@
 
 '''
-This script converts a vector GIS file (shapefile, geodatabase, geojson, etc...) to a file geodatabase feature class
+This script converts a vector GIS file (shapefile, geojson, etc...) to a file geodatabase feature class
 i.e. Import data using geopandas, transform geometry to desired CRS, convert object to spatial dataframe, export to gdb
 '''
 
-print(); print()
 
 
-## Setup ================================================================================================
 
-
-## Packages ---
-
-import pandas as pd
 import geopandas as gpd
 from arcgis.features import GeoAccessor, GeoSeriesAccessor
 from pathlib import Path
 
 
-## User defined functions ---
 
-# Function to convert geospatial file to file geodatabase feature class
-def fc_convert(file_to_convert, file_gdb, crs):
+def convert_shp_to_fc(file_to_convert, file_gdb, crs):
 
     '''
+
+    Function to convert locally stored GIS file (shapefile, geojson, etc...) to file geodatabase feature class
+
     Parameters:
     file_to_convert = file path to vector GIS file that the user wants to convert to a file geodatabase feature class
     file_gdb        = file path of file geodatabase
     crs             = desired CRS of output feature class
     '''
 
-    print(f'Importing GIS file {file_to_convert}...'); print();print()
+    print(f'Importing GIS file {file_to_convert}...\n\n')
     
     gdf_data = gpd.read_file(file_to_convert)
     gdf_data = gdf_data.to_crs(crs)
@@ -40,13 +35,12 @@ def fc_convert(file_to_convert, file_gdb, crs):
     fc_name = file_to_convert.stem
     file_fc = file_gdb / fc_name
 
-    print(f'Exporting feature class {file_to_convert} to the file geodatabase {file_gdb}...'); print(); print()
+    print(f'Exporting feature class {file_to_convert} to the file geodatabase {file_gdb}...\n\n')
     sdf_data.spatial.to_featureclass(location=file_fc)
-    print(f'Successfully exported to the following location: {file_gdb}'); print(); print()
+    print(f'Successfully exported to the following location: {file_gdb}\n\n')
 
 
 
-## Main ================================================================================================
 
 
 if __name__ == '__main__':
@@ -65,4 +59,4 @@ if __name__ == '__main__':
 
     crs = 'EPSG:2284'
 
-    fc_convert(file_to_convert, file_gdb, crs)
+    convert_shp_to_fc(file_to_convert, file_gdb, crs)

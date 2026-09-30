@@ -1,26 +1,116 @@
 
 
 import pandas as pd
+import os
 from pathlib import Path
 from tqdm import tqdm
 import time
 from IPython.display import display
-
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
+
+
 yaml_file = rhna.load_yaml()
-
-
+PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 
+def dof_import(indicator):
+    
+    workbooks = os.listdir(PATH_DATA)
+    workbooks = [workbook for workbook in workbooks if indicator in workbook]
+    print('\n'*2)
+    print('Workbooks to import: ', workbooks)     
+
+    path_places   = PATH_DATA / f'{indicator} DOF Jurisdictions.xlsx'  
+    path_counties = PATH_DATA / f'{indicator} DOF Counties.xlsx'
+    path_mpo      = PATH_DATA / f'{indicator} DOF MPO.xlsx'     
+    
+    df_places   = pd.read_excel(path_places  , sheet_name='Data')
+    df_counties = pd.read_excel(path_counties, sheet_name='Data')
+    df_mpo      = pd.read_excel(path_mpo     , sheet_name='Data')
+
+    return df_places, df_counties, df_mpo
+
+
+def dof_clean(df_places, df_counties, df_mpo):
+
+    df_places.loc[df_places['Jurisdiction']=='Yuba', 'Jurisdiction'] = 'Yuba City'
+
+    df_places   = df_places  [df_places  ['MPO'] == 'SACOG']
+    df_counties = df_counties[df_counties['MPO'] == 'SACOG']
+    df_mpo      = df_mpo[     df_mpo     ['MPO'] == 'SACOG']
+    df_mpo['MPO'] = df_mpo['MPO'] + ' Region'
+
+    df_places   = df_places  [[          'County', 'Jurisdiction', 'Year', 'Population']]
+    df_counties = df_counties[[          'County',                 'Year', 'Population']]
+    df_mpo      = df_mpo     [['MPO'   ,                           'Year', 'Population']]
+
+    df_places   = df_places  .rename(columns={'Jurisdiction':'Geography'})
+    df_counties = df_counties.rename(columns={'County'      :'Geography'})
+    df_mpo      = df_mpo     .rename(columns={'MPO'         :'Geography'})
+
+    df_places   = df_places  .reset_index(drop=True)
+    df_counties = df_counties.reset_index(drop=True)
+    df_mpo      = df_mpo     .reset_index(drop=True)
+
+
+    return df_places, df_counties, df_mpo
+
+
+def dof_sub(df_places, df_counties, county):
+    
+    df_counties_sub = df_counties[df_counties['Geography'] == county]
+    df_places_sub   = df_places  [df_places  ['County'   ] == county]
+        
+    df_places_sub   = df_places_sub  .reset_index(drop=True)
+    df_counties_sub = df_counties_sub.reset_index(drop=True)
+
+    return df_places_sub, df_counties_sub
+
+
+def dof_index(df_places_sub, df_counties_sub, df_mpo, jurisdiction):
+
+    df_plot1 = df_places_sub.copy()
+    df_plot2 = df_counties_sub.copy()
+    df_plot3 = df_mpo.copy()
+
+    df_plot1 = df_plot1[df_plot1['Geography'] == jurisdiction]
+    df_plot1 = df_plot1[df_plot1['Population'] > 0]
+    base_year = df_plot1['Year'].min()
+    df_year = df_plot1[df_plot1['Year'] == base_year]
+    df_year = df_year.rename(columns={'Population':'base_year'})
+    df_year = df_year.drop('Year', axis=1)
+    df_plot1 = df_plot1.merge(df_year, on=['County', 'Geography'], how='left')
+    df_plot1['growth'] = df_plot1['Population']/df_plot1['base_year']-1
+    df_plot1 = df_plot1.drop('base_year', axis=1)
+
+    df_plot2 = df_plot2[df_plot2['Year'] >= base_year]
+    df_year = df_plot2[df_plot2['Year'] == base_year]
+    df_year = df_year.rename(columns={'Population':'base_year'})
+    df_year = df_year.drop('Year', axis=1)
+    df_plot2 = df_plot2.merge(df_year, on=['Geography'], how='left')
+    df_plot2['growth'] = df_plot2['Population']/df_plot2['base_year']-1
+    df_plot2 = df_plot2.drop('base_year', axis=1)
+
+    df_plot3 = df_plot3[df_plot3['Year'] >= base_year]
+    df_year = df_plot3[df_plot3['Year'] == base_year]
+    df_year = df_year.rename(columns={'Population':'base_year'})
+    df_year = df_year.drop('Year', axis=1)
+    df_plot3 = df_plot3.merge(df_year, on=['Geography'], how='left')
+    df_plot3['growth'] = df_plot3['Population']/df_plot3['base_year']-1
+    df_plot3 = df_plot3.drop(['base_year'], axis=1)
+
+    return df_plot1, df_plot2, df_plot3
+
+
+
 if __name__ == '__main__':
 
-    df_places, df_counties, df_mpo = rhna.dof_import(INDICATOR)
-    df_places, df_counties, df_mpo = rhna.dof_clean(df_places, df_counties, df_mpo)
+    df_places, df_counties, df_mpo = dof_import(INDICATOR)
+    df_places, df_counties, df_mpo = dof_clean(df_places, df_counties, df_mpo)
     counties = df_counties['Geography'].unique()
 
     for county in counties:
@@ -29,20 +119,20 @@ if __name__ == '__main__':
         print(county)
         time.sleep(2)
 
-        df_places_sub, df_counties_sub = rhna.dof_sub(df_places, df_counties, county)
+        df_places_sub, df_counties_sub = dof_sub(df_places, df_counties, county)
         jurisdictions = df_places_sub['Geography'].unique()
         
         for jurisdiction in tqdm(jurisdictions, position=0):
 
             tqdm.write(jurisdiction)
         
-            df_prod1, df_prod2, df_prod3 = rhna.dof_index(df_places_sub, df_counties_sub, df_mpo, jurisdiction)
+            df_prod1, df_prod2, df_prod3 = dof_index(df_places_sub, df_counties_sub, df_mpo, jurisdiction)
             df_prod2['Geography'] = df_prod2['Geography'] + ' County'
             df_plot = pd.concat([df_prod1, df_prod2, df_prod3]).drop(['County', 'Population'], axis=1)
             df_plot['Percent Difference'] = df_plot['growth']*100
 
             df_prod2 = df_prod2.drop('Geography', axis=1).rename(columns={'Population': f'{county} County', 'growth': f'{county} County_growth'})
-            df_prod3 = df_prod3.drop('Geography', axis=1).rename(columns={'Population': 'SACOG'           , 'growth': f'SACOG_growth'          })
+            df_prod3 = df_prod3.drop('Geography', axis=1).rename(columns={'Population': 'SACOG'           , 'growth':  'SACOG_growth'          })
             df_prod = df_prod1[df_prod1['Geography'] == jurisdiction].drop(['County', 'Geography'], axis=1).rename(columns = {'Population': jurisdiction, 'growth': f'{jurisdiction}_growth'})
             df_prod = df_prod.merge(df_prod2, on='Year')
             df_prod = df_prod.merge(df_prod3, on='Year')

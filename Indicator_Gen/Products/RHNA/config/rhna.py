@@ -8,7 +8,6 @@ import requests
 import gzip
 import io
 from tqdm import tqdm
-from datetime import datetime
 import time
 import re
 import yaml
@@ -22,23 +21,18 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Font
 # from openpyxl.styles import numbers
 from openpyxl.styles import Border, Side
+from openpyxl import load_workbook
+from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+from openpyxl.utils import get_column_letter
 border_thin = Side(style='thin')
 # pip install kaleido==0.1.0.post1
 
 
 
-
-
 EXPORT=True
 
-
 PATH_DATA    = Path(r'I:\Projects\Josh\RHNA\Data')
-PATH_GIT     = Path(__file__).parent.parent.parent.parent
-PATH_CENSUS  = PATH_GIT / 'Data' / 'Census'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_PROD    = PATH_GIT / 'Products' / 'RHNA'
-PATH_CONFIG  = PATH_GIT / 'Products' / 'RHNA' / 'config'
-PATH_PY      = PATH_GIT / 'Products' / 'RHNA' / 'python'
+PATH_CONFIG  = Path(__file__).parent.parent.parent.parent / 'Products' / 'RHNA' / 'config'
 PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 PATH_GEO = Path(r'I:\Projects\Josh\Geospatial Data')
 PATH_LODES = Path(r'I:\Projects\Josh\Regional Monitoring')
@@ -50,34 +44,25 @@ def load_yaml():
             yaml_rhna = yaml.load(yaml_file, Loader=yaml.SafeLoader)
     except FileNotFoundError:
         print(f"Error: The file at {PATH_CONFIG} does not exist.")
-    
     return yaml_rhna
 
 
 def split_notes(indicator):
     FILE_YAML = load_yaml()
     notes = FILE_YAML[indicator]['Notes']
-    
     lines = notes.split('\\n')
     rows_new = [{'Indicator': 'Notes' if i == 0 else '', indicator: line} for i, line in enumerate(lines) if line]
-    
     df_notes = pd.DataFrame(rows_new)
-    
     return df_notes
 
 
-
 def import_gz_from_url(url):
-
     response = requests.get(url, stream=True)
     response.raise_for_status()  # Raise an exception for non-200 status codes
     compressed_file = io.BytesIO(response.content)
     decompressed_file = gzip.GzipFile(fileobj=compressed_file)
     data = decompressed_file.read() # Read the decompressed data
-
     return data
-
-
 
 
 def sort_categorical(df, col, sort_list):
@@ -86,115 +71,35 @@ def sort_categorical(df, col, sort_list):
     return df
 
 
-
-## DOF ---
-
-def dof_import(indicator):
-    
-    workbooks = os.listdir(PATH_DATA)
-    workbooks = [workbook for workbook in workbooks if indicator in workbook]
-    print('\n'*2)
-    print('Workbooks to import: ', workbooks)     
-
-    path_places   = PATH_DATA / f'RHNA_{indicator} Places DOF.xlsx'  
-    path_counties = PATH_DATA / f'RHNA_{indicator} Counties DOF.xlsx'
-    path_mpo      = PATH_DATA / f'RHNA_{indicator} MPO DOF.xlsx'     
-    
-    df_places   = pd.read_excel(path_places  , sheet_name='Places'  )
-    df_counties = pd.read_excel(path_counties, sheet_name='Counties')
-    df_mpo      = pd.read_excel(path_mpo     , sheet_name='MPO'     )
-
-    return df_places, df_counties, df_mpo
-
-
-def dof_clean(df_places, df_counties, df_mpo):
-
-    df_places   = df_places  [df_places  ['MPO'] == 'SACOG']
-    df_counties = df_counties[df_counties['MPO'] == 'SACOG']
-    df_mpo      = df_mpo[     df_mpo     ['MPO'] == 'SACOG']
-    df_mpo['MPO'] = df_mpo['MPO'] + ' Region'
-
-    df_places   = df_places  [[          'County', 'Jurisdiction', 'Year', 'Population']]
-    df_counties = df_counties[[          'County',                 'Year', 'Population']]
-    df_mpo      = df_mpo     [['MPO'   ,                           'Year', 'Population']]
-
-    df_places   = df_places  .rename(columns={'Jurisdiction':'Geography'})
-    df_counties = df_counties.rename(columns={'County'      :'Geography'})
-    df_mpo      = df_mpo     .rename(columns={'MPO'         :'Geography'})
-
-    df_places   = df_places  .reset_index(drop=True)
-    df_counties = df_counties.reset_index(drop=True)
-    df_mpo      = df_mpo     .reset_index(drop=True)
-
-    return df_places, df_counties, df_mpo
-
-
-def dof_sub(df_places, df_counties, county):
-    
-    df_counties_sub = df_counties[df_counties['Geography'] == county]
-    df_places_sub   = df_places  [df_places  ['County'   ] == county]
-        
-    df_places_sub   = df_places_sub  .reset_index(drop=True)
-    df_counties_sub = df_counties_sub.reset_index(drop=True)
-
-    return df_places_sub, df_counties_sub
-
-def dof_index(df_places_sub, df_counties_sub, df_mpo, jurisdiction):
-
-    df_plot1 = df_places_sub.copy()
-    df_plot2 = df_counties_sub.copy()
-    df_plot3 = df_mpo.copy()
-
-    df_plot1 = df_plot1[df_plot1['Geography'] == jurisdiction]
-    df_plot1 = df_plot1[df_plot1['Population'] > 0]
-    base_year = df_plot1['Year'].min()
-    df_year = df_plot1[df_plot1['Year'] == base_year]
-    df_year = df_year.rename(columns={'Population':'base_year'})
-    df_year = df_year.drop('Year', axis=1)
-    df_plot1 = df_plot1.merge(df_year, on=['County', 'Geography'], how='left')
-    df_plot1['growth'] = df_plot1['Population']/df_plot1['base_year']-1
-    df_plot1 = df_plot1.drop('base_year', axis=1)
-
-    df_plot2 = df_plot2[df_plot2['Year'] >= base_year]
-    df_year = df_plot2[df_plot2['Year'] == base_year]
-    df_year = df_year.rename(columns={'Population':'base_year'})
-    df_year = df_year.drop('Year', axis=1)
-    df_plot2 = df_plot2.merge(df_year, on=['Geography'], how='left')
-    df_plot2['growth'] = df_plot2['Population']/df_plot2['base_year']-1
-    df_plot2 = df_plot2.drop('base_year', axis=1)
-
-    df_plot3 = df_plot3[df_plot3['Year'] >= base_year]
-    df_year = df_plot3[df_plot3['Year'] == base_year]
-    df_year = df_year.rename(columns={'Population':'base_year'})
-    df_year = df_year.drop('Year', axis=1)
-    df_plot3 = df_plot3.merge(df_year, on=['Geography'], how='left')
-    df_plot3['growth'] = df_plot3['Population']/df_plot3['base_year']-1
-    df_plot3 = df_plot3.drop(['base_year'], axis=1)
-
-    return df_plot1, df_plot2, df_plot3
+def cols_geo_rename(df, cols, county, jurisdiction):
+    if 'County' not in county:
+        county = f'{county} County'
+    cols = [col.replace('[county]', county) for col in cols]
+    cols = [col.replace('[jurisdiction]', jurisdiction) for col in cols]
+    df = df[cols]
+    return df
 
 
 
-## CHAS ---
+## CHAS ---------------------------------------------------------------------------------------------------------------------------------------------
 
 
 def chas_import(PATH_DATA, indicator):
     
     workbooks = os.listdir(PATH_DATA)
-    workbooks = [workbook for workbook in workbooks if f'RHNA_{indicator}' in workbook]
+    workbooks = [workbook for workbook in workbooks if f'{indicator}' in workbook]
     print('\n'*2)
     print('Workbooks to import: ', workbooks)
     
-    path_places   = PATH_DATA / f'RHNA_{indicator} Places ACS5.xlsx'
-    path_counties = PATH_DATA / f'RHNA_{indicator} Counties ACS5.xlsx'
-    path_mpo      = PATH_DATA / f'RHNA_{indicator} MPO ACS5.xlsx'
+    path_places   = PATH_DATA / f'{indicator} Places ACS5.xlsx'
+    path_counties = PATH_DATA / f'{indicator} Counties ACS5.xlsx'
+    path_mpo      = PATH_DATA / f'{indicator} MPO ACS5.xlsx'
     
     df_places   = pd.read_excel(path_places  , sheet_name='Places'  )
     df_counties = pd.read_excel(path_counties, sheet_name='Counties')
     df_mpo      = pd.read_excel(path_mpo     , sheet_name='MPO'     )
 
     return df_places, df_counties, df_mpo
-
 
 
 def chas_clean(df_places, df_counties, df_mpo, columns, values):
@@ -288,120 +193,6 @@ def chas_pivot(indicator, df_places_sub, county, jurisdiction, columns, values, 
         print()
 
     return df_prod, df_pct
-        
-
-## HDMA ---
-
-def hmda_import(years, counties, dtypes):
-    '''
-    Years can only be from 2018, to 2024. County codes can be found by using the online tool: https://ffiec.cfpb.gov/data-browser/data/2023?category=counties. 
-    '''
-    print()
-    print('Importing data from HDMA...')
-    print()
-
-    list_df = []
-
-    for year in tqdm(years):
-        if int(year) < 2018 or int(year) > int(datetime.now().year - 1): 
-            print(f"Error: the year {year} does not have accessible data.") 
-            continue
-
-        url = 'https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?counties=' + ','.join(counties) + '&years=' + str(year)
-        
-        df = pd.read_csv(url, dtype=dtypes)
-
-        list_df.append(df)
-    
-    df = pd.concat(list_df, ignore_index=True)
-
-    return df
-
-
-## CHP ---
-
-def chp_sub(df_places, df_counties, county):
-    
-    df_counties_sub = df_counties[df_counties['Geography'  ] == county]
-    df_places_sub   = df_places  [df_places  ['County'     ] == county]
-
-    df_places_sub = df_places_sub.drop('County', axis=1)
-    df_places_sub   = df_places_sub  .reset_index(drop=True)
-    df_counties_sub = df_counties_sub.reset_index(drop=True)
-
-    return df_places_sub, df_counties_sub
-
-
-def chp_clean(df_chp):
-
-    df_chp['MPO'] = 'SACOG Region'
-    df_chp.loc[df_chp['Risk Level'] == 'HIgh', 'Risk Level'] = 'High'
-    df_chp['County'] = df_chp['County'] + ' County'
-
-    df_mpo      = df_chp.groupby(['MPO'           , 'Risk Level'], as_index=False).agg(affordable_units=('Affordable Units', 'sum')).rename(columns={'MPO':'Geography'})
-    df_counties = df_chp.groupby(['County'        , 'Risk Level'], as_index=False).agg(affordable_units=('Affordable Units', 'sum')).rename(columns={'County':'Geography'})
-    df_places   = df_chp.groupby(['County', 'City', 'Risk Level'], as_index=False).agg(affordable_units=('Affordable Units', 'sum')).rename(columns={'City':'Geography'})
-
-    df_mpo2      = df_chp.groupby(['MPO'           ], as_index=False).agg(affordable_units=('Affordable Units', 'sum')).rename(columns={'MPO':'Geography'})
-    df_counties2 = df_chp.groupby(['County'        ], as_index=False).agg(affordable_units=('Affordable Units', 'sum')).rename(columns={'County':'Geography'})
-    df_places2   = df_chp.groupby(['County', 'City'], as_index=False).agg(affordable_units=('Affordable Units', 'sum')).rename(columns={'City':'Geography'})
-
-    df_mpo2     ['Risk Level'] = 'Total Assisted Units in Database'
-    df_counties2['Risk Level'] = 'Total Assisted Units in Database'
-    df_places2  ['Risk Level'] = 'Total Assisted Units in Database'
-
-    df_mpo      = pd.concat([df_mpo     , df_mpo2     ])
-    df_counties = pd.concat([df_counties, df_counties2])
-    df_places   = pd.concat([df_places  , df_places2  ])
-
-    df_mpo      = df_mpo     .merge(df_mpo2     .drop('Risk Level', axis=1).rename(columns={'affordable_units':'total_affordable_units'}), on=[          'Geography'], how='left')
-    df_counties = df_counties.merge(df_counties2.drop('Risk Level', axis=1).rename(columns={'affordable_units':'total_affordable_units'}), on=[          'Geography'], how='left')
-    df_places   = df_places  .merge(df_places2  .drop('Risk Level', axis=1).rename(columns={'affordable_units':'total_affordable_units'}), on=['County', 'Geography'], how='left')
-
-    df_mpo     ['Percent'] = df_mpo     ['affordable_units']/df_mpo     ['total_affordable_units']
-    df_counties['Percent'] = df_counties['affordable_units']/df_counties['total_affordable_units']
-    df_places  ['Percent'] = df_places  ['affordable_units']/df_places  ['total_affordable_units']
-
-    df_mpo      = df_mpo     .drop('total_affordable_units', axis=1)
-    df_counties = df_counties.drop('total_affordable_units', axis=1)
-    df_places   = df_places  .drop('total_affordable_units', axis=1)
-
-    df_mpo     ['Sort'] = pd.Categorical(df_mpo     ['Risk Level'], ['Low', 'Moderate', 'High', 'Very High', 'Total Assisted Units in Database'])
-    df_counties['Sort'] = pd.Categorical(df_counties['Risk Level'], ['Low', 'Moderate', 'High', 'Very High', 'Total Assisted Units in Database'])
-    df_places  ['Sort'] = pd.Categorical(df_places  ['Risk Level'], ['Low', 'Moderate', 'High', 'Very High', 'Total Assisted Units in Database'])
-
-    df_mpo      = df_mpo     .sort_values(['Geography', 'Sort']).reset_index(drop=True).drop('Sort', axis=1)
-    df_counties = df_counties.sort_values(['Geography', 'Sort']).reset_index(drop=True).drop('Sort', axis=1)
-    df_places   = df_places  .sort_values(['Geography', 'Sort']).reset_index(drop=True).drop('Sort', axis=1)
-
-    return df_places, df_counties, df_mpo
-
-
-
-def chp_pivot(df_places_sub, county, jurisdiction, columns, values, df_counties_sub=None, df_mpo=None):
-
-    df_prod = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
-    if 'Percent' in df_places_sub.columns:
-        df_prod = df_prod.drop('Percent', axis=1)
-    df_prod = df_prod.pivot_table(index='Geography', columns=columns, values=values).reset_index()
-    df_prod['Sort'] = pd.Categorical(df_prod['Geography'], [jurisdiction, county, 'SACOG Region'])
-    df_prod = df_prod.sort_values(['Sort']).drop(['Sort'], axis=1)
-
-    if 'Percent' in df_places_sub.columns:
-        df_pct = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
-        df_pct = df_pct.drop(values, axis=1)
-        
-        df_pct = df_pct.pivot_table(index='Geography', columns=columns, values='Percent').reset_index()
-        df_pct['Sort'] = pd.Categorical(df_pct['Geography'], [jurisdiction, county, 'SACOG Region'])
-        df_pct = df_pct.sort_values(['Sort']).drop(['Sort'], axis=1)
-
-    if jurisdiction == 'Sacramento':
-        print()
-        print('Final Product:')
-        display(df_prod.head())
-        print()
-
-    return df_prod, df_pct
 
 
 
@@ -412,31 +203,21 @@ def chp_pivot(df_places_sub, county, jurisdiction, columns, values, df_counties_
 
 
 
-
-def cols_geo_rename(df, cols, county, jurisdiction):
-    if 'County' not in county:
-        county = f'{county} County'
-    cols = [col.replace('[county]', county) for col in cols]
-    cols = [col.replace('[jurisdiction]', jurisdiction) for col in cols]
-    df = df[cols]
-    return df
-
-
 def acs_import(indicator):
     
     workbooks = os.listdir(PATH_DATA)
     workbooks = [workbook for workbook in workbooks if indicator in workbook]
-    print(); print()
+    print('\n'*2)
     print('Workbooks to import: ', workbooks)
 
     if indicator == 'ELI_4':
-        path_places   = PATH_DATA / f'RHNA_{indicator} Places DP5.xlsx'
-        path_counties = PATH_DATA / f'RHNA_{indicator} Counties DP5.xlsx'
-        path_mpo      = PATH_DATA / f'RHNA_{indicator} MPO DP5.xlsx'
+        path_places   = PATH_DATA / f'{indicator} Places DP5.xlsx'
+        path_counties = PATH_DATA / f'{indicator} Counties DP5.xlsx'
+        path_mpo      = PATH_DATA / f'{indicator} MPO DP5.xlsx'
     else:
-        path_places   = PATH_DATA / f'RHNA_{indicator} Places ACS5.xlsx'  
-        path_counties = PATH_DATA / f'RHNA_{indicator} Counties ACS5.xlsx'
-        path_mpo      = PATH_DATA / f'RHNA_{indicator} MPO ACS5.xlsx'     
+        path_places   = PATH_DATA / f'{indicator} Places ACS5.xlsx'  
+        path_counties = PATH_DATA / f'{indicator} Counties ACS5.xlsx'
+        path_mpo      = PATH_DATA / f'{indicator} MPO ACS5.xlsx'     
     
     df_places   = pd.read_excel(path_places  , sheet_name='Places'  )
     df_counties = pd.read_excel(path_counties, sheet_name='Counties')
@@ -447,10 +228,19 @@ def acs_import(indicator):
     df_mpo      = df_mpo     .rename(columns={'Race_Ethnicity':'Race/Ethnicity', 'Percentage':'Percent'})
 
     if indicator == 'OVER_3':
-        df_places   = df_places  [df_places  ['Variable']=='More than occupant per room'] # More than one occupant per room
-        df_counties = df_counties[df_counties['Variable']=='More than occupant per room'] # More than one occupant per room
-        df_mpo      = df_mpo     [df_mpo     ['Variable']=='More than occupant per room'] # More than one occupant per room
-        
+        df_places   = df_places  [df_places  ['Variable']=='More than one occupant per room']
+        df_counties = df_counties[df_counties['Variable']=='More than one occupant per room']
+        df_mpo      = df_mpo     [df_mpo     ['Variable']=='More than one occupant per room']
+
+    if indicator == 'ELI_3':
+        df_places   = df_places  [df_places  ['Variable']=='Below poverty level']
+        df_counties = df_counties[df_counties['Variable']=='Below poverty level']
+        df_mpo      = df_mpo     [df_mpo     ['Variable']=='Below poverty level']
+
+    if indicator == 'FARM_4':
+        df_places   = df_places  [df_places  ['Variable']=='Agriculture & Natural Resources']
+        df_counties = df_counties[df_counties['Variable']=='Agriculture & Natural Resources']
+        df_mpo      = df_mpo     [df_mpo     ['Variable']=='Agriculture & Natural Resources']
 
     if len(df_places['Race/Ethnicity'].unique()) > 1:
         df_places   = df_places  [df_places  ['Race/Ethnicity'] != 'All']
@@ -458,7 +248,6 @@ def acs_import(indicator):
         df_mpo      = df_mpo     [df_mpo     ['Race/Ethnicity'] != 'All']
 
     return df_places, df_counties, df_mpo
-
 
 
 def acs_clean(df_places, df_counties, df_mpo, params):
@@ -489,7 +278,7 @@ def acs_clean(df_places, df_counties, df_mpo, params):
         df_counties.loc[df_counties['Race/Ethnicity'].isin(['Some other race (NH)', 'Two or more races (NH)']), 'Race/Ethnicity'] = 'Other race or multiple races (NH)'
         df_mpo     .loc[df_mpo     ['Race/Ethnicity'].isin(['Some other race (NH)', 'Two or more races (NH)']), 'Race/Ethnicity'] = 'Other race or multiple races (NH)'
 
-
+    
     return df_places, df_counties, df_mpo
 
 
@@ -637,6 +426,7 @@ def main_acs(indicator, params):
         df_mpo     .loc[df_mpo     ['Cost Burden']=='50% or more of income used for housing', 'Cost Burden'] = '50%+ of income used for housing'
 
 
+
     counties = df_counties['Geography'].unique()
 
     for county in counties:
@@ -668,9 +458,16 @@ def main_acs(indicator, params):
                 df_pct  = sort_categorical(df_pct , 'Rent Price', sort_list)
 
             df_plot = pd.concat([df_places_sub[df_places_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
-            df_plot[f'Percent of {params['prod']['value']}'] = round(df_plot['Percent']*100, 1)
+            if indicator == 'FARM_4':
+                df_plot['Share of Overall Workforce'] = round(df_plot['Percent']*100, 1)
+            else:
+                df_plot[f'Percent of {params['prod']['value']}'] = round(df_plot['Percent']*100, 1)
             df_plot['Sort'] = pd.Categorical(df_plot['Geography'], [jurisdiction, county, 'SACOG Region'])
-            df_plot = df_plot.sort_values(['Sort', f'Percent of {params['prod']['value']}'], ascending=[True, False]).drop('Sort', axis=1)
+            if indicator == 'FARM_4':
+                df_plot = df_plot.sort_values(['Sort', 'Share of Overall Workforce'], ascending=[True, False]).drop('Sort', axis=1)
+            else:
+                df_plot = df_plot.sort_values(['Sort', f'Percent of {params['prod']['value']}'], ascending=[True, False]).drop('Sort', axis=1)
+            
 
             fig = make_fig(indicator, params, df_plot, county, jurisdiction)
             plot_rhna(fig, county, jurisdiction, indicator, params)
@@ -681,10 +478,10 @@ def main_acs(indicator, params):
 
 
 
-## Plotting/Exporting --------------------------------------------------------------------------------------------------------------
+## Plotting/Exporting ---------------------------------------------------------------------------------------------------------------------------------------------
 
 
-def sort_plot(df_plot, indicator, jurisdiction):
+def sort_plot(df_plot, indicator, county, jurisdiction):
 
     if indicator in ['POPEMP_21', 'POPEMP_23', 'POPEMP_24', 'HSG_2', 'HSG_7', 'HSG_9', 'HSG_11', 'OVER_3', 'OVER_4', 'OVER_5', 'OVER_7',
                      'OVER_8', 'LGFEM_1', 'LGFEM_2', 'LGFEM_3', 'LGFEM_4', 'LGFEM_5', 'SEN_1', 'SEN_3', 'SEN_4', 'DISAB_1', 'DISAB_5',
@@ -700,8 +497,9 @@ def sort_plot(df_plot, indicator, jurisdiction):
                        , 'Vacant housing units': 'Vacant'}
             df_plot['Occupancy Status'] = df_plot['Occupancy Status'].map(var_map)
         if indicator == 'HSG_7':
+            df_plot['sort_geo'] = pd.Categorical(df_plot['Geography'], [jurisdiction, county, 'SACOG Region'])
             df_plot['Sort'] = pd.Categorical(df_plot['Home Value'], ['Units valued less than 250k', 'Units valued 250k-500k', 'Units valued 500k-750k', 'Units valued 750k-1M', 'Units valued 1M-1.5M', 'Units valued 1.5M-2M', 'Units valued 2M+'])
-            df_plot = df_plot.sort_values('Sort').drop('Sort', axis=1)
+            df_plot = df_plot.sort_values(['sort_geo', 'Sort']).drop(['sort_geo', 'Sort'], axis=1)
             var_map = {'Units valued less than 250k': '&#36;0k-&#36;250k'
                         , 'Units valued 250k-500k': '&#36;250k-&#36;500k'
                         , 'Units valued 500k-750k': '&#36;500k-&#36;750k'
@@ -712,8 +510,9 @@ def sort_plot(df_plot, indicator, jurisdiction):
             df_plot['Home Value'] = df_plot['Home Value'].map(var_map)
             df_plot['Share of Owner-Occupied Units'] = df_plot['Percent of Households'].copy()
         if indicator == 'HSG_9':
+            df_plot['sort_geo'] = pd.Categorical(df_plot['Geography'], [jurisdiction, county, 'SACOG Region'])
             df_plot['Sort'] = pd.Categorical(df_plot['Rent Price'], ["Rent less than 500", "Rent 500-1,000", "Rent 1,000-1,500", "Rent 1,500-2,000", "Rent 2,000-2,500", "Rent 2,500-3,000", "Rent 3,000 or more"])
-            df_plot = df_plot.sort_values('Sort').drop('Sort', axis=1)
+            df_plot = df_plot.sort_values(['sort_geo', 'Sort']).drop(['sort_geo', 'Sort'], axis=1)
             var_map = {"Rent less than 500": "&#36;0-&#36;500"
                         , "Rent 500-1,000": "&#36;500-&#36;1,000"
                         , "Rent 1,000-1,500": "&#36;1,000-&#36;1,500"
@@ -737,7 +536,8 @@ def sort_plot(df_plot, indicator, jurisdiction):
                 , 'White (NH)': 'White (NH)'
             }
             df_plot['Race/Ethnicity'] = df_plot['Race/Ethnicity'].map(var_map)
-            df_plot = df_plot[df_plot['Geography']==jurisdiction]
+            if indicator == 'OVER_3':
+                df_plot = df_plot[df_plot['Geography']==jurisdiction]
         if indicator in ['POPEMP_21', 'OVER_4', 'OVER_5', 'LGFEM_3', 'SEN_1', 'SEN_3']:
             var_map = {
                 '0%-30% of AMI':'Less than 30%'
@@ -877,222 +677,256 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
 
     color_discrete_map  = {
     
-        'SACOG Region': '#9DC209'
-        , county: '#1F45FC'
-        , jurisdiction: '#FBB117'
+        'SACOG Region': '#E57149'
+        , county: '#7EB460'
+        , jurisdiction: '#27AAE1'
 
-        , 'American Indian or Alaska Native (NH)': '#E56717'
-        , 'Native Hawaiian or other Pacific Islander (NH)': '#006A4E'
-        , 'Other race or multiple races (NH)': '#7E587E'
-        , 'Black or African American (NH)': '#FBB117'
-        , 'Asian (NH)': '#9DC209'
-        , 'Hispanic or Latino': '#1E90FF'
-        , 'White (NH)': '#151B54'
+        , 'American Indian or Alaska Native (NH)': '#96D2E8'
+        , 'American Indian or Alaska Native': '#96D2E8'
+        , 'American Indian or<br>Alaska Native (NH)': '#96D2E8'
+        , 'American Indian or<br>Alaska Native': '#96D2E8'
+        , 'American Indian,<br>Alaska Native,<br>or Indigenous': '#96D2E8'
+        , 'Native Hawaiian or other Pacific Islander (NH)': '#00A97D'
+        , 'Native Hawaiian or other Pacific Islander': '#00A97D'
+        , 'Native Hawaiian or<br>other Pacific Islander (NH)': '#00A97D'
+        , 'Native Hawaiian or<br>other Pacific Islander': '#00A97D'
+        , 'Native Hawaiian or<br>Other Pacific Islander': '#00A97D'
+        , 'Some other race (NH)': '#55C8E8'
+        , 'Some other race': '#55C8E8'
+        , 'Two or more races (NH)': '#006883'
+        , 'Two or more races': '#006883'
+        , 'Other race or multiple races (NH)': '#6764A6'
+        , 'Other race or multiple races': '#006883'
+        , 'Other race or<br>multiple races (NH)': '#006883'
+        , 'Other race or<br>multiple races': '#006883'
+        , 'Other Race or<br>Multiple Races (NH)': '#006883'
+        , 'Other Race or<br>Multiple Races': '#006883'
+        , 'Asian (NH)': '#27AAE1'
+        , 'Asian': '#27AAE1'
+        , 'Asian or<br>Asian American': '#27AAE1'
+        , 'Black or African American (NH)': '#7EB460'
+        , 'Black or African American': '#7EB460'
+        , 'Black or<br>African American (NH)': '#7EB460'
+        , 'Black or<br>African American': '#7EB460'
+        , 'Black,<br>African American,<br>or African': '#7EB460'
+        , 'Black': '#7EB460'
+        , 'Hispanic or Latino': "#E57149"
+        , 'Hispanic or<br>Latino': "#E57149"
+        , 'Hispanic/Latina/e/o Only': '#E57149'
+        , 'Hispanic': "#E57149"
+        , 'White (NH)': "#A24F82"
+        , 'White': "#A24F82"
 
-        , 'American Indian or Alaska Native': '#E56717'
-        , 'Native Hawaiian or other Pacific Islander': '#006A4E'
-        , 'Other race or multiple races': '#7E587E'
-        , 'Black or African American': '#FBB117'
-        , 'Asian': '#9DC209'
+        , '2000': '#6764A6'
+        , '2010': '#E57149'
+        , '2020': '#27AAE1'
+        , '2023': '#7EB460'
+        , '2024': '#7EB460'
+        , '2025': '#7EB460' # 00A97D
 
-        , 'American Indian or<br>Alaska Native': '#E56717'
-        , 'Native Hawaiian or<br>other Pacific Islander': '#006A4E'
-        , 'Other race or<br>multiple races': '#7E587E'
-        , 'Black or<br>African American': '#FBB117'
-        , 'Hispanic or<br>Latino': '#1E90FF'
+        , "2002":"#7EB460"
+        , "2007":"#E57149"
+        , "2012":"#27AAE1"
+        , "2017":"#6764A6"
+        , "2022":"#A24F82"
 
-        , 'American Indian,<br>Alaska Native,<br>or Indigenous': '#E56717'
-        , 'Asian or<br>Asian American': '#9DC209'
-        , 'Black,<br>African American,<br>or African': '#FBB117'
-        , 'Hispanic/Latina/e/o Only': '#1E90FF'
-        , 'Native Hawaiian or<br>Other Pacific Islander': '#006A4E'
-        , 'Other Race or<br>Multiple Races': '#7E587E'
-        , 'White': '#151B54'
+        , 'Same house': '#7EB460'
+        , 'Same city or town': '#E57149'
+        , 'Same county': '#27AAE1'
+        , 'Elsewhere in CA': '#6764A6'
+        , 'Elsewhere in U.S.': '#A24F82'
+        , 'Abroad': '#00A97D'
 
-        , '2000': '#151B54'
-        , '2010': '#1E90FF'
-        , '2020': '#9DC209'
-        , '2023': '#FBB117'
-        , '2024': '#FBB117'
+        , 'Agriculture & Natural Resources': '#7EB460'
+        , 'Construction': '#E57149'
+        , 'Manufacturing, Wholesale, & Transportation': '#27AAE1'
+        , 'Retail': '#6764A6'
+        , 'Information': '#A24F82'
+        , 'Finance & Professional Services': '#00A97D'
+        , 'Health & Educational Services': '#006883'
+        , 'Other': '#55C8E8'
 
-        , "2002":"#151B54"
-        , "2007":"#1E90FF"
-        , "2012":"#9DC209"
-        , "2017":"#FBB117"
-        , "2022":"#DC381F"
+        , 'Arts, Recreation, & Other': '#96D2E8'
+        , 'Financial & Leasing': '#00A97D'
+        , 'Government': "#7EB460"
+        , 'Manufacturing & Wholesale': '#27AAE1'
+        , 'Professional & Managerial Services': '#808285'
+        , 'Transportation & Utilities': '#00A97D'
 
-        , 'Same house': '#151B54'
-        , 'Same city or town': '#1E90FF'
-        , 'Same county': '#9DC209'
-        , 'Elsewhere in CA': '#FBB117'
-        , 'Elsewhere in U.S.': '#7E587E'
-        , 'Abroad': '#DC381F'
+        , 'Management, Business, Science, and Arts occupations': '#7EB460'
+        , 'Service occupations': '#E57149'
+        , 'Sales and Office occupations': '#27AAE1'
+        , 'Natural Resources, Construction, and Maintenance occupations': '#6764A6'
+        , 'Production, Transportation, and Material Moving occupations': '#A24F82'
 
-        , 'Agriculture & Natural Resources': '#151B54'
-        , 'Construction': '#1E90FF'
-        , 'Manufacturing, Wholesale, & Transportation': '#9DC209'
-        , 'Retail': '#FBB117'
-        , 'Information': '#7E587E'
-        , 'Finance & Professional Services': '#DC381F'
-        , 'Health & Educational Services': '#008000'
-        , 'Other': '#E56717'
+        , 'Private company workers': '#7EB460'
+        , 'Self-employed workers': '#E57149'
+        , 'Private not-for-profit workers': '#27AAE1'
+        , 'Local and state government workers': '#6764A6'
+        , 'Federal government workers': '#A24F82'
+        , 'Unpaid family workers': '#00A97D'
 
-        , 'Management, Business, Science, and Arts occupations': '#151B54'
-        , 'Service occupations': '#1E90FF'
-        , 'Sales and Office occupations': '#9DC209'
-        , 'Natural Resources, Construction, and Maintenance occupations': '#FBB117'
-        , 'Production, Transportation, and Material Moving occupations': '#7E587E'
+        , 'Place of residence': '#E57149'
+        , 'Place of work': '#27AAE1'
 
-        , 'Private company workers': '#151B54'
-        , 'Self-employed workers': '#7E587E'
-        , 'Private not-for-profit workers': '#1E90FF'
-        , 'Local and state government workers': '#9DC209'
-        , 'Federal government workers': '#FBB117'
-        , 'Unpaid family workers': '#DC381F'
+        , 'Earnings &#36;1,250/month or less': '#E57149'
+        , 'Earnings &#36;1,251/month to &#36;3,333/month': '#27AAE1'
+        , 'Earnings greater than &#36;3,333/month': '#7EB460'
 
-        , 'Place of residence': '#9DC209'
-        , 'Place of work': '#1F45FC'
+        , 'Renter occupied': '#E57149'
+        , 'Owner occupied': '#27AAE1'
 
-        , 'Arts, Recreation, & Other': '#E56717'
-        , 'Financial & Leasing': '#7FFFD4'
-        , 'Government': "#906E3E"
-        , 'Manufacturing & Wholesale': '#9DC209'
-        , 'Professional & Managerial Services': '#CC7A8B'
-        , 'Transportation & Utilities': '#620C4B'
+        , 'Female-headed family': '#6764A6'
+        , 'Male-headed family': '#27AAE1'
+        , 'Married-couple family': '#E57149'
+        , 'Other non-family': '#7EB460'
+        , 'Single-person': '#A24F82'
 
-        , 'Earnings &#36;1,250/month or less': '#151B54'
-        , 'Earnings &#36;1,251/month to &#36;3,333/month': '#1E90FF'
-        , 'Earnings greater than &#36;3,333/month': '#9DC209'
+        , 'No children': '#27AAE1'
+        , 'One or more children under 18': '#E57149'
 
-        , 'Renter occupied': '#9DC209'
-        , 'Owner occupied': '#1F45FC'
+        , "Occupied":"#27AAE1"
+        , "Vacant": "#E57149"
 
-        , 'Female-headed family': '#9DC209'
-        , 'Male-headed family': '#1E90FF'
-        , 'Married-couple family': '#151B54'
-        , 'Other non-family': '#7E587E'
-        , 'Single-person': '#FBB117'
+        , "For rent":"#E57149"
+        , "For sale only":"#00A97D"
+        , "For seasonal, recreational, or occasional use":"#27AAE1"
+        , "Other vacant":"#7EB460"
+        , "Rented, not occupied":"#006883"
+        , "Sold, not occupied":"#A24F82"
+        , "For migrant workers":"#6764A6"
 
-        , 'No children': '#1F45FC'
-        , 'One or more children under 18': '#9DC209'
+        , "Less than &#36;250k":"#E57149"
+        , "&#36;0k-&#36;250k":"#E57149"
+        , "&#36;250k-&#36;500k":"#27AAE1"
+        , "&#36;500k-&#36;750k":"#6764A6"
+        , "&#36;750k-&#36;1M":"#A24F82"
+        , "&#36;1M-&#36;1.5M":"#006883"
+        , "&#36;1.5M-&#36;2M":"#00A97D"
+        , "&#36;2M+":"#7EB460"
 
-        , "Occupied":"#1F45FC"
-        , "Vacant": "#9DC209"
+        , "Less than &#36;500":"#E57149"
+        , "&#36;0-&#36;500":"#E57149"
+        , "&#36;500-&#36;1,000":"#27AAE1"
+        , "&#36;1,000-&#36;1,500":"#6764A6"
+        , "&#36;1,500-&#36;2,000":"#A24F82"
+        , "&#36;2,000-&#36;2,500":"#006883"
+        , "&#36;2,500-&#36;3,000":"#00A97D"
+        , "&#36;3,000 or more":"#7EB460"
+        , "&#36;3,000+":"#7EB460"
 
-        , "For rent":"#151B54"
-        , "For sale only":"#DC381F"
-        , "For seasonal, recreational, or occasional use":"#1E90FF"
-        , "Other vacant":"#9DC209"
-        , "Rented, not occupied":"#7E587E"
-        , "Sold, not occupied":"#FBB117"
-        , "For migrant workers":"#006A4E"
+        , 'Less than or equal to 1 person per room': '#7EB460'
+        , '1.01 to 1.5 occupants per room': '#27AAE1'
+        , 'More than 1.5 occupants per room': '#E57149'
 
-        , "Less than &#36;250k":"#151B54"
-        , "&#36;0k-&#36;250k":"#151B54"
-        , "&#36;250k-&#36;500k":"#1E90FF"
-        , "&#36;500k-&#36;750k":"#9DC209"
-        , "&#36;750k-&#36;1M":"#FBB117"
-        , "&#36;1M-&#36;1.5M":"#7E587E"
-        , "&#36;1.5M-&#36;2M":"#DC381F"
-        , "&#36;2M+":"#006A4E"
+        , 'Not computed': '#808285'
+        , '0%-30% of income used for housing': '#27AAE1'
+        , '30%-50% of income used for housing': '#7EB460'
+        , '50%+ of income used for housing': '#E57149'
 
-        , "Less than &#36;500":"#151B54"
-        , "&#36;0-&#36;500":"#151B54"
-        , "&#36;500-&#36;1,000":"#1E90FF"
-        , "&#36;1,000-&#36;1,500":"#9DC209"
-        , "&#36;1,500-&#36;2,000":"#FBB117"
-        , "&#36;2,000-&#36;2,500":"#7E587E"
-        , "&#36;2,500-&#36;3,000":"#DC381F"
-        , "&#36;3,000 or more":"#006A4E"
-        , "&#36;3,000+":"#006A4E"
+        , "1 person households":"#E57149"
+        , "2 person households":"#27AAE1"
+        , "3-4 person households":"#7EB460"
+        , "5 or more person households":"#A24F82"
 
-        , 'Less than or equal to 1 person per room': '#E56717'
-        , '1.01 to 1.5 occupants per room': '#9DC209'
-        , 'More than 1.5 occupants per room': '#1F45FC'
+        , 'Less than 30%': '#E57149'
+        , '31%-50%': '#27AAE1'
+        , '51%-80%': '#7EB460'
+        , '81%-100%': '#A24F82'
+        , 'Greater than 100%': '#00A97D'
 
-        , 'Not computed': '#9B9A96'
-        , '0%-30% of income used for housing': '#1F45FC'
-        , '30%-50% of income used for housing': '#9DC209'
-        , '50%+ of income used for housing': '#E56717'
+        , 'Above poverty level': '#27AAE1'
+        , 'Below poverty level': '#E57149'
 
-        , "1 person households":"#151B54"
-        , "2 person households":"#1E90FF"
-        , "3-4 person households":"#9DC209"
-        , "5 or more person households":"#FBB117"
+        , 'With a disability': '#E57149'
+        , 'No disability': '#27AAE1'
 
-        , 'Less than 30%': '#151B54'
-        , '31%-50%': '#1E90FF'
-        , '51%-80%': '#9DC209'
-        , '81%-100%': '#FBB117'
-        , 'Greater than 100%': '#DC381F'
+        , 'Employed': '#27AAE1'
+        , 'Unemployed': '#E57149'
 
-        , 'Above poverty level': '#1F45FC'
-        , 'Below poverty level': '#9DC209'
+        , "Sheltered - Emergency Shelter":"#E57149"
+        , "Sheltered - Transitional Housing": "#27AAE1"
+        , 'Unsheltered': "#7EB460"
 
-        , 'With a disability': '#9DC209'
-        , 'No disability': '#1F45FC'
+        , "Emergency Shelter":"#E57149"
+        , "Transitional Housing": "#27AAE1"
 
-        , 'Employed': '#1F45FC'
-        , 'Unemployed': '#9DC209'
+        , 'Share of homeless population': '#E57149'
+        , 'Share of overall population': '#27AAE1'
 
-        , "Sheltered - Emergency Shelter":"#151B54"
-        , "Sheltered - Transitional Housing": "#1E90FF"
-        , 'Unsheltered': "#9DC209"
+        , 'Chronic Substance Abuse':"#E57149"
+        , 'HIV/AIDS': "#27AAE1"
+        , 'Severely Mentally Ill': "#7EB460"
+        , 'Veterans': '#006883'
+        , 'Victims of Domestic Violence': '#A24F82'
 
-        , "Emergency Shelter":"#151B54"
-        , "Transitional Housing": "#1E90FF"
+        , "2020-21":"#E57149"
+        , "2021-22":"#27AAE1"
+        , "2022-23":"#7EB460"
+        , "2023-24":"#A24F82"
+        , "2024-25":"#00A97D"
 
-        , 'Share of homeless population': '#9DC209'
-        , 'Share of overall population': '#1F45FC'
+        , '0%-30% of AMI': '#E57149'
+        , '31%-50% of AMI': '#27AAE1'
+        , '51%-80% of AMI': '#7EB460'
+        , '81%-100% of AMI': '#A24F82'
+        , 'Greater than 100% of AMI': '#00A97D'
 
-        , 'Chronic Substance Abuse':"#151B54"
-        , 'HIV/AIDS': "#1E90FF"
-        , 'Severely Mentally Ill': "#9DC209"
-        , 'Veterans': '#E56717'
-        , 'Victims of Domestic Violence': '#FBB117'
+        , 'Loan originated':'#27AAE1'
+        , 'Application approved but not accepted':'#E57149'
+        , 'Application denied': '#7EB460'
+        , 'Application withdrawn by applicant':'#808285'
+        , 'File closed for incompleteness':'#96D2E8'
+        , 'Purchased loan': '#A24F82'
+        , 'Preapproval request denied':'#006883'
+        , 'Preapproval request approved but not accepted':'#00A97D'
 
-        , "2020-21":"#151B54"
-        , "2021-22":"#1E90FF"
-        , "2022-23":"#9DC209"
-        , "2023-24":"#FBB117"
+        , 'Speak english "well" or "very well"': '#27AAE1'
+        , 'Speak english "not well" or "not at all"': '#E57149'
 
-        , '0%-30% of AMI': '#151B54'
-        , '31%-50% of AMI': '#1E90FF'
-        , '51%-80% of AMI': '#9DC209'
-        , '81%-100% of AMI': '#FBB117'
-        , 'Greater than 100% of AMI': '#DC381F'
+        , 'At Risk of or Experiencing Exclusion': '#E57149'
+        , 'Susceptible to or Experiencing Displacement':'#27AAE1'
+        , 'At Risk of or Experiencing Gentrification': '#6764A6'
+        , 'Stable Moderate/Mixed Income':'#A24F82'
 
-        , 'Loan originated':'#1E90FF'
-        , 'Application approved but not accepted':'#151B54'
-        , 'Application denied': '#9DC209'
-        , 'Application withdrawn by applicant':'#7FFFD4'
-        , 'File closed for incompleteness':'#7E587E'
-        , 'Purchased loan': '#FBB117'
-        , 'Preapproval request denied':'#008000'
-        , 'Preapproval request approved but not accepted':'#DC381F'
+        , "1 bedroom":"#E57149"
+        , "2 bedrooms":"#27AAE1"
+        , "3 bedrooms":"#6764A6"
+        , "4 bedrooms":"#A24F82"
+        , "5+ bedrooms":"#7EB460"
 
-        , 'Speak english "well" or "very well"': '#1F45FC'
-        , 'Speak english "not well" or "not at all"': '#9DC209'
+        , 'Low': '#E57149'
+        , 'Moderate': '#27AAE1'
+        , 'High': '#7EB460'
+        , 'Very High': '#A24F82'
 
-        , 'At Risk of or Experiencing Exclusion': '#151B54'
-        , 'Susceptible to or Experiencing Displacement':'#1E90FF'
-        , 'At Risk of or Experiencing Gentrification': '#9DC209'
-        , 'Stable Moderate/Mixed Income':'#FBB117'
+        , 'Low Resource': '#E57149'
+        , 'Moderate Resource': '#27AAE1'
+        , 'High/Highest Resource': '#7EB460'
+        , 'Unknown': '#A24F82'
 
-        , "1 bedroom":"#151B54"
-        , "2 bedrooms":"#1E90FF"
-        , "3 bedrooms":"#9DC209"
-        , "4 bedrooms":"#FBB117"
-        , "5+ bedrooms":"#E56717"
+        , "Spanish":"#E57149"
+        , "Other Indo-European":"#27AAE1"
+        , "Other Asian and Pacific Island":"#6764A6"
+        , "Chinese (incl. Mandarin, Cantonese)":"#A24F82"
+        , "Tagalog (incl. Filipino)":"#E57149"
+        , "Russian, Polish, or other Slavic":"#00A97D"
+        , "Vietnamese":"#7EB460"
+        , "Other and unspecified":"#808285"
+        , "Korean":"#149ABF"
+        , 'German or other West Germanic': '#55C8E8'
+        , 'French, Haitian, or Cajun': '#96D2E8'
+        , 'Arabic': '#006883'
 
     }
 
-    df_plot = sort_plot(df_plot, indicator, jurisdiction)
 
-    if indicator in ['HSG_6']:
+    df_plot = sort_plot(df_plot, indicator, county, jurisdiction)
+
+    if indicator in ['HSG_6', 'AFFH_5']:
         text_limit=0
     else:
-        text_limit=5
+        text_limit=4
 
     if params['text']:
         df_plot['text'] = np.where(df_plot[params['y']] >= text_limit, df_plot[params['y']].astype(str)+'%', '')
@@ -1100,7 +934,11 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
 
     # Line graphs
     if params['line']:
-        fig = px.line(df_plot, x=params['x'], y=params['y'], color=params['color'], color_discrete_map=color_discrete_map, markers=True)
+        if params['color']:
+            fig = px.line(df_plot, x=params['x'], y=params['y'], color=params['color'], color_discrete_map=color_discrete_map, markers=True)
+        else:
+            fig = px.line(df_plot, x=params['x'], y=params['y'], markers=True)
+            fig['data'][0]['line']['color']='#27AAE1'
         if indicator == 'POPEMP_1':
             range_min = df_plot[params['y']].min()-4
             range_max = df_plot[params['y']].max()+4
@@ -1123,7 +961,8 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
                 fig.update_yaxes(dtick=0.5, range=[0, 2.25])
         if indicator == 'POPEMP_15':
             fig.update_yaxes(ticksuffix='%', dtick=5, range=[0, 21])
-        fig.update_xaxes(dtick=2, range=[df_plot[params['x']].min()-0.5, df_plot[params['x']].max()+0.5])
+        if indicator != 'POPEMP_27':
+            fig.update_xaxes(dtick=2, range=[df_plot[params['x']].min()-0.5, df_plot[params['x']].max()+0.5])
 
     # Bar graphs
     if params['bar']:
@@ -1139,10 +978,10 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
                 fig = px.bar(df_plot, x=params['x'], y=params['y'], color=params['color'], color_discrete_map=color_discrete_map, barmode='group')
         if params['bar'] == 'simple':
             fig = px.bar(df_plot, x=params['x'], y=params['y'])
-            fig.update_traces(marker_color='#1E90FF')
+            fig.update_traces(marker_color='#27AAE1')
 
     if params['format'] == 'percent':
-        if indicator in ['POPEMP_1', 'POPEMP_15', 'HSG_6', 'HSG_7', 'HSG_9', 'OVER_3', 'OVER_4', 'SEN_4', 'DISAB_1', 'HOMELS_2', 'ELI_3', 'ELI_4']:
+        if indicator in ['POPEMP_1', 'POPEMP_15', 'HSG_6', 'HSG_7', 'HSG_9', 'OVER_3', 'OVER_4', 'SEN_4', 'DISAB_1', 'HOMELS_2', 'ELI_3', 'ELI_4', 'FARM_4', 'AFFH_5']:
             fig.update_yaxes(ticksuffix='%')
         else:
             fig.update_yaxes(dtick=25, ticksuffix='%', range=[0,102])
@@ -1157,7 +996,7 @@ def make_fig(indicator, params, df_plot, county, jurisdiction):
     if indicator == 'HOMELS_4':
         fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=-0.175,xanchor="right", x=0.75))
 
-    if indicator not in ['POPEMP_4', 'POPEMP_10', 'HSG_1', 'LGFEM_5', 'HOMELS_3', 'HOMELS_4']:
+    if indicator not in ['POPEMP_1', 'POPEMP_10', 'POPEMP_13', 'POPEMP_15', 'POPEMP_27', 'HSG_8', 'HSG_10', 'HOMELS_2', 'HOMELS_4', 'ELI_4', 'AFFH_5']:
         fig.update_layout(legend={'traceorder': 'reversed'})
 
     fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgrey')
@@ -1177,27 +1016,28 @@ def plot_rhna(fig, county, jurisdiction, indicator, params):
 
     fig.update_layout(
         legend_title=None
-        , title=params['Title']
+        # , title=params['Title']
         , template=PLOTLY_TEMPLATE
         , font_family=PLOTLY_FONT_FAMILY
         , yaxis=dict(tickfont=dict(size=14))
         , xaxis=dict(tickfont=dict(size=14))
+        , margin=dict(t=20, b=20)
         )
 
-    if indicator in ['POPEMP_3', 'POPEMP_5', 'POPEMP_6', 'POPEMP_7',
-                        'POPEMP_8', 'POPEMP_9', 'POPEMP_16', 'POPEMP_23',
-                        'POPEMP_24', 'HSG_2', 'HSG_3', 'HSG_7', 'HSG_9',
-                        'OVER_2', 'OVER_7', 'LGFEM_2', 'DISAB_2', 'HOMELS_4',
-                        'ELI_1', 'AFFH_3', 'FARM_2', 'LGFEM_1', 'SEN_2']:
+    if indicator in ['POPEMP_3', 'POPEMP_5', 'POPEMP_6', 'POPEMP_7', 'FARM_4',
+                    'POPEMP_8', 'POPEMP_9', 'POPEMP_16', 'POPEMP_23', 'ELI_3',
+                    'POPEMP_24', 'POPEMP_27', 'HSG_2', 'HSG_3', 'HSG_7', 'HSG_9',
+                    'OVER_2', 'OVER_7', 'LGFEM_2', 'DISAB_2', 'HOMELS_4', 'AFFH_5',
+                    'ELI_1', 'AFFH_3', 'FARM_2', 'LGFEM_1', 'SEN_2', 'RISK_1']:
         fig.update_layout(xaxis_title=None)
     
     if jurisdiction == 'Sacramento':
         fig.show(config=PLOTLY_CONFIG)
     
     if EXPORT:
-        file_png  = path_plots / f'RHNA_{indicator}.png'
+        file_png = path_plots / f'{indicator}.png'
         try:
-            fig.write_image(file=file_png , engine='kaleido', scale=1, width=1000, height=500)
+            fig.write_image(file=file_png, engine='kaleido', scale=1, width=1000, height=500)
         except Exception as e:
             e
 
@@ -1224,16 +1064,13 @@ def export_rhna_temp(county, jurisdiction, indicator):
             wb.create_sheet(indicator, sheet_index)
         ws = wb[indicator]
 
-        df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator]['Title'], 'The data used for this indicator is not available for this jurisdiction']})
-        if indicator == 'POPEMP_25':
-            df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator]['Title'], 'This indicator is still a work in progress']})
+        df_out = pd.DataFrame({'Temp': [FILE_YAML[indicator]['Title'], 'The data used for this indicator is not available for this jurisdiction, likely due to small sample sizes']})
 
         for r in dataframe_to_rows(df_out, index=False, header=False):
             ws.append(r)
         ws['A1'].font = Font(bold=True, size=14)
 
         wb.save(path_juris)
-
 
 
 def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
@@ -1248,7 +1085,7 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
         try:
 
             try:
-                path_plot = path_plots / f'RHNA_{indicator}.png'
+                path_plot = path_plots / f'{indicator}.png'
                 img = Image(path_plot)
             except Exception as e:
                 e
@@ -1284,9 +1121,9 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
             df_subtitle1 = pd.DataFrame([['' for _ in range(len(df_prod2.columns))]])
             if indicator in ['FARM_2', 'HOMELS_1']:
                 df_subtitle1.iloc[0, 0] = f'Total: {county} County'
-            if indicator in ['HSG_11']:
+            elif indicator in ['HSG_11', 'RISK_1', 'POPEMP_28']:
                 df_subtitle1.iloc[0, 0] = f'Total: {jurisdiction}'
-            if 'Value' in params.keys():
+            elif 'Value' in params.keys():
                 df_subtitle1.iloc[0, 0] = f'Total: {params['Value']}' # TODO: make sure this is working correctly, i.e. "Total: Households" or "Total: Population" (or should it be "Total: Individuals")
             else:
                 df_subtitle1.iloc[0, 0] = 'Total'
@@ -1339,7 +1176,8 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
             format_numbers = '#,##0'
             format_percent = '0.0%'
             format_ratio   = '0.00'
-            formet_dollars = '$#,##0'
+            format_age   = '0.0'
+            format_dollars = '$#,##0'
             
             for col in ws.columns:
                 max_length = 0
@@ -1357,8 +1195,13 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
                                 cell.value = float(cell.value)
                                 cell.number_format = format_percent
                             else:
-                                if indicator in ['POPEMP_13', 'POPEMP_14']:
-                                    cell.number_format = format_ratio
+                                if indicator in ['POPEMP_13', 'POPEMP_14', 'POPEMP_27', 'HSG_8', 'HSG_10', 'HSG_12']:
+                                    if indicator == 'POPEMP_27':
+                                        cell.number_format = format_age
+                                    elif indicator in ['HSG_8', 'HSG_10', 'HSG_12']:
+                                        cell.number_format = format_dollars
+                                    else:
+                                        cell.number_format = format_ratio
                                 else:
                                     cell.value = int(cell.value)
                                     cell.number_format = format_numbers
@@ -1381,7 +1224,7 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
                     ws.column_dimensions[column].width = adjusted_width
 
             try:
-                row_num = df_out.shape[0] + 4
+                row_num = df_out.shape[0] + 3
                 ws.add_image(img, f'B{row_num}') # 21 (style 1)
             except Exception as e:
                 e
@@ -1394,5 +1237,160 @@ def export_rhna(county, jurisdiction, indicator, params, df_prod, df_pct=None):
 
 
 
+def write_sup_table(df, indicator, county, jurisdiction):
+    """
+    Write a pandas DataFrame into an *existing* Excel workbook at a specific cell,
+    without modifying anything else in the workbook except the cells written.
+    Then auto-fit ONLY the columns used by the written table.
+    """
 
+    try:
+        if EXPORT:
+
+            path_wb = PATH_OUT / county.replace(' County', '') / jurisdiction / f'RHNA_{jurisdiction}.xlsx'
+
+            if not path_wb.exists():
+                raise FileNotFoundError(f"Workbook not found: {path_wb}")
+
+            wb = load_workbook(path_wb)
+            if indicator not in wb.sheetnames:
+                raise ValueError(f"Sheet {indicator} not found. Available: {wb.sheetnames}")
+
+            ws = wb[indicator]
+
+            start_cell = "H1" # Subject to change depending on indicator
+            col_letters, row = coordinate_from_string(start_cell)
+            start_col = column_index_from_string(col_letters)
+            start_row = row
+
+            out_df = df.copy()
+
+            values = []
+            values.append(list(out_df.columns))
+            values.extend(out_df.to_numpy().tolist())
+
+            n_rows_written = len(values)              # header + data rows
+            n_cols_written = len(values[0]) if values else 0
+
+            for r_offset, row_values in enumerate(values):
+                for c_offset, val in enumerate(row_values):
+                    ws.cell(row=start_row + r_offset, column=start_col + c_offset).value = val
+
+            min_width = 8.43   # Excel default
+            max_width = 60     # prevent comically wide columns
+            padding  = 1       # a little breathing room
+
+            for c in range(start_col, start_col + n_cols_written):
+                col_letter = get_column_letter(c)
+
+                max_len = 0
+                for r in range(start_row, start_row + n_rows_written):
+                    v = ws.cell(row=r, column=c).value
+                    if v is None:
+                        continue
+                    max_len = max(max_len, len(str(v)))
+
+                new_width = max(min_width, min(max_width, max_len + padding))
+                ws.column_dimensions[col_letter].width = new_width
+
+            wb.save(path_wb)
+
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        print()
+        export_rhna_temp(county, jurisdiction, indicator)
+
+
+
+
+# def write_risk1_table(
+#     df: pd.DataFrame,
+#     workbook_path: Union[str, Path],
+#     sheet_name: str = "RISK_1",
+#     start_cell: str = "H3",
+#     *,
+#     include_header: bool = True,
+#     # include_index: bool = False,
+#     # clear_output_range: bool = False,
+#     # na_rep: Optional[str] = None,
+#     # save_as: Optional[Union[str, Path]] = None,
+# ) -> None:
+#     """
+#     Write a pandas DataFrame into an *existing* Excel workbook at a specific cell,
+#     without modifying anything else in the workbook except the cells written.
+
+#     Parameters
+#     ----------
+#     df : pd.DataFrame
+#         The DataFrame to write.
+#     workbook_path : str | Path
+#         Path to the existing workbook (e.g., "RHNA_Folsom.xlsx").
+#     sheet_name : str
+#         Name of the worksheet to write into (default: "RISK_1").
+#     start_cell : str
+#         Excel cell (e.g., "H3") where the top-left of the output table begins.
+#     include_header : bool
+#         If True, write column headers at the first row of the output.
+#     include_index : bool
+#         If True, write the DataFrame index as the first column.
+#     clear_output_range : bool
+#         If True, clears the target rectangle (header + data area) before writing.
+#         This prevents stale values if the new df is smaller than the old one.
+#     na_rep : str | None
+#         If provided, replaces NaN/None with this string.
+#     save_as : str | Path | None
+#         If provided, saves to a new file path instead of overwriting the original.
+
+#     Returns
+#     -------
+#     None
+#     """
+#     workbook_path = Path(workbook_path)
+#     if not workbook_path.exists():
+#         raise FileNotFoundError(f"Workbook not found: {workbook_path}")
+
+#     # Load workbook without destroying existing content
+#     wb = load_workbook(workbook_path)
+#     if sheet_name not in wb.sheetnames:
+#         raise ValueError(f"Sheet '{sheet_name}' not found. Available: {wb.sheetnames}")
+
+#     ws = wb[sheet_name]
+
+#     # Parse start cell
+#     col_letters, row = coordinate_from_string(start_cell)
+#     start_col = column_index_from_string(col_letters)
+#     start_row = row
+
+#     # Build the 2D values matrix to write
+#     out_df = df.copy()
+
+#     # # if na_rep is not None:
+#     #     out_df = out_df.where(out_df.notna(), na_rep)
+
+#     # if include_index:
+#     #     out_df = out_df.reset_index()
+
+#     values = []
+#     if include_header:
+#         values.append(list(out_df.columns))
+#     values.extend(out_df.to_numpy().tolist())
+
+
+#     # # Optionally clear only the rectangle we will write into
+#     # n_rows = len(values)
+#     # n_cols = 0 if n_rows == 0 else max(len(r) for r in values)
+#     # if clear_output_range and n_rows > 0 and n_cols > 0:
+#     #     for r in range(start_row, start_row + n_rows):
+#     #         for c in range(start_col, start_col + n_cols):
+#     #             ws.cell(row=r, column=c).value = None
+
+#     # Write values cell-by-cell (preserves everything else on the sheet)
+#     for r_offset, row_values in enumerate(values):
+#         for c_offset, val in enumerate(row_values):
+#             ws.cell(row=start_row + r_offset, column=start_col + c_offset).value = val
+
+#     # # Save (overwrite or save_as)
+#     # out_path = Path(save_as) if save_as else workbook_path
+#     wb.save(workbook_path)
 

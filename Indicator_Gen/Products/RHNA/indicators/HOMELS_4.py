@@ -20,6 +20,7 @@ FILE_SCHOOLS = Path(r'I:/Projects/Warren/Schools_data_update/2024_Data/Data_Clea
 FILE_AREA = Path(__file__).parent.parent.parent.parent / 'config' / 'area_codes.xlsx'
 FILE_CDP = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\geojson') / 'tl_2022_us_place_SACOG.geojson'
 
+## Just closing the loop on the student homelessness enrollment, the vast majority of these are in the "Temporarily Doubled Up" category, which I think makes sense
 
 def clean_years(df):
     
@@ -27,6 +28,7 @@ def clean_years(df):
     df['2021-22'] = df['2021-22'].astype(int)
     df['2022-23'] = df['2022-23'].astype(int)
     df['2023-24'] = df['2023-24'].astype(int)
+    df['2024-25'] = df['2024-25'].astype(int)
 
     return df
 
@@ -36,7 +38,8 @@ if __name__ == '__main__':
 
     # Use URLs to import enrollment total files
     urls = [
-        'https://www3.cde.ca.gov/demo-downloads/homeless/hse2324.txt'
+        'https://www3.cde.ca.gov/demo-downloads/homeless/hse2425.txt'
+        , 'https://www3.cde.ca.gov/demo-downloads/homeless/hse2324.txt'
         , 'https://www3.cde.ca.gov/demo-downloads/homeless/hse2223.txt'
         , 'https://www3.cde.ca.gov/demo-downloads/homeless/hse2122.txt'
         , 'https://www3.cde.ca.gov/demo-downloads/homeless/hse2021.txt'
@@ -74,17 +77,11 @@ if __name__ == '__main__':
 
     # Merge schools with enrollment total files to get geometries
     df_edu = df_edu.merge(gdf_schools, on=['County Name', 'School Name'], how='left')
-
-    gdf_edu = gpd.GeoDataFrame(
-        df_edu,
-        geometry='geometry',
-        crs="EPSG:2226"
-    )
+    gdf_edu = gpd.GeoDataFrame(df_edu, geometry='geometry', crs="EPSG:2226")
 
     # print(len(gdf_edu[gdf_edu['cdscode'].isna()]['SchoolName'].unique())) # some schools are missing
     gdf_edu['Homeless Student Enrollment'] = gdf_edu['Homeless Student Enrollment'].replace('*', '0')
     gdf_edu['Homeless Student Enrollment'] = gdf_edu['Homeless Student Enrollment'].astype(int)
-    breakpoint()
 
     # Roll up enrollment to SACOG region and county level enrollment totals
     df_counties = gdf_edu.groupby(['AcademicYear', 'County Name'], as_index=False)['Homeless Student Enrollment'].sum()

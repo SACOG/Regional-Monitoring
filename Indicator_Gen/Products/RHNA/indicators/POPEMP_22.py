@@ -1,7 +1,5 @@
 
 
-
-
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
@@ -15,13 +13,17 @@ yaml_file = rhna.load_yaml()
 
 
 def re_remove_post(x, exp = ':'):
-    try: x = str(x.split(exp, 1)[0])
-    except: pass
+    try:
+        x = str(x.split(exp, 1)[0])
+    except Exception as e:
+        e
     return x
 
 def re_remove_pre(x, exp = ':  '):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
+    try:
+        x = str(x.split(exp, 1)[1])
+    except Exception as e:
+        e
     return x
 
 
@@ -33,7 +35,7 @@ warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
-    df_places = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx')
+    df_places = pd.read_excel(PATH_DATA / f'{INDICATOR} Places ACS5.xlsx')
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
@@ -42,7 +44,7 @@ if __name__ == '__main__':
     df_places['Housing Tenure'] = df_places['Housing Type'].apply(re_remove_post)
     df_places['Housing Type'  ] = df_places['Housing Type'].apply(re_remove_pre )
 
-    df_places = df_places[['County Name', 'Geography', 'Households', 'Housing Tenure', 'Housing Type', 'Percentage']]
+    df_places = df_places[['County Name', 'Geography', 'Households', 'Housing Tenure', 'Housing Type', 'Percent']]
     df_places['Percent'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Housing Type'])['Households'].transform('sum')
 
     df_places['Sort'] = pd.Categorical(df_places['Housing Type'], ['Detached single-family homes', 'Attached single-family homes', 'Multi-family housing', 'Mobile homes', 'Boat, RV, van, or other'])

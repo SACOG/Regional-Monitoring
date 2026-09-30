@@ -8,6 +8,15 @@ User must specify the geometry column as WKB (Shape.STAsBinary() AS geometry, wh
 '''
 
 
+import geopandas as gpd
+import re
+from time import perf_counter as perf
+import pyodbc
+import urllib
+import sqlalchemy as sqla
+from IPython.display import display
+
+
 DB = 'GISData'
 SQL_QUERY = """
             SELECT
@@ -20,14 +29,6 @@ SQL_QUERY = """
 # "Shape" is the name of the geometry field
 # "Shape.STSrid AS srid" ensures the CRS also gets imported into Python
 
-
-import geopandas as gpd
-import re
-from time import perf_counter as perf
-import pyodbc
-import urllib
-import sqlalchemy as sqla
-from IPython.display import display
 
 def get_odbc_driver():
     
@@ -72,8 +73,10 @@ def sqlqry_to_gdf(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
     rowcnt = gdf.shape[0]
     
     et_mins = round((perf() - start_time) / 60, 2)
-    print(f"Successfully executed query in {et_mins} minutes. {rowcnt} rows loaded into dataframe."); print()
-    display(gdf); print()
+    print(f"Successfully executed query in {et_mins} minutes. {rowcnt} rows loaded into dataframe.")
+    print()
+    display(gdf)
+    print()
 
     return gdf
 

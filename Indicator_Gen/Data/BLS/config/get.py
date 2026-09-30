@@ -1,27 +1,3 @@
-def print2(): print(); print()
-
-
-'''
-
-Functions:
-
-get_data()
-read_inputs_file()
-read_vars_file()
-moe_split()
-prep_request_special()
-get_acs()
-get_pums()
-get_dp()
-get_subject()
-get_dec()
-get_lehd()
-get_data_any()
-
-
-'''
-
-
 
 
 
@@ -36,14 +12,9 @@ import requests
 from IPython.display import display
 
 
-PATH_GIT = Path(__file__).parent.parent.parent.parent
-PATH_CODE    = PATH_GIT / 'Data' / 'BLS'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
-PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\BLS')
-
+PATH_CONFIG0 = Path(__file__).parent.parent.parent.parent / 'config'
 FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
-FILE_CONFIG = PATH_CONFIG / 'bls.xlsx'
+FILE_CONFIG = Path(__file__).parent / 'bls.xlsx'
 
 
 
@@ -131,7 +102,7 @@ def construct_series_id(survey, geography, seasonal, df=None, list_sectors=None,
             if survey in ['EN']:
                 series_id =  list(map(lambda sector: str(survey) + str(seasonal) + str(area_code) + str(data_type) + str(size_code) + str(owner_code) + str(sector), list_sectors))
             if survey in ['SM', 'CE']:
-                state     = str(df.loc[i, 'State FIPS'])
+                state     = str(df.loc[i, 'STATEFP'])
                 series_id = list(map(lambda sector: str(survey) + str(seasonal) + str(state) + str(area_code) + str(sector) + str(data_type), list_sectors))
             keys.append(str(df.loc[i, 'area_text']))
             vals.append(series_id)
@@ -198,21 +169,21 @@ def create_series_dictionary(dt_params, yaml_bls):
             df_area = df_area[df_area['area_type_code'] == 'B']
             if state_code:
                 file_area = PATH_CONFIG0 / 'area_codes.xlsx'
-                df_states = pd.read_excel(file_area, sheet_name='MSAcodes', dtype={'State FIPS':str, 'MSA_ID':str})
-                df_states = df_states[['MSA_ID', 'State FIPS', 'MSA']].drop_duplicates()
-                df_area['MSA_ID'] = df_area['MSA_ID'].astype(str)
+                df_states = pd.read_excel(file_area, sheet_name='MSAcodes', dtype={'STATEFP':str, 'MSA_ID':str})
+                df_states = df_states[['MSA_ID', 'STATEFP', 'MSA']].drop_duplicates()
+                df_area['MSA_ID'] = df_area['MSA ID'].astype(str)
                 df_area = df_area.merge(df_states, on = 'MSA_ID', how = 'left')
-                df_area = df_area[['State FIPS', 'area_code', 'area_text', 'MSA', 'MSA_ID']]
+                df_area = df_area[['STATEFP', 'area_code', 'area_text', 'MSA', 'MSA_ID']]
             else:
-                df_area = df_area[['area_code', 'area_text', 'MSA_ID']]
+                df_area = df_area[['area_code', 'area_text', 'MSA ID']].rename(columns={'MSA ID':'MSA_ID'})
         if geography == 'Counties':
             df_area = df_area[df_area['area_type_code'] == 'F']
             if state_code:
                 file_area = PATH_CONFIG0 / 'area_codes.xlsx'
-                df_states = pd.read_excel(file_area, sheet_name = 'CountyFIPS', dtype = {'State FIPS':str, 'County FIPS':str})
-                df_states = df_states[['County FIPS', 'State FIPS', 'County Name']].drop_duplicates()
+                df_states = pd.read_excel(file_area, sheet_name = 'CountyFIPS', dtype = {'STATEFP':str, 'County FIPS':str})
+                df_states = df_states[['County FIPS', 'STATEFP', 'County Name']].drop_duplicates()
                 df_area = df_area.merge(df_states, on = 'County FIPS', how = 'left')
-                df_area = df_area[['State FIPS', 'area_code', 'area_text', 'County Name']]
+                df_area = df_area[['STATEFP', 'area_code', 'area_text', 'County Name']]
             else: 
                 df_area = df_area[['area_code', 'area_text']]
         df_area = df_area.reset_index(drop=True)
@@ -351,7 +322,7 @@ def get_data_any(api_key, dt_params, yaml_bls):
     list_series_all, df_series_area, dt_series = create_series_dictionary(dt_params, yaml_bls)
 
     print('Importing BLS data using user inputs...')
-    print2()
+    print('\n'*2)
 
     list_df_years = []
     year_step = 20

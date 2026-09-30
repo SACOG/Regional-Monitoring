@@ -1,6 +1,5 @@
 
 
-
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -63,8 +62,5 @@ if __name__ == '__main__':
             fig = rhna.make_fig(INDICATOR, params, df_plot, county, jurisdiction)
             rhna.plot_rhna(fig, county, jurisdiction, INDICATOR, params)
             rhna.export_rhna(county, jurisdiction, INDICATOR, params, df_prod)
-
-
-    breakpoint()
 
 

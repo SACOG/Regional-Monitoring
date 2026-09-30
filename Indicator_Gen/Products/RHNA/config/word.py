@@ -3,14 +3,26 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import re
+import traceback
+from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Inches
 import sys
 sys.path.append(str(Path(__file__).parent))
 import rhna
 FILE_YAML = rhna.load_yaml()
 PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
 
-ACS_YEAR_MAX = 2023
+ACS_YEAR_MAX=2024
+ACS_YEAR_MIN=2024-4
+ACS_YEAR_RANGE=f'{ACS_YEAR_MIN}-{ACS_YEAR_MAX}'
+CHAS_YEAR_MAX = 2022
+CHAS_YEAR_MIN = 2022-4
+CHAS_YEAR_RANGE=f'{CHAS_YEAR_MIN}-{CHAS_YEAR_MAX}'
 
+
+
+# Indicators ----------------------------------------------------------------------------------------------------------------------------------------
 
 def popemp_1(dt_find_replace, df_prod, jurisdiction, year_max, year_min):
     prod_year_min = df_prod[df_prod['Year']==year_min][jurisdiction].values[0]
@@ -33,15 +45,15 @@ def popemp_1(dt_find_replace, df_prod, jurisdiction, year_max, year_min):
         increased_or_decreased_pop_2020 = 'increased'
     else:
         increased_or_decreased_pop_2020 = 'decreased'
-    dt_find_replace['[POPEMP_1_prod_year_min]'             ] = f'{prod_year_min:,.0f}'
-    dt_find_replace['[POPEMP_1_prod_year_max]'             ] = f'{prod_year_max:,.0f}'
-    dt_find_replace['[POPEMP_1_prod_pct_diff]'             ] = f'{prod_pct_diff:.1%}'
-    dt_find_replace['[POPEMP_1_prod_pct_diff_region]'      ] = f'{prod_pct_diff_region:.1%}'
-    dt_find_replace['[POPEMP_1_increased_or_decreased_pop]'] = increased_or_decreased_pop
-    dt_find_replace['[POPEMP_1_above_or_below_region]'     ] = above_or_below_region
-    dt_find_replace['[POPEMP_1_prod_pct_region]'           ] = f'{prod_year_max_pct_region:.1%}'
-    dt_find_replace['[POPEMP_1_prod_pct_diff_2020]'        ] = f'{prod_pct_diff_2020:.1%}'
-    dt_find_replace['[POPEMP_1_increased_or_decreased_pop_2020]'] = increased_or_decreased_pop_2020
+    dt_find_replace['[[POPEMP_1_prod_year_min]]'             ] = f'{prod_year_min:,.0f}'
+    dt_find_replace['[[POPEMP_1_prod_year_max]]'             ] = f'{prod_year_max:,.0f}'
+    dt_find_replace['[[POPEMP_1_prod_pct_diff]]'             ] = f'{prod_pct_diff:.1%}'
+    dt_find_replace['[[POPEMP_1_prod_pct_diff_region]]'      ] = f'{prod_pct_diff_region:.1%}'
+    dt_find_replace['[[POPEMP_1_increased_or_decreased_pop]]'] = increased_or_decreased_pop
+    dt_find_replace['[[POPEMP_1_above_or_below_region]]'     ] = above_or_below_region
+    dt_find_replace['[[POPEMP_1_prod_pct_region]]'           ] = f'{prod_year_max_pct_region:.1%}'
+    dt_find_replace['[[POPEMP_1_prod_pct_diff_2020]]'        ] = f'{prod_pct_diff_2020:.1%}'
+    dt_find_replace['[[POPEMP_1_increased_or_decreased_pop_2020]]'] = increased_or_decreased_pop_2020
     return dt_find_replace
 
 def popemp_2(dt_find_replace, df_prod, df_pct):
@@ -69,16 +81,16 @@ def popemp_2(dt_find_replace, df_prod, df_pct):
     else:
         increased_or_decreased_prod_white_pct = 'decreased'
     prod_year_max_non_white = df_prod[df_prod['Year'] == year_max].sum(axis=1).reset_index(drop=True)[0] - df_prod[df_prod['Year'] == year_max]['White (NH)'].sum()
-    dt_find_replace['[POPEMP_2_year_min]'] = year_min
-    dt_find_replace['[POPEMP_2_year_max]'] = year_max
-    dt_find_replace['[POPEMP_2_prod_year_max_white_pct]'   ] = f'{prod_year_max_white_pct:.1%}'
-    dt_find_replace['[POPEMP_2_prod_year_max_black_pct]'   ] = f'{prod_year_max_black_pct:.1%}'
-    dt_find_replace['[POPEMP_2_prod_year_max_asian_pct]'   ] = f'{prod_year_max_asian_pct:.1%}'
-    dt_find_replace['[POPEMP_2_prod_year_max_hispanic_pct]'] = f'{prod_year_max_hispanic_pct:.1%}'
-    dt_find_replace['[POPEMP_2_prod_non_white_pct_diff]'] = f'{prod_non_white_pct_diff:.1f}'
-    dt_find_replace['[POPEMP_2_increased_or_decreased_prod_white_pct]'    ] = increased_or_decreased_prod_white_pct
-    dt_find_replace['[POPEMP_2_increased_or_decreased_prod_non_white_pct]'] = increased_or_decreased_prod_non_white_pct
-    dt_find_replace['[POPEMP_2_prod_year_max_non_white]'                  ] = f'{prod_year_max_non_white:,.0f}'
+    dt_find_replace['[[POPEMP_2_year_min]]'] = year_min
+    dt_find_replace['[[POPEMP_2_year_max]]'] = year_max
+    dt_find_replace['[[POPEMP_2_prod_year_max_white_pct]]'   ] = f'{prod_year_max_white_pct:.1%}'
+    dt_find_replace['[[POPEMP_2_prod_year_max_black_pct]]'   ] = f'{prod_year_max_black_pct:.1%}'
+    dt_find_replace['[[POPEMP_2_prod_year_max_asian_pct]]'   ] = f'{prod_year_max_asian_pct:.1%}'
+    dt_find_replace['[[POPEMP_2_prod_year_max_hispanic_pct]]'] = f'{prod_year_max_hispanic_pct:.1%}'
+    dt_find_replace['[[POPEMP_2_prod_non_white_pct_diff]]'] = f'{prod_non_white_pct_diff:.1f}'
+    dt_find_replace['[[POPEMP_2_increased_or_decreased_prod_white_pct]]'    ] = increased_or_decreased_prod_white_pct
+    dt_find_replace['[[POPEMP_2_increased_or_decreased_prod_non_white_pct]]'] = increased_or_decreased_prod_non_white_pct
+    dt_find_replace['[[POPEMP_2_prod_year_max_non_white]]'                  ] = f'{prod_year_max_non_white:,.0f}'
     return dt_find_replace
 
 def popemp_4(dt_find_replace, df_prod):
@@ -99,14 +111,14 @@ def popemp_4(dt_find_replace, df_prod):
         increased_or_decreased_over_65 = 'increased'
     else:
         increased_or_decreased_over_65 = 'decreased'
-    dt_find_replace['[POPEMP_4_year_min]'] = year_min
-    dt_find_replace['[POPEMP_4_year_max]'] = ACS_YEAR_MAX
-    dt_find_replace['[POPEMP_4_prod_year_max_under_18]'    ] = f'{prod_year_max_under_18:,.0f}'
-    dt_find_replace['[POPEMP_4_prod_year_max_over_65]'     ] = f'{prod_year_max_over_65:,.0f}'
-    dt_find_replace['[POPEMP_4_prod_year_max_under_18_pct]'] = f'{prod_year_max_under_18_pct:.1%}'
-    dt_find_replace['[POPEMP_4_prod_year_max_over_65_pct]' ] = f'{prod_year_max_over_65_pct:.1%}'
-    dt_find_replace['[POPEMP_4_increased_or_decreased_under_18]'] = increased_or_decreased_under_18
-    dt_find_replace['[POPEMP_4_increased_or_decreased_over_65]' ] = increased_or_decreased_over_65
+    dt_find_replace['[[POPEMP_4_year_min]]'] = year_min
+    dt_find_replace['[[POPEMP_4_year_max]]'] = ACS_YEAR_MAX
+    dt_find_replace['[[POPEMP_4_prod_year_max_under_18]]'    ] = f'{prod_year_max_under_18:,.0f}'
+    dt_find_replace['[[POPEMP_4_prod_year_max_over_65]]'     ] = f'{prod_year_max_over_65:,.0f}'
+    dt_find_replace['[[POPEMP_4_prod_year_max_under_18_pct]]'] = f'{prod_year_max_under_18_pct:.1%}'
+    dt_find_replace['[[POPEMP_4_prod_year_max_over_65_pct]]' ] = f'{prod_year_max_over_65_pct:.1%}'
+    dt_find_replace['[[POPEMP_4_increased_or_decreased_under_18]]'] = increased_or_decreased_under_18
+    dt_find_replace['[[POPEMP_4_increased_or_decreased_over_65]]' ] = increased_or_decreased_over_65
     return dt_find_replace
 
 def popemp_5(dt_find_replace, df_prod, jurisdiction):
@@ -118,10 +130,10 @@ def popemp_5(dt_find_replace, df_prod, jurisdiction):
         more_or_less_region = 'more'
     else:
         more_or_less_region = 'less'
-    dt_find_replace['[POPEMP_5_prod_pct_moved]'       ] = f'{prod_pct_moved:.1%}'
-    dt_find_replace['[POPEMP_5_prod_pct_moved_region]'] = f'{prod_pct_moved_region:.1%}'
-    dt_find_replace['[POPEMP_5_prod_pct_moved_diff]'  ] = f'{prod_pct_moved_diff:.1%}'
-    dt_find_replace['[POPEMP_5_more_or_less_region]'  ] = more_or_less_region
+    dt_find_replace['[[POPEMP_5_prod_pct_moved]]'       ] = f'{prod_pct_moved:.1%}'
+    dt_find_replace['[[POPEMP_5_prod_pct_moved_region]]'] = f'{prod_pct_moved_region:.1%}'
+    dt_find_replace['[[POPEMP_5_prod_pct_moved_diff]]'  ] = f'{prod_pct_moved_diff:.1%}'
+    dt_find_replace['[[POPEMP_5_more_or_less_region]]'  ] = more_or_less_region
     return dt_find_replace
 
 def popemp_6(dt_find_replace, df_pct, jurisdiction, county):
@@ -135,9 +147,9 @@ def popemp_6(dt_find_replace, df_pct, jurisdiction, county):
     most_common_industry        = df_t       [df_t       ['Pct']==pct_most_common_industry       ]['Industry'].values[0].lower()
     most_common_industry_county = df_t_county[df_t_county['Pct']==pct_most_common_industry_county]['Industry'].values[0].lower()
     most_common_industry_region = df_t_region[df_t_region['Pct']==pct_most_common_industry_region]['Industry'].values[0].lower()
-    dt_find_replace['[POPEMP_6_most_common_industry]'       ] = most_common_industry
-    dt_find_replace['[POPEMP_6_most_common_industry_county]'] = most_common_industry_county
-    dt_find_replace['[POPEMP_6_most_common_industry_region]'] = most_common_industry_region
+    dt_find_replace['[[POPEMP_6_most_common_industry]]'       ] = most_common_industry
+    dt_find_replace['[[POPEMP_6_most_common_industry_county]]'] = most_common_industry_county
+    dt_find_replace['[[POPEMP_6_most_common_industry_region]]'] = most_common_industry_region
     return dt_find_replace
 
 def popemp_11(dt_find_replace, df_prod, year_max, year_min):
@@ -147,16 +159,16 @@ def popemp_11(dt_find_replace, df_prod, year_max, year_min):
         increased_or_decreased_jobs = 'increased'
     else:
         increased_or_decreased_jobs = 'decreased'
-    dt_find_replace['[POPEMP_11_prod_jobs_pct_diff]'] = f'{prod_jobs_pct_diff:.1%}'
-    dt_find_replace['[POPEMP_11_increased_or_decreased_jobs]'] = increased_or_decreased_jobs
-    dt_find_replace['[POPEMP_11_prod_year_max_total]'] = f'{prod_year_max_total:,.0f}'
+    dt_find_replace['[[POPEMP_11_prod_jobs_pct_diff]]'] = f'{prod_jobs_pct_diff:.1%}'
+    dt_find_replace['[[POPEMP_11_increased_or_decreased_jobs]]'] = increased_or_decreased_jobs
+    dt_find_replace['[[POPEMP_11_prod_year_max_total]]'] = f'{prod_year_max_total:,.0f}'
     return dt_find_replace
 
 def popemp_12(dt_find_replace, df_prod, year_max):
     prod_year_max_total = df_prod[df_prod['Year']==year_max].drop('Year', axis=1).sum(axis=1).values[0]
     most_common_industry = df_prod.columns[df_prod[df_prod['Year']==year_max].isin([df_prod[df_prod['Year']==year_max].drop('Year', axis=1).values.max(1)[0]]).any()][0]
-    dt_find_replace['[POPEMP_12_most_common_industry]'] = most_common_industry
-    dt_find_replace['[POPEMP_12_prod_year_max_total]' ] = f'{prod_year_max_total:,.0f}'
+    dt_find_replace['[[POPEMP_12_most_common_industry]]'] = most_common_industry
+    dt_find_replace['[[POPEMP_12_prod_year_max_total]]' ] = f'{prod_year_max_total:,.0f}'
     return dt_find_replace
 
 def popemp_13(dt_find_replace, df_prod, jurisdiction, year_max, year_min):
@@ -170,12 +182,11 @@ def popemp_13(dt_find_replace, df_prod, jurisdiction, year_max, year_min):
         importer_or_exporter = 'importer'
     else:
         importer_or_exporter = 'exporter'
-    dt_find_replace['[POPEMP_13_prod_year_min]'] = f'{prod_year_min:.2f}'
-    dt_find_replace['[POPEMP_13_prod_year_max]'] = f'{prod_year_max:.2f}'
-    dt_find_replace['[POPEMP_13_increased_or_decreased_ratio]'] = increased_or_decreased_ratio
-    dt_find_replace['[POPEMP_13_importer_or_exporter]'] = importer_or_exporter
+    dt_find_replace['[[POPEMP_13_prod_year_min]]'] = f'{prod_year_min:.2f}'
+    dt_find_replace['[[POPEMP_13_prod_year_max]]'] = f'{prod_year_max:.2f}'
+    dt_find_replace['[[POPEMP_13_increased_or_decreased_ratio]]'] = increased_or_decreased_ratio
+    dt_find_replace['[[POPEMP_13_importer_or_exporter]]'] = importer_or_exporter
     return dt_find_replace
-
 
 def popemp_14(dt_find_replace, df_prod, year_max, county, jurisdiction):
     file_mpo = PATH_OUT / county.replace(' County', '') / jurisdiction / 'tables' / 'POPEMP_14_prod_mpo.csv'
@@ -183,6 +194,7 @@ def popemp_14(dt_find_replace, df_prod, year_max, county, jurisdiction):
     df_mpo = df_mpo.groupby(['Year'], as_index=False).agg(num_jobs_wac=('num_jobs_wac', 'sum'), num_jobs_rac=('num_jobs_rac', 'sum'))
     df_mpo['Ratio'] = df_mpo['num_jobs_wac'] / df_mpo['num_jobs_rac']   
     prod_year_max_region = df_mpo[df_mpo['Year']==year_max]['Ratio'].values[0]
+    df_prod = df_prod.melt(id_vars=['Year'], var_name='Wage Group', value_name='Ratio')
     prod_year_max_low_ratio  = df_prod[(df_prod['Year']==year_max) & (df_prod['Wage Group']=='Earnings &#36;1,250/month or less'     )]['Ratio'].values[0]
     prod_year_max_high_ratio = df_prod[(df_prod['Year']==year_max) & (df_prod['Wage Group']=='Earnings greater than &#36;3,333/month')]['Ratio'].values[0]
     if prod_year_max_low_ratio > 1:
@@ -209,11 +221,11 @@ def popemp_14(dt_find_replace, df_prod, year_max, county, jurisdiction):
                 small_or_modest_or_large_region = 'large'
         else:
             small_or_modest_or_large_region = 'small'
-    dt_find_replace['[POPEMP_14_more_or_less_low_wage_jobs]' ] = more_or_less_low_wage_jobs
-    dt_find_replace['[POPEMP_14_more_or_less_high_wage_jobs]'] = more_or_less_high_wage_jobs
-    dt_find_replace['[POPEMP_14_prod_year_max_region]'           ] = f'{prod_year_max_region:.2f}'
-    dt_find_replace['[POPEMP_14_import_or_export_region]'        ] = import_or_export_region
-    dt_find_replace['[POPEMP_14_small_or_modest_or_large_region]'] = small_or_modest_or_large_region
+    dt_find_replace['[[POPEMP_14_more_or_less_low_wage_jobs]]' ] = more_or_less_low_wage_jobs
+    dt_find_replace['[[POPEMP_14_more_or_less_high_wage_jobs]]'] = more_or_less_high_wage_jobs
+    dt_find_replace['[[POPEMP_14_prod_year_max_region]]'           ] = f'{prod_year_max_region:.2f}'
+    dt_find_replace['[[POPEMP_14_import_or_export_region]]'        ] = import_or_export_region
+    dt_find_replace['[[POPEMP_14_small_or_modest_or_large_region]]'] = small_or_modest_or_large_region
     return dt_find_replace
 
 def popemp_15(dt_find_replace, df_prod, jurisdiction, year_max, year_min):
@@ -228,11 +240,11 @@ def popemp_15(dt_find_replace, df_prod, jurisdiction, year_max, year_min):
         increase_or_decrease_rate_year_min = 'increase'
     else:
         increase_or_decrease_rate_year_min = 'decrease'
-    dt_find_replace['[POPEMP_15_year_back1]'] = year_back1
-    dt_find_replace['[POPEMP_15_prod_rate_diff]'] = f'{abs(prod_rate_diff):.1f}'
-    dt_find_replace['[POPEMP_15_increased_or_decreased_rate]'] = increased_or_decreased_rate
-    dt_find_replace['[POPEMP_15_prod_rate_diff_year_min]'] = f'{abs(prod_rate_diff_year_min):.1f}'
-    dt_find_replace['[POPEMP_15_increase_or_decrease_rate_year_min]'] = increase_or_decrease_rate_year_min
+    dt_find_replace['[[POPEMP_15_year_back1]]'] = year_back1
+    dt_find_replace['[[POPEMP_15_prod_rate_diff]]'] = f'{abs(prod_rate_diff):.1f}'
+    dt_find_replace['[[POPEMP_15_increased_or_decreased_rate]]'] = increased_or_decreased_rate
+    dt_find_replace['[[POPEMP_15_prod_rate_diff_year_min]]'] = f'{abs(prod_rate_diff_year_min):.1f}'
+    dt_find_replace['[[POPEMP_15_increase_or_decrease_rate_year_min]]'] = increase_or_decrease_rate_year_min
     return dt_find_replace
 
 def popemp_16(dt_find_replace, df_prod, df_pct, jurisdiction, county):
@@ -249,56 +261,56 @@ def popemp_16(dt_find_replace, df_prod, df_pct, jurisdiction, county):
     pct_own  = df_pct[df_pct['Geography']==jurisdiction]['Owner occupied' ].values[0]
     pct_rent_county = df_pct[df_pct['Geography']==f'{county} County']['Renter occupied'].values[0]
     pct_own_region  = df_pct[df_pct['Geography']== 'SACOG Region'   ]['Owner occupied' ].values[0]
-    dt_find_replace['[POPEMP_16_prod_total]'] = f'{prod_total:,.0f}'
-    dt_find_replace['[POPEMP_16_more_or_less_renters]'] = more_or_less_renters
-    dt_find_replace['[POPEMP_16_pct_rent]'] = f'{pct_rent:.1%}'
-    dt_find_replace['[POPEMP_16_pct_own]' ] = f'{pct_own:.1%}'
-    dt_find_replace['[POPEMP_16_pct_rent_county]'] = f'{pct_rent_county:.1%}'
-    dt_find_replace['[POPEMP_16_pct_own_region]' ] = f'{pct_own_region:.1%}'
+    dt_find_replace['[[POPEMP_16_prod_total]]'] = f'{prod_total:,.0f}'
+    dt_find_replace['[[POPEMP_16_more_or_less_renters]]'] = more_or_less_renters
+    dt_find_replace['[[POPEMP_16_pct_rent]]'] = f'{pct_rent:.1%}'
+    dt_find_replace['[[POPEMP_16_pct_own]]' ] = f'{pct_own:.1%}'
+    dt_find_replace['[[POPEMP_16_pct_rent_county]]'] = f'{pct_rent_county:.1%}'
+    dt_find_replace['[[POPEMP_16_pct_own_region]]' ] = f'{pct_own_region:.1%}'
     return dt_find_replace
 
 def popemp_18(dt_find_replace, df_prod):
-    prod_25_44_rent_pct   = df_prod[df_prod['Age Group'].isin(['Age 25-34', 'Age 35-44'])]['Renter occupied'].sum() / df_prod[df_prod['Age Group'].isin(['Age 25-34', 'Age 35-44'           ])].sum(numeric_only= True).sum()
-    prod_over_65_rent_pct = df_prod[df_prod['Age Group'].isin(['Age 25-34', 'Age 35-44'])]['Renter occupied'].sum() / df_prod[df_prod['Age Group'].isin(['Age 65-74', 'Age 75-84', 'Age 85+'])].sum(numeric_only= True).sum()
-    dt_find_replace['[POPEMP_18_prod_25_44_rent_pct]'  ] = f'{prod_25_44_rent_pct:.1%}'
-    dt_find_replace['[POPEMP_18_prod_over_65_rent_pct]'] = f'{prod_over_65_rent_pct:.1%}'
+    prod_25_44_rent_pct   = df_prod[df_prod['Age Group'].isin(['Age 25-34', 'Age 35-44'])]['Renter occupied'].sum() / df_prod[df_prod['Age Group'].isin(['Age 25-34', 'Age 35-44'])].sum(numeric_only= True).sum()
+    prod_over_65_rent_pct = df_prod[df_prod['Age Group'].isin(['Age 65-74', 'Age 75-84', 'Age 85+'])].sum(numeric_only= True).sum() / df_prod.sum(numeric_only= True).sum()
+    dt_find_replace['[[POPEMP_18_prod_25_44_rent_pct]]'  ] = f'{prod_25_44_rent_pct:.1%}'
+    dt_find_replace['[[POPEMP_18_prod_over_65_rent_pct]]'] = f'{prod_over_65_rent_pct:.1%}'
     return dt_find_replace
 
 def popemp_20(dt_find_replace, df_pct):
     try:
-        pct_own_black = df_pct[df_pct['Race/Ethnicity']=='Black or African American']['Owner occupied'].values[0]; dt_find_replace['[POPEMP_20_pct_own_black]'] = f'{pct_own_black:.1%}'
+        pct_own_black = df_pct[df_pct['Race/Ethnicity']=='Black or African American']['Owner occupied'].values[0]; dt_find_replace['[[POPEMP_20_pct_own_black]]'] = f'{pct_own_black:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_own_black=None
     try:
-        pct_own_asian = df_pct[df_pct['Race/Ethnicity']=='Asian']['Owner occupied'].values[0]; dt_find_replace['[POPEMP_20_pct_own_asian]'] = f'{pct_own_asian:.1%}'
+        pct_own_asian = df_pct[df_pct['Race/Ethnicity']=='Asian']['Owner occupied'].values[0]; dt_find_replace['[[POPEMP_20_pct_own_asian]]'] = f'{pct_own_asian:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_own_asian=None
     try:
-        pct_own_hispanic = df_pct[df_pct['Race/Ethnicity']=='Hispanic or Latino']['Owner occupied'].values[0]; dt_find_replace['[POPEMP_20_pct_own_hispanic]'] = f'{pct_own_hispanic:.1%}'
+        pct_own_hispanic = df_pct[df_pct['Race/Ethnicity']=='Hispanic or Latino']['Owner occupied'].values[0]; dt_find_replace['[[POPEMP_20_pct_own_hispanic]]'] = f'{pct_own_hispanic:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_own_hispanic=None
     try:
-        pct_own_white = df_pct[df_pct['Race/Ethnicity']=='White (NH)']['Owner occupied'].values[0]; dt_find_replace['[POPEMP_20_pct_own_white]'] = f'{pct_own_white:.1%}'
+        pct_own_white = df_pct[df_pct['Race/Ethnicity']=='White (NH)']['Owner occupied'].values[0]; dt_find_replace['[[POPEMP_20_pct_own_white]]'] = f'{pct_own_white:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_own_white=None
     return dt_find_replace
 
 def popemp_21(dt_find_replace, df_pct):
     most_common_income_rent = df_pct[df_pct['Renter occupied'] == df_pct['Renter occupied'].max()]['Income Level'].values[0]
     most_common_income_own  = df_pct[df_pct['Owner occupied' ] == df_pct['Owner occupied' ].max()]['Income Level'].values[0]
-    dt_find_replace['[POPEMP_21_most_common_income_rent]'] = most_common_income_rent
-    dt_find_replace['[POPEMP_21_most_common_income_own]'] = most_common_income_own
+    dt_find_replace['[[POPEMP_21_most_common_income_rent]]'] = most_common_income_rent
+    dt_find_replace['[[POPEMP_21_most_common_income_own]]'] = most_common_income_own
     return dt_find_replace
 
 def popemp_22(dt_find_replace, df_pct):
     pct_sfd_own = df_pct[df_pct['Housing Type']=='Detached single-family homes']['Owner occupied'].values[0]
     pct_mf_own  = df_pct[df_pct['Housing Type']=='Multi-family housing'        ]['Owner occupied'].values[0]
-    dt_find_replace['[POPEMP_22_pct_sfd_own]'] = f'{pct_sfd_own:.1%}'
-    dt_find_replace['[POPEMP_22_pct_mf_own]' ] = f'{pct_mf_own:.1%}'
+    dt_find_replace['[[POPEMP_22_pct_sfd_own]]'] = f'{pct_sfd_own:.1%}'
+    dt_find_replace['[[POPEMP_22_pct_mf_own]]' ] = f'{pct_mf_own:.1%}'
     return dt_find_replace
 
 def popemp_23(dt_find_replace, df_prod, df_pct, jurisdiction):
@@ -309,23 +321,37 @@ def popemp_23(dt_find_replace, df_prod, df_pct, jurisdiction):
     most_common_household = df_t[df_t['Population']==prod_most_common_household]['Household Type'].values[0]
     pct_most_common_household = df_pct[df_pct['Geography']==jurisdiction][most_common_household            ].values[0]
     pct_female_householder    = df_pct[df_pct['Geography']==jurisdiction]['Female-headed family households'].values[0]
-    dt_find_replace['[POPEMP_23_most_common_household]'] = most_common_household
-    dt_find_replace['[POPEMP_23_pct_most_common_household]'] = f'{pct_most_common_household:.1%}'
-    dt_find_replace['[POPEMP_23_pct_female_householder]'   ] = f'{pct_female_householder:.1%}'
+    dt_find_replace['[[POPEMP_23_most_common_household]]'] = most_common_household
+    dt_find_replace['[[POPEMP_23_pct_most_common_household]]'] = f'{pct_most_common_household:.1%}'
+    dt_find_replace['[[POPEMP_23_pct_female_householder]]'   ] = f'{pct_female_householder:.1%}'
     return dt_find_replace
 
 def popemp_25(dt_find_replace, df_prod):
     displacement_pct   = df_prod[df_prod['Typology'] == 'Susceptible to or Experiencing Displacement'].sum(numeric_only=True).sum() / df_prod.sum(numeric_only=True).sum()
     gentrification_pct = df_prod[df_prod['Typology'] == 'At Risk of or Experiencing Gentrification'  ].sum(numeric_only=True).sum() / df_prod.sum(numeric_only=True).sum()
     excluded_pct       = df_prod[df_prod['Typology'] == 'At Risk of or Experiencing Exclusion'       ].sum(numeric_only=True).sum() / df_prod.sum(numeric_only=True).sum()
-    dt_find_replace['[POPEMP_25_displacement_pct]'  ] = f'{displacement_pct:.1%}'
-    dt_find_replace['[POPEMP_25_gentrification_pct]'] = f'{gentrification_pct:.1%}'
-    dt_find_replace['[POPEMP_25_excluded_pct]'      ] = f'{excluded_pct:.1%}'
+    dt_find_replace['[[POPEMP_25_displacement_pct]]'  ] = f'{displacement_pct:.1%}'
+    dt_find_replace['[[POPEMP_25_gentrification_pct]]'] = f'{gentrification_pct:.1%}'
+    dt_find_replace['[[POPEMP_25_excluded_pct]]'      ] = f'{excluded_pct:.1%}'
+    return dt_find_replace
+
+def popemp_27(dt_find_replace, df_prod, jurisdiction, year_min, year_max):
+    prod_year_min_age = df_prod[df_prod['Year']==year_min][jurisdiction].values[0]
+    prod_year_max_age = df_prod[df_prod['Year']==year_max][jurisdiction].values[0]
+    if prod_year_max_age > prod_year_min_age:
+        increased_or_decreased_age = 'increased'
+    else:
+        increased_or_decreased_age = 'decreased'
+    dt_find_replace['[[POPEMP_27_year_min]]'] = year_min
+    dt_find_replace['[[POPEMP_27_year_max]]'] = year_max
+    dt_find_replace['[[POPEMP_27_prod_year_min_age]]'] = f'{abs(prod_year_min_age):.1f}'
+    dt_find_replace['[[POPEMP_27_prod_year_max_age]]'] = f'{abs(prod_year_max_age):.1f}'
+    dt_find_replace['[[POPEMP_27_increased_or_decreased_age]]'] = increased_or_decreased_age
     return dt_find_replace
 
 def hsg_1(dt_find_replace, df_prod, jurisdiction, county):
     year_min = 2010
-    year_max = 2024
+    year_max = 2025
     prod_year_min_sfd = df_prod[df_prod['Housing Type'] == 'Single Family Detached'        ][f'{jurisdiction} ({year_min})'].values[0]
     prod_year_min_sfa = df_prod[df_prod['Housing Type'] == 'Single Family Attached'        ][f'{jurisdiction} ({year_min})'].values[0]
     prod_year_min_mfs = df_prod[df_prod['Housing Type'] == 'Multifamily: Two to Four Units'][f'{jurisdiction} ({year_min})'].values[0]
@@ -363,33 +389,33 @@ def hsg_1(dt_find_replace, df_prod, jurisdiction, county):
         above_or_below_region_sfd = 'above'
     else:
         above_or_below_region_sfd = 'below'
-    dt_find_replace['[HSG_1_year_min]'] = year_min
-    dt_find_replace['[HSG_1_year_max]'] = year_max
-    dt_find_replace['[HSG_1_prod_year_min_sfd]'] = f'{prod_year_min_sfd:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_min_sfa]'] = f'{prod_year_min_sfa:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_min_mfs]'] = f'{prod_year_min_mfs:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_min_mfl]'] = f'{prod_year_min_mfl:,.0f}'
-    dt_find_replace['[HSG_1_more_or_less_units]'] = more_or_less_units
-    dt_find_replace['[HSG_1_prod_year_max_sfd]'] = f'{prod_year_max_sfd:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_max_sfa]'] = f'{prod_year_max_sfa:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_max_mfs]'] = f'{prod_year_max_mfs:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_max_mfl]'] = f'{prod_year_max_mfl:,.0f}'
-    dt_find_replace['[HSG_1_prod_year_max_mh]' ] = f'{prod_year_max_mh:,.0f}'
-    dt_find_replace['[HSG_1_most_growth_housing_type]'] = most_growth_housing_type
-    dt_find_replace['[HSG_1_prod_pct_diff]'         ] = f'{prod_pct_diff:.1%}'
-    dt_find_replace['[HSG_1_prod_pct_diff_county]'  ] = f'{prod_pct_diff_county:.1%}'
-    dt_find_replace['[HSG_1_increased_or_decreased]'] = increased_or_decreased
-    dt_find_replace['[HSG_1_above_or_below_county]' ] = above_or_below_county
-    dt_find_replace['[HSG_1_above_or_below_region]' ] = above_or_below_region
-    dt_find_replace['[HSG_1_above_or_below_region_sfd]' ] = above_or_below_region_sfd
+    dt_find_replace['[[HSG_1_year_min]]'] = year_min
+    dt_find_replace['[[HSG_1_year_max]]'] = year_max
+    dt_find_replace['[[HSG_1_prod_year_min_sfd]]'] = f'{prod_year_min_sfd:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_min_sfa]]'] = f'{prod_year_min_sfa:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_min_mfs]]'] = f'{prod_year_min_mfs:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_min_mfl]]'] = f'{prod_year_min_mfl:,.0f}'
+    dt_find_replace['[[HSG_1_more_or_less_units]]'] = more_or_less_units
+    dt_find_replace['[[HSG_1_prod_year_max_sfd]]'] = f'{prod_year_max_sfd:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_max_sfa]]'] = f'{prod_year_max_sfa:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_max_mfs]]'] = f'{prod_year_max_mfs:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_max_mfl]]'] = f'{prod_year_max_mfl:,.0f}'
+    dt_find_replace['[[HSG_1_prod_year_max_mh]]' ] = f'{prod_year_max_mh:,.0f}'
+    dt_find_replace['[[HSG_1_most_growth_housing_type]]'] = most_growth_housing_type
+    dt_find_replace['[[HSG_1_prod_pct_diff]]'         ] = f'{prod_pct_diff:.1%}'
+    dt_find_replace['[[HSG_1_prod_pct_diff_county]]'  ] = f'{prod_pct_diff_county:.1%}'
+    dt_find_replace['[[HSG_1_increased_or_decreased]]'] = increased_or_decreased
+    dt_find_replace['[[HSG_1_above_or_below_county]]' ] = above_or_below_county
+    dt_find_replace['[[HSG_1_above_or_below_region]]' ] = above_or_below_region
+    dt_find_replace['[[HSG_1_above_or_below_region_sfd]]' ] = above_or_below_region_sfd
     return dt_find_replace
 
 def hsg_2(dt_find_replace, df_pct, jurisdiction):
     df_pct = df_pct.set_index(df_pct.columns[0]).T.reset_index(names='Geography')
     pct_vacant        = df_pct[df_pct['Geography']==jurisdiction  ]['Vacant housing units'].values[0]
     pct_vacant_region = df_pct[df_pct['Geography']=='SACOG Region']['Vacant housing units'].values[0]
-    dt_find_replace['[HSG_2_pct_vacant]'       ] = f'{pct_vacant:.1%}'
-    dt_find_replace['[HSG_2_pct_vacant_region]'] = f'{pct_vacant_region:.1%}'
+    dt_find_replace['[[HSG_2_pct_vacant]]'       ] = f'{pct_vacant:.1%}'
+    dt_find_replace['[[HSG_2_pct_vacant_region]]'] = f'{pct_vacant_region:.1%}'
     return dt_find_replace
 
 def hsg_3(dt_find_replace, df_pct, county, jurisdiction):
@@ -408,13 +434,13 @@ def hsg_3(dt_find_replace, df_pct, county, jurisdiction):
     most_common_vacancy_type_region_1 = df_t_region[df_t_region['Pct']==pct_most_common_vacancy_type_region_1]['Vacancy Type'].values[0].lower()
     most_common_vacancy_type_region_2 = df_t_region[df_t_region['Pct']==pct_most_common_vacancy_type_region_2]['Vacancy Type'].values[0].lower()
     most_common_vacancy_type_region_3 = df_t_region[df_t_region['Pct']==pct_most_common_vacancy_type_region_3]['Vacancy Type'].values[0].lower()
-    dt_find_replace['[HSG_3_pct_most_common_vacancy_type]'] = f'{pct_most_common_vacancy_type:.1%}'
-    dt_find_replace['[HSG_3_most_common_vacancy_type]'    ] = most_common_vacancy_type
-    dt_find_replace['[HSG_3_most_common_vacancy_type_region_1]'] = most_common_vacancy_type_region_1
-    dt_find_replace['[HSG_3_most_common_vacancy_type_region_2]'] = most_common_vacancy_type_region_2
-    dt_find_replace['[HSG_3_most_common_vacancy_type_region_3]'] = most_common_vacancy_type_region_3
-    dt_find_replace['[HSG_3_sup_vacant_for_sale_pct]'] = f'{sup_vacant_for_sale_pct:.1%}'
-    dt_find_replace['[HSG_3_sup_vacant_for_rent_pct]'] = f'{sup_vacant_for_rent_pct:.1%}'
+    dt_find_replace['[[HSG_3_pct_most_common_vacancy_type]]'] = f'{pct_most_common_vacancy_type:.1%}'
+    dt_find_replace['[[HSG_3_most_common_vacancy_type]]'    ] = most_common_vacancy_type
+    dt_find_replace['[[HSG_3_most_common_vacancy_type_region_1]]'] = most_common_vacancy_type_region_1
+    dt_find_replace['[[HSG_3_most_common_vacancy_type_region_2]]'] = most_common_vacancy_type_region_2
+    dt_find_replace['[[HSG_3_most_common_vacancy_type_region_3]]'] = most_common_vacancy_type_region_3
+    dt_find_replace['[[HSG_3_sup_vacant_for_sale_pct]]'] = f'{sup_vacant_for_sale_pct:.1%}'
+    dt_find_replace['[[HSG_3_sup_vacant_for_rent_pct]]'] = f'{sup_vacant_for_rent_pct:.1%}'
     return dt_find_replace
 
 def hsg_4(dt_find_replace, df_prod, df_pct):
@@ -422,40 +448,40 @@ def hsg_4(dt_find_replace, df_prod, df_pct):
     most_common_year_built = df_pct[df_pct['Percent']==pct_most_common_year_built]['Year Built'].values[0].replace('Built ', '')
     pct_year_built_2010_or_later  = df_pct [df_pct ['Year Built']=='Built 2010 or later']['Percent'   ].values[0]
     prod_year_built_2010_or_later = df_prod[df_prod['Year Built']=='Built 2010 or later']['Households'].values[0]
-    dt_find_replace['[HSG_4_pct_most_common_year_built]'  ] = f'{pct_most_common_year_built:.1%}'
-    dt_find_replace['[HSG_4_most_common_year_built]'      ] = most_common_year_built
-    dt_find_replace['[HSG_4_pct_year_built_2010_or_later]'] = f'{pct_year_built_2010_or_later:.1%}'
-    dt_find_replace['[HSG_4_prod_year_built_2010_or_later]'] = f'{prod_year_built_2010_or_later:,.0f}'
+    dt_find_replace['[[HSG_4_pct_most_common_year_built]]'  ] = f'{pct_most_common_year_built:.1%}'
+    dt_find_replace['[[HSG_4_most_common_year_built]]'      ] = most_common_year_built
+    dt_find_replace['[[HSG_4_pct_year_built_2010_or_later]]'] = f'{pct_year_built_2010_or_later:.1%}'
+    dt_find_replace['[[HSG_4_prod_year_built_2010_or_later]]'] = f'{prod_year_built_2010_or_later:,.0f}'
     return dt_find_replace
 
 def hsg_5(dt_find_replace, df_prod):
     prod_3_plus_bedrooms = df_prod[df_prod['Number of Bedrooms'].isin(['3-4 bedrooms', '5 or more bedrooms'])].sum(numeric_only= True).sum()
     prod_3_plus_bedrooms_own_pct  = df_prod[df_prod['Number of Bedrooms'].isin(['3-4 bedrooms', '5 or more bedrooms'])]['Owner occupied' ].sum() / prod_3_plus_bedrooms
     prod_3_plus_bedrooms_rent_pct = df_prod[df_prod['Number of Bedrooms'].isin(['3-4 bedrooms', '5 or more bedrooms'])]['Renter occupied'].sum() / prod_3_plus_bedrooms
-    dt_find_replace['[HSG_5_prod_3_plus_bedrooms]'] = f'{prod_3_plus_bedrooms:,.0f}'
-    dt_find_replace['[HSG_5_prod_3_plus_bedrooms_own_pct]' ] = f'{prod_3_plus_bedrooms_own_pct:.1%}'
-    dt_find_replace['[HSG_5_prod_3_plus_bedrooms_rent_pct]'] = f'{prod_3_plus_bedrooms_rent_pct:.1%}'
+    dt_find_replace['[[HSG_5_prod_3_plus_bedrooms]]'] = f'{prod_3_plus_bedrooms:,.0f}'
+    dt_find_replace['[[HSG_5_prod_3_plus_bedrooms_own_pct]]' ] = f'{prod_3_plus_bedrooms_own_pct:.1%}'
+    dt_find_replace['[[HSG_5_prod_3_plus_bedrooms_rent_pct]]'] = f'{prod_3_plus_bedrooms_rent_pct:.1%}'
     return dt_find_replace
 
 def hsg_6(dt_find_replace, df_pct):
     try:
-        pct_kitchen_rent  = df_pct[df_pct['Housing Issue']=='Lacking kitchen facilities' ]['Renter occupied'].values[0]; dt_find_replace['[HSG_6_pct_kitchen_rent]'  ] = f'{pct_kitchen_rent:.1%}'
+        pct_kitchen_rent  = df_pct[df_pct['Housing Issue']=='Lacking kitchen facilities' ]['Renter occupied'].values[0]; dt_find_replace['[[HSG_6_pct_kitchen_rent]]'  ] = f'{pct_kitchen_rent:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_kitchen_rent=None
     try:
-        pct_kitchen_own = df_pct[df_pct['Housing Issue']=='Lacking kitchen facilities' ]['Owner occupied' ].values[0]; dt_find_replace['[HSG_6_pct_kitchen_own]'   ] = f'{pct_kitchen_own:.1%}'
+        pct_kitchen_own = df_pct[df_pct['Housing Issue']=='Lacking kitchen facilities' ]['Owner occupied' ].values[0]; dt_find_replace['[[HSG_6_pct_kitchen_own]]'   ] = f'{pct_kitchen_own:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_kitchen_own=None
     try:
-        pct_plumbing_rent = df_pct[df_pct['Housing Issue']=='Lacking plumbing facilities']['Renter occupied'].values[0]; dt_find_replace['[HSG_6_pct_plumbing_rent]' ] = f'{pct_plumbing_rent:.1%}'
+        pct_plumbing_rent = df_pct[df_pct['Housing Issue']=='Lacking plumbing facilities']['Renter occupied'].values[0]; dt_find_replace['[[HSG_6_pct_plumbing_rent]]' ] = f'{pct_plumbing_rent:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_plumbing_rent=None
-    try: pct_plumbing_own = df_pct[df_pct['Housing Issue']=='Lacking plumbing facilities']['Owner occupied' ].values[0]; dt_find_replace['[HSG_6_pct_plumbing_own]'  ] = f'{pct_plumbing_own:.1%}'
+    try: pct_plumbing_own = df_pct[df_pct['Housing Issue']=='Lacking plumbing facilities']['Owner occupied' ].values[0]; dt_find_replace['[[HSG_6_pct_plumbing_own]]'  ] = f'{pct_plumbing_own:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_plumbing_own=None
     return dt_find_replace
 
@@ -469,11 +495,11 @@ def hsg_7(dt_find_replace, df_pct, jurisdiction):
     pct_most_common_home_prod_region_2 = df_t_region[df_t_region['Pct']<df_t_region['Pct'].max()]['Pct'].max()
     most_common_home_prod_region_1 = df_t_region[df_t_region['Pct']==pct_most_common_home_prod_region_1]['Home Value'].values[0].replace('Units valued ', '')
     most_common_home_prod_region_2 = df_t_region[df_t_region['Pct']==pct_most_common_home_prod_region_2]['Home Value'].values[0].replace('Units valued ', '')
-    dt_find_replace['[HSG_7_year_max]'] = ACS_YEAR_MAX
-    dt_find_replace['[HSG_7_pct_most_common_home_value]'] = f'{pct_most_common_home_value:.1%}'
-    dt_find_replace['[HSG_7_most_common_home_value]'        ] = most_common_home_value
-    dt_find_replace['[HSG_7_most_common_home_prod_region_1]'] = most_common_home_prod_region_1
-    dt_find_replace['[HSG_7_most_common_home_prod_region_2]'] = most_common_home_prod_region_2
+    dt_find_replace['[[HSG_7_year_max]]'] = ACS_YEAR_MAX
+    dt_find_replace['[[HSG_7_pct_most_common_home_value]]'] = f'{pct_most_common_home_value:.1%}'
+    dt_find_replace['[[HSG_7_most_common_home_value]]'        ] = most_common_home_value
+    dt_find_replace['[[HSG_7_most_common_home_prod_region_1]]'] = most_common_home_prod_region_1
+    dt_find_replace['[[HSG_7_most_common_home_prod_region_2]]'] = most_common_home_prod_region_2
     return dt_find_replace
 
 def hsg_8(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min):
@@ -499,19 +525,18 @@ def hsg_8(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min):
         above_or_below_region = 'above'
     else:
         above_or_below_region = 'below'
-    breakpoint()
-    dt_find_replace['[HSG_8_year_min]'] = year_min
-    dt_find_replace['[HSG_8_year_max]'] = year_max
-    dt_find_replace['[HSG_8_prod_year_min]'] = f'${prod_year_min:,.0f}'
-    dt_find_replace['[HSG_8_prod_year_max]'] = f'${prod_year_max:,.0f}'
-    dt_find_replace['[HSG_8_prod_home_price_inc]'] = f'{prod_home_price_inc:.1%}'
-    dt_find_replace['[HSG_8_prod_year_min_county]'] = f'${prod_year_min_county:,.0f}'
-    dt_find_replace['[HSG_8_prod_year_max_county]'] = f'${prod_year_max_county:,.0f}'
-    dt_find_replace['[HSG_8_prod_year_min_region]'] = f'${prod_year_min_region:,.0f}'
-    dt_find_replace['[HSG_8_prod_year_max_region]'] = f'${prod_year_max_region:,.0f}'
-    dt_find_replace['[HSG_8_increased_or_decreased]'] = increased_or_decreased
-    dt_find_replace['[HSG_8_above_or_below_county]' ] = above_or_below_county
-    dt_find_replace['[HSG_8_above_or_below_region]' ] = above_or_below_region
+    dt_find_replace['[[HSG_8_year_min]]'] = year_min
+    dt_find_replace['[[HSG_8_year_max]]'] = year_max
+    dt_find_replace['[[HSG_8_prod_year_min]]'] = f'${prod_year_min:,.0f}'
+    dt_find_replace['[[HSG_8_prod_year_max]]'] = f'${prod_year_max:,.0f}'
+    dt_find_replace['[[HSG_8_prod_home_price_inc]]'] = f'{prod_home_price_inc:.1%}'
+    dt_find_replace['[[HSG_8_prod_year_min_county]]'] = f'${prod_year_min_county:,.0f}'
+    dt_find_replace['[[HSG_8_prod_year_max_county]]'] = f'${prod_year_max_county:,.0f}'
+    dt_find_replace['[[HSG_8_prod_year_min_region]]'] = f'${prod_year_min_region:,.0f}'
+    dt_find_replace['[[HSG_8_prod_year_max_region]]'] = f'${prod_year_max_region:,.0f}'
+    dt_find_replace['[[HSG_8_increased_or_decreased]]'] = increased_or_decreased
+    dt_find_replace['[[HSG_8_above_or_below_county]]' ] = above_or_below_county
+    dt_find_replace['[[HSG_8_above_or_below_region]]' ] = above_or_below_region
     return dt_find_replace
 
 def hsg_9(dt_find_replace, df_pct, jurisdiction, county):
@@ -524,12 +549,12 @@ def hsg_9(dt_find_replace, df_pct, jurisdiction, county):
     df_t_county = df_pct[df_pct['Geography']==f'{county} County'].sum(axis=0, numeric_only=True).reset_index().rename(columns={'index':'Rent Price', 0:'Pct'})
     pct_most_common_rent_price_county = df_t_county['Pct'].max()
     most_common_rent_price_county   = df_t_county[df_t_county['Pct']==pct_most_common_rent_price_county]['Rent Price'].values[0].replace('Rent ', '')
-    dt_find_replace['[HSG_9_pct_most_common_rent_price]'       ] = f'{pct_most_common_rent_price:.1%}'
-    dt_find_replace['[HSG_9_pct_most_common_rent_price_2]'     ] = f'{pct_most_common_rent_price_2:.1%}'
-    dt_find_replace['[HSG_9_pct_most_common_rent_price_county]'] = f'{pct_most_common_rent_price_county:.1%}'
-    dt_find_replace['[HSG_9_most_common_rent_price]'       ] = most_common_rent_price
-    dt_find_replace['[HSG_9_most_common_rent_price_2]'     ] = most_common_rent_price_2
-    dt_find_replace['[HSG_9_most_common_rent_price_county]'] = most_common_rent_price_county
+    dt_find_replace['[[HSG_9_pct_most_common_rent_price]]'       ] = f'{pct_most_common_rent_price:.1%}'
+    dt_find_replace['[[HSG_9_pct_most_common_rent_price_2]]'     ] = f'{pct_most_common_rent_price_2:.1%}'
+    dt_find_replace['[[HSG_9_pct_most_common_rent_price_county]]'] = f'{pct_most_common_rent_price_county:.1%}'
+    dt_find_replace['[[HSG_9_most_common_rent_price]]'       ] = most_common_rent_price
+    dt_find_replace['[[HSG_9_most_common_rent_price_2]]'     ] = most_common_rent_price_2
+    dt_find_replace['[[HSG_9_most_common_rent_price_county]]'] = most_common_rent_price_county
     return dt_find_replace
 
 def hsg_10(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min):
@@ -555,60 +580,69 @@ def hsg_10(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min):
     else:
         increased_or_decreased_rent_region = 'decreased'
     prod_year_max_income = prod_year_max/0.3*12
-    dt_find_replace['[HSG_10_year_min]'] = year_min
-    dt_find_replace['[HSG_10_year_max]'] = year_max
-    dt_find_replace['[HSG_10_prod_year_min]'] = f'${prod_year_min:,.0f}'
-    dt_find_replace['[HSG_10_prod_year_max]'] = f'${prod_year_max:,.0f}'
-    dt_find_replace['[HSG_10_prod_year_min_county]'] = f'${prod_year_min_county:,.0f}'
-    dt_find_replace['[HSG_10_prod_year_max_county]'] = f'${prod_year_max_county:,.0f}'
-    dt_find_replace['[HSG_10_prod_year_min_region]'] = f'${prod_year_min_region:,.0f}'
-    dt_find_replace['[HSG_10_prod_year_max_region]'] = f'${prod_year_max_region:,.0f}'
-    dt_find_replace['[HSG_10_prod_rent_pct_diff]'       ] = f'{prod_rent_pct_diff:.1%}'
-    dt_find_replace['[HSG_10_prod_rent_pct_diff_county]'] = f'{prod_rent_pct_diff_county:.1%}'
-    dt_find_replace['[HSG_10_prod_rent_pct_diff_region]'] = f'{prod_rent_pct_diff_region:.1%}'
-    dt_find_replace['[HSG_10_increased_or_decreased_rent]'     ] = increased_or_decreased_rent
-    dt_find_replace['[HSG_10_increased_or_decreased_rent_county]'] = increased_or_decreased_rent_county
-    dt_find_replace['[HSG_10_increased_or_decreased_rent_region]'] = increased_or_decreased_rent_region
-    dt_find_replace['[HSG_10_increase_or_decrease_rent_region]'] = increased_or_decreased_rent_region[:-1]
-    dt_find_replace['[HSG_10_prod_year_max_income]'] = f'${prod_year_max_income:,.0f}'
+    dt_find_replace['[[HSG_10_year_min]]'] = year_min
+    dt_find_replace['[[HSG_10_year_max]]'] = year_max
+    dt_find_replace['[[HSG_10_prod_year_min]]'] = f'${prod_year_min:,.0f}'
+    dt_find_replace['[[HSG_10_prod_year_max]]'] = f'${prod_year_max:,.0f}'
+    dt_find_replace['[[HSG_10_prod_year_min_county]]'] = f'${prod_year_min_county:,.0f}'
+    dt_find_replace['[[HSG_10_prod_year_max_county]]'] = f'${prod_year_max_county:,.0f}'
+    dt_find_replace['[[HSG_10_prod_year_min_region]]'] = f'${prod_year_min_region:,.0f}'
+    dt_find_replace['[[HSG_10_prod_year_max_region]]'] = f'${prod_year_max_region:,.0f}'
+    dt_find_replace['[[HSG_10_prod_rent_pct_diff]]'       ] = f'{prod_rent_pct_diff:.1%}'
+    dt_find_replace['[[HSG_10_prod_rent_pct_diff_county]]'] = f'{prod_rent_pct_diff_county:.1%}'
+    dt_find_replace['[[HSG_10_prod_rent_pct_diff_region]]'] = f'{prod_rent_pct_diff_region:.1%}'
+    dt_find_replace['[[HSG_10_increased_or_decreased_rent]]'     ] = increased_or_decreased_rent
+    dt_find_replace['[[HSG_10_increased_or_decreased_rent_county]]'] = increased_or_decreased_rent_county
+    dt_find_replace['[[HSG_10_increased_or_decreased_rent_region]]'] = increased_or_decreased_rent_region
+    dt_find_replace['[[HSG_10_increase_or_decrease_rent_region]]'] = increased_or_decreased_rent_region[:-1]
+    dt_find_replace['[[HSG_10_prod_year_max_income]]'] = f'${prod_year_max_income:,.0f}'
     return dt_find_replace
 
 def hsg_11(dt_find_replace, df_prod):
     try:
-        prod_total = df_prod['Number of Permits'].sum(); dt_find_replace['[HSG_11_prod_total]'] = f'{prod_total:,.0f}'
+        prod_total = df_prod['Number of Permits'].sum()
+        dt_find_replace['[[HSG_11_prod_total]]'] = f'{prod_total:,.0f}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         prod_total=None
     try:
-        prod_above_mod_pct = df_prod[df_prod['Income Group']=='ABOVE MOD PERMITS']['Number of Permits'].values[0] / prod_total; dt_find_replace['[HSG_11_prod_above_mod_pct]'] = f'{prod_above_mod_pct:.1%}'
+        prod_above_mod_pct = df_prod[df_prod['Income Group']=='Above Moderate']['Number of Permits'].values[0] / prod_total
+        dt_find_replace['[[HSG_11_prod_above_mod_pct]]'] = f'{prod_above_mod_pct:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         prod_above_mod_pct=None
     try:
-        prod_mod_pct = df_prod[df_prod['Income Group']=='MOD PERMITS']['Number of Permits'].values[0] / prod_total; dt_find_replace['[HSG_11_prod_mod_pct]'] = f'{prod_mod_pct:.1%}'
+        prod_mod_pct = df_prod[df_prod['Income Group']=='Moderate']['Number of Permits'].values[0] / prod_total
+        dt_find_replace['[[HSG_11_prod_mod_pct]]'] = f'{prod_mod_pct:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         prod_mod_pct=None
     try:
-        prod_low_pct = df_prod[df_prod['Income Group'].isin(['LI PERMITS', 'VLI PERMITS'])]['Number of Permits'].sum() / prod_total; dt_find_replace['[HSG_11_prod_low_pct]'] = f'{prod_low_pct:.1%}'
+        prod_low_pct = df_prod[df_prod['Income Group'].isin(['Low', 'Very Low'])]['Number of Permits'].sum() / prod_total
+        dt_find_replace['[[HSG_11_prod_low_pct]]'] = f'{prod_low_pct:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         prod_low_pct=None
     return dt_find_replace
 
-## TODO: RISK_1
-def risk_1(dt_find_replace, df_prod):
-    pass
+def risk_1(dt_find_replace, df_prod, df_pct, jurisdiction):
+    df_prod = df_prod.fillna(0)
+    df_pct  = df_pct .fillna(0)
+    prod_total_assisted = df_prod[df_prod['Risk Level']=='Total Assisted Units in Database'][jurisdiction].values[0]
+    pct_high_or_very_high = df_pct[df_pct['Risk Level']=='High'][jurisdiction].values[0] + df_pct[df_pct['Risk Level']=='Very High'][jurisdiction].values[0]
+    dt_find_replace['[[RISK_1_prod_total_assisted]]'] = f'{prod_total_assisted:,.0f}'
+    dt_find_replace['[[RISK_1_pct_high_or_very_high]]'] = f'{pct_high_or_very_high:.1%}'
+    return dt_find_replace
 
 def over_1(dt_find_replace, df_pct):
     pct_rent_more_than_15 = df_pct[df_pct['Housing Tenure']=='Renter occupied']['More than 1.5 occupants per room'].values[0]
     pct_own_more_than_15  = df_pct[df_pct['Housing Tenure']=='Owner occupied' ]['More than 1.5 occupants per room'].values[0]
     pct_rent_1_to_15      = df_pct[df_pct['Housing Tenure']=='Renter occupied']['1.01 to 1.5 occupants per room'  ].values[0]
     pct_own_1_to_15       = df_pct[df_pct['Housing Tenure']=='Owner occupied' ]['1.01 to 1.5 occupants per room'  ].values[0]
-    dt_find_replace['[OVER_1_pct_rent_more_than_15]'] = f'{pct_rent_more_than_15:.1%}'
-    dt_find_replace['[OVER_1_pct_own_more_than_15]' ] = f'{pct_own_more_than_15:.1%}'
-    dt_find_replace['[OVER_1_pct_rent_1_to_15]'] = f'{pct_rent_1_to_15:.1%}'
-    dt_find_replace['[OVER_1_pct_own_1_to_15]' ] = f'{pct_own_1_to_15:.1%}'
+    dt_find_replace['[[OVER_1_pct_rent_more_than_15]]'] = f'{pct_rent_more_than_15:.1%}'
+    dt_find_replace['[[OVER_1_pct_own_more_than_15]]' ] = f'{pct_own_more_than_15:.1%}'
+    dt_find_replace['[[OVER_1_pct_rent_1_to_15]]'] = f'{pct_rent_1_to_15:.1%}'
+    dt_find_replace['[[OVER_1_pct_own_1_to_15]]' ] = f'{pct_own_1_to_15:.1%}'
     return dt_find_replace
 
 def over_3(dt_find_replace, df_pct, jurisdiction):
@@ -616,14 +650,14 @@ def over_3(dt_find_replace, df_pct, jurisdiction):
     prod_most_overcrowded_ethnicity = df_pct[df_pct['Geography']==jurisdiction].max(axis=1, numeric_only=True).values[0]
     df_t = df_pct[df_pct['Geography']==jurisdiction].sum(axis=0, numeric_only=True).reset_index().rename(columns={'index':'Race/Ethnicity', 0:'Population'})
     most_overcrowded_ethnicity = df_t[df_t['Population']==prod_most_overcrowded_ethnicity]['Race/Ethnicity'].values[0]
-    dt_find_replace['[OVER_3_most_overcrowded_ethnicity]'] = most_overcrowded_ethnicity
+    dt_find_replace['[[OVER_3_most_overcrowded_ethnicity]]'] = most_overcrowded_ethnicity
     return dt_find_replace
 
 def over_4(dt_find_replace, df_pct):
     pct_below_50_ami_15_plus = df_pct[df_pct['Income Level'].isin(['0%-30% of AMI', '31%-50% of AMI'])]['More than 1.5 occupants per room'].sum()
     pct_over_100_ami_15_plus = df_pct[df_pct['Income Level'].isin(['Greater than 100% of AMI'       ])]['More than 1.5 occupants per room'].sum()
-    dt_find_replace['[OVER_4_pct_below_50_ami_15_plus]' ] = f'{pct_below_50_ami_15_plus:.1%}'
-    dt_find_replace['[OVER_4_pct_over_100_ami_15_plus]' ] = f'{pct_over_100_ami_15_plus:.1%}'
+    dt_find_replace['[[OVER_4_pct_below_50_ami_15_plus]]' ] = f'{pct_below_50_ami_15_plus:.1%}'
+    dt_find_replace['[[OVER_4_pct_over_100_ami_15_plus]]' ] = f'{pct_over_100_ami_15_plus:.1%}'
     return dt_find_replace
 
 def over_5(dt_find_replace, df_prod, df_pct):
@@ -633,12 +667,12 @@ def over_5(dt_find_replace, df_prod, df_pct):
     pct_less_than_30_ami_50_plus  = df_pct[df_pct['Income Level']=='0%-30% of AMI'           ]['50%+ of income used for housing'  ].values[0]
     pct_100_plus_ami_50_plus      = df_pct[df_pct['Income Level']=='Greater than 100% of AMI']['50%+ of income used for housing'  ].values[0]
     pct_100_plus_ami_less_than_30 = df_pct[df_pct['Income Level']=='Greater than 100% of AMI']['0%-30% of income used for housing'].values[0]
-    dt_find_replace['[OVER_5_prod_less_than_30_pct]'] = f'{prod_less_than_30_pct:.1%}'
-    dt_find_replace['[OVER_5_prod_30_50_pct]'       ] = f'{prod_30_50_pct:.1%}'
-    dt_find_replace['[OVER_5_prod_50_plus_pct]'     ] = f'{prod_50_plus_pct:.1%}'
-    dt_find_replace['[OVER_5_pct_less_than_30_ami_50_plus]' ] = f'{pct_less_than_30_ami_50_plus:.1%}'
-    dt_find_replace['[OVER_5_pct_100_plus_ami_50_plus]'     ] = f'{pct_100_plus_ami_50_plus:.1%}'
-    dt_find_replace['[OVER_5_pct_100_plus_ami_less_than_30]'] = f'{pct_100_plus_ami_less_than_30:.1%}'
+    dt_find_replace['[[OVER_5_prod_less_than_30_pct]]'] = f'{prod_less_than_30_pct:.1%}'
+    dt_find_replace['[[OVER_5_prod_30_50_pct]]'       ] = f'{prod_30_50_pct:.1%}'
+    dt_find_replace['[[OVER_5_prod_50_plus_pct]]'     ] = f'{prod_50_plus_pct:.1%}'
+    dt_find_replace['[[OVER_5_pct_less_than_30_ami_50_plus]]' ] = f'{pct_less_than_30_ami_50_plus:.1%}'
+    dt_find_replace['[[OVER_5_pct_100_plus_ami_50_plus]]'     ] = f'{pct_100_plus_ami_50_plus:.1%}'
+    dt_find_replace['[[OVER_5_pct_100_plus_ami_less_than_30]]'] = f'{pct_100_plus_ami_less_than_30:.1%}'
     return dt_find_replace
 
 def over_6(dt_find_replace, df_pct):
@@ -647,10 +681,10 @@ def over_6(dt_find_replace, df_pct):
     pct_30_50_own    = df_pct[df_pct['Housing Tenure'] == 'Owner' ]['30%-50% of income used for housing'].values[0]
     pct_50_plus_rent = df_pct[df_pct['Housing Tenure'] == 'Renter']['50%+ of income used for housing'   ].values[0]
     pct_50_plus_own  = df_pct[df_pct['Housing Tenure'] == 'Owner' ]['50%+ of income used for housing'   ].values[0]
-    dt_find_replace['[OVER_6_pct_30_50_rent]'  ] = f'{pct_30_50_rent:.1%}'
-    dt_find_replace['[OVER_6_pct_30_50_own]'   ] = f'{pct_30_50_own:.1%}'
-    dt_find_replace['[OVER_6_pct_50_plus_rent]'] = f'{pct_50_plus_rent:.1%}'
-    dt_find_replace['[OVER_6_pct_50_plus_own]' ] = f'{pct_50_plus_own:.1%}'
+    dt_find_replace['[[OVER_6_pct_30_50_rent]]'  ] = f'{pct_30_50_rent:.1%}'
+    dt_find_replace['[[OVER_6_pct_30_50_own]]'   ] = f'{pct_30_50_own:.1%}'
+    dt_find_replace['[[OVER_6_pct_50_plus_rent]]'] = f'{pct_50_plus_rent:.1%}'
+    dt_find_replace['[[OVER_6_pct_50_plus_own]]' ] = f'{pct_50_plus_own:.1%}'
     return dt_find_replace
 
 def over_8(dt_find_replace, df_pct):
@@ -658,42 +692,42 @@ def over_8(dt_find_replace, df_pct):
     most_cost_burdened_ethnicity = df_pct[df_pct['30%+ of income used for housing'] == df_pct['30%+ of income used for housing'].max()]['Race/Ethnicity'].values[0]
     pct_most_cost_burdened_ethnicity_30_50   = df_pct[df_pct['Race/Ethnicity']==most_cost_burdened_ethnicity]['30%-50% of income used for housing'].values[0]
     pct_most_cost_burdened_ethnicity_50_plus = df_pct[df_pct['Race/Ethnicity']==most_cost_burdened_ethnicity]['50%+ of income used for housing'   ].values[0]
-    dt_find_replace['[OVER_8_most_cost_burdened_ethnicity]'] = most_cost_burdened_ethnicity
-    dt_find_replace['[OVER_8_pct_most_cost_burdened_ethnicity_30_50]'  ] = f'{pct_most_cost_burdened_ethnicity_30_50:.1%}'
-    dt_find_replace['[OVER_8_pct_most_cost_burdened_ethnicity_50_plus]'] = f'{pct_most_cost_burdened_ethnicity_50_plus:.1%}'
+    dt_find_replace['[[OVER_8_most_cost_burdened_ethnicity]]'] = most_cost_burdened_ethnicity
+    dt_find_replace['[[OVER_8_pct_most_cost_burdened_ethnicity_30_50]]'  ] = f'{pct_most_cost_burdened_ethnicity_30_50:.1%}'
+    dt_find_replace['[[OVER_8_pct_most_cost_burdened_ethnicity_50_plus]]'] = f'{pct_most_cost_burdened_ethnicity_50_plus:.1%}'
     return dt_find_replace
 
 def over_9(dt_find_replace, df_pct):
     df_pct = df_pct.set_index(df_pct.columns[0]).T.reset_index(names='Household Size')
     try:
-        pct_large_family_30_50 = df_pct[df_pct['Household Size']=='Large family with 5+ persons']['30%-50% of income used for housing'].values[0]; dt_find_replace['[OVER_9_pct_large_family_30_50]'  ] = f'{pct_large_family_30_50:.1%}'
+        pct_large_family_30_50 = df_pct[df_pct['Household Size']=='Large family with 5+ persons']['30%-50% of income used for housing'].values[0]; dt_find_replace['[[OVER_9_pct_large_family_30_50]]'  ] = f'{pct_large_family_30_50:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_large_family_30_50=None
-    try: pct_large_family_50_plus = df_pct[df_pct['Household Size']=='Large family with 5+ persons']['50%+ of income used for housing'   ].values[0]; dt_find_replace['[OVER_9_pct_large_family_50_plus]'] = f'{pct_large_family_50_plus:.1%}'
+    try: pct_large_family_50_plus = df_pct[df_pct['Household Size']=='Large family with 5+ persons']['50%+ of income used for housing'   ].values[0]; dt_find_replace['[[OVER_9_pct_large_family_50_plus]]'] = f'{pct_large_family_50_plus:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_large_family_50_plus=None
-    try: pct_other_30_50 = df_pct[df_pct['Household Size']=='All other household types']['30%-50% of income used for housing'].values[0]; dt_find_replace['[OVER_9_pct_other_30_50]'] = f'{pct_other_30_50:.1%}'
+    try: pct_other_30_50 = df_pct[df_pct['Household Size']=='All other household types']['30%-50% of income used for housing'].values[0]; dt_find_replace['[[OVER_9_pct_other_30_50]]'] = f'{pct_other_30_50:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_other_30_50=None
-    try: pct_other_50_plus = df_pct[df_pct['Household Size']=='All other household types']['50%+ of income used for housing'   ].values[0]; dt_find_replace['[OVER_9_pct_other_50_plus]'] = f'{pct_other_50_plus:.1%}'
+    try: pct_other_50_plus = df_pct[df_pct['Household Size']=='All other household types']['50%+ of income used for housing'   ].values[0]; dt_find_replace['[[OVER_9_pct_other_50_plus]]'] = f'{pct_other_50_plus:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_other_50_plus=None
     return dt_find_replace
 
-def farm_1(dt_find_replace, df_prod, jurisdiction):
+def farm_1(dt_find_replace, df_prod, county, jurisdiction):
     year_min = '2020-2021'
     year_max = '2023-2024'
-    prod_year_min = df_prod[df_prod['Geography']==jurisdiction]['2020-21'].values[0]
-    prod_year_max = df_prod[df_prod['Geography']==jurisdiction]['2023-24'].values[0]
+    prod_year_min = df_prod[df_prod['Geography']==jurisdiction][year_min.replace('-20', '-')].values[0]
+    prod_year_max = df_prod[df_prod['Geography']==jurisdiction][year_max.replace('-20', '-')].values[0]
     try:
         prod_pct_diff = prod_year_max/prod_year_min-1
-        dt_find_replace['[FARM_1_prod_pct_diff]'] = f'{abs(prod_pct_diff):.1%}'
+        dt_find_replace['[[FARM_1_prod_pct_diff]]'] = f'{abs(prod_pct_diff):.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         prod_pct_diff=None
     if prod_pct_diff > 1:
         increase_or_decrease = 'increase'
@@ -701,19 +735,28 @@ def farm_1(dt_find_replace, df_prod, jurisdiction):
         increase_or_decrease = 'decrease'
     if prod_pct_diff is None:
         increase_or_decrease=None
-    prod_year_min_region = df_prod[df_prod['Geography']=='SACOG Region']['2020-21'].values[0]
-    prod_year_max_region = df_prod[df_prod['Geography']=='SACOG Region']['2023-24'].values[0]
+    prod_year_min_county = df_prod[df_prod['Geography']==f'{county} County'][year_min.replace('-20', '-')].values[0]
+    prod_year_max_county = df_prod[df_prod['Geography']==f'{county} County'][year_max.replace('-20', '-')].values[0]
+    prod_pct_diff_county = prod_year_max_county/prod_year_min_county-1
+    if prod_pct_diff_county > 1:
+        increase_or_decrease_county = 'increase'
+    else:
+        increase_or_decrease_county = 'decrease'
+    prod_year_min_region = df_prod[df_prod['Geography']=='SACOG Region'][year_min.replace('-20', '-')].values[0]
+    prod_year_max_region = df_prod[df_prod['Geography']=='SACOG Region'][year_max.replace('-20', '-')].values[0]
     prod_pct_diff_region = prod_year_max_region/prod_year_min_region-1
     if prod_pct_diff_region > 1:
         increase_or_decrease_region = 'increase'
     else:
         increase_or_decrease_region = 'decrease'
-    dt_find_replace['[FARM_1_year_min]'] = year_min
-    dt_find_replace['[FARM_1_year_max]'] = year_max
-    dt_find_replace['[FARM_1_prod_year_min]'] = f'{prod_year_min:.0f}'
-    dt_find_replace['[FARM_1_prod_year_max]'] = f'{prod_year_max:.0f}'
-    dt_find_replace['[FARM_1_increase_or_decrease]'       ] = increase_or_decrease
-    dt_find_replace['[FARM_1_increase_or_decrease_region]'] = increase_or_decrease_region
+    dt_find_replace['[[FARM_1_year_min]]'] = year_min.replace('-20', '-')
+    dt_find_replace['[[FARM_1_year_max]]'] = year_max.replace('-20', '-')
+    dt_find_replace['[[FARM_1_prod_year_min]]'] = f'{prod_year_min:.0f}'
+    dt_find_replace['[[FARM_1_prod_year_max]]'] = f'{prod_year_max:.0f}'
+    dt_find_replace['[[FARM_1_prod_pct_diff_county]]'] = f'{abs(prod_pct_diff_county):.1%}'
+    dt_find_replace['[[FARM_1_increase_or_decrease]]'       ] = increase_or_decrease
+    dt_find_replace['[[FARM_1_increase_or_decrease_county]]'] = increase_or_decrease_county
+    dt_find_replace['[[FARM_1_increase_or_decrease_region]]'] = increase_or_decrease_region
     return dt_find_replace
 
 def farm_2(dt_find_replace, df_prod):
@@ -731,100 +774,100 @@ def farm_2(dt_find_replace, df_prod):
         increased_or_decreased_seasonal = 'increased'
     else:
         increased_or_decreased_seasonal = 'decreased'
-    dt_find_replace['[FARM_2_year_min]'] = year_min
-    dt_find_replace['[FARM_2_year_max]'] = year_max
-    dt_find_replace['[FARM_2_prod_year_min_permanent]'] = f'{prod_year_min_permanent:,.0f}'
-    dt_find_replace['[FARM_2_prod_year_min_seasonal]' ] = f'{prod_year_min_seasonal:,.0f}'
-    dt_find_replace['[FARM_2_prod_year_max_permanent]'] = f'{prod_year_max_permanent:,.0f}'
-    dt_find_replace['[FARM_2_prod_year_max_seasonal]' ] = f'{prod_year_max_seasonal:,.0f}'
-    dt_find_replace['[FARM_2_increased_or_decreased_permanent]'] = increased_or_decreased_permanent
-    dt_find_replace['[FARM_2_increased_or_decreased_seasonal]' ] = increased_or_decreased_seasonal
+    dt_find_replace['[[FARM_2_year_min]]'] = year_min
+    dt_find_replace['[[FARM_2_year_max]]'] = year_max
+    dt_find_replace['[[FARM_2_prod_year_min_permanent]]'] = f'{prod_year_min_permanent:,.0f}'
+    dt_find_replace['[[FARM_2_prod_year_min_seasonal]]' ] = f'{prod_year_min_seasonal:,.0f}'
+    dt_find_replace['[[FARM_2_prod_year_max_permanent]]'] = f'{prod_year_max_permanent:,.0f}'
+    dt_find_replace['[[FARM_2_prod_year_max_seasonal]]' ] = f'{prod_year_max_seasonal:,.0f}'
+    dt_find_replace['[[FARM_2_increased_or_decreased_permanent]]'] = increased_or_decreased_permanent
+    dt_find_replace['[[FARM_2_increased_or_decreased_seasonal]]' ] = increased_or_decreased_seasonal
     return dt_find_replace
 
 def lgfem_1(dt_find_replace, df_pct):
     pct_5_plus_rent = df_pct[df_pct['Household Size']=='5 or more person household']['Renter occupied'].values[0]
     pct_5_plus_own  = df_pct[df_pct['Household Size']=='5 or more person household']['Owner occupied' ].values[0]
-    dt_find_replace['[LGFEM_1_pct_5_plus_rent]'] = f'{pct_5_plus_rent:.1%}'
-    dt_find_replace['[LGFEM_1_pct_5_plus_own]' ] = f'{pct_5_plus_own:.1%}'
+    dt_find_replace['[[LGFEM_1_pct_5_plus_rent]]'] = f'{pct_5_plus_rent:.1%}'
+    dt_find_replace['[[LGFEM_1_pct_5_plus_own]]' ] = f'{pct_5_plus_own:.1%}'
     return dt_find_replace
 
 def lgfem_2(dt_find_replace, df_pct, jurisdiction):
     df_pct = df_pct.set_index(df_pct.columns[0]).T.reset_index(names='Geography')
     pct_5_plus = df_pct[df_pct['Geography']==jurisdiction]['5 or more person households'].values[0]
-    dt_find_replace['[LGFEM_2_pct_5_plus]'] = f'{pct_5_plus:.1%}'
+    dt_find_replace['[[LGFEM_2_pct_5_plus]]'] = f'{pct_5_plus:.1%}'
     return dt_find_replace
 
 def lgfem_3(dt_find_replace, df_pct):
     df_pct = df_pct.set_index(df_pct.columns[0]).T.reset_index(names='Household Size')
     try:
-        pct_large_family_below_50_ami = df_pct[df_pct['Household Size']=='Large family with 5+ persons']['0%-30% of AMI'].values[0] + df_pct[df_pct['Household Size']=='Large family with 5+ persons']['31%-50% of AMI'].values[0]; dt_find_replace['[LGFEM_3_pct_large_family_below_50_ami]'] = f'{pct_large_family_below_50_ami:.1%}'
+        pct_large_family_below_50_ami = df_pct[df_pct['Household Size']=='Large family with 5+ persons']['0%-30% of AMI'].values[0] + df_pct[df_pct['Household Size']=='Large family with 5+ persons']['31%-50% of AMI'].values[0]; dt_find_replace['[[LGFEM_3_pct_large_family_below_50_ami]]'] = f'{pct_large_family_below_50_ami:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_large_family_below_50_ami=None
     return dt_find_replace
 
 def lgfem_4(dt_find_replace, df_prod):
     pct_female_headed_family_household = df_prod[df_prod['Household Type']=='Female-headed family household'].sum(numeric_only=True).sum()/df_prod.sum(numeric_only=True).sum()
-    dt_find_replace['[LGFEM_4_pct_female_headed_family_household]'] = f'{pct_female_headed_family_household:.1%}'
+    dt_find_replace['[[LGFEM_4_pct_female_headed_family_household]]'] = f'{pct_female_headed_family_household:.1%}'
     return dt_find_replace
 
 def lgfem_5(dt_find_replace, df_pct):
     try:
-        pct_w_children_below_fpl = df_pct[df_pct['Family Status']=='Female-headed households with children']['Below poverty level'].values[0]; dt_find_replace['[LGFEM_5_pct_w_children_below_fpl]' ] = f'{pct_w_children_below_fpl:.1%}'
+        pct_w_children_below_fpl = df_pct[df_pct['Family Status']=='Female-headed households with children']['Below poverty level'].values[0]; dt_find_replace['[[LGFEM_5_pct_w_children_below_fpl]]' ] = f'{pct_w_children_below_fpl:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_w_children_below_fpl=None
     try:
-        pct_no_children_below_fpl = df_pct[df_pct['Family Status']=='Female-headed households without children']['Below poverty level'].values[0]; dt_find_replace['[LGFEM_5_pct_no_children_below_fpl]'] = f'{pct_no_children_below_fpl:.1%}'
+        pct_no_children_below_fpl = df_pct[df_pct['Family Status']=='Female-headed households without children']['Below poverty level'].values[0]; dt_find_replace['[[LGFEM_5_pct_no_children_below_fpl]]'] = f'{pct_no_children_below_fpl:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_no_children_below_fpl=None
     return dt_find_replace
 
 def sen_1(dt_find_replace, df_pct):
     most_common_income_rent = df_pct[df_pct['Renter occupied'] == df_pct['Renter occupied'].max()]['Income Level'].values[0].replace('G', 'g')
     most_common_income_own  = df_pct[df_pct['Owner occupied' ] == df_pct['Owner occupied' ].max()]['Income Level'].values[0].replace('G', 'g')
-    dt_find_replace['[SEN_1_most_common_income_rent]'] = most_common_income_rent
-    dt_find_replace['[SEN_1_most_common_income_own]' ] = most_common_income_own
+    dt_find_replace['[[SEN_1_most_common_income_rent]]'] = most_common_income_rent
+    dt_find_replace['[[SEN_1_most_common_income_own]]' ] = most_common_income_own
     return dt_find_replace
 
 def sen_2(dt_find_replace, df_pct):
     df_pct  = df_pct .set_index(df_pct .columns[0]).T.reset_index(names='Age Group')
     pct_non_white_under_18 = 1-df_pct[df_pct['Age Group'] == 'Age 0-17']['White (NH)'].values[0]
     pct_non_white_over_65  = 1-df_pct[df_pct['Age Group'] == 'Age 65+' ]['White (NH)'].values[0]
-    dt_find_replace['[SEN_2_pct_non_white_under_18]'] = f'{pct_non_white_under_18:.1%}'
-    dt_find_replace['[SEN_2_pct_non_white_over_65]' ] = f'{pct_non_white_over_65:.1%}'
+    dt_find_replace['[[SEN_2_pct_non_white_under_18]]'] = f'{pct_non_white_under_18:.1%}'
+    dt_find_replace['[[SEN_2_pct_non_white_over_65]]' ] = f'{pct_non_white_over_65:.1%}'
     return dt_find_replace
 
 def sen_3(dt_find_replace, df_pct):
     try:
-        pct_below_30_ami_50_plus = df_pct[df_pct['Income Level']=='0%-30% of AMI']['50%+ of income used for housing'  ].values[0]; dt_find_replace['[SEN_3_pct_below_30_ami_50_plus]'] = f'{pct_below_30_ami_50_plus:.1%}'
+        pct_below_30_ami_50_plus = df_pct[df_pct['Income Level']=='0%-30% of AMI']['50%+ of income used for housing'  ].values[0]; dt_find_replace['[[SEN_3_pct_below_30_ami_50_plus]]'] = f'{pct_below_30_ami_50_plus:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_below_30_ami_50_plus=None
     try:
-        pct_over_100_ami_less_than_30 = df_pct[df_pct['Income Level']=='Greater than 100% of AMI']['0%-30% of income used for housing'].values[0]; dt_find_replace['[SEN_3_pct_over_100_ami_less_than_30]'] = f'{pct_over_100_ami_less_than_30:.1%}'
+        pct_over_100_ami_less_than_30 = df_pct[df_pct['Income Level']=='Greater than 100% of AMI']['0%-30% of income used for housing'].values[0]; dt_find_replace['[[SEN_3_pct_over_100_ami_less_than_30]]'] = f'{pct_over_100_ami_less_than_30:.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         pct_over_100_ami_less_than_30=None
     return dt_find_replace
 
 def disab_2(dt_find_replace, df_pct, jurisdiction):
     df_pct = df_pct.set_index(df_pct.columns[0]).T.reset_index(names='Geography')
     pct_disability = df_pct[df_pct['Geography']==jurisdiction]['With a disability'].values[0]
-    dt_find_replace['[DISAB_2_pct_disability]'] = f'{pct_disability:.1%}'
+    dt_find_replace['[[DISAB_2_pct_disability]]'] = f'{pct_disability:.1%}'
     return dt_find_replace
 
 def disab_4(dt_find_replace, df_prod):
     prod_under_18_pct = df_prod[df_prod['Age Group']=='Under 18']['Population'].values[0] / df_prod['Population'].sum()
     prod_over_18_pct  = df_prod[df_prod['Age Group']=='Over 18' ]['Population'].values[0] / df_prod['Population'].sum()
-    dt_find_replace['[DISAB_4_prod_under_18_pct]'] = f'{prod_under_18_pct:.1%}'
-    dt_find_replace['[DISAB_4_prod_over_18_pct]' ] = f'{prod_over_18_pct:.1%}'
+    dt_find_replace['[[DISAB_4_prod_under_18_pct]]'] = f'{prod_under_18_pct:.1%}'
+    dt_find_replace['[[DISAB_4_prod_over_18_pct]]' ] = f'{prod_over_18_pct:.1%}'
     return dt_find_replace
 
 def disab_5(dt_find_replace, df_prod):
     most_common_residence_type = df_prod[df_prod['Population'] == df_prod['Population'].max()]['Residence Type'].values[0]
-    dt_find_replace['[DISAB_5_most_common_residence_type]'] = most_common_residence_type
+    dt_find_replace['[[DISAB_5_most_common_residence_type]]'] = most_common_residence_type
     return dt_find_replace
 
 def homels_1(dt_find_replace, df_prod):
@@ -833,9 +876,9 @@ def homels_1(dt_find_replace, df_prod):
     prod_most_common_shelter_w_children = prod_most_common_shelter_w_children.replace('Sheltered - ', '')
     df_prod = df_prod.set_index(df_prod.columns[0]).T.reset_index(names='Shelter Status')
     prod_no_children_unsheltered_pct = df_prod[df_prod['Shelter Status']=='Unsheltered']['Persons in households without children'].values[0]/df_prod['Persons in households without children'].sum()
-    dt_find_replace['[HOMELS_1_prod_most_common_household_type]'] = prod_most_common_household_type
-    dt_find_replace['[HOMELS_1_prod_most_common_shelter_w_children]'] = prod_most_common_shelter_w_children
-    dt_find_replace['[HOMELS_1_prod_no_children_unsheltered_pct]'] = f'{prod_no_children_unsheltered_pct:.1%}'
+    dt_find_replace['[[HOMELS_1_prod_most_common_household_type]]'] = prod_most_common_household_type.replace('Persons in ', '')
+    dt_find_replace['[[HOMELS_1_prod_most_common_shelter_w_children]]'] = prod_most_common_shelter_w_children.lower()
+    dt_find_replace['[[HOMELS_1_prod_no_children_unsheltered_pct]]'] = f'{prod_no_children_unsheltered_pct:.1%}'
     return dt_find_replace
 
 def homels_2(dt_find_replace, df_prod, df_pct):
@@ -843,10 +886,10 @@ def homels_2(dt_find_replace, df_prod, df_pct):
     most_common_ethnicity_homeless = df_pct[df_pct['Homeless Population (%)'] == df_pct['Homeless Population (%)'].max()]['Race/Ethnicity'].values[0]
     pct_most_common_ethnicity_homeless = df_pct[df_pct['Race/Ethnicity']==most_common_ethnicity_homeless]['Homeless Population (%)'].values[0]
     pct_most_common_ethnicity_overall  = df_pct[df_pct['Race/Ethnicity']==most_common_ethnicity_homeless]['Overall Population (%)' ].values[0]
-    dt_find_replace['[HOMELS_2_prod_homeless]'] = f'{prod_homeless:,.0f}'
-    dt_find_replace['[HOMELS_2_most_common_ethnicity_homeless]'] = most_common_ethnicity_homeless
-    dt_find_replace['[HOMELS_2_pct_most_common_ethnicity_homeless]'] = f'{pct_most_common_ethnicity_homeless:.1%}'
-    dt_find_replace['[HOMELS_2_pct_most_common_ethnicity_overall]' ] = f'{pct_most_common_ethnicity_overall:.1%}'
+    dt_find_replace['[[HOMELS_2_prod_homeless]]'] = f'{prod_homeless:,.0f}'
+    dt_find_replace['[[HOMELS_2_most_common_ethnicity_homeless]]'] = most_common_ethnicity_homeless
+    dt_find_replace['[[HOMELS_2_pct_most_common_ethnicity_homeless]]'] = f'{pct_most_common_ethnicity_homeless:.1%}'
+    dt_find_replace['[[HOMELS_2_pct_most_common_ethnicity_overall]]' ] = f'{pct_most_common_ethnicity_overall:.1%}'
     return dt_find_replace
 
 def homels_3(dt_find_replace, df_prod):
@@ -856,21 +899,21 @@ def homels_3(dt_find_replace, df_prod):
     most_common_characteristic = df_t[df_t['Population']==prod_most_common_characteristic]['Characteristic'].values[0]
     prod_most_common_characteristic_unsheltered = df_prod[df_prod['Shelter Status'] == 'Unsheltered'][most_common_characteristic].values[0]
     prod_most_common_characteristic_unsheltered_pct = prod_most_common_characteristic_unsheltered/df_prod[[most_common_characteristic]].sum()[most_common_characteristic]
-    dt_find_replace['[HOMELS_3_most_common_characteristic]'] = most_common_characteristic   
-    dt_find_replace['[HOMELS_3_prod_most_common_characteristic]'] = f'{prod_most_common_characteristic:,.0f}'
-    dt_find_replace['[HOMELS_3_prod_most_common_characteristic_unsheltered_pct]'] = f'{prod_most_common_characteristic_unsheltered_pct:.1%}'
+    dt_find_replace['[[HOMELS_3_most_common_characteristic]]'] = most_common_characteristic   
+    dt_find_replace['[[HOMELS_3_prod_most_common_characteristic]]'] = f'{prod_most_common_characteristic:,.0f}'
+    dt_find_replace['[[HOMELS_3_prod_most_common_characteristic_unsheltered_pct]]'] = f'{prod_most_common_characteristic_unsheltered_pct:.1%}'
     return dt_find_replace
 
 def homels_4(dt_find_replace, df_prod, jurisdiction, county):
     year_min = '2020-2021'
     year_max = '2023-2024'
-    prod_year_min = df_prod[df_prod['Geography']==jurisdiction]['2020-21'].values[0]
-    prod_year_max = df_prod[df_prod['Geography']==jurisdiction]['2023-24'].values[0]
+    prod_year_min = df_prod[df_prod['Geography']==jurisdiction][year_min.replace('-20', '-')].values[0]
+    prod_year_max = df_prod[df_prod['Geography']==jurisdiction][year_max.replace('-20', '-')].values[0]
     try:
         prod_pct_diff = prod_year_max/prod_year_min-1
-        dt_find_replace['[HOMELS_4_prod_pct_diff]'] = f'{abs(prod_pct_diff):.1%}'
+        dt_find_replace['[[HOMELS_4_prod_pct_diff]]'] = f'{abs(prod_pct_diff):.1%}'
     except Exception as e:
-        print(f"How exceptional! {e}")
+        e
         prod_pct_diff=None
     if prod_pct_diff > 1:
         increased_or_decreased = 'increased'
@@ -878,15 +921,15 @@ def homels_4(dt_find_replace, df_prod, jurisdiction, county):
         increased_or_decreased = 'decreased'
     if prod_pct_diff is None:
         increased_or_decreased=None
-    prod_year_min_county = df_prod[df_prod['Geography']==f'{county} County']['2020-21'].values[0]
-    prod_year_max_county = df_prod[df_prod['Geography']==f'{county} County']['2023-24'].values[0]
+    prod_year_min_county = df_prod[df_prod['Geography']==f'{county} County'][year_min.replace('-20', '-')].values[0]
+    prod_year_max_county = df_prod[df_prod['Geography']==f'{county} County'][year_max.replace('-20', '-')].values[0]
     prod_pct_diff_county = abs(prod_year_max_county/prod_year_min_county-1)
     if prod_pct_diff_county > 1:
         increase_or_decrease_county = 'increase'
     else:
         increase_or_decrease_county = 'decrease'
-    prod_year_min_region = df_prod[df_prod['Geography']=='SACOG Region']['2020-21'].values[0]
-    prod_year_max_region = df_prod[df_prod['Geography']=='SACOG Region']['2023-24'].values[0]
+    prod_year_min_region = df_prod[df_prod['Geography']=='SACOG Region'][year_min.replace('-20', '-')].values[0]
+    prod_year_max_region = df_prod[df_prod['Geography']=='SACOG Region'][year_max.replace('-20', '-')].values[0]
     prod_pct_diff_region = prod_year_max_region/prod_year_min_region-1
     if prod_pct_diff_region > 1:
         increased_or_decreased_region = 'increased'
@@ -894,18 +937,18 @@ def homels_4(dt_find_replace, df_prod, jurisdiction, county):
         increased_or_decreased_region = 'decreased'
     prod_year_max_pct_of_county = prod_year_max/prod_year_max_county
     prod_year_max_pct_of_region = prod_year_max/prod_year_max_region
-    dt_find_replace['[HOMELS_4_year_min]'] = year_min
-    dt_find_replace['[HOMELS_4_year_max]'] = year_max
-    dt_find_replace['[HOMELS_4_prod_year_min]'] = f'{prod_year_min:,.0f}'
-    dt_find_replace['[HOMELS_4_prod_year_max]'] = f'{prod_year_max:,.0f}'
-    dt_find_replace['[HOMELS_4_prod_year_max_region]'] = f'{prod_year_max_region:,.0f}'
-    dt_find_replace['[HOMELS_4_prod_pct_diff_county]'] = f'{prod_pct_diff_county:.1%}'
-    dt_find_replace['[HOMELS_4_prod_pct_diff_region]'] = f'{prod_pct_diff_region:.1%}'
-    dt_find_replace['[HOMELS_4_increased_or_decreased]'       ] = increased_or_decreased
-    dt_find_replace['[HOMELS_4_increase_or_decrease_county]'  ] = increase_or_decrease_county
-    dt_find_replace['[HOMELS_4_increased_or_decreased_region]'] = increased_or_decreased_region
-    dt_find_replace['[HOMELS_4_prod_year_max_pct_of_county]'] = f'{prod_year_max_pct_of_county:.1%}'
-    dt_find_replace['[HOMELS_4_prod_year_max_pct_of_region]'] = f'{prod_year_max_pct_of_region:.1%}'
+    dt_find_replace['[[HOMELS_4_year_min]]'] = year_min.replace('-20', '-')
+    dt_find_replace['[[HOMELS_4_year_max]]'] = year_max.replace('-20', '-')
+    dt_find_replace['[[HOMELS_4_prod_year_min]]'] = f'{prod_year_min:,.0f}'
+    dt_find_replace['[[HOMELS_4_prod_year_max]]'] = f'{prod_year_max:,.0f}'
+    dt_find_replace['[[HOMELS_4_prod_year_max_region]]'] = f'{prod_year_max_region:,.0f}'
+    dt_find_replace['[[HOMELS_4_prod_pct_diff_county]]'] = f'{prod_pct_diff_county:.1%}'
+    dt_find_replace['[[HOMELS_4_prod_pct_diff_region]]'] = f'{prod_pct_diff_region:.1%}'
+    dt_find_replace['[[HOMELS_4_increased_or_decreased]]'       ] = increased_or_decreased
+    dt_find_replace['[[HOMELS_4_increase_or_decrease_county]]'  ] = increase_or_decrease_county
+    dt_find_replace['[[HOMELS_4_increased_or_decreased_region]]'] = increased_or_decreased_region
+    dt_find_replace['[[HOMELS_4_prod_year_max_pct_of_county]]'] = f'{prod_year_max_pct_of_county:.1%}'
+    dt_find_replace['[[HOMELS_4_prod_year_max_pct_of_region]]'] = f'{prod_year_max_pct_of_region:.1%}'
     return dt_find_replace
 
 def eli_1(dt_find_replace, df_prod, df_pct, jurisdiction):
@@ -914,33 +957,35 @@ def eli_1(dt_find_replace, df_prod, df_pct, jurisdiction):
     prod_more_than_100 = df_prod[df_prod['Geography']==jurisdiction]['Greater than 100% of AMI'].values[0]
     prod_less_than_30  = df_prod[df_prod['Geography']==jurisdiction]['0%-30% of AMI'           ].values[0]
     pct_more_than_100 = df_pct[df_pct['Geography']==jurisdiction]['Greater than 100% of AMI'].values[0]    
-    dt_find_replace['[ELI_1_prod_more_than_100]'] = f'{prod_more_than_100:,.0f}'
-    dt_find_replace['[ELI_1_prod_less_than_30]' ] = f'{prod_less_than_30:,.0f}'
-    dt_find_replace['[ELI_1_pct_more_than_100]' ] = f'{pct_more_than_100:.1%}'
+    pct_less_than_30_region  = df_pct[df_pct['Geography']=='SACOG Region']['0%-30% of AMI'].values[0]
+    dt_find_replace['[[ELI_1_prod_more_than_100]]'] = f'{prod_more_than_100:,.0f}'
+    dt_find_replace['[[ELI_1_prod_less_than_30]]' ] = f'{prod_less_than_30:,.0f}'
+    dt_find_replace['[[ELI_1_pct_more_than_100]]' ] = f'{pct_more_than_100:.1%}'
+    dt_find_replace['[[ELI_1_pct_less_than_30]]' ] = f'{pct_less_than_30_region:.1%}'
     return dt_find_replace
 
 def eli_3(dt_find_replace, df_pct):
     most_common_ethnicity_below_fpl_1 = df_pct[df_pct['Below poverty level'] == df_pct['Below poverty level'].max()]['Race/Ethnicity'].values[0]
     df_pct_2 = df_pct[df_pct['Below poverty level'] != df_pct['Below poverty level'].max()]
     most_common_ethnicity_below_fpl_2 = df_pct_2[df_pct_2['Below poverty level'] == df_pct_2['Below poverty level'].max()]['Race/Ethnicity'].values[0]
-    dt_find_replace['[ELI_3_most_common_ethnicity_below_fpl_1]'] = most_common_ethnicity_below_fpl_1
-    dt_find_replace['[ELI_3_most_common_ethnicity_below_fpl_2]'] = most_common_ethnicity_below_fpl_2
+    dt_find_replace['[[ELI_3_most_common_ethnicity_below_fpl_1]]'] = most_common_ethnicity_below_fpl_1
+    dt_find_replace['[[ELI_3_most_common_ethnicity_below_fpl_2]]'] = most_common_ethnicity_below_fpl_2
     return dt_find_replace
 
 def eli_4(dt_find_replace, df_pct):
     pct_less_than_15 = df_pct[df_pct['Income Bracket'] == 'Acutely low income']['Percent'].values[0]
     ami_county = int(''.join(re.findall(r'\d+', df_pct[df_pct['Income Bracket']=='High income']['Income Range'].values[0])))/1.2
     ami_county_30_pct = ami_county*0.3
-    dt_find_replace['[ELI_4_pct_less_than_15]'] = f'{pct_less_than_15:.1%}'
-    dt_find_replace['[ELI_4_ami_county]'       ] = f'${ami_county:,.0f}'
-    dt_find_replace['[ELI_4_ami_county_30_pct]'] = f'${ami_county_30_pct:,.0f}'
+    dt_find_replace['[[ELI_4_pct_less_than_15]]'] = f'{pct_less_than_15:.1%}'
+    dt_find_replace['[[ELI_4_ami_county]]'       ] = f'${ami_county:,.0f}'
+    dt_find_replace['[[ELI_4_ami_county_30_pct]]'] = f'${ami_county_30_pct:,.0f}'
     return dt_find_replace
 
 def affh_2(dt_find_replace, df_prod):
     prod_high_pct = df_prod['High/Highest Resource'].sum() / df_prod.sum(numeric_only=True).sum()
     prod_low_pct  = df_prod['Low Resource'         ].sum() / df_prod.sum(numeric_only=True).sum()
-    dt_find_replace['[AFFH_2_prod_high_pct]'] = f'{prod_high_pct:.1%}'
-    dt_find_replace['[AFFH_2_prod_low_pct]' ] = f'{prod_low_pct:.1%}'
+    dt_find_replace['[[AFFH_2_prod_high_pct]]'] = f'{prod_high_pct:.1%}'
+    dt_find_replace['[[AFFH_2_prod_low_pct]]' ] = f'{prod_low_pct:.1%}'
     return dt_find_replace
 
 def affh_3(dt_find_replace, df_pct, jurisdiction):
@@ -951,11 +996,316 @@ def affh_3(dt_find_replace, df_pct, jurisdiction):
         above_or_below = 'above'
     else:
         above_or_below = 'below'
-    dt_find_replace['[AFFH_3_pct_limited_english]'       ] = f'{pct_limited_english:.1%}'
-    dt_find_replace['[AFFH_3_pct_limited_english_region]'] = f'{pct_limited_english_region:.1%}'
-    dt_find_replace['[AFFH_3_above_or_below]'] = above_or_below
+    dt_find_replace['[[AFFH_3_pct_limited_english]]'       ] = f'{pct_limited_english:.1%}'
+    dt_find_replace['[[AFFH_3_pct_limited_english_region]]'] = f'{pct_limited_english_region:.1%}'
+    dt_find_replace['[[AFFH_3_above_or_below]]'] = above_or_below
     return dt_find_replace
 
 
 
+# Interacting with word doc --------------------------------------------------------------------------------------------------------------------------
+
+
+# Tables/charts word doc ---
+
+
+def doc_add_table(doc, indicator, df_prod):
+
+    '''
+    Function to add a table to the word document
+    Conditional statements regarding 'column_name' may need updates as more indicators are added to the for loop
+    '''
+
+    cols_str = ['Geography', 'Housing Type', 'Income Level', 'Race/Ethnicity', 'Variable', 'Age Group', 'Location 1 Year Ago'
+                , 'Household Type', 'Family Status', 'Household Status', 'Industry', 'Occupation', 'Class of Worker', 'Season'
+                , 'Earnings', 'Wage Group', 'Housing Tenure', 'Year Moved to Current Residence', 'Vacancy Type', 'Rent Price'
+                , 'Year Built', 'Number of Bedrooms', 'Housing Issue', 'Home Value', 'Contract Rent', 'Income Group', 'Typology'
+                , 'Risk Level', 'Tenure', 'Overcrowding Severity', 'Cost Burden', 'Year', 'Household Size', 'Occupancy Status'
+                , 'Family Status', 'Disability Type', 'Disability Status', 'Residence Type', 'Characteristic', 'Employment Status'
+                , 'School Year', 'Income Bracket', 'English Proficiency', 'Farm Worker', 'Shelter Status', 'Poverty Status', 'Income Range']
+
+    table = doc.add_table(rows=1 + len(df_prod), cols=len(df_prod.columns))
+    table.style = 'Table Grid'
+
+    hdr_cells = table.rows[0].cells
+    for i, column_name in enumerate(df_prod.columns):
+        run = hdr_cells[i].paragraphs[0].add_run(column_name)
+        run.bold = True
+        run.font.size = Pt(8)
+
+    for i, row in df_prod.iterrows():
+        row_cells = table.rows[i+1].cells
+        for j, column_name in enumerate(df_prod.columns):
+            value = row[column_name]
+            paragraph = row_cells[j].paragraphs[0]
+            if column_name == 'Year':
+                if isinstance(value, str):
+                    value = int(value.replace('Year ', ''))
+                formatted_value = f"{value:.0f}"
+            elif indicator in ['POPEMP_13', 'POPEMP_14']:
+                formatted_value = f"{value:.2f}"  # Format as #.## (e.g., 1.23)
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            elif column_name not in cols_str and 'Percent' not in column_name and '(%' not in column_name and indicator not in ['POPEMP_15', 'HSG_8', 'HSG_10']:
+                formatted_value = f"{value:,.0f}"  # Format as #,### (e.g., 1,234)
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            # elif 'Percentage' in column_name or 'Percent' in column_name or '(%)' in column_name:
+            elif 'Percent' in column_name or '(%' in column_name or indicator == 'POPEMP_15':
+                formatted_value = f"{value:.1%}"  # Format as #.#% (e.g., 12.3%)
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            elif indicator in ['HSG_8', 'HSG_10']:
+                formatted_value = f"${value:,.0f}"  # Format as #,### (e.g., 1,234)
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            else:
+                formatted_value = str(value)
+            run = row_cells[j].paragraphs[0].add_run(formatted_value)
+            run.font.size = Pt(8)
+
+
+def doc_add_plot(doc, file_png):
+    '''
+    Function to add an image file to the word document
+    Each image is a plot of the data stored as an '.png' file
+    '''
+    doc.add_picture(str(file_png), width=Inches(6))
+    doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+
+def combine_total_pct_tables(indicator, df_prod, df_pct=None):
+
+    subgroup = FILE_YAML[indicator]['word']['subgroup']
+
+    if ',' in subgroup:
+        subgroup=subgroup.split(', ')
+
+    df_prod_ = df_prod.copy()
+    if indicator in ['POPEMP_11', 'POPEMP_12', 'POPEMP_14']:
+        cols = FILE_YAML[indicator]['word']['cols'].split('<>')
+        df_prod_.columns = cols
+
+    if FILE_YAML[indicator]['word']['transpose']:
+        df_prod_ = df_prod_.set_index(df_prod_.columns[0]).T.reset_index(names=subgroup)
+    if FILE_YAML[indicator]['word']['percent']:
+        df_pct_ = df_pct.copy()
+        if FILE_YAML[indicator]['word']['transpose']:
+            df_pct_ = df_pct_.set_index(df_pct_.columns[0]).T.reset_index(names=subgroup)
+        df_prod_pct = df_prod_.merge(df_pct_, on=subgroup)
+        list_new_col_names=[]
+        for col_prod_pct in df_prod_pct.columns:
+            if '_y' in col_prod_pct:
+                col_prod_pct = col_prod_pct.replace('_y', ' (%)') # (%)
+            col_prod_pct = col_prod_pct.replace('_x', '')
+            list_new_col_names.append(col_prod_pct)
+        df_prod_pct.columns = list_new_col_names
+        if 'Percent' not in df_prod_pct.columns:
+            cols_wout_pct = [col_ for col_ in list_new_col_names if '(%)' not in col_][1:]
+            for col_wout_pct in cols_wout_pct:
+                col_data = df_prod_pct.pop(f'{col_wout_pct} (%)')
+                df_prod_pct.insert(loc=df_prod_pct.columns.get_loc(col_wout_pct)+1, column=f'{col_wout_pct} (%)', value=col_data)
+
+        return df_prod_pct
+    else:
+        return df_prod_
+
+
+
+
+# Main report word doc ---
+
+def find_replace_one(word_app, str_find, str_replace):
+    wd_replace=2
+    wd_find_wrap=1
+    word_app.Selection.Find.Execute(
+                                    FindText=str_find,
+                                    ReplaceWith=str_replace,
+                                    Replace=wd_replace,
+                                    Forward=True,
+                                    MatchCase=True,
+                                    MatchWholeWord=True,
+                                    MatchWildcards=False,
+                                    MatchSoundsLike=False,
+                                    MatchAllWordForms=False,
+                                    Wrap=wd_find_wrap,
+                                    Format=True
+                                )
+
+
+def find_replace_all(word_app, dt_find_replace):
+
+    for str_find, str_replace in dt_find_replace.items():
+
+        try:
+            find_replace_one(word_app, str_find, str_replace)
+            
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            print()
+
+
+def set_main_find_replace(county, jurisdiction):
+
+    dt_find_replace={}
+
+    if jurisdiction == 'Unincorporated':
+        dt_find_replace['[[jurisdiction]]' ] = f'{county} County unincorporated'
+        dt_find_replace['[[jurisdictions]]'] = f"{county} County's unincorporated"
+        dt_find_replace['[[JURISDICTION]]' ] = f'{county} County unincorporated'.upper()
+    else:
+        dt_find_replace['[[jurisdiction]]' ] = jurisdiction
+        dt_find_replace['[[jurisdictions]]'] = f"{jurisdiction}'s"
+        dt_find_replace['[[JURISDICTION]]' ] = jurisdiction.upper()
+
+    dt_find_replace['[[county]]'] = f'{county} County'
+
+    dt_find_replace['[[ACS_YEAR_MAX]]'   ] = ACS_YEAR_MAX
+    dt_find_replace['[[ACS_YEAR_RANGE]]' ] = ACS_YEAR_RANGE
+    dt_find_replace['[[CHAS_MAX_YEAR]]'  ] = CHAS_YEAR_MAX
+    dt_find_replace['[[CHAS_YEAR_RANGE]]'] = CHAS_YEAR_RANGE
+
+    return dt_find_replace
+
+
+def set_indicator_find_replace(indicator, county, jurisdiction, path_tables):
+
+    '''
+    Function to include a summary/interpretation of data, specific to each indicator
+    Each indicator needs its own conditional statement to match with the "Word" parameter in the 'rhna.yaml' file
+    '''
+
+    file_tables_prod = [file for file in path_tables.glob('*.csv') if f'{indicator}_prod' in str(file)]
+    file_tables_pct  = [file for file in path_tables.glob('*.csv') if f'{indicator}_pct' in str(file)]
+    if len(file_tables_prod)>0:
+        df_prod = pd.read_csv(path_tables/f'{indicator}_prod.csv')
+        if len(file_tables_pct)>0:
+            df_pct = pd.read_csv(path_tables/f'{indicator}_pct.csv' )
+
+    dt_find_replace={}
+
+    if 'Year' in df_prod.columns:
+        year_min = df_prod['Year'].min()
+        year_max = df_prod['Year'].max()
+        dt_find_replace[f'[[{indicator}_year_max]]'] = year_max
+        dt_find_replace[f'[[{indicator}_year_min]]'] = year_min
+
+    if indicator == 'POPEMP_1':
+        dt_find_replace = popemp_1(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
+    if indicator == 'POPEMP_2':
+        dt_find_replace = popemp_2(dt_find_replace, df_prod, df_pct)
+    if indicator == 'POPEMP_4':
+        dt_find_replace = popemp_4(dt_find_replace, df_prod)
+    if indicator == 'POPEMP_5':
+        dt_find_replace = popemp_5(dt_find_replace, df_prod, jurisdiction)
+    if indicator == 'POPEMP_6':
+        dt_find_replace = popemp_6(dt_find_replace, df_pct, jurisdiction, county)
+    if indicator == 'POPEMP_11':
+        dt_find_replace = popemp_11(dt_find_replace, df_prod, year_max, year_min)
+    if indicator == 'POPEMP_12':
+        dt_find_replace = popemp_12(dt_find_replace, df_prod, year_max)
+    if indicator == 'POPEMP_13':
+        dt_find_replace = popemp_13(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
+    if indicator == 'POPEMP_14':
+        dt_find_replace = popemp_14(dt_find_replace, df_prod, year_max, county, jurisdiction)
+    if indicator == 'POPEMP_15':
+        dt_find_replace = popemp_15(dt_find_replace, df_prod, jurisdiction, year_max, year_min)
+    if indicator == 'POPEMP_16':
+        dt_find_replace = popemp_16(dt_find_replace, df_prod, df_pct, jurisdiction, county)
+    if indicator == 'POPEMP_18':
+        dt_find_replace = popemp_18(dt_find_replace, df_prod)
+    if indicator == 'POPEMP_20':
+        dt_find_replace = popemp_20(dt_find_replace, df_pct)
+    if indicator == 'POPEMP_21':
+        dt_find_replace = popemp_21(dt_find_replace, df_pct)
+    if indicator == 'POPEMP_22':
+        dt_find_replace = popemp_22(dt_find_replace, df_pct)
+    if indicator == 'POPEMP_23':
+        dt_find_replace = popemp_23(dt_find_replace, df_prod, df_pct, jurisdiction)
+    if indicator == 'POPEMP_25':
+        dt_find_replace = popemp_25(dt_find_replace, df_prod)
+    if indicator == 'POPEMP_27':
+        dt_find_replace = popemp_27(dt_find_replace, df_prod, jurisdiction, year_min, year_max)
+    if indicator == 'HSG_1':
+        dt_find_replace = hsg_1(dt_find_replace, df_prod, jurisdiction, county)
+    if indicator == 'HSG_2':
+        dt_find_replace = hsg_2(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'HSG_3':
+        dt_find_replace = hsg_3(dt_find_replace, df_pct, county, jurisdiction)
+    if indicator == 'HSG_4':
+        dt_find_replace = hsg_4(dt_find_replace, df_prod, df_pct)
+    if indicator == 'HSG_5':
+        dt_find_replace = hsg_5(dt_find_replace, df_prod)
+    if indicator == 'HSG_6':
+        dt_find_replace = hsg_6(dt_find_replace, df_pct)
+    if indicator == 'HSG_7':
+        dt_find_replace = hsg_7(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'HSG_8':
+        dt_find_replace = hsg_8(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min)
+    if indicator == 'HSG_9':
+        dt_find_replace = hsg_9(dt_find_replace, df_pct, jurisdiction, county)
+    if indicator == 'HSG_10':
+        dt_find_replace = hsg_10(dt_find_replace, df_prod, jurisdiction, county, year_max, year_min)
+    if indicator == 'HSG_11':
+        dt_find_replace = hsg_11(dt_find_replace, df_prod)
+    if indicator == 'RISK_1':
+        dt_find_replace = risk_1(dt_find_replace, df_prod, df_pct, jurisdiction)
+    if indicator == 'OVER_1':
+        dt_find_replace = over_1(dt_find_replace, df_pct)
+    if indicator == 'OVER_3':
+        dt_find_replace = over_3(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'OVER_4':
+        dt_find_replace = over_4(dt_find_replace, df_pct)
+    if indicator == 'OVER_5':
+        dt_find_replace = over_5(dt_find_replace, df_prod, df_pct)
+    if indicator == 'OVER_6':
+        dt_find_replace = over_6(dt_find_replace, df_pct)
+    if indicator == 'OVER_8':
+        dt_find_replace = over_8(dt_find_replace, df_pct)
+    if indicator == 'OVER_9':
+        dt_find_replace = over_9(dt_find_replace, df_pct)
+    if indicator == 'FARM_1':
+        dt_find_replace = farm_1(dt_find_replace, df_prod, county, jurisdiction)
+    if indicator == 'FARM_2':
+        dt_find_replace = farm_2(dt_find_replace, df_prod)
+    if indicator == 'LGFEM_1':
+        dt_find_replace = lgfem_1(dt_find_replace, df_pct)
+    if indicator == 'LGFEM_2':
+        dt_find_replace = lgfem_2(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'LGFEM_3':
+        dt_find_replace = lgfem_3(dt_find_replace, df_pct)
+    if indicator == 'LGFEM_4':
+        dt_find_replace = lgfem_4(dt_find_replace, df_prod)
+    if indicator == 'LGFEM_5':
+        dt_find_replace = lgfem_5(dt_find_replace, df_pct)
+    if indicator == 'SEN_1':
+        dt_find_replace = sen_1(dt_find_replace, df_pct)
+    if indicator == 'SEN_2':
+        dt_find_replace = sen_2(dt_find_replace, df_pct)
+    if indicator == 'SEN_3':
+        dt_find_replace = sen_3(dt_find_replace, df_pct)
+    if indicator == 'DISAB_2':
+        dt_find_replace = disab_2(dt_find_replace, df_pct, jurisdiction)
+    if indicator == 'DISAB_4':
+        dt_find_replace = disab_4(dt_find_replace, df_prod)
+    if indicator == 'DISAB_5':
+        dt_find_replace = disab_5(dt_find_replace, df_prod)
+    if indicator == 'HOMELS_1':
+        dt_find_replace = homels_1(dt_find_replace, df_prod)
+    if indicator == 'HOMELS_2':
+        dt_find_replace = homels_2(dt_find_replace, df_prod, df_pct)
+    if indicator == 'HOMELS_3':
+        dt_find_replace = homels_3(dt_find_replace, df_prod)
+    if indicator == 'HOMELS_4':
+        dt_find_replace = homels_4(dt_find_replace, df_prod, jurisdiction, county)
+    if indicator == 'ELI_1':
+        dt_find_replace = eli_1(dt_find_replace, df_prod, df_pct, jurisdiction)
+    if indicator == 'ELI_3':
+        dt_find_replace = eli_3(dt_find_replace, df_pct)
+    if indicator == 'ELI_4':
+        dt_find_replace = eli_4(dt_find_replace, df_pct)
+    if indicator == 'AFFH_2':
+        dt_find_replace = affh_2(dt_find_replace, df_prod)
+    if indicator == 'AFFH_3':
+        dt_find_replace = affh_3(dt_find_replace, df_pct, jurisdiction)
+
+
+    return dt_find_replace
 

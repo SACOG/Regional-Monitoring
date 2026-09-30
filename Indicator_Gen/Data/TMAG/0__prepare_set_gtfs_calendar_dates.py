@@ -34,10 +34,6 @@ from IPython.display import display
 import plotly.express as px
 
 
-SOURCE_GTFS_PARENT_DIR = r'I:\Projects\Josh\Geospatial Data\GTFS\original_gtfs' # a folder containing only the ZIPs of GTFS feeds
-DEST_GTFS_PARENT_DIR = r'I:\Projects\Josh\Geospatial Data\GTFS\datemod_versions'
-
-
 
 
 # updates by josh
@@ -55,8 +51,8 @@ def check_gtfs_dates(op_dir, file_name, start_date_field, end_date_field, transi
             df[transit_agency_field] = src_dir_zip.stem
             df = df.set_index(transit_agency_field).reset_index()
             list_df_calendars.append(df)
-        except:
-            pass
+        except Exception as e:
+            e
 
     df = pd.concat(list_df_calendars)
     df = df.reset_index(drop=True)
@@ -75,10 +71,10 @@ def check_gtfs_dates(op_dir, file_name, start_date_field, end_date_field, transi
     fig_starts.show()
     fig_ends  .show()
 
-    print('A sample of start/end dates:')
+    print('\nA sample of start/end dates:')
     display(df.head(10))
     display(df.tail(10))
-    print(); print('Check histograms in browser to observe all start/end dates')
+    print('\nCheck histograms in browser to observe all start/end dates')
 
 
 
@@ -104,11 +100,8 @@ def update_calendar_dates_txt(op_dir, dummy_date_str):
     calendar_dates_txt = Path(op_dir).joinpath('calendar_dates.txt')
 
     df = pd.read_csv(calendar_dates_txt)
-
     df['date'] = dummy_date_str
-
     df = df.groupby('service_id', as_index=False).min()
-
 
     header_out = ','.join(df.columns)
     with open(calendar_dates_txt, 'w') as fo:
@@ -153,8 +146,8 @@ def yolobus(op_dir, new_start_date, new_end_date, start_date_field, end_date_fie
 
     df['is_weekly'] = df['count'].eq(df.groupby('dow')['count'].transform('max'))
 
-    df_weekly  = df[df['is_weekly'] == True ]
-    df_special = df[df['is_weekly'] == False]
+    df_weekly  = df[df['is_weekly']]
+    df_special = df[not df['is_weekly']]
 
     df_weekly['weekday'] = df_weekly['dow'].map(dt_dow)
     df_weekly = df_weekly.sort_values('dow')
@@ -247,23 +240,25 @@ def create_zip(dir_to_zip, zip_parent_dir):
 
 
 
-if __name__ == '__main__':
+SOURCE_GTFS_PARENT_DIR = r'I:\Projects\Josh\Geospatial Data\GTFS\original_gtfs' # a folder containing only the ZIPs of GTFS feeds
+DEST_GTFS_PARENT_DIR = r'I:\Projects\Josh\Geospatial Data\GTFS\datemod_versions'
 
-    print(); print()
+
+
+if __name__ == '__main__':
 
 
     ## Check calendars ---
 
     # updates by josh
-    print('Concatenating all start/end dates together...'); print()
+    print('\n\nConcatenating all start/end dates together...\n')
     check_gtfs_dates(op_dir                  = SOURCE_GTFS_PARENT_DIR
                       , file_name            = 'calendar.txt'
                       , start_date_field     = 'start_date'
                       , end_date_field       = 'end_date'
                       , transit_agency_field = 'transit_agency')
 
-    print(); print()
-    print('Please input a start and end date that seems appropriate (use "YYYYMMDD" format):')
+    print('\n\nPlease input a start and end date that seems appropriate (use "YYYYMMDD" format):')
     print('Start date: ')
     newstart = input()
     print('End date: ')
@@ -295,9 +290,8 @@ if __name__ == '__main__':
         extract_zip(src_dir_zip, output_folder=dest_dir) # extract files to destination folder
 
         # shutil.copytree(src=src_dir, dst=dest_dir) # 1/12/24 - should be able to delete this line
-        print(); print()
 
-        print(f"updating calendar.txt in {dest_dir}...")
+        print(f"\n\nUpdating calendar.txt in {dest_dir}...")
         update_start_end_dates(op_dir             = dest_dir
                                , file_name        = 'calendar.txt'
                                , new_start_date   = newstart
@@ -306,7 +300,7 @@ if __name__ == '__main__':
                                , end_date_field   = 'end_date'
                                , dummy_date       = dummy)
         
-        print(f"updating feed_info.txt in {dest_dir}...")
+        print(f"Updating feed_info.txt in {dest_dir}...")
         update_start_end_dates(op_dir             = dest_dir
                                , file_name        = 'feed_info.txt'
                                , new_start_date   = newstart
@@ -315,5 +309,5 @@ if __name__ == '__main__':
                                , end_date_field   = 'feed_end_date'
                                , dummy_date       = dummy)
         
-        print(); print()
+        print('\n'*2)
         create_zip(dest_dir, DEST_GTFS_PARENT_DIR)

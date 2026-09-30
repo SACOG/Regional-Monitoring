@@ -1,0 +1,9 @@
+Project: Monitoring and Reporting
+Indicator Name: Income_7
+Export Location: Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_7 Mortgage Status
+Sample: PUMS
+Estimate: ACS5
+Geography: PUMA
+Years Imported: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+Import Tab: Counties
+Margin of Error: Yes

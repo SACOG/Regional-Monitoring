@@ -1,18 +1,12 @@
 
-print(); print(); print()
-
-
-
-EXPORT=True
-
-
 
 # Workspace ------------------------------------------------------------------------------------------------------
 
 import pandas as pd
 from pathlib import Path
 from IPython.display import display
-import urllib.request, json
+import urllib.request
+import json
 
 
 PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
@@ -27,8 +21,6 @@ FILE_CONFIG = PATH_CONFIG / 'census.xlsx'
 def list_combine(l):
     return "/".join(l)
 
-
-# API key
 with open(FILE_API, 'r') as file:
     api_key = file.read()
 
@@ -39,8 +31,13 @@ with open(FILE_API, 'r') as file:
 # Main ------------------------------------------------------------------------------------------------------------------------------------------
 
 
+EXPORT=True
+
+
+
 if __name__ == '__main__':
 
+    print('\n'*3)
 
     with urllib.request.urlopen("https://api.census.gov/data.json") as url:
         dt_acs = json.load(url)
@@ -57,7 +54,6 @@ if __name__ == '__main__':
     df_url2['c_url'] = 'https://api.census.gov/data' + '/' + df_url2['c_vintage'].astype(str) + '/' + df_url2['c_dataset']
     df_url2 = df_url2.sort_values(['c_dataset', 'c_vintage'], ascending = [True, False])
 
-    
     df_url1 = pd.read_excel(FILE_CONFIG, sheet_name='URL')
 
     df_url = df_url2.merge(df_url1, on = ['title', 'c_vintage', 'c_dataset', 'c_url'], how='left')

@@ -1,0 +1,5 @@
+ogr_config: C:\Users\jfontes\AppData\Local\ESRI\conda\envs\conveyal_gdal\Library\share\gdal\osmconf.ini
+ogr_paths:
+  - C:\Users\jfontes\AppData\Local\ESRI\conda\envs\conveyal_gdal\Library\bin
+  - C:\Users\jfontes\AppData\Local\ESRI\conda\envs\conveyal_gdal\Library\share\gdal
+  - C:\Users\jfontes\AppData\Local\ESRI\conda\envs\conveyal_osmosis\Library\bin

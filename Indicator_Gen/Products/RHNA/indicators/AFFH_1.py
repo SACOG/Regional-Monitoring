@@ -1,16 +1,18 @@
 
 
+import pandas as pd
+from datetime import datetime
 import geopandas as gpd
 from pathlib import Path
 from tqdm import tqdm
 from IPython.display import display
 
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
 
+
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
@@ -21,10 +23,38 @@ FILE_TRACTS = PATH_GEO / 'GISOWNER' / 'T2020_Census_Tracts_SACOG_Region' / 'T202
 FILE_JURISDICTIONS = PATH_GEO / 'GISOWNER' / 'CityCounty' / 'CityCounty.shp'
 
 
+def hmda_import(years, counties, dtypes):
+    '''
+    Years can only be from 2018, to 2024. County codes can be found by using the online tool: https://ffiec.cfpb.gov/data-browser/data/2023?category=counties. 
+    '''
+    print()
+    print('Importing data from HDMA...')
+    print()
+
+    list_df = []
+
+    for year in tqdm(years):
+        if int(year) < 2018 or int(year) > int(datetime.now().year - 1): 
+            print(f"Error: the year {year} does not have accessible data.") 
+            continue
+
+        url = 'https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?counties=' + ','.join(counties) + '&years=' + str(year)
+        
+        df = pd.read_csv(url, dtype=dtypes)
+
+        list_df.append(df)
+    
+    df = pd.concat(list_df, ignore_index=True)
+
+    return df
+
+
+
+YEARS = ['2024']
+
 if __name__ == '__main__':
 
 
-    years    = ['2023']
     counties = ['06101','06115','06113','06061','06017','06067']
 
     dtypes = {
@@ -57,7 +87,7 @@ if __name__ == '__main__':
     }
 
 
-    df = rhna.hmda_import(years, counties, dtypes)
+    df = hmda_import(YEARS, counties, dtypes)
 
     df = df[['county_code', 'census_tract', 'derived_ethnicity', 'derived_race', 'action_taken']]
     df['Mortgage Application Status'] = df['action_taken'].replace(action_map)

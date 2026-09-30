@@ -17,10 +17,7 @@ import yaml
 from IPython.display import display
 
 
-PATH_GIT = Path(__file__).parent.parent.parent.parent
-PATH_CODE    = PATH_GIT / 'Data' / 'Census'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
+PATH_CONFIG  = Path(__file__).parent.parent.parent.parent / 'Data' / 'Census' / 'config'
 PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
 
 
@@ -75,14 +72,14 @@ def api_request_params(yaml_census, rerun):
         years_to_import = df_run[df_run['Parameter'] == 'Years Imported' ]['Input'].values[0]
         import_tab      = df_run[df_run['Parameter'] == 'Import Tab'     ]['Input'].values[0]
         margin_of_error = df_run[df_run['Parameter'] == 'Margin of Error']['Input'].values[0]
-        export_loc  = yaml_census['Indicators'][project][indicator]['sp_location'        ]
-        folder      = yaml_census['Indicators'][project][indicator]['folder'             ]
-        MOE_thresh  = yaml_census['Indicators'][project][indicator]['MOE_threshold'      ]
         num_vars    = yaml_census['Indicators'][project][indicator]['number_of_variables']
         percentages = yaml_census['Indicators'][project][indicator]['percentages'        ]
         weighted_by = yaml_census['Indicators'][project][indicator]['weighted_by'        ]
         adjust_cpi  = yaml_census['Indicators'][project][indicator]['adjust_cpi'         ]
         metric      = yaml_census['Indicators'][project][indicator]['metric'             ]
+        variable    = yaml_census['Indicators'][project][indicator]['variable'           ]
+        race        = yaml_census['Indicators'][project][indicator]['race'               ]
+        export_loc  = yaml_census['Indicators'][project][indicator]['export_loc'         ]
         if sample_type != 'LEHD':
             years_to_import = years_to_import.split(', ')
             years_to_import = [int(year) for year in years_to_import]
@@ -141,15 +138,14 @@ def api_request_params(yaml_census, rerun):
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
                 
-
-        export_loc  = yaml_census['Indicators'][project][indicator]['sp_location'        ]
-        folder      = yaml_census['Indicators'][project][indicator]['folder'             ]
-        MOE_thresh  = yaml_census['Indicators'][project][indicator]['MOE_threshold'      ]
+        export_loc  = yaml_census['Indicators'][project][indicator]['export_loc'         ]
         num_vars    = yaml_census['Indicators'][project][indicator]['number_of_variables']
         percentages = yaml_census['Indicators'][project][indicator]['percentages'        ]
         weighted_by = yaml_census['Indicators'][project][indicator]['weighted_by'        ]
         adjust_cpi  = yaml_census['Indicators'][project][indicator]['adjust_cpi'         ]
         metric      = yaml_census['Indicators'][project][indicator]['metric'             ]
+        variable    = yaml_census['Indicators'][project][indicator]['variable'           ]
+        race        = yaml_census['Indicators'][project][indicator]['race'               ]
 
         while True:
             print()
@@ -263,10 +259,13 @@ def api_request_params(yaml_census, rerun):
                 else:
                     print()
                     print("LEHD organizes data quarterly and the API requires a 'timeseries' call.")
-                    years_to_import = 'timeseries'
-                    years = 'timeseries'
+                    years_to_import = ['timeseries']
+                    years = ['timeseries']
                     year = 'timeseries' # TODO: might need to include this on return statement for LEHD
+                    year_start=None
+                    year_end=None
                     print()
+                    break
                 print()
                 print('---------------------------------------------------------------------------------------------------------------------------------------')
             except ValueError:
@@ -313,7 +312,6 @@ def api_request_params(yaml_census, rerun):
             f.write(f"Project: {project}\n")
             f.write(f"Indicator Name: {indicator}\n")
             f.write(f"Export Location: {export_loc}\n")
-            f.write(f"Folder: {folder}\n")
             f.write(f"Sample: {sample_type}\n")
             f.write(f"Estimate: {estimate}\n")
             f.write(f"Geography: {geography}\n")
@@ -321,36 +319,30 @@ def api_request_params(yaml_census, rerun):
             f.write(f"Import Tab: {import_tab}\n")
             f.write(f"Margin of Error: {margin_of_error}\n")
             
-            
     if margin_of_error == 'Yes':
         margin_of_error=True
     else:
         margin_of_error=False
 
-    if percentages == 'Yes':
-        percentages=True
-    else:
-        percentages=False
-
     params = {
-        'project': project,
-        'indicator': indicator,
-        'estimate': estimate,
-        'sample': sample_type,
-        'geo': geography,
-        'years_to_import': years_to_import,
-        'start_year': year_start,
-        'end_year': year_end,
-        'import_tab': import_tab,
-        'moe': margin_of_error,
-        'moe_thresh': MOE_thresh,
-        'num_vars': num_vars,
-        'metric': metric,
-        'pct': percentages,
-        'weight': weighted_by,
-        'adjust_cpi': adjust_cpi,
-        'export_loc': Path.home()/export_loc,
-        'folder': folder
+        'project': project
+        , 'indicator': indicator
+        , 'estimate': estimate
+        , 'sample': sample_type
+        , 'geo': geography
+        , 'years_to_import': years_to_import
+        , 'start_year': year_start
+        , 'end_year': year_end
+        , 'import_tab': import_tab
+        , 'moe': margin_of_error
+        , 'num_vars': num_vars
+        , 'metric': metric
+        , 'variable': variable
+        , 'race': race
+        , 'pct': percentages
+        , 'weight': weighted_by
+        , 'adjust_cpi': adjust_cpi
+        , 'export_loc': Path.home()/export_loc
     }
 
     return params

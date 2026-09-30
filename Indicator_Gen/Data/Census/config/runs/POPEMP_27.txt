@@ -1,0 +1,10 @@
+Project: Peer Region Studies
+Indicator Name: POPEMP_27
+Export Location: Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\Data
+Folder: Age
+Sample: SUBJECT
+Estimate: ACS5
+Geography: Counties
+Years Imported: 2024
+Import Tab: Counties
+Margin of Error: Yes

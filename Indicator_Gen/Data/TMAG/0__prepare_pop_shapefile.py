@@ -1,121 +1,196 @@
 
 
-
 '''
+Accessibility analysis for SACOG requires population data across service area in raster format
 
-Accessibility analysis for Valley Vision requires population data across service area in raster format
 This code:
 (1) Imports processed ACS 5 year estimates for population (table B03002 - imported using the MnR data pipeline tools)
-(2) Imports a cleaned tigerline geojson file of block groups throughout the 8 county Valley Vision service area
-(3) Merges population data onto the block group geojson
+(2) Imports the latest block groups file throughout the 6 county SACOG planning area, feature class located on the SDE
+(3) Joins block group population data with the block groups geometries
 (4) Exports as shapefile so that we can manually upload shapefile to Conveyal and convert to tiff format
-
-Read in block group population table
-Reshape table from long to wide so that there is only one row per block group and one column for each population by race/eth for the latest year
-Read in block group shapefile
-Merge on block group GEOID, the population table onto the block group shapefile
-Export as shapefile
-Export as filegdb
-
 
 '''
 
-EXPORT=False
 
 
-
-# Workspace ----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Setup ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 from pathlib import Path
 import pandas as pd
 import geopandas as gpd
 import os
 import re
+import urllib
+from time import perf_counter as perf
+import pyodbc
+import sqlalchemy as sqla
 from IPython.display import display
 import warnings
 warnings.filterwarnings('ignore')
 
 
-PATH_IN = Path(r'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\CERF\We Prosper Together\Population')
-PATH_OUT = Path(r'I:\Projects\Josh\Regional Monitoring\Accessibility\shp')
+## SQL stuff ---
 
+DB='GISData'
+SERVERNAME='SQL-SVR'
+TRUSTEDCONN='yes'
+ENCRYPT='yes'
+TRUSTEDCERT='yes'
+
+
+def sqlqry_to_gdf(query_str):
+
+    def get_odbc_driver():
+        
+        # gets name of ODBC driver, with name "ODBC Driver <version> for SQL Server"
+        drivers = [d for d in pyodbc.drivers() if 'ODBC Driver ' in d]
+
+        if len(drivers) == 0:
+            errmsg = f"ERROR. No usable ODBC Driver found for SQL Server." \
+            f"drivers found include {drivers}. Check ODBC Administrator program" \
+            "for more information."
+
+            raise Exception (errmsg)
+        else:
+            d_versions = [re.findall('\d+', dv)[0] for dv in drivers] # [re.findall('\d+', dv)[0] for dv in drivers]
+            latest_version = max([int(v) for v in d_versions])
+            driver = f"ODBC Driver {latest_version} for SQL Server"
+
+            return driver
+
+    driver = get_odbc_driver()
+
+    conn_str = f"DRIVER={driver};" \
+        f"SERVER={SERVERNAME};" \
+        f"DATABASE={DB};" \
+        f"Trusted_Connection={TRUSTEDCONN};" \
+        f"Encrypt={ENCRYPT};" \
+        f"TrustServerCertificate={TRUSTEDCERT};"
+
+    conn_str = urllib.parse.quote_plus(conn_str)
+    engine = sqla.create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
+
+    start_time = perf()
+
+    print("\nExecuting query. Results loading into dataframe...")
+    gdf = gpd.read_postgis(query_str, engine, geom_col="geometry")
+    srid = int(gdf["srid"].iloc[0])
+    gdf = gdf.set_crs(epsg=srid)
+    gdf = gdf.drop('srid', axis=1)
+
+    rowcnt = gdf.shape[0]
+    
+    et_mins = round((perf() - start_time) / 60, 2)
+    print(f"Successfully executed query in {et_mins} minutes. {rowcnt} rows loaded into dataframe.")
+
+    return gdf
+
+
+## Dataframe stuff ---
 
 def re_remove_post(x, exp = '.'):
-    if x == 'nan':
-        return 'nan'
-    else:
-        return x.split(exp, 1)[0]
+    try:
+        x.split(exp, 1)[0]
+    except:
+        pass
+    return x
 
+def clean_fips(df_acs):
 
+    df_acs['Block Group ID'] = df_acs['Block Group ID'].fillna(0)
+    df_acs['Block Group ID'] = df_acs['Block Group ID'].astype(str).apply(re_remove_post)
+
+    df_acs['State FIPS'    ] = df_acs['State FIPS'    ].astype(str).apply('{:0>2}'.format)
+    df_acs['County FIPS'   ] = df_acs['County FIPS'   ].astype(str).apply('{:0>3}'.format)
+    df_acs['Tract ID'      ] = df_acs['Tract ID'      ].astype(str).apply('{:0>6}'.format)
+    df_acs['Block Group ID'] = df_acs['Block Group ID'].astype(str)
+
+    df_acs['Census Tract'] = df_acs['State FIPS'] + df_acs['County FIPS'] + df_acs['Tract ID']
+    df_acs['GEOID'       ] = df_acs['State FIPS'] + df_acs['County FIPS'] + df_acs['Tract ID'] + df_acs['Block Group ID']
+    df_acs['GEOID'] = df_acs['GEOID'].str[:-2].astype('int64')
+
+    return df_acs
+
+def reshape_acs_table(df_acs):
+    df_acs = df_acs.sort_values(['GEOID', 'Year'], ascending=[True,False])
+    df_acs = df_acs.drop_duplicates(['GEOID', 'Race/Ethnicity'])
+    df_acs = df_acs[['GEOID', 'Race/Ethnicity', 'Population']]
+    df_acs = df_acs.pivot_table(index='GEOID', columns='Race/Ethnicity', values='Population').reset_index()
+    return df_acs
+
+def import_acs_table(file_acs):
+    print('\n\nImporting/processing excel or csv file to merge onto the geospatial layer...')
+    df_acs = pd.read_excel(file_acs, sheet_name='Block Groups')
+    df_acs = clean_fips(df_acs)
+    df_acs = reshape_acs_table(df_acs)
+    return df_acs
+
+def combine_acs(df_acs, gdf_bg):
+
+    print('Combining ACS data with the SACOG block groups...')
+    gdf_bg_acs = gdf_bg.merge(df_acs, on='GEOID', how='left')
+
+    gdf_bg_acs.columns = [x.lower() for x in gdf_bg_acs.columns]
+    gdf_bg_acs.columns = [re.sub('[^\\w\\s]', '_', col.strip()) for col in gdf_bg_acs.columns]
+    gdf_bg_acs.columns = [re.sub('[\s+]'    , '_', col.strip()) for col in gdf_bg_acs.columns]
+    gdf_bg_acs.columns = [re.sub('\\?'      , '' , col.strip()) for col in gdf_bg_acs.columns]
+
+    gdf_bg_acs = gdf_bg_acs[['all', 'asian__nh_', 'black_or_african_american__nh_', 'hispanic_or_latino', 'white__nh_', 'geometry']]
+    gdf_bg_acs.columns = ['all', 'asian_nh', 'black_nh', 'hispanic', 'white_nh', 'geometry']
+    gdf_bg_acs = gdf_bg_acs.fillna(0)
+
+    print('\nFinal result:')
+    display(gdf_bg_acs.head())
+
+    return gdf_bg_acs
+
+def export_shp(gdf_bg_acs, file_shp):
+        print('\n\nExporting to shp...')
+        os.makedirs(file_shp.parent, exist_ok=True)
+        gdf_bg_acs.to_file(file_shp, engine='pyogrio')
+        print('Successfully EXPORTed shp\n\n')
 
 
 
 # Main --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+EXPORT=True
+ACS_YEAR=2024
+CRS=4326 # used by Conveyal
+
+FILE_IN_ACS = Path(r'I:\Projects\Josh\Regional Monitoring\weights') / 'Total_Population Block Groups ACS5.xlsx'
+if ACS_YEAR>=2020:
+    SQL_BG = """
+                SELECT
+                    GEOCODE AS GEOID,
+                    Shape.STAsBinary() AS geometry,
+                    Shape.STSrid AS srid
+                FROM gisowner.T2020_Census_Block_Groups_SACOG_Region
+                """
+else:
+    SQL_BG = """
+            SELECT
+                GEOID10 AS GEOID,
+                Shape.STAsBinary() AS geometry,
+                Shape.STSrid AS srid
+            FROM gisowner.BlockGroups2010
+            """
+FILE_OUT_SHP = Path(r'I:\Projects\Josh\Conveyal\conveyal_inputs\shp\pop3') / f'pop3_bg_{ACS_YEAR}'
+
+
+
 if __name__ == '__main__':
 
-    print(); print()
-    print('Importing/processing excel or csv file to merge onto the geospatial layer...')
-    wkbook = 'Pop_3 Block Groups ACS5_ValleyVision.xlsx'
-    sheet_name = 'Block Groups'
-    file_in = path_in / wkbook
-    df = pd.read_excel(file_in, sheet_name=sheet_name)
+    df_acs = import_acs_table(FILE_IN_ACS)
+    gdf_bg = sqlqry_to_gdf(SQL_BG)
+    if gdf_bg.crs != CRS:
+        gdf_bg = gdf_bg.to_crs(CRS)
 
-    df['Block Group ID'] = df['Block Group ID'].fillna(0)
-    df['Block Group ID'] = df['Block Group ID'].astype(str).apply(re_remove_post)
-
-
-    df['State FIPS'    ] = df['State FIPS'    ].astype(str).apply('{:0>2}'.format)
-    df['County FIPS'   ] = df['County FIPS'   ].astype(str).apply('{:0>3}'.format)
-    df['Tract ID'      ] = df['Tract ID'      ].astype(str).apply('{:0>6}'.format)
-    df['Block Group ID'] = df['Block Group ID'].astype(str)
-
-    df['Census Tract'] = df['State FIPS'] + df['County FIPS'] + df['Tract ID']
-    df['GEOID'       ] = df['State FIPS'] + df['County FIPS'] + df['Tract ID'] + df['Block Group ID']
-    df['GEOID'] = df['GEOID'].astype('int64')
-
-
-    df = df.sort_values(['GEOID', 'Year'], ascending=[True,False])
-    df = df.drop_duplicates(['GEOID', 'Race_Ethnicity'])
-    df = df[['GEOID', 'Race_Ethnicity', 'Population']]
-
-    df = df.pivot_table(index='GEOID', columns='Race_Ethnicity', values='Population').reset_index()
-
-
-    print(); print()
-    print('Importing/processing geospatial layer...')
-    path_shp = Path(r'I:\Projects\Josh\Geospatial Data\TIGER\geojson')
-    shpname = 'tl_2020_valleyvision_bg.geojson'
-    file_shp = path_shp / shpname
-    gdf_bg = gpd.read_file(file_shp)
-    gdf_bg = gdf_bg.to_crs("EPSG:4326")
-
-
-    gdf_bg = gdf_bg[['GEOID', 'geometry']]
-
-    gdf_bg = gdf_bg.merge(df, on='GEOID', how='left')
-
-    gdf_bg.columns = [x.lower() for x in gdf_bg.columns]
-    gdf_bg.columns = [re.sub('[^\\w\\s]', '_', col.strip()) for col in gdf_bg.columns]
-    gdf_bg.columns = [re.sub('[\s+]'    , '_', col.strip()) for col in gdf_bg.columns]
-    gdf_bg.columns = [re.sub('\\?'      , '' , col.strip()) for col in gdf_bg.columns]
-
-    gdf_bg = gdf_bg[['all', 'asian__nh_', 'black_or_african_american__nh_', 'hispanic_or_latino', 'white__nh_', 'geometry']]
-    gdf_bg.columns = ['all', 'asian_nh', 'black_nh', 'hispanic', 'white_nh', 'geometry']
-    gdf_bg = gdf_bg.fillna(0)
-    display(gdf_bg)
-
-
+    gdf_bg['GEOID'] = gdf_bg['GEOID'].astype('int64')
+    gdf_bg_acs = combine_acs(df_acs, gdf_bg)
 
     if EXPORT:
-        print(); print()
-        print('Exporting to shp...')
-        shp_out = "pop3_bg_ValleyVision"
-        file_shp = PATH_OUT / shp_out
-        os.makedirs(file_shp, exist_ok=True)
-        file_shp_out = file_shp / f'{shp_out}.shp'
-        gdf_bg.to_file(file_shp_out)
-        print('Successfully EXPORTed shp')
-        print();print()
-
+        export_shp(gdf_bg_acs, FILE_OUT_SHP)
 

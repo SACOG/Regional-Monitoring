@@ -13,13 +13,17 @@ yaml_file = rhna.load_yaml()
 
 
 def re_remove_post(x, exp = ':'):
-    try: x = str(x.split(exp, 1)[0])
-    except: pass
+    try:
+        x = str(x.split(exp, 1)[0])
+    except Exception as e:
+        e
     return x
 
 def re_remove_pre(x, exp = ': '):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
+    try:
+        x = str(x.split(exp, 1)[1])
+    except Exception as e:
+        e
     return x
 
 PATH_DATA = Path(yaml_file['Path_Data'])
@@ -32,8 +36,8 @@ warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
-    df_places_a = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR}a Places ACS5.xlsx')
-    df_places_b = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR}b Places ACS5.xlsx')
+    df_places_a = pd.read_excel(PATH_DATA / f'{INDICATOR}a Places ACS5.xlsx')
+    df_places_b = pd.read_excel(PATH_DATA / f'{INDICATOR}b Places ACS5.xlsx')
     df_places = pd.concat([df_places_a, df_places_b])
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
@@ -43,7 +47,7 @@ if __name__ == '__main__':
     df_places['Housing Tenure'] = df_places['Year Moved to Current Residence'].apply(re_remove_post)
     df_places['Year Moved to Current Residence'     ] = df_places['Year Moved to Current Residence'].apply(re_remove_pre )
 
-    df_places = df_places[['County Name', 'Geography', 'Households', 'Housing Tenure', 'Year Moved to Current Residence', 'Percentage']]
+    df_places = df_places[['County Name', 'Geography', 'Households', 'Housing Tenure', 'Year Moved to Current Residence', 'Percent']]
     df_places['Percent'] = df_places['Households'] / df_places.groupby(['County Name', 'Geography', 'Year Moved to Current Residence'])['Households'].transform('sum')
 
     df_places['Sort'] = pd.Categorical(df_places['Year Moved to Current Residence'], ['Moved in 2021 or later', 'Moved in 2018 to 2020', 'Moved in 2010 to 2017', 'Moved in 2000 to 2009', 'Moved in 1999 or earlier'])

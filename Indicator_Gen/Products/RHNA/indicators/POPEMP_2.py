@@ -6,7 +6,6 @@ from tqdm import tqdm
 import time
 import warnings
 
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
@@ -21,8 +20,8 @@ warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
-    df_places2 = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx', sheet_name='Places')
-    df_places1 = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places DEC.xlsx' , sheet_name='Places')
+    df_places2 = pd.read_excel(PATH_DATA / f'{INDICATOR} Places ACS5.xlsx', sheet_name='Places')
+    df_places1 = pd.read_excel(PATH_DATA / f'{INDICATOR} Places DEC.xlsx' , sheet_name='Places')
 
     df_places1['Geography'] = df_places1['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places1['Geography'] = df_places1['NAME'].str.replace(' city, California', '', regex=True)
@@ -32,8 +31,8 @@ if __name__ == '__main__':
     df_places1 = df_places1.rename(columns={'Race_Ethnicity':'Race/Ethnicity'})
     df_places2 = df_places2.rename(columns={'Race_Ethnicity':'Race/Ethnicity'})
 
-    df_places1 = df_places1[df_places1['Race/Ethnicity'] != 'All'][['County Name', 'Geography', 'Year', 'Race/Ethnicity', 'Population', 'Percentage']]
-    df_places2 = df_places2[df_places2['Race/Ethnicity'] != 'All'][['County Name', 'Geography', 'Year', 'Race/Ethnicity', 'Population', 'Percentage']]
+    df_places1 = df_places1[df_places1['Race/Ethnicity'] != 'All'][['County Name', 'Geography', 'Year', 'Race/Ethnicity', 'Population', 'Percent']]
+    df_places2 = df_places2[df_places2['Race/Ethnicity'] != 'All'][['County Name', 'Geography', 'Year', 'Race/Ethnicity', 'Population', 'Percent']]
 
     df_places1.loc[df_places1['Race/Ethnicity'].isin(['Some other race (NH)', 'Two or more races (NH)']), 'Race/Ethnicity'] = 'Other race or multiple races (NH)'
     df_places2.loc[df_places2['Race/Ethnicity'].isin(['Some other race (NH)', 'Two or more races (NH)']), 'Race/Ethnicity'] = 'Other race or multiple races (NH)'

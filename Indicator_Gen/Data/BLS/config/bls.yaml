@@ -8,46 +8,63 @@
 
 Project:
   - 'Monitoring and Reporting'
+  - 'Peer Region Studies'
 
 
 Indicators:
   Monitoring and Reporting:
     Jobs_OH:
-      sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
-      folder: 'Sector'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs\Jobs_OH Sector'
       survey: ['SM', 'CE']
       weighted_by: 'No'
     Jobs_1:
-      sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
-      folder: 'Total'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs\Jobs_1 Total'
       survey: ['SM', 'CE']
       percentages: 'Yes'
       weighted_by: 'No'
     Jobs_2:
-      sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
-      folder: 'Sector'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs_2 Sector'
       survey: ['SM', 'CE']
       percentages: 'Yes'
       weighted_by: 'No'
     Jobs_3:
-      sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
-      folder: 'Type'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs\Jobs_3 Type'
       survey: ['SM', 'CE']
       percentages: 'Yes'
       weighted_by: 'No'
     Jobs_5:
-      sp_location: 'Vibrant and Inclusive Places\\Economy\\Jobs'
-      folder: 'Employer Size'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs\Jobs_5 Employer Size'
       survey: 'EN'
       percentages: 'Yes'
       weighted_by: 'No'
     Labor_2:
-      sp_location: 'Vibrant and Inclusive Places\\Economy\\Labor Force'
-      folder: 'Unemployment'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Labor Force\Labor_2 Unemployment'
       survey: 'LA'
       percentages: 'No'
       weighted_by: 'Employees'
 
+  Peer Region Studies:
+    Jobs_1:
+      # sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\SACOG Peer Regions tours\2026\2026 peer region tour data outputs\2026 update\MnR_outputs'
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      survey: ['SM', 'CE']
+      percentages: 'Yes'
+      weighted_by: 'No'
+    Jobs_2:
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      survey: ['SM', 'CE']
+      percentages: 'Yes'
+      weighted_by: 'No'
+    Jobs_3:
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      survey: ['SM', 'CE']
+      percentages: 'Yes'
+      weighted_by: 'No'
+    Labor_2:
+      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      survey: 'LA'
+      percentages: 'No'
+      weighted_by: 'Employees'
 
 
 Surveys:
@@ -71,7 +88,7 @@ Surveys:
     size_code: No
     owner_code: No
     measure_code: No
-    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]
   CE: # National Employment, Hours, and Earnings (Current Employment Statistics (CES))
     geographies_available:
     - National
@@ -91,7 +108,7 @@ Surveys:
     size_code: No
     owner_code: No
     measure_code: No
-    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]
   EN: # State and County Employment and Wages from Quarterly Census of Employment and Wages (Quarterly Census of Employment and Wages (QCEW))
     geographies_available:
     - Counties
@@ -131,7 +148,7 @@ Surveys:
     - Total Government
     - Total U.I. Covered (Excludes Federal Government)
     measure_code: No
-    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]
   LA: # Local Area Unemployment Statistics (LAUS)
     geographies_available:
     - Counties
@@ -152,7 +169,7 @@ Surveys:
     - 'Employment-Population Ratio'
     - 'Labor Force Participation Rate'
     - 'Civilian Noninstitutional Population'
-    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+    years_available: [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]
 
 
 

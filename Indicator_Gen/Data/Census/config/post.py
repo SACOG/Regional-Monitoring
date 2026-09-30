@@ -17,40 +17,32 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 import time
-import os
 import re
 from IPython.display import display
-
 import sys
 sys.path.append(str(Path(__file__).parent.parent.parent.parent/'config'))
 import functions as func
-import help
-
+import helpers
 sys.path.append(str(Path(__file__).parent/'config'))
 import get
 
-
-PATH_GIT = Path(__file__).parent.parent.parent.parent
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_GIT / 'Data' / 'Census' / 'config'
+PATH_CONFIG  = Path(__file__).parent
+PATH_CONFIG0 = Path(__file__).parent.parent.parent.parent / 'config'
 
 FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
 FILE_CPI = PATH_CONFIG0 / 'CPI_IAF.xlsx'
 FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
 
-# SharePoint OneDrive paths
-PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-PATH_MAIN = PATH_SP / 'Data'
-PATH_WEIGHTS = PATH_MAIN / 'Reference' / 'Weights'
-PATH_ABOUT = PATH_SP / 'Process Revamp' / 'Task 6. Process Map'
 
+# SharePoint/Network drives
+PATH_ABOUT = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents' / 'Process Revamp' / 'Task 6. Process Map'
 PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
 PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
+PATH_WEIGHTS = Path(r'I:\Projects\Josh\Regional Monitoring\weights')
 
 
 
-
-
+# User defined Crosswalks
 GEO_SHEETS = {
                     'Block Groups': 'Block Groups'
                         , 'Tracts': 'Tracts'
@@ -179,7 +171,7 @@ def acs_match_county_to_mpo(df, params):
     return df
 
 
-def acs_merge_vars_labels(df, params, df_vars):
+def acs_merge_vars_labels(df, params):
 
     print('Merging ACS common variable names (and user defined groups) onto their estimate IDs...')
 
@@ -187,7 +179,7 @@ def acs_merge_vars_labels(df, params, df_vars):
     df = df.dropna()
     df['Total'] = df['Total'].apply(pd.to_numeric)
     df['Year'] = df['Year'].astype(int)
-    df = df.merge(df_vars.rename(columns={'ID2':'Estimate ID'}), on=['Year', 'Estimate ID'], how='left')
+    df = df.merge(params['df_vars'].rename(columns={'ID2':'Estimate ID'}), on=['Year', 'Estimate ID'], how='left')
     df = df.drop_duplicates()
 
     return df
@@ -233,9 +225,8 @@ For any indicator involving rolls ups that need to be weighted by the population
 
 def acs_cpi_adjust(df, params):
 
-    print('Adjusting dollar estimates for inflation using the CPI...')
-
-    if params['indicator'] in ['Income_1']:#, 'Chamber_H_5']:
+    if params['adjust_cpi']:
+        print('Adjusting dollar estimates for inflation using the CPI...')
         df_cpi = pd.read_excel(FILE_CPI, sheet_name='BLS_West')
         df_cpi = df_cpi[['Year', 'IAF_' + str(params['end_year'])]]
         df = df.merge(df_cpi, on='Year', how='left')
@@ -243,7 +234,7 @@ def acs_cpi_adjust(df, params):
         df['MOE'  ] = round(df['MOE'  ]*df['IAF_' + str(params['end_year'])])
         df = df.drop(['IAF_' + str(params['end_year'])], axis=1)
 
-        return df
+    return df
 
 
 
@@ -279,7 +270,7 @@ def acs_merge_place_codes(df, params):
         df['NAME'] = df['NAME'].str.replace(' town, California', '', regex=True)
         df['NAME'] = df['NAME'].str.replace(' city, California', '', regex=True)
         df = df.drop_duplicates()
-        
+
         return df
     
 
@@ -318,8 +309,7 @@ def acs_merge_weights(df, params):
                         ]
             choices = ["All", "American Indian or Alaska Native", "Asian", "Black or African American", "Hispanic or Latino",
                         "Native Hawaiian or other Pacific Islander", "White (NH)", "Some other race", "Two or more races"]
-            df_weight["Race/Ethnicity"] = np.select(conditions, choices)          
-        
+            df_weight["Race/Ethnicity"] = np.select(conditions, choices)
         df = df.merge(df_weight, on=[field_id, 'Year', 'Race/Ethnicity'], how='left').drop_duplicates()
 
         if params['indicator'] in ['Chamber_H_5', 'Chamber_H_7']:
@@ -350,10 +340,10 @@ Rolls up population/household counts and standard errors and calculates percenta
 
 def acs_rollup(df, params):
 
-    x = df['Total'].to_numpy()
+    x = df['Total'].fillna(0).to_numpy() # TODO: fillna(0)?  Does this make sense?
 
     if params['moe']:
-        se = df['MOE'].to_numpy()
+        se = df['MOE'].fillna(0).to_numpy()
 
     if not params['weight']:
         est = np.sum(x)
@@ -398,10 +388,10 @@ def acs_calculate_unincorporated(df, params):
 
     if params['geo'] == 'Places':
 
-        if params['unincorporated']: # TODO: Need to figure out if I can get around this weird file name problem
+        if params['unincorporated']:
 
             print('Calculating estimates for unincorporated communities...')
-        
+            # TODO: Need to figure out if I can get around this weird file name problem
             if params['sample'] == 'SUBJECT':
                 params['estimate'] = re.sub('ACS', 'SUBJECT', params['estimate'])
             if params['sample'] == 'DP':
@@ -418,7 +408,7 @@ def acs_calculate_unincorporated(df, params):
                 params['estimate'] = re.sub('DP', 'ACS', params['estimate'])
 
 
-            if params['indicator'] in ['Income_1', 'RHNA_POPEMP_26']:
+            if params['indicator'] in ['Income_1', 'HSG_10', 'POPEMP_27', 'FARM_6', 'HSG_12']:
 
                 ## Need to include weighted average of unincorporated areas properly for things like income
                 # County Average Household Income = ((Unincorporated Average Household Income)*(Unincorporated Population) + (Incorporated Average Household Income)*(Incorporated Population)) / (County Population)
@@ -430,23 +420,34 @@ def acs_calculate_unincorporated(df, params):
                 # Subtact total incorporated county households from total county households to get total unincorporated county households
                 if params['indicator'] == 'Income_1':
                     est = 'Median Household Income'
-                if params['indicator'] == 'RHNA_POPEMP_26':
+                if params['indicator'] == 'HSG_10':
+                    est = 'Median Contract Rent'
+                if params['indicator'] == 'POPEMP_27':
                     est = 'Median Age'
+                if params['indicator'] == 'FARM_6':
+                    est = 'Median Annual Earnings'
+                if params['indicator'] == 'HSG_12':
+                    est = 'Median Gross Rent'
 
                 df_counties = pd.read_excel(file_counties, sheet_name='Counties')
 
-
+                ## TODO:
+                # I included 'Variable' below and it wasn't there previously
+                # This is because of FARM_6
+                # FARM_6 has more than one variable category, which the other indicators did not
+                # So when merging on population/households for weights, I also need to include it by variable (in this case, number of farmworkers vs all workers, which may not be possible)
+                # But in general, including variable would make this more robust, just going to take some reworking
                 if params['moe']:
-                    cols = ['County Name', 'Year', 'Race/Ethnicity', est, 'Margin of Error']
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', 'Variable', est, 'Margin of Error'] # Include 'Variable'?
                 else:
-                    cols = ['County Name', 'Year', 'Race/Ethnicity', est]
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', 'Variable', est] # Include 'Variable'?
                 df_counties = df_counties[cols].rename(columns={est:f'{est} County', 'Margin of Error':'MOE County'})
 
                 df_inc1 = df.groupby(['County Name', 'Year', 'Race/Ethnicity', 'Variable'], as_index=False, sort=False).apply(lambda x: acs_rollup(x, params))
-                df_inc1 = df_inc1.drop(['Variable', params['weight']], axis=1).rename(columns={'Total':f'{est} Inc', 'MOE':'MOE Inc'})
+                df_inc1 = df_inc1.drop([params['weight']], axis=1).rename(columns={'Total':f'{est} Inc', 'MOE':'MOE Inc'})# Remove 'Variable' from drop?
                 file_cdp_pop = PATH_WEIGHTS / f'Total_{params['weight']} {params['geo']} {params['estimate']}.xlsx'
                 df_inc_pop = pd.read_excel(file_cdp_pop, sheet_name=GEO_SHEETS[params['geo']])
-                df_inc_pop = df_inc_pop[['County Name', 'Place ID', 'NAME', 'Year','Race/Ethnicity', params['weight']]]
+                df_inc_pop = df_inc_pop[['County Name', 'Place ID', 'NAME', 'Year','Race/Ethnicity', params['weight']]] # Include 'Variable'?
                 list_cdp_inc = pd.read_excel(FILE_AREA, sheet_name='CDPcodes')
                 list_cdp_inc = list_cdp_inc[(list_cdp_inc['MPO']=='SACOG') & (list_cdp_inc['Year']==2020) & (list_cdp_inc['Incorporated']=='Yes')]
                 list_cdp_inc['NAME'] = list_cdp_inc['NAME'].str.replace(' city', '')
@@ -457,20 +458,20 @@ def acs_calculate_unincorporated(df, params):
 
                 file_counties_pop = PATH_WEIGHTS / f'Total_{params['weight']} Counties {params['estimate']}.xlsx'
                 df_counties_pop = pd.read_excel(file_counties_pop, sheet_name='Counties')
-                df_counties_pop = df_counties_pop[['County Name', 'Year','Race/Ethnicity', params['weight']]]
+                df_counties_pop = df_counties_pop[['County Name', 'Year', 'Race/Ethnicity', params['weight']]] # Include 'Variable'?
 
                 df_all_weight = df_counties_pop.merge(df_inc_pop.rename(columns={params['weight']:f'{params['weight']} Inc'}), on=['County Name', 'Year', 'Race/Ethnicity'])
                 df_all_weight[f'{params['weight']} Uninc'] = df_all_weight[params['weight']] - df_all_weight[f'{params['weight']} Inc']
 
-                df_all_est = df_counties.merge(df_inc1, on=['County Name', 'Year', 'Race/Ethnicity'])
+                df_all_est = df_counties.merge(df_inc1, on=['County Name', 'Year', 'Race/Ethnicity', 'Variable']) # Include 'Variable'
                 df_all = df_all_est.merge(df_all_weight, on=['County Name', 'Year', 'Race/Ethnicity'])
 
                 def calculate_uninc_est(county_est, county_weight, incorp_est, incorp_weight, unincorp_weight):
                     try:
                         unincorp_income = ((county_est)*(county_weight) - (incorp_est)*(incorp_weight)) / (unincorp_weight)
                     except Exception as e:
-                        print('Quite exceptional!', e)
-                        unincorp_income = 999999
+                        e
+                        unincorp_income = np.nan
                     return unincorp_income
                 
                 def calculate_uninc_est_me(county_me, county_hh, incorp_me, incorp_hh, uninc_hh):
@@ -479,16 +480,17 @@ def acs_calculate_unincorporated(df, params):
                         term2 = (incorp_hh / uninc_hh)**2 * incorp_me**2
                         return np.sqrt(term1 + term2)
                     except Exception as e:
-                        print('Quite exceptional!', e)
+                        e
                         return np.nan
+                
                 df_all[f'{est} Uninc'] = df_all.apply(lambda x: calculate_uninc_est(x[f'{est} County'], x[params['weight']], x[f'{est} Inc'], x[f'{params['weight']} Inc'], x[f'{params['weight']} Uninc']), axis=1)
                 if params['moe']:
                     df_all[f'{est} Uninc MOE'] = df_all.apply(lambda x: calculate_uninc_est_me(x['MOE County'], x[params['weight']], x['MOE Inc'], x[f'{params['weight']} Inc'], x[f'{params['weight']} Uninc']), axis=1)
-                    cols = ['County Name', 'Year', 'Race/Ethnicity', f'{est} Uninc', f'{est} Uninc MOE', f'{params['weight']} Uninc']
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', 'Variable', f'{est} Uninc', f'{est} Uninc MOE', f'{params['weight']} Uninc'] # Include 'Variable'?
                 else:
-                    cols = ['County Name', 'Year', 'Race/Ethnicity', f'{est} Uninc', f'{params['weight']} Uninc']
+                    cols = ['County Name', 'Year', 'Race/Ethnicity', 'Variable', f'{est} Uninc', f'{params['weight']} Uninc'] # Include 'Variable'?
                 df_uninc = df_all[cols].rename(columns={f'{est} Uninc':'Total', f'{est} Uninc MOE':'MOE', f'{params['weight']} Uninc':params['weight']})
-                df_uninc[['State FIPS', 'Variable', 'Place ID', 'NAME', 'Sort']] = '06', est, 'Unincorporated', 'Unincorporated', 1
+                df_uninc[['State FIPS', 'Place ID', 'NAME', 'Sort']] = '06', 'Unincorporated', 'Unincorporated', 1
                 df_uninc = calculate_ME_ratio(df_uninc, params)
                 df = pd.concat([df, df_uninc])
 
@@ -499,9 +501,12 @@ def acs_calculate_unincorporated(df, params):
 
                 df_inc1 = df.groupby(['State FIPS', 'County Name', 'Year', 'Race/Ethnicity', 'Variable'], as_index=False, sort=False).apply(lambda x: acs_rollup(x, params))
                 df_counties = pd.read_excel(file_counties, sheet_name='Counties')
+                df_counties = df_counties.rename(columns={params['variable']:'Variable'})
+                if 'Race/Ethnicity' not in df_counties.columns:
+                    df_counties['Race/Ethnicity']='All'
                 if not params['moe']:
                     df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race/Ethnicity', 'Variable', params['metric']]], on=['County Name', 'Year', 'Race/Ethnicity', 'Variable'], how='left')
-                if params['moe']: 
+                if params['moe']:
                     df_inc1 = df_inc1.merge(df_counties[['County Name', 'Year', 'Race/Ethnicity', 'Variable', params['metric'], 'Margin of Error']], on=['County Name', 'Year', 'Race/Ethnicity', 'Variable'], how='left')
                     df_inc1['diff_ME'] = np.sqrt(df_inc1['Margin of Error']**2 + df_inc1['MOE']**2)
                 df_inc1['diff'] = df_inc1[params['metric']] - df_inc1['Total']
@@ -526,6 +531,7 @@ def acs_aggregate(df, params):
 
     print('Aggregating and rolling up across groupings and geographies, as needed...')
 
+    df = df.drop_duplicates().reset_index(drop=True)
     df = df.groupby(GEOID_CLEAN[params['geo']] + ['Year', 'Race/Ethnicity', 'Variable', 'Sort'], as_index=False, sort=False).apply(lambda x: acs_rollup(x, params))
 
     if params['indicator'] == 'Income_4':
@@ -592,40 +598,46 @@ def sort_table(df, params):
         df = df.sort_values(by= GEOID_CLEAN[params['geo']]+['Year', 'Race/Ethnicity_sort', 'Sort'], ascending=[item in GEOID_CLEAN[params['geo']] for item in GEOID_CLEAN[params['geo']]]+[False, True, True])
     df = df.drop(['Race/Ethnicity_sort', 'Sort'], axis=1).reset_index(drop=True)
     if 'Percent' in df.columns:
-        df = help.move_column_after(df, 'Percent', 'Total')
+        df = helpers.move_column_after(df, 'Percent', 'Total')
     # if params['project'] == 'Monitoring and Reporting':
     #     if params['geo'] not in ['MSA', 'Places']:
     #         df = df.drop('NAME', axis=1)
     df = df.rename(columns={'Total': params['metric'], 'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio', 'MSA_ID':'MSA ID'})
+
+    if params['variable']:
+        if isinstance(params['variable'], str):
+            df = df.rename(columns={'Variable': params['variable']})
+        if isinstance(params['variable'], dict):
+            df = df.rename(columns=params['variable'])
+    else:
+        df = df.drop('Variable', axis=1)
+
+    if not params['race']:
+        df = df.drop('Race/Ethnicity', axis=1)
 
     return df
 
 
 
 
-def acs_main(df, params, df_vars):
+def acs_main(df, params):
 
     '''
     Main function to used process requested ACS data
     '''
 
-    print()
-    print('Post processing for ACS data:')
-    print()
-
+    print('\nPost processing for ACS data:\n')
     df = acs_convert_to_nan(df)
-
     df = acs_clean_cols(df, params)
     
     if params['geo'] == 'Counties':
         df = acs_match_county_to_mpo(df, params)
     
-    df = acs_merge_vars_labels(df, params, df_vars)
+    df = acs_merge_vars_labels(df, params)
     df = acs_moe_reshape(df, params)
-    df = help.clean_fips(df)
+    df = helpers.clean_fips(df)
 
-    if params['adjust_cpi']:
-        df = acs_cpi_adjust(df, params)
+    df = acs_cpi_adjust(df, params)
 
     if params['geo'] == 'Places':
         df = acs_merge_place_codes(df, params)
@@ -636,9 +648,8 @@ def acs_main(df, params, df_vars):
     df = acs_aggregate(df, params)
     df = sort_table(df, params)
 
-    print('\n'*2)
     time.sleep(5)
-    print('Final table:')
+    print('\n\nFinal table:')
     display(df)
     print('\n'*2)
     time.sleep(5)
@@ -652,11 +663,11 @@ def acs_export(df, params):
     print('\n'*2)
     workbooks = set_workbook_name(params)
 
-    path_out_sp = Path(params['export_loc']) / f"{params['indicator']} {params['folder']}"
-    if params['project'] != 'Monitoring and Reporting':
-        path_out_sp = Path(params['export_loc'])
-    if params['project'] == 'Monitoring and Reporting' and params['server']: paths = [PATH_SERVER, path_out_sp]
-    else: paths = [path_out_sp]
+    path_out_sp = Path(params['export_loc'])
+    if params['project'] == 'Monitoring and Reporting' and params['server']:
+        paths = [PATH_SERVER, path_out_sp]
+    else:
+        paths = [path_out_sp]
 
     if params['geo'] == 'Counties' and params['mpo']:
         df_mpo = df[df['County Name']=='MPO'].reset_index(drop=True).drop(['County FIPS', 'County Name'], axis=1)
@@ -691,9 +702,24 @@ def misc_groups():
     return group_puma, group_counties, group_msa, group_mpo
 
 
+def geo_groups():
+
+    group_puma     = ['State FIPS', 'MPO', 'PUMA'       , 'PUMA NAME'  ]
+    group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
+    group_msa      = [                     'MSA_ID'     , 'MSA'        ] # Dropped State FIPS
+    group_mpo      = [              'MPO'                              ] # Dropped State FIPS
+
+    d_geo_groups = {
+        'PUMA': group_puma
+        , 'Counties': group_counties
+        , 'MSA': group_msa
+        , 'MPO': group_mpo
+    }
+
+    return d_geo_groups
 
 
-def pums_clean_data(df, params, weight, df_vars):
+def pums_clean_data(df, params, weight):
 
     '''
     User defined function to do initial cleaning of PUMS tables
@@ -704,8 +730,8 @@ def pums_clean_data(df, params, weight, df_vars):
 
     print('Cleaning FIPS codes fields and variable descriptions...')
 
-    groups  = list(df_vars[df_vars['Data Type'].str.contains('group')]['ID2'].unique())
-    groups2 = list(df_vars[df_vars['Data Type'] ==           'group' ]['ID2'].unique())
+    groups  = list(params['df_vars'][params['df_vars']['Data Type'].str.contains('group')]['ID2'].unique())
+    groups2 = list(params['df_vars'][params['df_vars']['Data Type'] ==           'group' ]['ID2'].unique())
 
     if params['sample'] == 'PUMS':
         df['PUMA'] = df['PUMA'].astype(str).apply('{:0>5}'.format)
@@ -721,7 +747,7 @@ def pums_clean_data(df, params, weight, df_vars):
     for group in groups2:
         df[group] = df[group].astype(int).astype(str).apply('{:0>2}'.format)
 
-    df_vars  ['Value1'] = df_vars  ['Value1'].astype(str).apply('{:0>2}'.format)
+    params['df_vars']  ['Value1'] = params['df_vars']  ['Value1'].astype(str).apply('{:0>2}'.format)
     df['state' ] = df['state' ].astype(str).apply('{:0>2}'.format)
 
     if params['sample'] == 'PUMS':
@@ -730,7 +756,7 @@ def pums_clean_data(df, params, weight, df_vars):
     #     df[weight] = df[weight].astype('float')
     df[groups2] = df[groups2].astype("string")
 
-    df_vars2 = df_vars.pivot_table(index=['Year', 'Value1'], columns='ID2', values='Description2', aggfunc = lambda x: x).reset_index()
+    df_vars2 = params['df_vars'].pivot_table(index=['Year', 'Value1'], columns='ID2', values='Description2', aggfunc = lambda x: x).reset_index()
     cols = ['Year', 'Value1'] + groups2
     df_vars2 = df_vars2[cols]
 
@@ -773,11 +799,11 @@ def pums_cw_to_geos(df, params, groups):
         df_fips_pums = df_fips_pums[['STATEFP', 'PUMA5CE', 'PUMA NAME', 'COUNTYFP', 'Years']].rename(columns={'PUMA5CE':'PUMA', 'STATEFP':'State FIPS', 'COUNTYFP':'County FIPS'}).drop_duplicates()
 
         if params['estimate'] in ['ACS5', 'PUMS5']:
-            df1 = df[df['Year'].isin(help.sequence(2012, 2021, 1))]
-            df2 = df[df['Year'].isin(help.sequence(2022, 2031, 1))]
+            df1 = df[df['Year'].isin(helpers.sequence(2012, 2021, 1))]
+            df2 = df[df['Year'].isin(helpers.sequence(2022, 2031, 1))]
         else:
-            df1 = df[df['Year'].isin(help.sequence(2010, 2020, 1))]
-            df2 = df[df['Year'].isin(help.sequence(2021, 2030, 1))]
+            df1 = df[df['Year'].isin(helpers.sequence(2010, 2020, 1))]
+            df2 = df[df['Year'].isin(helpers.sequence(2021, 2030, 1))]
 
         df1 = df1.merge(df_fips_pums[df_fips_pums['Years'] == '2012-2021'], on=['State FIPS', 'PUMA'], how='left')
         df2 = df2.merge(df_fips_pums[df_fips_pums['Years'] == '2022-2031'], on=['State FIPS', 'PUMA'], how='left')
@@ -830,11 +856,11 @@ def pums_clean_eth_groups(df, params, groups):
 
 def pums_cpi_adjust(df, params):
 
-    if params['indicator'] in ['Income_2', 'Accessibility_2', 'Accessibility_4']:
+    if params['adjust_cpi']:
 
         print('Adjusting income estimates for inflation...')
 
-        df_cpi = pd.read_excel(os.path.join(PATH_CONFIG0, 'CPI_IAF.xlsx'), sheet_name='BLS_West')
+        df_cpi = pd.read_excel(PATH_CONFIG0/'CPI_IAF.xlsx', sheet_name='BLS_West')
         df_cpi = df_cpi[['Year', 'IAF_2024']]
 
         df = df.merge(df_cpi, on='Year', how='left')
@@ -877,20 +903,28 @@ def pums_assign_own_vs_rent(df, params, groups):
     return df, groups
 
 
+
+def clean_hcd_ami(df):
+
+        df['County'].fillna(method='ffill', inplace=True)
+        df['County'] = df['County'].str.replace(' County.*'         , '' , regex = True)
+        df['County'] = df['County'].str.replace('\n'                , ' ', regex = True)
+        df['AMI'   ] = df['County'].str.extract('\$?([0-9,]+)[.%]?')
+        df['AMI'   ] = df['AMI'   ].str.replace(','                 , '' , regex = True)
+        df['County'] = df['County'].str.replace(' \$?([0-9,]+)[.%]?', '' , regex = True)
+        df = pd.melt(df, id_vars = ['County', 'Income Bracket', 'AMI'], var_name='NP', value_name='Income Threshold')
+        df = df[df['Income Bracket'].isin(['Low Income', 'Moderate Income'])]
+        df = df.pivot_table(index = ['County', 'NP'], columns='Income Bracket', values='Income Threshold').reset_index().rename(columns={'County':'County Name'})
+
+        return df
+
+
 def pums_income_brackets(df, params, groups):
 
     if params['indicator'] in ['Income_2', 'Accessibility_2', 'Accessibility_4']:
 
-        df_income_brackets = pd.read_excel(os.path.join(PATH_CONFIG0, 'CA_state_income_brackets_by_household_size.xlsx'), sheet_name='Table')
-        df_income_brackets['County'].fillna(method='ffill', inplace=True)
-        df_income_brackets['County'] = df_income_brackets['County'].str.replace(' County.*'         , '' , regex = True)
-        df_income_brackets['County'] = df_income_brackets['County'].str.replace('\n'                , ' ', regex = True)
-        df_income_brackets['AMI'   ] = df_income_brackets['County'].str.extract('\$?([0-9,]+)[.%]?')
-        df_income_brackets['AMI'   ] = df_income_brackets['AMI'   ].str.replace(','                 , '' , regex = True)
-        df_income_brackets['County'] = df_income_brackets['County'].str.replace(' \$?([0-9,]+)[.%]?', '' , regex = True)
-        df_income_brackets = pd.melt(df_income_brackets, id_vars = ['County', 'Income Bracket', 'AMI'], var_name='NP', value_name='Income Threshold')
-        df_income_brackets = df_income_brackets[df_income_brackets['Income Bracket'].isin(['Low Income', 'Moderate Income'])]
-        df_income_brackets = df_income_brackets.pivot_table(index = ['County', 'NP'], columns='Income Bracket', values='Income Threshold').reset_index().rename(columns={'County':'County Name'})
+        df_income_brackets = pd.read_excel(PATH_CONFIG0/'CA_state_income_brackets_by_household_size.xlsx', sheet_name='Table')
+        df_income_brackets = clean_hcd_ami(df_income_brackets)
         # df_income_brackets['NP'] = df_income_brackets['NP'].astype(str)
         df = df.merge(df_income_brackets, on=['County Name', 'NP'], how='left')
         df.loc[ df['HINCP'] <= df['Low Income']                                          , 'Income Bracket'] = 'Low Income'
@@ -917,7 +951,6 @@ def pums_travel_time_brackets(df, params, groups):
         groups.remove('JWTRNS')
 
     return df, groups
-
 
 
 def pums_calc_moe_ratio(params, df_puma, df_counties, df_msa, df_mpo):
@@ -947,9 +980,36 @@ def pums_calc_moe_ratio(params, df_puma, df_counties, df_msa, df_mpo):
 
 
 
-## TODO:
-# Decompose PUMS_aggregate into smaller helper functions?
-# Consolidate groupby roll ups together somehow?
+'''
+User defined functions to aggregate ACS estimates
+Rolls up population/household counts and standard errors and calculates percentages based on user defined geography/variable mappings
+'''
+
+def pums_rollup(df, params, weight):
+
+    x = df[weight].fillna(0).to_numpy() # TODO: fillna(0)?  Does this make sense?
+    est = np.sum(x)
+    
+    if params['moe']:
+        se = df['MOE'].fillna(0).to_numpy()
+        est_se = np.sqrt(np.sum(se**2))
+
+    if not params['moe']:
+        return pd.Series({'Total': est})
+    if params['moe']:
+        return pd.Series({'Total': est, 'MOE': est_se})
+
+
+
+## TODO: Idea for consolidating df 4 times in a row
+# d_geo_groups = geo_groups()
+# dfs = {'PUMA': df_puma
+#         , 'Counties': df_counties
+#         , 'MSA': df_msa
+#         , 'MPO': df_mpo
+#     }
+# for geo, geo_group in d_geo_groups.items():
+#     dfs[geo] = do something
 
 def pums_aggregate(df_census, params, weight, groups):
 
@@ -961,231 +1021,101 @@ def pums_aggregate(df_census, params, weight, groups):
     print('Rolling up estimtaes to desired group variables and geographies, and calculating percentages...')
 
     group_puma, group_counties, group_msa, group_mpo = misc_groups()
+
     df_census.loc[df_census['MPO'].isna(), 'MPO'] = 'Unknown'
-    df_puma     = df_census.drop([                            'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_puma    ).reset_index()
-    df_counties = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA',                               'SERIALNO'], axis=1).set_index(group_counties).reset_index()
-    df_msa      = df_census.drop(['MPO', 'PUMA', 'PUMA NAME',                  'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_msa     ).reset_index()
-    df_mpo      = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_mpo     ).reset_index()
+    df_puma     = df_census.drop([                            'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_puma    ).drop_duplicates().reset_index()
+    df_counties = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA',                               'SERIALNO'], axis=1).set_index(group_counties).drop_duplicates().reset_index()
+    df_msa      = df_census.drop(['MPO', 'PUMA', 'PUMA NAME',                  'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_msa     ).drop_duplicates().reset_index()
+    df_mpo      = df_census.drop([       'PUMA', 'PUMA NAME', 'MSA_ID', 'MSA', 'County FIPS', 'County Name', 'SERIALNO'], axis=1).set_index(group_mpo     ).drop_duplicates().reset_index()
 
     if params['moe']:
-        def sqrtsumsq(x):
-            return np.sqrt(np.sum(x**2))
-        # sqrtsumsq = lambda x: np.sqrt(np.sum(x**2))
         df_puma    .loc[df_puma    ['MOE'] < 0, 'MOE'] = np.nan
         df_counties.loc[df_counties['MOE'] < 0, 'MOE'] = np.nan
         df_msa     .loc[df_msa     ['MOE'] < 0, 'MOE'] = np.nan
         df_mpo     .loc[df_mpo     ['MOE'] < 0, 'MOE'] = np.nan
+    
+    if params['indicator'] in ['Income_2', 'Accessibility_2', 'Accessibility_3', 'Accessibility_4']:
+        if params['indicator'] == 'Accessibility_4':
+            def accessibility_4(df, params, geos, weight):
+                df1 = df.groupby(geos + ['Year', 'RAC1P'         , 'Travel Time'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+                df2 = df.groupby(geos + ['Year', 'Income Bracket', 'Travel Time'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+                df1.loc[:, 'Income Bracket'] = 'All'
+                df2.loc[:, 'RAC1P'] = 'All'
+                df = pd.concat([df1, df2])
+                return df
+            df_puma     = accessibility_4(df_puma    , params, group_puma    , weight)
+            df_counties = accessibility_4(df_counties, params, group_counties, weight)
+            df_msa      = accessibility_4(df_msa     , params, group_msa     , weight)
+            df_mpo      = accessibility_4(df_mpo     , params, group_mpo     , weight)
+        if params['indicator'] == 'Accessibility_3':
+            df_puma     = df_puma    .groupby(group_puma     + ['Year', 'VEH'         ], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_counties = df_counties.groupby(group_counties + ['Year', 'VEH'         ], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_msa      = df_msa     .groupby(group_msa      + ['Year', 'VEH'         ], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_mpo1     = df_mpo     .groupby(group_mpo      + ['Year', 'VEH', 'RAC1P'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_mpo2     = df_mpo     .groupby(group_mpo      + ['Year', 'VEH'         ], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_mpo2     .loc[:, 'RAC1P'] = 'All'
+            df_mpo      = pd.concat([df_mpo1, df_mpo2])
+        if params['indicator'] == 'Accessibility_2':
+            df_puma     = df_puma    .groupby(group_puma     + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_counties = df_counties.groupby(group_counties + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_msa      = df_msa     .groupby(group_msa      + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_mpo      = df_mpo     .groupby(group_mpo      + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+        if params['indicator'] == 'Income_2':
+            df_puma     = df_puma    .groupby(group_puma     + ['Year', 'Income Bracket'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_counties = df_counties.groupby(group_counties + ['Year', 'Income Bracket'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_msa      = df_msa     .groupby(group_msa      + ['Year', 'Income Bracket'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df_mpo      = df_mpo     .groupby(group_mpo      + ['Year', 'Income Bracket'], as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+
+    elif params['indicator'] == 'Cost_6':
         
-        if params['indicator'] in ['Income_2', 'Accessibility_2', 'Accessibility_3', 'Accessibility_4']:
-            if params['indicator'] == 'Accessibility_4':
-                df_puma1     = df_puma    .groupby(group_puma     + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_counties1 = df_counties.groupby(group_counties + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_msa1      = df_msa     .groupby(group_msa      + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo1      = df_mpo     .groupby(group_mpo      + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_puma2     = df_puma    .groupby(group_puma     + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_counties2 = df_counties.groupby(group_counties + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_msa2      = df_msa     .groupby(group_msa      + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo2      = df_mpo     .groupby(group_mpo      + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_puma1    .loc[:, 'Income Bracket'] = 'All'
-                df_counties1.loc[:, 'Income Bracket'] = 'All'
-                df_msa1     .loc[:, 'Income Bracket'] = 'All'
-                df_mpo1     .loc[:, 'Income Bracket'] = 'All'
-                df_puma2    .loc[:, 'RAC1P'] = 'All'
-                df_counties2.loc[:, 'RAC1P'] = 'All'
-                df_msa2     .loc[:, 'RAC1P'] = 'All'
-                df_mpo2     .loc[:, 'RAC1P'] = 'All'
-                df_puma     = pd.concat([df_puma1    , df_puma2    ])
-                df_counties = pd.concat([df_counties1, df_counties2])
-                df_msa      = pd.concat([df_msa1     , df_msa2     ])
-                df_mpo      = pd.concat([df_mpo1     , df_mpo2     ])
-            if params['indicator'] == 'Accessibility_3':
-                df_puma     = df_puma    .groupby(group_puma     + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_counties = df_counties.groupby(group_counties + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_msa      = df_msa     .groupby(group_msa      + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo1     = df_mpo     .groupby(group_mpo      + ['Year', 'VEH', 'RAC1P'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo2     = df_mpo     .groupby(group_mpo      + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo2     .loc[:, 'RAC1P'] = 'All'
-                df_mpo      = pd.concat([df_mpo1, df_mpo2])           
-            if params['indicator'] == 'Accessibility_2':
-                df_puma     = df_puma    .groupby(group_puma     + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_counties = df_counties.groupby(group_counties + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_msa      = df_msa     .groupby(group_msa      + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo      = df_mpo     .groupby(group_mpo      + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            if params['indicator'] == 'Income_2':
-                df_puma     = df_puma    .groupby(group_puma     + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_counties = df_counties.groupby(group_counties + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_msa      = df_msa     .groupby(group_msa      + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-                df_mpo      = df_mpo     .groupby(group_mpo      + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-
-        elif params['indicator'] == 'Cost_6':
-
+        def cost_6(df, geos, groups, weight):
             groups2 = groups.copy()
             groups3 = groups.copy()
             groups2.remove('RAC1P')
             groups3.remove('housing_type')
+            df1 = df.groupby(geos + ['Year'] + groups , as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df2 = df.groupby(geos + ['Year'] + groups2, as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+            df2['RAC1P'] = 'All'
+            df2 = pd.concat([df1, df2])
+            df3 = df2[df2['housing_type'].isin(['Owner', 'Renter'])]
+            df3 = df3.groupby(geos + ['Year'] + groups3, as_index=False).apply(lambda x: pums_rollup(x, params, 'Total'))
+            df3.loc[:, 'housing_type'] = 'Owners and Renters'
+            df = pd.concat([df2, df3])
+            return df
 
-            df_puma1 = df_puma.groupby(group_puma + ['Year'] + groups , as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_puma2 = df_puma.groupby(group_puma + ['Year'] + groups2, as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_puma2['RAC1P'] = 'All'
-            df_puma2 = pd.concat([df_puma1, df_puma2])
-            df_puma3 = df_puma2[df_puma2['housing_type'].isin(['Owner', 'Renter'])]
-            df_puma3 = df_puma3.groupby(group_puma + ['Year'] + groups3, as_index=False).agg(Total=('Total', 'sum'), MOE=('MOE', sqrtsumsq))
-            df_puma3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_puma = pd.concat([df_puma2, df_puma3])
+        df_puma     = cost_6(df_puma    , group_puma    , groups, weight)
+        df_counties = cost_6(df_counties, group_counties, groups, weight)
+        df_msa      = cost_6(df_msa     , group_msa     , groups, weight)
+        df_mpo      = cost_6(df_mpo     , group_mpo     , groups, weight)
+    
+    else:
+        df_puma     = df_puma    .groupby(group_puma     + ['Year'] + groups , as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+        df_counties = df_counties.groupby(group_counties + ['Year'] + groups , as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+        df_msa      = df_msa     .groupby(group_msa      + ['Year'] + groups , as_index=False).apply(lambda x: pums_rollup(x, params, weight))
+        df_mpo      = df_mpo     .groupby(group_mpo      + ['Year'] + groups , as_index=False).apply(lambda x: pums_rollup(x, params, weight))
 
-            df_counties1 = df_counties.groupby(group_counties + ['Year'] + groups , as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_counties2 = df_counties.groupby(group_counties + ['Year'] + groups2, as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_counties2.loc[:, 'RAC1P'] = 'All'
-            df_counties2 = pd.concat([df_counties1, df_counties2])
-            df_counties3 = df_counties2[df_counties2['housing_type'].isin(['Owner', 'Renter'])]
-            df_counties3 = df_counties3.groupby(group_counties + ['Year'] + groups3, as_index=False).agg(Total=('Total', 'sum'), MOE=('MOE', sqrtsumsq))
-            df_counties3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_counties = pd.concat([df_counties2, df_counties3])
-            
-            df_msa1 = df_msa.groupby(group_msa + ['Year'] + groups , as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_msa2 = df_msa.groupby(group_msa + ['Year'] + groups2, as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_msa2.loc[:, 'RAC1P'] = 'All'
-            df_msa2 = pd.concat([df_msa1, df_msa2])
-            df_msa3 = df_msa2[df_msa2['housing_type'].isin(['Owner', 'Renter'])]
-            df_msa3 = df_msa3.groupby(group_msa + ['Year'] + groups3, as_index=False).agg(Total=('Total', 'sum'), MOE=('MOE', sqrtsumsq))
-            df_msa3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_msa = pd.concat([df_msa2, df_msa3])
-            
-            df_mpo1 = df_mpo.groupby(group_mpo + ['Year'] + groups , as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_mpo2 = df_mpo.groupby(group_mpo + ['Year'] + groups2, as_index=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_mpo2.loc[:, 'RAC1P'] = 'All'
-            df_mpo2 = pd.concat([df_mpo1, df_mpo2])
-            df_mpo3 = df_mpo2[df_mpo2['housing_type'].isin(['Owner', 'Renter'])]
-            df_mpo3 = df_mpo3.groupby(group_mpo + ['Year'] + groups3, as_index=False).agg(Total=('Total', 'sum'), MOE=('MOE', sqrtsumsq))
-            df_mpo3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_mpo = pd.concat([df_mpo2, df_mpo3])
-        
-        else:
-            df_puma     = df_puma    .groupby(group_puma     + ['Year'] + groups , as_index=False, sort=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_counties = df_counties.groupby(group_counties + ['Year'] + groups , as_index=False, sort=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_msa      = df_msa     .groupby(group_msa      + ['Year'] + groups , as_index=False, sort=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-            df_mpo      = df_mpo     .groupby(group_mpo      + ['Year'] + groups , as_index=False, sort=False).agg(Total=(weight, 'sum'), MOE=('MOE', sqrtsumsq))
-        
+    if params['moe']:
         df_puma, df_counties, df_msa, df_mpo = pums_calc_moe_ratio(params, df_puma, df_counties, df_msa, df_mpo)
 
-    if not params['moe']:
-        if params['indicator'] in ['Income_2', 'Accessibility_2', 'Accessibility_3', 'Accessibility_4']:
-            if params['indicator'] == 'Accessibility_4':
-                df_puma1     = df_puma    .groupby(group_puma     + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_counties1 = df_counties.groupby(group_counties + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_msa1      = df_msa     .groupby(group_msa      + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo1      = df_mpo     .groupby(group_mpo      + ['Year', 'RAC1P'                  , 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_puma2     = df_puma    .groupby(group_puma     + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_counties2 = df_counties.groupby(group_counties + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_msa2      = df_msa     .groupby(group_msa      + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo2      = df_mpo     .groupby(group_mpo      + ['Year',          'Income Bracket', 'Travel Time'], as_index=False).agg(Total=(weight, 'sum'))
-                df_puma1    .loc[:, 'Income Bracket'] = 'All'
-                df_counties1.loc[:, 'Income Bracket'] = 'All'
-                df_msa1     .loc[:, 'Income Bracket'] = 'All'
-                df_mpo1     .loc[:, 'Income Bracket'] = 'All'
-                df_puma2    .loc[:, 'RAC1P'] = 'All'
-                df_counties2.loc[:, 'RAC1P'] = 'All'
-                df_msa2     .loc[:, 'RAC1P'] = 'All'
-                df_mpo2     .loc[:, 'RAC1P'] = 'All'
-                df_puma     = pd.concat([df_puma1    , df_puma2    ])
-                df_counties = pd.concat([df_counties1, df_counties2])
-                df_msa      = pd.concat([df_msa1     , df_msa2     ])
-                df_mpo      = pd.concat([df_mpo1     , df_mpo2     ])
-            if params['indicator'] == 'Accessibility_3':
-                df_puma     = df_puma    .groupby(group_puma     + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'))
-                df_counties = df_counties.groupby(group_counties + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'))
-                df_msa      = df_msa     .groupby(group_msa      + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo1     = df_mpo     .groupby(group_mpo      + ['Year', 'VEH', 'RAC1P'], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo2     = df_mpo     .groupby(group_mpo      + ['Year', 'VEH'         ], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo2     .loc[:, 'RAC1P'] = 'All'
-                df_mpo      = pd.concat([df_mpo1, df_mpo2])
-            if params['indicator'] == 'Accessibility_2':
-                df_puma     = df_puma    .groupby(group_puma     + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'))
-                df_counties = df_counties.groupby(group_counties + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'))
-                df_msa      = df_msa     .groupby(group_msa      + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo      = df_mpo     .groupby(group_mpo      + ['Year', 'Income Bracket', 'JWTRNS'], as_index=False).agg(Total=(weight, 'sum'))
-            if params['indicator'] == 'Income_2':
-                df_puma     = df_puma    .groupby(group_puma     + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'))
-                df_counties = df_counties.groupby(group_counties + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'))
-                df_msa      = df_msa     .groupby(group_msa      + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'))
-                df_mpo      = df_mpo     .groupby(group_mpo      + ['Year', 'Income Bracket'], as_index=False).agg(Total=(weight, 'sum'))
-                
-        elif params['indicator'] == 'Cost_6':
-            df_puma1 = df_puma.groupby(list(df_puma.drop([weight         ], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_puma2 = df_puma.groupby(list(df_puma.drop([weight, 'RAC1P'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_puma2.loc[:, 'RAC1P'] = 'All'
-            df_puma2 = pd.concat([df_puma1, df_puma2])
-            df_puma3 = df_puma2[df_puma2['housing_type'].isin(['Owner', 'Renter'])]
-            df_puma3 = df_puma3.groupby(list(df_puma3.drop(['Total'], axis=1).columns), as_index=False).agg(Total=('Total', 'sum'))
-            df_puma3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_puma3['Percent'] = df_puma3['Total']/df_puma3.groupby(list(df_puma3.drop(['housing_burden', 'Total'], axis=1).columns))['Total'].transform('sum')
-            df_puma = pd.concat([df_puma2, df_puma3])
-
-            df_counties1 = df_counties.groupby(list(df_counties.drop([weight         ], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_counties2 = df_counties.groupby(list(df_counties.drop([weight, 'RAC1P'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_counties2.loc[:, 'RAC1P'] = 'All'
-            df_counties2 = pd.concat([df_counties1, df_counties2])
-            df_counties3 = df_counties2[df_counties2['housing_type'].isin(['Owner', 'Renter'])]
-            df_counties3 = df_counties3.groupby(list(df_counties3.drop(['Total'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_counties3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_counties = pd.concat([df_counties2, df_counties3])
-
-            df_msa1 = df_msa.groupby(list(df_msa.drop([weight         ], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_msa2 = df_msa.groupby(list(df_msa.drop([weight, 'RAC1P'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_msa2.loc[:, 'RAC1P'] = 'All'
-            df_msa2 = pd.concat([df_msa1, df_msa2])
-            df_msa3 = df_msa2[df_msa2['housing_type'].isin(['Owner', 'Renter'])]
-            df_msa3 = df_msa3.groupby(list(df_msa3.drop(['Total'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_msa3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_msa = pd.concat([df_msa2, df_msa3])
-            
-            df_mpo1 = df_mpo.groupby(list(df_mpo.drop([weight         ], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_mpo2 = df_mpo.groupby(list(df_mpo.drop([weight, 'RAC1P'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_mpo2.loc[:, 'RAC1P'] = 'All'
-            df_mpo2 = pd.concat([df_mpo1, df_mpo2])
-            df_mpo3 = df_mpo2[df_mpo2['housing_type'].isin(['Owner', 'Renter'])]
-            df_mpo3 = df_mpo3.groupby(list(df_mpo3.drop(['Total'], axis=1).columns), as_index=False).agg(Total=(weight, 'sum'))
-            df_mpo3.loc[:, 'housing_type'] = 'Owners and Renters'
-            df_mpo = pd.concat([df_mpo2, df_mpo3])
-
-        else:
-            df_puma     = df_puma    .groupby(list(df_puma    .drop([weight], axis=1).columns), as_index=False, sort=False).agg(Total=(weight, 'sum'))
-            df_counties = df_counties.groupby(list(df_counties.drop([weight], axis=1).columns), as_index=False, sort=False).agg(Total=(weight, 'sum'))
-            df_msa      = df_msa     .groupby(list(df_msa     .drop([weight], axis=1).columns), as_index=False, sort=False).agg(Total=(weight, 'sum'))
-            df_mpo      = df_mpo     .groupby(list(df_mpo     .drop([weight], axis=1).columns), as_index=False, sort=False).agg(Total=(weight, 'sum'))
-    
-    if 'RAC1P' in groups:# and indicator not in ['Cost_6', 'Accessibility_1']:
+    if 'RAC1P' in groups:
         groups.remove('RAC1P')
         groups = ['RAC1P'] + groups
+    if params['indicator'] == 'Accessibility_4':
+        groups.remove('NP')
 
     if params['pct']:
         if params['moe']:
-            if len(groups) > 1:
-                df_puma    ['Percent'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop([groups[-1]] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_counties['Percent'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop([groups[-1]] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_msa     ['Percent'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop([groups[-1]] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_mpo     ['Percent'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop([groups[-1]] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-            if len(groups) == 1:
-                df_puma    ['Percent'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_counties['Percent'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_msa     ['Percent'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_mpo     ['Percent'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-        if not params['moe']:
-            if len(groups) > 1:
-                df_puma    ['Percent'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop([groups[-1]] + ['Total'], axis=1).columns))['Total'].transform('sum')
-                df_counties['Percent'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop([groups[-1]] + ['Total'], axis=1).columns))['Total'].transform('sum')
-                df_msa     ['Percent'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop([groups[-1]] + ['Total'], axis=1).columns))['Total'].transform('sum')
-                df_mpo     ['Percent'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop([groups[-1]] + ['Total'], axis=1).columns))['Total'].transform('sum')
-            if len(groups) == 1:
-                df_puma    ['Percent'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(groups + ['Total'], axis=1).columns))['Total'].transform('sum')
-                df_counties['Percent'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups + ['Total'], axis=1).columns))['Total'].transform('sum')
-                df_msa     ['Percent'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(groups + ['Total'], axis=1).columns))['Total'].transform('sum')           
-                df_mpo     ['Percent'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups + ['Total'], axis=1).columns))['Total'].transform('sum')
-
-    df_puma    .reset_index(drop=True, inplace=True)
-    df_counties.reset_index(drop=True, inplace=True)
-    df_msa     .reset_index(drop=True, inplace=True)
-    df_mpo     .reset_index(drop=True, inplace=True)
+            est_group = ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting']
+        else:
+            est_group = ['Total']
+        if len(groups) > 1:
+            pct_group = [groups[-1]]
+        else:
+            pct_group = groups
+        df_puma    ['Percent'] = df_puma    ['Total'] / df_puma    .groupby(list(df_puma    .drop(pct_group + est_group, axis=1).columns))['Total'].transform('sum')
+        df_counties['Percent'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(pct_group + est_group, axis=1).columns))['Total'].transform('sum')
+        df_msa     ['Percent'] = df_msa     ['Total'] / df_msa     .groupby(list(df_msa     .drop(pct_group + est_group, axis=1).columns))['Total'].transform('sum')
+        df_mpo     ['Percent'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(pct_group + est_group, axis=1).columns))['Total'].transform('sum')
 
     if params['indicator'] == 'Accessibility_4':
         if params['pct']:
@@ -1200,18 +1130,19 @@ def pums_aggregate(df_census, params, weight, groups):
             groups.remove('Income Bracket')
             groups = groups + ['Income Bracket']
             if params['moe']:
-                df_puma1     = df_puma1    .drop('Percent', axis=1)
-                df_counties1 = df_counties1.drop('Percent', axis=1)
-                df_msa1      = df_msa1     .drop('Percent', axis=1)
-                df_mpo1      = df_mpo1     .drop('Percent', axis=1)
-                df_puma1    ['Percent'] = df_puma1    ['Total'] / df_puma1    .groupby(list(df_puma1    .drop(groups[:-1] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_counties1['Percent'] = df_counties1['Total'] / df_counties1.groupby(list(df_counties1.drop(groups[:-1] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_msa1     ['Percent'] = df_msa1     ['Total'] / df_msa1     .groupby(list(df_msa1     .drop(groups[:-1] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
-                df_mpo1     ['Percent'] = df_mpo1     ['Total'] / df_mpo1     .groupby(list(df_mpo1     .drop(groups[:-1] + ['Total', 'MOE', 'MOE_ratio', 'Use for Reporting'], axis=1).columns))['Total'].transform('sum')
+                df_puma1    ['Percent'] = df_puma1    ['Total'] / df_puma1    .groupby(list(df_puma1    .drop(groups[:-1] + ['Percent'] + est_group, axis=1).columns))['Total'].transform('sum')
+                df_counties1['Percent'] = df_counties1['Total'] / df_counties1.groupby(list(df_counties1.drop(groups[:-1] + ['Percent'] + est_group, axis=1).columns))['Total'].transform('sum')
+                df_msa1     ['Percent'] = df_msa1     ['Total'] / df_msa1     .groupby(list(df_msa1     .drop(groups[:-1] + ['Percent'] + est_group, axis=1).columns))['Total'].transform('sum')
+                df_mpo1     ['Percent'] = df_mpo1     ['Total'] / df_mpo1     .groupby(list(df_mpo1     .drop(groups[:-1] + ['Percent'] + est_group, axis=1).columns))['Total'].transform('sum')
             df_puma     = pd.concat([df_puma1    , df_puma2    ])
             df_counties = pd.concat([df_counties1, df_counties2])
             df_msa      = pd.concat([df_msa1     , df_msa2     ])
             df_mpo      = pd.concat([df_mpo1     , df_mpo2     ])
+
+    df_puma     = df_puma    .reset_index(drop=True)
+    df_counties = df_counties.reset_index(drop=True)
+    df_msa      = df_msa     .reset_index(drop=True)
+    df_mpo      = df_mpo     .reset_index(drop=True)
 
     return df_puma, df_counties, df_msa, df_mpo, groups
 
@@ -1244,10 +1175,6 @@ def pums_rename(params, groups, df_puma, df_counties, df_msa, df_mpo):
                 df_mpo = df_mpo[group_mpo + ['Year'] + groups_mpo + ['Total', 'Percent', 'MOE', 'MOE_ratio', 'Use for Reporting']]
             else:
                 df_mpo = df_mpo[group_mpo + ['Year'] + groups + ['Total', 'Percent', 'MOE', 'MOE_ratio', 'Use for Reporting']]
-        df_puma     = df_puma    .rename(columns={'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio'})
-        df_counties = df_counties.rename(columns={'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio'})
-        df_msa      = df_msa     .rename(columns={'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio'})
-        df_mpo      = df_mpo     .rename(columns={'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio'})
 
     if not params['moe']:
         if params['sample'] == 'PUMS':
@@ -1262,137 +1189,116 @@ def pums_rename(params, groups, df_puma, df_counties, df_msa, df_mpo):
                 df_counties = df_counties[group_counties + ['Year'] + groups + ['Total']]
                 df_msa      = df_msa     [group_msa      + ['Year'] + groups + ['Total']]
                 df_mpo      = df_mpo     [group_mpo      + ['Year'] + groups + ['Total']]
-        if params['sample'] == 'FOODSEC':
-            df_counties = df_counties[group_counties + groups + ['Total', 'Percent']]
-            df_mpo      = df_mpo     [group_mpo      + groups + ['Total', 'Percent']]
 
-    if params['geo'] == 'PUMA':
-        df_puma     = df_puma    .sort_values(group_puma     + ['Year'] + groups, ascending=[True, True, True, True, False] + [item in groups for item in groups])
-        df_counties = df_counties.sort_values(group_counties + ['Year'] + groups, ascending=[True, True, True, True, False] + [item in groups for item in groups])
-        df_msa      = df_msa     .sort_values(group_msa      + ['Year'] + groups, ascending=[True, True,             False] + [item in groups for item in groups])
-        df_mpo      = df_mpo     .sort_values(group_mpo      + ['Year'] + groups, ascending=[True,                   False] + [item in groups for item in groups])
-    if params['sample'] == 'FOODSEC':
-        df_counties = df_counties.sort_values(group_counties + groups, ascending=[True, True, True, True] + [item in groups for item in groups])
-        df_mpo      = df_mpo     .sort_values(group_mpo      + groups, ascending=[True,                 ] + [item in groups for item in groups])
     if 'PTDTRACE' in groups:
         df_counties = df_counties.set_index(['State FIPS', 'MPO', 'County FIPS', 'County Name', 'PTDTRACE']).reset_index()
         df_mpo      = df_mpo     .set_index(['State FIPS', 'MPO',                               'PTDTRACE']).reset_index()
 
-    if params['indicator'] == 'Accessibility_1':
+    if 'JWTRNS' in df_puma.columns:
         factor_commutes = ['Car, truck, or van', 'Public transportation (bus, subway, or rail)', 'Bicycle', 'Walked', 'Other method', 'Worked from home']
         df_puma    ['JWTRNS_sort'] = pd.Categorical(df_puma    ['JWTRNS'], factor_commutes)
         df_counties['JWTRNS_sort'] = pd.Categorical(df_counties['JWTRNS'], factor_commutes)
         df_msa     ['JWTRNS_sort'] = pd.Categorical(df_msa     ['JWTRNS'], factor_commutes)
         df_mpo     ['JWTRNS_sort'] = pd.Categorical(df_mpo     ['JWTRNS'], factor_commutes)
 
+    if 'BLD' in df_puma.columns:
+        factor_bld = ['Single Family Detached', 'Single Family Attached', 'Mutlifamily 2-4 Units', 'Multifamily 5+ Units', 'Mobile Homes or Other', 'N/A (GQ)']
+        df_puma    ['BLD_sort'] = pd.Categorical(df_puma    ['BLD'], factor_bld)
+        df_counties['BLD_sort'] = pd.Categorical(df_counties['BLD'], factor_bld)
+        df_msa     ['BLD_sort'] = pd.Categorical(df_msa     ['BLD'], factor_bld)
+        df_mpo     ['BLD_sort'] = pd.Categorical(df_mpo     ['BLD'], factor_bld)
+
+    if 'RAC1P' in df_puma.columns:
         factor_race = ['All', 'American Indian or Alaska Native (NH)', 'Asian (NH)', 'Black or African American (NH)', 'Hispanic or Latino', 'Native Hawaiian or other Pacific Islander (NH)', 'White (NH)', 'Some other race (NH)', 'Two or more races (NH)']
         df_puma    ['RAC1P_sort'] = pd.Categorical(df_puma    ['RAC1P'], factor_race)
         df_counties['RAC1P_sort'] = pd.Categorical(df_counties['RAC1P'], factor_race)
         df_msa     ['RAC1P_sort'] = pd.Categorical(df_msa     ['RAC1P'], factor_race)
         df_mpo     ['RAC1P_sort'] = pd.Categorical(df_mpo     ['RAC1P'], factor_race)
 
-        df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True,  True,  True, False, True, True]).drop(['RAC1P_sort', 'JWTRNS_sort'], axis=1)
-        df_counties = df_counties.sort_values(by= group_counties + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True,  True,  True, False, True, True]).drop(['RAC1P_sort', 'JWTRNS_sort'], axis=1)
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True, True,               False, True, True]).drop(['RAC1P_sort', 'JWTRNS_sort'], axis=1)
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'JWTRNS_sort'], ascending=[True,                     False, True, True]).drop(['RAC1P_sort', 'JWTRNS_sort'], axis=1)
-
-    if params['indicator'] == 'Accessibility_2':
+    if 'Income Bracket' in df_puma.columns:
         factor_incomes = ['No data available', 'Low Income', 'Moderate Income', 'High Income']
         df_puma    ['Income_sort'] = pd.Categorical(df_puma    ['Income Bracket'], factor_incomes)
         df_counties['Income_sort'] = pd.Categorical(df_counties['Income Bracket'], factor_incomes)
         df_msa     ['Income_sort'] = pd.Categorical(df_msa     ['Income Bracket'], factor_incomes)
         df_mpo     ['Income_sort'] = pd.Categorical(df_mpo     ['Income Bracket'], factor_incomes)
 
-        factor_commutes = ['Car, truck, or van', 'Public transportation (bus, subway, or rail)', 'Bicycle', 'Walked', 'Worked from home', 'Other method']
-        df_puma    ['JWTRNS_sort'] = pd.Categorical(df_puma    ['JWTRNS'], factor_commutes)
-        df_counties['JWTRNS_sort'] = pd.Categorical(df_counties['JWTRNS'], factor_commutes)
-        df_msa     ['JWTRNS_sort'] = pd.Categorical(df_msa     ['JWTRNS'], factor_commutes)
-        df_mpo     ['JWTRNS_sort'] = pd.Categorical(df_mpo     ['JWTRNS'], factor_commutes)
-
-        df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, True, True, False, True, True]).drop(['Income_sort', 'JWTRNS_sort'], axis=1)
-        df_counties = df_counties.sort_values(by= group_counties + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True, True, True, False, True, True]).drop(['Income_sort', 'JWTRNS_sort'], axis=1)
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True, True,             False, True, True]).drop(['Income_sort', 'JWTRNS_sort'], axis=1)
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'Income_sort', 'JWTRNS_sort'], ascending=[True,                   False, True, True]).drop(['Income_sort', 'JWTRNS_sort'], axis=1)
-
-    if params['indicator'] == 'Accessibility_4':
-        factor_race = ['All', 'American Indian or Alaska Native (NH)', 'Asian (NH)', 'Black or African American (NH)', 'Hispanic or Latino', 'Native Hawaiian or other Pacific Islander (NH)', 'White (NH)', 'Some other race (NH)', 'Two or more races (NH)']
-        df_puma    ['RAC1P_sort'] = pd.Categorical(df_puma    ['RAC1P'], factor_race)
-        df_counties['RAC1P_sort'] = pd.Categorical(df_counties['RAC1P'], factor_race)
-        df_msa     ['RAC1P_sort'] = pd.Categorical(df_msa     ['RAC1P'], factor_race)
-        df_mpo     ['RAC1P_sort'] = pd.Categorical(df_mpo     ['RAC1P'], factor_race)
-        
-        factor_incomes = ['All', 'No data available', 'Low Income', 'Moderate Income', 'High Income']
-        df_puma    ['Income_sort'] = pd.Categorical(df_puma    ['Income Bracket'], factor_incomes)
-        df_counties['Income_sort'] = pd.Categorical(df_counties['Income Bracket'], factor_incomes)
-        df_msa     ['Income_sort'] = pd.Categorical(df_msa     ['Income Bracket'], factor_incomes)
-        df_mpo     ['Income_sort'] = pd.Categorical(df_mpo     ['Income Bracket'], factor_incomes)
-
+    if 'Travel Time' in df_puma.columns:
         factor_times = ['No commute (worked from home)', '0 to 15 minutes', '15 to 30 minutes', 'More than 30 minutes']
         df_puma    ['Travel_sort'] = pd.Categorical(df_puma    ['Travel Time'], factor_times)
         df_counties['Travel_sort'] = pd.Categorical(df_counties['Travel Time'], factor_times)
         df_msa     ['Travel_sort'] = pd.Categorical(df_msa     ['Travel Time'], factor_times)
         df_mpo     ['Travel_sort'] = pd.Categorical(df_mpo     ['Travel Time'], factor_times)
 
-        df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, True, True, False, True, True, True]).drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis=1)
-        df_counties = df_counties.sort_values(by= group_counties + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True, True, True, False, True, True, True]).drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis=1)
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True, True,             False, True, True, True]).drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis=1)
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'Income_sort', 'Travel_sort'], ascending=[True,                   False, True, True, True]).drop(['RAC1P_sort', 'Income_sort', 'Travel_sort'], axis=1)
-
-    if params['indicator'] == 'Accessibility_3':
-        factor_race = ['All', 'American Indian or Alaska Native (NH)', 'Asian (NH)', 'Black or African American (NH)', 'Hispanic or Latino', 'Native Hawaiian or other Pacific Islander (NH)', 'White (NH)', 'Some other race (NH)', 'Two or more races (NH)']
-        df_mpo['RAC1P_sort'] = pd.Categorical(df_mpo['RAC1P'], factor_race)
-        df_mpo = df_mpo.sort_values(by= group_mpo + ['Year', 'RAC1P_sort', 'VEH'], ascending=[True, False, True, True]).drop(['RAC1P_sort'], axis=1)
-        
-    if params['indicator'] == 'Income_2':
-        factor_incomes = ['No data available', 'Low Income', 'Moderate Income', 'High Income']
-        df_puma    ['Income_sort'] = pd.Categorical(df_puma    ['Income Bracket'], factor_incomes)
-        df_counties['Income_sort'] = pd.Categorical(df_counties['Income Bracket'], factor_incomes)
-        df_msa     ['Income_sort'] = pd.Categorical(df_msa     ['Income Bracket'], factor_incomes)
-        df_mpo     ['Income_sort'] = pd.Categorical(df_mpo     ['Income Bracket'], factor_incomes)
-        
-        df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'Income_sort'], ascending=[True, True, True, True, False, True]).drop(['Income_sort'], axis=1)
-        df_counties = df_counties.sort_values(by= group_counties + ['Year', 'Income_sort'], ascending=[True, True, True, True, False, True]).drop(['Income_sort'], axis=1)
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'Income_sort'], ascending=[True, True,             False, True]).drop(['Income_sort'], axis=1)
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'Income_sort'], ascending=[True,                   False, True]).drop(['Income_sort'], axis=1)
-
-    if params['indicator'] == 'Cost_6':
+    if 'housing_burden' in df_puma.columns:
         factor_burden = ['Housing data not available', 'N/A (GQ/vacant/not owned or being bought/occupied without rent payment/no household income)', 'Cost burden <=30%', 'Cost burden >30% to <=50%', 'Cost burden >50%']
         df_puma    ['housing_burden_sort'] = pd.Categorical(df_puma    ['housing_burden'], factor_burden)
         df_counties['housing_burden_sort'] = pd.Categorical(df_counties['housing_burden'], factor_burden)
         df_msa     ['housing_burden_sort'] = pd.Categorical(df_msa     ['housing_burden'], factor_burden)
         df_mpo     ['housing_burden_sort'] = pd.Categorical(df_mpo     ['housing_burden'], factor_burden)
 
+    if 'housing_type' in df_puma.columns:
         factor_types = ['Housing data not available', 'N/A (GQ/vacant/not owned or being bought/occupied without rent payment/no household income)', 'Owner', 'Renter', 'Owners and Renters']
         df_puma    ['housing_type_sort'] = pd.Categorical(df_puma    ['housing_type'], factor_types)
         df_counties['housing_type_sort'] = pd.Categorical(df_counties['housing_type'], factor_types)
         df_msa     ['housing_type_sort'] = pd.Categorical(df_msa     ['housing_type'], factor_types)
         df_mpo     ['housing_type_sort'] = pd.Categorical(df_mpo     ['housing_type'], factor_types)
 
+    if 'TEN' in df_puma.columns:
+        factor_tens = ['N/A  (GQ/vacant)', 'Owned free And clear', 'Owned with mortgage or loan (include home equity loans)', 'Rented', 'Occupied without payment of rent']
+        df_puma    ['TEN_sort'] = pd.Categorical(df_puma    ['TEN'], factor_tens)
+        df_counties['TEN_sort'] = pd.Categorical(df_counties['TEN'], factor_tens)
+        df_msa     ['TEN_sort'] = pd.Categorical(df_msa     ['TEN'], factor_tens)
+        df_mpo     ['TEN_sort'] = pd.Categorical(df_mpo     ['TEN'], factor_tens)
+
+    if params['indicator'] in ['Accessibility_1', 'Accessibility_2', 'Income_2', 'Cost_6', 'Income_7', 'Housing_4']:
+        if params['indicator'] == 'Accessibility_1':
+            sort_group = ['RAC1P_sort', 'JWTRNS_sort']
+        if params['indicator'] == 'Accessibility_2':
+            sort_group = ['Income_sort', 'JWTRNS_sort']
+        if params['indicator'] == 'Accessibility_4':
+            sort_group = ['RAC1P_sort', 'Income_sort', 'Travel_sort']
+        if params['indicator'] == 'Income_2':
+            sort_group = ['Income_sort']
+        if params['indicator'] == 'Cost_6':
+            sort_group = ['RAC1P_sort', 'housing_type_sort', 'housing_burden_sort']
+        if params['indicator'] == 'Income_7':
+            sort_group = ['RAC1P_sort', 'TEN_sort']
+        if params['indicator'] == 'Housing_4':
+            sort_group = ['BLD_sort']
+
+        df_puma     = df_puma    .sort_values(by= group_puma     + ['Year'] + sort_group, ascending=[item in group_puma     for item in group_puma    ] + [False] + [item in sort_group for item in sort_group]).drop(sort_group, axis=1)
+        df_counties = df_counties.sort_values(by= group_counties + ['Year'] + sort_group, ascending=[item in group_counties for item in group_counties] + [False] + [item in sort_group for item in sort_group]).drop(sort_group, axis=1)
+        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year'] + sort_group, ascending=[item in group_msa      for item in group_msa     ] + [False] + [item in sort_group for item in sort_group]).drop(sort_group, axis=1)
+        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year'] + sort_group, ascending=[item in group_mpo      for item in group_mpo     ] + [False] + [item in sort_group for item in sort_group]).drop(sort_group, axis=1)
+
+    if params['indicator'] == 'Accessibility_3':
         factor_race = ['All', 'American Indian or Alaska Native (NH)', 'Asian (NH)', 'Black or African American (NH)', 'Hispanic or Latino', 'Native Hawaiian or other Pacific Islander (NH)', 'White (NH)', 'Some other race (NH)', 'Two or more races (NH)']
-        df_puma    ['RAC1P_sort'] = pd.Categorical(df_puma    ['RAC1P'], factor_race)
-        df_counties['RAC1P_sort'] = pd.Categorical(df_counties['RAC1P'], factor_race)
-        df_msa     ['RAC1P_sort'] = pd.Categorical(df_msa     ['RAC1P'], factor_race)
-        df_mpo     ['RAC1P_sort'] = pd.Categorical(df_mpo     ['RAC1P'], factor_race)
+        df_mpo['RAC1P_sort'] = pd.Categorical(df_mpo['RAC1P'], factor_race)
+        df_mpo = df_mpo.sort_values(by= group_mpo + ['Year', 'RAC1P_sort', 'VEH'], ascending=[True, False, True, True]).drop(['RAC1P_sort'], axis=1)
 
-        df_puma     = df_puma    .sort_values(by= group_puma     + ['Year', 'RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], ascending=[True, True,  True,  True, False, True, True, True]).drop(['RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], axis=1).rename(columns={'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
-        df_counties = df_counties.sort_values(by= group_counties + ['Year', 'RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], ascending=[True, True,  True,  True, False, True, True, True]).drop(['RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], axis=1).rename(columns={'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
-        df_msa      = df_msa     .sort_values(by= group_msa      + ['Year', 'RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], ascending=[True, True,               False, True, True, True]).drop(['RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], axis=1).rename(columns={'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
-        df_mpo      = df_mpo     .sort_values(by= group_mpo      + ['Year', 'RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], ascending=[True,                     False, True, True, True]).drop(['RAC1P_sort', 'housing_type_sort', 'housing_burden_sort'], axis=1).rename(columns={'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
+    df_puma     = df_puma    .rename(columns={'Total': params['metric'], 'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio', 'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
+    df_counties = df_counties.rename(columns={'Total': params['metric'], 'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio', 'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
+    df_msa      = df_msa     .rename(columns={'Total': params['metric'], 'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio', 'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
+    df_mpo      = df_mpo     .rename(columns={'Total': params['metric'], 'MOE':'Margin of Error', 'MOE_ratio':'Margin of Error Ratio', 'housing_type':'Housing Type', 'housing_burden':'Housing Burden'})
 
-    df_puma     = df_puma    .rename(columns={'Total': params['metric']})
-    df_counties = df_counties.rename(columns={'Total': params['metric']})
-    df_msa      = df_msa     .rename(columns={'Total': params['metric']})
-    df_mpo      = df_mpo     .rename(columns={'Total': params['metric']})
-
+    if params['variable']:
+        if isinstance(params['variable'], str):
+            df_puma     = df_puma    .rename(columns={'Variable': params['variable']})
+            df_counties = df_counties.rename(columns={'Variable': params['variable']})
+            df_msa      = df_msa     .rename(columns={'Variable': params['variable']})
+            df_mpo      = df_mpo     .rename(columns={'Variable': params['variable']})
+        if isinstance(params['variable'], dict):
+            df_puma     = df_puma    .rename(columns=params['variable'])
+            df_counties = df_counties.rename(columns=params['variable'])
+            df_msa      = df_msa     .rename(columns=params['variable'])
+            df_mpo      = df_mpo     .rename(columns=params['variable'])
 
     return df_puma, df_counties, df_msa, df_mpo
 
 
-
-
-def pums_main(df, params, weight, df_vars):
+def pums_main(df, params, weight):
     
-    df, groups = pums_clean_data(df, params, weight, df_vars)
+    df, groups = pums_clean_data(df, params, weight)
     df = pums_cw_to_geos(df, params, groups)
     df, groups = pums_clean_eth_groups(df, params, groups)
 
@@ -1404,29 +1310,20 @@ def pums_main(df, params, weight, df_vars):
     df_puma, df_counties, df_msa, df_mpo, groups = pums_aggregate(df, params, weight, groups)
     df_puma, df_counties, df_msa, df_mpo = pums_rename(params, groups, df_puma, df_counties, df_msa, df_mpo)
 
-    print('\n'*2)
     time.sleep(5)
-    print('Final tables:')
-    print()
-    print('PUMA')
+    print('\n\nFinal tables:\n')
+    print('\nPUMA')
     display(df_puma)
-    print()
-    print('Counties')
+    print('\nCounties')
     display(df_counties)
-    print()
-    print('MSA')
+    print('\nMSA')
     display(df_msa)
-    print()
-    print('MPO')
+    print('\nMPO')
     display(df_mpo)
     print('\n'*3)
     time.sleep(5)
 
-
     return df_puma, df_counties, df_msa, df_mpo
-
-
-
 
 
 def pums_export(df_puma, df_counties, df_msa, df_mpo, params):
@@ -1434,15 +1331,12 @@ def pums_export(df_puma, df_counties, df_msa, df_mpo, params):
     print('\n'*2)
     workbooks = set_workbook_name(params)
 
-    path_out_sp = Path(params['export_loc']) / f"{params['indicator']} {params['folder']}"
-    if params['project'] != 'Monitoring and Reporting':
-        path_out_sp = Path(params['export_loc'])
-    if params['project'] == 'Monitoring and Reporting' and params['server']:
-        paths = [PATH_SERVER, path_out_sp]
+    if params['server']:
+        paths = [PATH_SERVER, Path(params['export_loc'])]
     else:
-        paths = [path_out_sp]
-
-    for path_ in paths:            
+        paths = [Path(params['export_loc'])]
+    
+    for path_ in paths:
 
         params['path_wb'] = path_ / workbooks[0]
         export_indicator(df_puma, params)
@@ -1464,66 +1358,12 @@ def pums_export(df_puma, df_counties, df_msa, df_mpo, params):
 
 
 
-
-
-## ---
-
-
-## CPS processing steps ---
-
-## FOODSEC processing step (4) (use 1-3 from PUMS process steps)
-
-def foodsec_processing(df_census, params, weight, groups):
-
-    print()
-    print('Processing 4:')
-    print('Rolling up estimtaes to desired group variables and geographies, and calculating perecntages...')
-    print()
-
-    if 'PTDTRACE' in groups:
-        groups.remove('PTDTRACE')
-        groups_to_drop=groups.copy()
-        groups = ['PTDTRACE'] + groups
-
-    df_counties = df_census.drop([                              'Household_ID', 'Householder', 'PERRP'], axis=1)
-    df_mpo      = df_census.drop(['County FIPS', 'County Name', 'Household_ID', 'Householder', 'PERRP'], axis=1)
-
-    group_counties = ['State FIPS', 'MPO', 'County FIPS', 'County Name']
-    group_mpo      = ['State FIPS', 'MPO'                              ]
-
-    df_counties = df_counties.set_index(group_counties).reset_index()
-    df_mpo      = df_mpo     .set_index(group_mpo     ).reset_index()
-
-    df_counties = df_counties.drop('Year', axis=1)
-    df_mpo      = df_mpo     .drop('Year', axis=1)
-
-    df_counties[weight] = 1
-    df_mpo     [weight] = 1
-
-    df_counties = df_counties.groupby(list(df_counties.drop([weight], axis=1).columns), as_index=False, sort=False).agg(Total=(weight, 'sum'))
-    df_mpo      = df_mpo     .groupby(list(df_mpo     .drop([weight], axis=1).columns), as_index=False, sort=False).agg(Total=(weight, 'sum'))
-
-    if params['pct']:
-        df_counties['Percent'] = df_counties['Total'] / df_counties.groupby(list(df_counties.drop(groups_to_drop + ['Total'], axis=1).columns))['Total'].transform('sum')
-        df_mpo     ['Percent'] = df_mpo     ['Total'] / df_mpo     .groupby(list(df_mpo     .drop(groups_to_drop + ['Total'], axis=1).columns))['Total'].transform('sum')
-
-    df_counties['Total'] = round(df_counties['Total'])
-    df_mpo     ['Total'] = round(df_mpo     ['Total'])
-
-    df_counties['Total'] = df_counties['Total'].astype(int)
-    df_mpo     ['Total'] = df_mpo     ['Total'].astype(int)
-
-    return df_counties, df_mpo, groups
-
-
-
-
 ## ---
 
 
 ## LEHD processing steps ---
 
-def lehd_processing(df_census, params, df_fips=None):
+def lehd_main(df_census, params, df_fips=None):
     if params['indicator'] == 'Jobs_4':
         df_census = df_census[df_census['Emp'] != 'null']
         df_census = df_census[~df_census['Emp'].isna()]
@@ -1532,7 +1372,7 @@ def lehd_processing(df_census, params, df_fips=None):
         df_census = df_census[df_census['firmage'] != 0]
         df_census.loc[ df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Less than or equal to 5 years old'
         df_census.loc[~df_census['firmage'].isin([1, 2, 3]), 'Firm Age'] = 'Greater than 5 years old'
-        df_census = df_census.drop(['Year', 'ownercode', 'firmage'], axis=1)
+        df_census = df_census.drop(['ownercode', 'firmage'], axis=1)
 
         df_census = df_census.rename(columns={'time':'Quarter'})
         # df_census = df_census[df_census['Quarter'].str.contains('Q3')] # remove this if you want to show all quarters
@@ -1560,10 +1400,8 @@ def lehd_processing(df_census, params, df_fips=None):
 
         if params['geo'] == 'MSA':
             
-            df_census = df_census[['MSA_ID', 'MSA', 'Quarter', 'Firm Age', 'Emp']]
-            df_msa = df_census.groupby(['MSA_ID', 'MSA', 'Quarter', 'Firm Age'], as_index=False).agg(Total=('Emp', 'sum'))
-            df_msa = df_msa.sort_values(['MSA', 'Quarter', 'Firm Age'], ascending=[True, False, False])
-            df_msa = df_msa.reset_index(drop=True)
+            df_msa = df_census.groupby(['MSA_ID', 'MSA', 'Year', 'Quarter', 'Firm Age'], as_index=False).agg(Total=('Emp', 'sum'))
+            df_msa = df_msa.sort_values(['MSA', 'Quarter', 'Firm Age'], ascending=[True, False, False]).reset_index(drop=True)
 
             if params['pct']:
                 df_msa['Percent'] = df_msa['Total'] / df_msa.groupby(['MSA', 'Quarter'])['Total'].transform('sum')
@@ -1575,10 +1413,7 @@ def lehd_processing(df_census, params, df_fips=None):
     
 
 
-
 ## ---
-
-
 
 
 
@@ -1619,9 +1454,11 @@ def set_workbook_name(params):
 
 def write_about_master(df_census, params):
 
-    params['start_year'] = df_census.Year.min()
-    params['end_year']   = df_census.Year.max()
+
+    params['start_year'] = df_census['Year'].min()
+    params['end_year']   = df_census['Year'].max()
     params['estimate'] = re.sub('PUMS', 'ACS', params['estimate'])
+
 
     df_about = func.write_about(params)
     params['df_about'] = df_about
@@ -1671,37 +1508,49 @@ def export_indicator(df, params):
     df.to_excel(writer, sheet_name=sheet_geo, index=False, header=True)
     workbook = writer.book
     
-    format_numbers_0 = workbook.add_format({'num_format': '#,##0'  })
-    format_percent   = workbook.add_format({'num_format': '0.0%'   })
-    format_dollars   = workbook.add_format({'num_format': '$#,##0' })
-    format_numbers_1 = workbook.add_format({'num_format': '#,##0.0'})
+    format_numbers_no_dec = workbook.add_format({'num_format': '#,##0'  })
+    format_percent        = workbook.add_format({'num_format': '0.0%'   })
+    format_dollars        = workbook.add_format({'num_format': '$#,##0' })
+    format_numbers_dec    = workbook.add_format({'num_format': '#,##0.0'})
+    format_dec            = workbook.add_format({'num_format': '0.000'  })  
 
     worksheet = writer.sheets[sheet_geo]
 
     dt_formats = {
-        'Population': format_numbers_0
-        , 'Households': format_numbers_0
-        , 'Housing Units': format_numbers_0
+        'Population': format_numbers_no_dec
+        , 'Households': format_numbers_no_dec
+        , 'Housing Units': format_numbers_no_dec
+        , 'Margin of Error': format_numbers_no_dec
         , 'Percent': format_percent
         , 'Margin of Error Ratio': format_percent
         , 'Median Household Income': format_dollars
         , 'Regional Median Household Income': format_dollars
         , 'Percent of Regional Median Household Income': format_percent
-        , 'Total Population': format_numbers_0
-        , 'Total Households': format_numbers_0
+        , 'Total Population': format_numbers_no_dec
+        , 'Total Households': format_numbers_no_dec
         , 'Birth Rate Per 1,000 People': format_percent
         , 'Marriage Rate Per 1,000 People': format_percent
-        , 'Median Age': format_numbers_1
+        , 'Median Age': format_numbers_dec
+        , 'Median Home Value': format_dollars
+        , 'Wealth Disparity Index': format_dollars
+        , 'Percent Home Ownership': format_percent
+        , 'Gini Index': format_dec
     }
 
-    for col, format in dt_formats.items():           
+    for col, format in dt_formats.items():
         try:
             idx_col = df.columns.get_loc(col)
             worksheet.set_column(idx_col, idx_col, 10, format)
-            if col in ['Median Household Income']:
+            if col in ['Median Household Income', 'Median Home Value']:
                 try:
                     idx_col = df.columns.get_loc('Margin of Error')
                     worksheet.set_column(idx_col, idx_col, 10, format_dollars)
+                except Exception as e:
+                    e
+            if col in ['Gini Index']:
+                try:
+                    idx_col = df.columns.get_loc('Margin of Error')
+                    worksheet.set_column(idx_col, idx_col, 10, format_dec)
                 except Exception as e:
                     e
         except Exception as e:
@@ -1711,6 +1560,5 @@ def export_indicator(df, params):
     
     writer.close()
 
-    print("Successfully exported!")
-    print()
+    print("Successfully exported!\n")
 

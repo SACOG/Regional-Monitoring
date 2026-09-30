@@ -9,7 +9,6 @@ https://api.census.gov/data/key_signup.html
 Request parameters need to be updated using census.xlsx in the config folder
 Every data release, the .py files in the config/step0 folder need to be reran
 
-
 RERUN=True/False -> if True, recycles parameters from the most recent API request
 EXPORT=True/False -> if True, exports requested data to desired file path
 
@@ -18,30 +17,20 @@ EXPORT=True/False -> if True, exports requested data to desired file path
 
 
 
-# Workspace -------------------------------------------------------------------------------------------------------------------------------------------------
+# Setup -------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-from pathlib import Path
-from IPython.display import display
 import sys
+from pathlib import Path
+
+from IPython.display import display
 
 sys.path.append(str(Path(__file__).parent/'config'))
-import pre
+import const
 import get
+import pre
 
-PATH_GIT = Path(__file__).parent.parent.parent
-PATH_CODE    = PATH_GIT / 'Data' / 'Census'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
-
-FILE_API = PATH_CONFIG / 'api_key.txt'
-
-
-# Network file paths for exporting
-PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
-
-
-
+FILE_API = Path(__file__).parent/'config'/'api_key.txt'
 
 
 # Main -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -50,7 +39,6 @@ PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data
 
 RERUN=False
 EXPORT=True
-
 
 
 if __name__ == '__main__':
@@ -70,10 +58,10 @@ if __name__ == '__main__':
 
     # Export
     if EXPORT:
-
-        file_out = PATH_ORIG / pre.set_download_name(params)
+        file_out = Path(const.PATH_I)/'Census'/pre.set_download_name(params)
         df_census.to_csv(file_out, index=False)
         print('Successfully EXPORTed!')
-        print('\n'*2)
+        
+    print('\n'*2)
 
 

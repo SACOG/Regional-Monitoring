@@ -2,6 +2,7 @@
 
 # TODO:
 # write_ABOUT functions need work on specificity - being able to adjust easily what to label the params['geo']
+# Production_5, Policy_5 needs to be lined up with other descriptions/notes
 
 
 from pathlib import Path
@@ -10,22 +11,17 @@ import geopandas as gpd
 import re
 from datetime import date
 import yaml
-
 from time import perf_counter as perf
 import pyodbc
 import urllib
 import sqlalchemy as sqla
 
 
-PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_GIT / 'Data' / 'Census' / 'config'
-PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
+PATH_CONFIG0 = Path(__file__).parent
 
 
 
 # About ----------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 
 # Writes about page for each params['indicator']
@@ -50,21 +46,26 @@ def write_about(params):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-    if params['estimate'] is None:
-        df = pd.DataFrame([yaml_about[params['sample']][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
-    elif params['sample'] == 'LEHD':
-        df = pd.DataFrame([yaml_about[params['sample']][params['estimate']][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+    df_source = pd.DataFrame([yaml_about[params['sample']]['Source']]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+    df_ind    = pd.DataFrame([yaml_about[params['sample']]['Indicators'][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+    # breakpoint()
+    if params['sample'] in ['ACS', 'PUMS', 'BLS', 'LEHD']:
+        # if params['estimate'] in ['ACS5', 'ACS1']:
+        if params['sample'] not in ['PUMS', 'LEHD']:
+            df_source.loc[df_source['Indicator']=='Source', params['indicator']] = df_source[df_source['Indicator']=='Source'][params['indicator']].values[0] + ': ' + df_ind[df_ind['Indicator']=='Table(s)'][params['indicator']].values[0]
+            df_ind = df_ind[df_ind['Indicator']!='Table(s)']
+        df_est = pd.DataFrame([yaml_about[params['sample']][params['estimate']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+        df = pd.concat([df_ind, df_source, df_est])
+    elif yaml_about[params['sample']]['Sample']:
+        df_samp = pd.DataFrame([yaml_about[params['sample']]['Sample']]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+        df = pd.concat([df_ind, df_source, df_samp])
     else:
-        df = pd.DataFrame.from_dict([yaml_about[params['estimate']][params['sample']][params['indicator']]]).T.reset_index().rename(columns = {'index': 'Indicator', 0: params['indicator']})
+        df = pd.concat([df_ind, df_source])
 
-
+    df.loc[df['Indicator'] == 'Year(s)', params['indicator']] = f"{params['start_year']}-{params['end_year']}"
     df.loc[df['Indicator'] == 'Last Updated', params['indicator']] = date.today().strftime('%Y-%m-%d')
-    df.loc[df['Indicator'] == 'Year(s)'     , params['indicator']] = f"{params['start_year']}-{params['end_year']}"
-    if params['moe_thresh'] is not None:
-        df.loc[df['Indicator'] == 'Margin of Error Limit', params['indicator']] = params['moe_thresh']
 
-
-    # Old:
+    ## Old:
     if params['geo']:
         df.loc[df['Indicator'] == 'Geography', params['indicator']] = params['geo']
 
@@ -98,22 +99,32 @@ def write_about(params):
     # Create a df from the new separated rows. Drop the old notes row
     # Combine original with new rows
     # Finally, we split the notes
-    def split_notes(df):
-        row_notes = df[df['Indicator'] == 'Notes'].copy()
+
+    df['Indicator'] = pd.Categorical(df['Indicator'], ['Title', 'Source', 'Website', 'Last Updated', 'Estimate', 'Year(s)', 'Geography', 'Description', 'Notes'])
+    df = df.sort_values('Indicator')
+
+    def split_notes(df, col):
+        row_notes = df[df['Indicator'] == col].copy()
         notes = row_notes[params['indicator']].values[0]
         
         lines = notes.split('\\n')
-        rows_new = [{'Indicator': 'Notes' if i == 0 else '', params['indicator']: line} for i, line in enumerate(lines) if line]
+        rows_new = [{'Indicator': col if i == 0 else '', params['indicator']: line} for i, line in enumerate(lines) if line]
         
         df_new = pd.DataFrame(rows_new)
-        df_filtered = df[df['Indicator'] != 'Notes']
+        df_filtered = df[df['Indicator'] != col]
        
         df_notes = pd.concat([df_filtered, df_new], ignore_index=True)
         
         return df_notes
-    
 
-    df = split_notes(df)
+    try:
+        df = split_notes(df, 'Description')
+    except Exception as e:
+        e
+    try:
+        df = split_notes(df, 'Notes')
+    except Exception as e:
+        e
 
     return df
 
@@ -168,35 +179,30 @@ def sqlqry_to_df(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
     
     return df
 
+def sqlqry_to_gdf(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):
 
-
-
-
-def sqlqry_to_gdf(query_str, dbname, servername='SQL-SVR', trustedconn='yes'):   
-
+    print()
     driver = get_odbc_driver()  
 
     conn_str = f"DRIVER={driver};" \
         f"SERVER={servername};" \
         f"DATABASE={dbname};" \
         f"Trusted_Connection={trustedconn}"
-        
+
     conn_str = urllib.parse.quote_plus(conn_str)
     engine = sqla.create_engine(f"mssql+pyodbc:///?odbc_connect={conn_str}")
-       
+
     start_time = perf()
 
-    # create SQL table from the dataframe
     print("Executing query. Results loading into dataframe...")
     gdf = gpd.read_postgis(query_str, engine, geom_col="geometry")
     srid = int(gdf["srid"].iloc[0])
     gdf = gdf.set_crs(epsg=srid)
     gdf = gdf.drop('srid', axis=1)
+
     rowcnt = gdf.shape[0]
     
     et_mins = round((perf() - start_time) / 60, 2)
     print(f"Successfully executed query in {et_mins} minutes. {rowcnt} rows loaded into dataframe.")
-    
+
     return gdf
-
-

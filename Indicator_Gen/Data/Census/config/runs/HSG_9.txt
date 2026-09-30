@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: HSG_9
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Contract Rents for Renter-Occupied Units
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

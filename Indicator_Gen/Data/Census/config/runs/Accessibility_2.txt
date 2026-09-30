@@ -1,10 +1,9 @@
 Project: Monitoring and Reporting
 Indicator Name: Accessibility_2
-Export Location: C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility
-Folder: Travel Mode by Household Income
+Export Location: Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility\Accessibility_2 Travel Mode by Household Income
 Sample: PUMS
 Estimate: ACS5
 Geography: PUMA
-Years Imported: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+Years Imported: 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
 Import Tab: Counties
 Margin of Error: Yes

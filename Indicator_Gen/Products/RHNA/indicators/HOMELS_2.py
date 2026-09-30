@@ -14,13 +14,11 @@ INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
-PATH_GEO = Path(r'I:\Projects\Josh\RHNA\Geospatial Data')
 
 
 if __name__ == '__main__':
 
 
-    ## Organizing POPEMP_3
     df_places, df_counties, df_mpo = rhna.acs_import('POPEMP_3')
 
     race_ethcnitiy_map = {
@@ -58,9 +56,8 @@ if __name__ == '__main__':
     df_counties = df_counties.rename(columns={'Population':'Overall Population', 'Percent':'Overall Population (%)'})
 
 
-    ## Organizing HOMELS_2
-
-    path_in = PATH_GEO / 'HUD'
+    # Organizing HOMELS_2
+    path_in = PATH_DATA / 'HUD'
     files = [f for f in path_in.iterdir() if f.is_file()]
     files = [f for f in files if '.xlsx' in str(f)]
 

@@ -5,11 +5,6 @@
 This script updates the "About Indicators.xlsx" file on the main Data folder of the MnR SP page with
 the working copy from the Process Map folder
 '''
-print(); print()
-
-
-# UPDATE = 'About'
-UPDATE = 'RHNA'
 
 
 
@@ -21,6 +16,9 @@ from pathlib import Path
 import shutil
 from tqdm import tqdm
 import time
+print('\n'*2)
+
+
 
 
 
@@ -42,13 +40,17 @@ def update_excel_copy(file_master, file_copy):
             df = workbook_master.parse(sheet_name)
             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
-    print(); print(); print()
+    print()
     print(f"The copy of the excel workbook '{file_copy}' has been updated with the sheets from '{file_master}'.")
-    print(); print(); print()
+    print('\n'*2)
 
 
 
 # Main ----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+# UPDATE = 'About'
+UPDATE = 'RHNA'
 
 
 if __name__ == '__main__':
@@ -83,7 +85,9 @@ if __name__ == '__main__':
 
         for county in dict_.keys():
 
-            print(); print(county); print()
+            print()
+            print(county)
+            print()
 
             for jurisdiction in tqdm(dict_[county], position=0):
 

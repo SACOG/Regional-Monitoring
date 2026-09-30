@@ -1,12 +1,7 @@
 
-print(); print(); print()
-
-EXPORT=True
 
 
 # Workspace -----------------------------------------------------------------------------------------------------------
-
-
 
 
 import pandas as pd
@@ -18,22 +13,20 @@ import time
 from IPython.display import display
 import sys
 
-PATH_GIT = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen'
-PATH_CODE    = PATH_GIT / 'Data' / 'Census'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
+
+sys.path.append(str(Path(__file__).parent.parent.parent.parent.parent/'config'))
+import functions as func
+import help
+
+sys.path.append(str(Path(__file__).parent.parent))
+import post
+        
+PATH_CONFIG0 = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'config'
+PATH_CONFIG  = Path.home() / 'Documents' / 'Projects' / 'Regional-Monitoring' / 'Indicator_Gen' / 'Data' / 'Census' / 'config'
 PATH_CSV = PATH_CONFIG / 'step0' / 'csv'
 
 FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
 FILE_API = PATH_CONFIG / 'api_key.txt'
-
-sys.path.append(str(PATH_CONFIG0))
-import functions as func
-
-sys.path.append(str(PATH_CONFIG))
-import post
-        
-
 
 # Obtain API Key from the following source 
 # https://api.census.gov/data/key_signup.html
@@ -42,11 +35,15 @@ with open(FILE_API, 'r') as file:
 
 
 
-START_YEAR = 2009
+START_YEAR = 2005
 END_YEAR   = 2024
 years_to_import = range(START_YEAR, END_YEAR+1)
 # years_to_import = [2000, 2010, 2020]
 
+
+
+
+EXPORT=True
 
 
 COUNTIES=False
@@ -67,6 +64,8 @@ PUMA=False
 
 
 if __name__ == '__main__':
+
+    print('\n'*3)
 
 
     ## The following URL is no longer available due to DOGE (I'm guessing)3
@@ -98,7 +97,8 @@ if __name__ == '__main__':
         start_time = time.time()
 
         print()
-        print('Importing County FIPS codes...'); print()
+        print('Importing County FIPS codes...')
+        print()
 
         # Use URL to county fips mapping table
         # Import county FIPS codes by state
@@ -145,7 +145,9 @@ if __name__ == '__main__':
 
         list_df_census = []
 
-        print(); print('Importing MSA codes for all states...'); print()
+        print()
+        print('Importing MSA codes for all states...')
+        print()
 
         for year in tqdm(years_to_import, position=0):
 
@@ -157,7 +159,10 @@ if __name__ == '__main__':
             # convert parsed response text to pandas df
             # apply year tag
             
-            root_ = f'https://api.census.gov/data/{year}/acs/acs5'
+            if year == 2020:
+                root_ = f'https://api.census.gov/data/{year}/acs/acs5'
+            else:
+                root_ = f'https://api.census.gov/data/{year}/acs/acs1'
             g_ = '?get='
             variables_ = 'NAME'
             location_ = '&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'
@@ -188,16 +193,16 @@ if __name__ == '__main__':
             try:
                 x = x.split(exp1, 1)[0]
                 x = x.split(exp2, 1)[0]
-            except:
-                pass
+            except Exception as e:
+                e
             return x
 
         def re_extract_state(x, exp=','):
             try:
                 x = x.split(exp, 1)[1]
                 x = x[1:3]
-            except:
-                pass
+            except Exception as e:
+                e
             return x
 
             
@@ -206,7 +211,7 @@ if __name__ == '__main__':
         df_msa['Abbrv'] = df_msa['City'] + ', ' + df_msa['STATE']
 
         df_fips = pd.read_excel(FILE_AREA, sheet_name='CountyFIPS', dtype=str)
-        df_fips = post.clean_fips(df_fips)
+        df_fips = help.clean_fips(df_fips)
 
         df_fips = df_fips[['STATE', 'STATEFP']].drop_duplicates()
 

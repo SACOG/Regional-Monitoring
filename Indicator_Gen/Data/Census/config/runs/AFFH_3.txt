@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: AFFH_3
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Population with Limited English Proficiency
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

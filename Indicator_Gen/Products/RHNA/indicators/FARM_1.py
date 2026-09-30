@@ -40,7 +40,8 @@ if __name__ == '__main__':
 
     # Use URLs to import enrollment total files
     urls = [
-        'https://www3.cde.ca.gov/demo-downloads/ce/cenroll2324.txt'
+        'https://www3.cde.ca.gov/demo-downloads/ce/cenroll2425.txt'
+        , 'https://www3.cde.ca.gov/demo-downloads/ce/cenroll2324.txt'
         , 'https://www3.cde.ca.gov/demo-downloads/ce/cenroll2223.txt'
         , 'https://www3.cde.ca.gov/demo-downloads/ce/cenroll2122.txt'
         , 'https://www3.cde.ca.gov/demo-downloads/ce/cenroll2021.txt'

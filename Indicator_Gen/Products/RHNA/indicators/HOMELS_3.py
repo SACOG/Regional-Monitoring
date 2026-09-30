@@ -14,7 +14,6 @@ INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 PATH_OUT = Path.home() / 'Documents' / 'Projects' / 'Local' / 'RHNA' / 'Final Products'
-PATH_GEO = Path(r'I:\Projects\Josh\RHNA\Geospatial Data')
 
 
 def remove_subtext(x):
@@ -24,7 +23,7 @@ def remove_subtext(x):
 
 if __name__ == '__main__':
 
-    path_in = PATH_GEO / 'HUD'
+    path_in = PATH_DATA / 'HUD'
     files = [f for f in path_in.iterdir() if f.is_file()]
     files = [f for f in files if '.xlsx' in str(f)]
 

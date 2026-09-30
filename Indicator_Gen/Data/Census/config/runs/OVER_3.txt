@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: OVER_3
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Overcrowding by Race
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

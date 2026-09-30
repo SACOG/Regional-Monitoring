@@ -1,36 +1,43 @@
 
 
-def re_remove_post(x, exp = ':'):
-    try: x = x.split(exp, 1)[0]
-    except: pass
-    return x
-
-def re_remove_pre(x, exp = ':  '):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
-    return x
-
-
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
 
+
+def re_remove_post(x, exp = ':'):
+    try:
+        x = x.split(exp, 1)[0]
+    except Exception as e:
+        e
+    return x
+
+def re_remove_pre(x, exp = ':  '):
+    try:
+        x = str(x.split(exp, 1)[1])
+    except Exception as e:
+        e
+    return x
+
+
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 
+warnings.filterwarnings("ignore")
+
 if __name__ == '__main__':
 
-    df_places_a = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR}a Places ACS5.xlsx')
-    df_places_b = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR}b Places ACS5.xlsx')
+    df_places_a = pd.read_excel(PATH_DATA / f'{INDICATOR}a Places ACS5.xlsx')
+    df_places_b = pd.read_excel(PATH_DATA / f'{INDICATOR}b Places ACS5.xlsx')
     df_places_a['Type'] = 'Kitchen'
     df_places_b['Type'] = 'Plumbing'
     df_places = pd.concat([df_places_a, df_places_b])

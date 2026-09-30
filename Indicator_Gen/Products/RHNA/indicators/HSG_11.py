@@ -8,9 +8,8 @@ from tqdm import tqdm
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
+
 yaml_file = rhna.load_yaml()
-
-
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]

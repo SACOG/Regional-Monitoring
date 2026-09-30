@@ -27,7 +27,7 @@ SERVER=True
 
 
 
-# Workspace -----------------------------------------------------------------------------------------------------------------------------------------
+# Setup -----------------------------------------------------------------------------------------------------------------------------------------
 
 
 import pandas as pd
@@ -35,24 +35,20 @@ from pathlib import Path
 from IPython.display import display
 import warnings
 import sys
-
 sys.path.append(str(Path(__file__).parent/'config'))
 import pre
 import get
 import post
+import const
 
-
-PATH_GIT = Path(__file__).parent.parent.parent
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_GIT / 'Data' / 'Census' / 'config'
+PATH_CONFIG0 = Path(__file__).parent.parent.parent / 'config'
+PATH_CONFIG  = Path(__file__).parent / 'config'
 
 FILE_API = PATH_CONFIG / 'api_key.txt'
 FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
 FILE_CPI = PATH_CONFIG0 / 'CPI_IAF.xlsx'
 FILE_INPUTS = PATH_CONFIG / 'census.xlsx'
 
-
-print('\n'*3)
 warnings.filterwarnings("ignore")
 
 # Network file paths for importing/exporting
@@ -61,33 +57,32 @@ PATH_SERVER = Path(r'\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data')
 
 
 
+
 ## Main ----------------------------------------------------------------------------------------------------------------------------------------------
-
-
 
 
 RERUN=True
 EXPORT=True
 
-MPO=False
+MPO=True
 UNINCORPORATED=True
 
-ABOUT=False
+ABOUT=True
 UPDATE=False
 SERVER=False
-
-
 
 
 
 if __name__ == '__main__':
 
     # Rerun prep work to read in census data collected in step 1
+    print('\n'*3)
     with open(PATH_CONFIG / 'api_key.txt', 'r') as file:
         api_key = file.read()
 
     yaml_census = pre.load_yaml()
     params = pre.api_request_params(yaml_census, RERUN)
+    params['moe_thresh']=const.MOE_THRESH
 
     if params['geo']=='Counties':
         params['mpo']=MPO
@@ -103,7 +98,7 @@ if __name__ == '__main__':
     params['server']=SERVER
 
     # Import variable mappings
-    df_vars = get.read_vars_file(params)
+    params['df_vars'] = get.read_vars_file(params)
 
     # Import requested data
     file_in = PATH_ORIG / pre.set_download_name(params)
@@ -126,23 +121,24 @@ if __name__ == '__main__':
     # Adjust dollars for inflation, if needed
     # Aggregate estimates across variables and geographies as needed
 
-    if params['sample'] in ['ACS', 'DP', 'SUBJECT', 'DEC']:
+    if params['sample'] in ['ACS', 'DP', 'SUBJECT', 'DEC', 'LEHD']:
 
-        df_census = post.acs_main(df_census, params, df_vars)
-
+        if params['sample'] in ['LEHD']:
+            df_census = post.lehd_main(df_census, params, df_fips=None)
+        else:
+            df_census = post.acs_main(df_census, params)
 
         if ABOUT:
             params = post.write_about_master(df_census, params)
             print("About documentation of the output for:", params['indicator'])
             display(params['df_about'])
 
-            
         if EXPORT:
             post.acs_export(df_census, params)
-    
 
 
-    ## PUMS, FOODSEC ----------
+
+    ## PUMS ----------
 
     # Processing steps:
 
@@ -156,10 +152,10 @@ if __name__ == '__main__':
     # Roll up using suggested weight field
     # Roll up to PUMA, counties, MSA, and MPO
 
-    if params['sample'] in ['PUMS', 'FOODSEC']:
+    if params['sample'] in ['PUMS']:
 
         if params['sample'] == 'PUMS':
-            if 'H' in df_vars['Table Type'].unique():
+            if 'H' in params['df_vars']['Table Type'].unique():
                 table_type = 'H'
                 weight = 'WGTP'
             else:
@@ -167,11 +163,7 @@ if __name__ == '__main__':
                 weight = 'PWGTP'
 
         if params['sample'] == 'PUMS':
-            df_puma, df_counties, df_msa, df_mpo = post.pums_main(df_census, params, weight, df_vars)
-
-        # if params['sample'] == 'FOODSEC':
-        #     df_counties, df_mpo, groups = post.foodsec_processing_4(df_census, params, weight, groups)
-        #     display(df_counties.head(3), df_mpo.head(3))
+            df_puma, df_counties, df_msa, df_mpo = post.pums_main(df_census, params, weight)
 
         if ABOUT:
             df_about = post.write_about_master(df_census, params)
@@ -183,7 +175,5 @@ if __name__ == '__main__':
 
 
 
-
 print('\n'*3)
-
 

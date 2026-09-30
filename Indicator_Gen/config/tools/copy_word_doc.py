@@ -2,8 +2,6 @@
 
 '''Tool to copy word documents from one folder to another'''
 
-print(); print()
-
 
 import shutil
 from pathlib import Path
@@ -16,11 +14,12 @@ FOLDER_SP   = Path.home()/'Sacramento Area Council of Governments'/'Regional Mon
 
 if __name__=='__main__':
 
+    print('\n'*2)
+
     for folder in FOLDER_SOURCE.iterdir():
 
-        county = folder.stem; print(county)
+        county = folder.stem; print(county, '\n')
         path_county = FOLDER_SOURCE / county
-        print()
 
         for folder in path_county.iterdir():
             
@@ -36,6 +35,6 @@ if __name__=='__main__':
             shutil.copy2(file_source_tables, folder_copy)
 
 
-        print("Files copied successfully!"); print(); print()
+        print("Files copied successfully!\n\n")
 
 

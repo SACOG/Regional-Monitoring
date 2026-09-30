@@ -1,10 +1,9 @@
 Project: Monitoring and Reporting
 Indicator Name: Jobs_4
-Export Location: Vibrant and Inclusive Places\\Economy\\Jobs
-Folder: New Firms
+Export Location: Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs\Jobs_4 New Firms
 Sample: LEHD
 Estimate: SA
 Geography: MSA
-Years Imported: timeseries
+Years Imported: ['timeseries']
 Import Tab: MSA
 Margin of Error: No

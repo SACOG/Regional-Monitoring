@@ -14,8 +14,10 @@ import rhna
 yaml_file = rhna.load_yaml()
 
 def re_remove_pre(x, exp = '('):
-    try: x = str(x.split(exp, 1)[1])
-    except: pass
+    try:
+        x = str(x.split(exp, 1)[1])
+    except Exception as e:
+        e
     return x
 
 
@@ -67,7 +69,6 @@ if __name__ == '__main__':
         df = df[df['job_sector_code'].isin(job_sectors)]
         df = df.reset_index(drop=True)
         
-            
         df['Desc_clean'] = df['Desc'].apply(re_remove_pre)
         df['Desc_clean'] = df['Desc_clean'].str[:-1]
 

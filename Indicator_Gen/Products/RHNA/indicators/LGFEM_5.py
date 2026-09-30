@@ -17,20 +17,24 @@ params = yaml_file[INDICATOR]
 
 
 def re_remove_post(x, exp = ':'):
-    try: x = x.split(exp, 1)[0]
-    except: pass
+    try:
+        x = x.split(exp, 1)[0]
+    except Exception as e:
+        e
     return x
 
 def re_remove_pre(x, exp = ':  '):
-    try: x = x.split(exp, 1)[1]
-    except: pass
+    try:
+        x = x.split(exp, 1)[1]
+    except Exception as e:
+        e
     return x
 
 warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
-    df_places = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx')
+    df_places = pd.read_excel(PATH_DATA / f'{INDICATOR} Places ACS5.xlsx')
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)

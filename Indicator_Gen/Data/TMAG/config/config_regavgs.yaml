@@ -20,14 +20,67 @@ server_data:
   gisdir:
     dir_name: PPA3_GIS_SVR
     archived_run_db: PPA3_run_data.gdb
-    svc_root_url: [https://services.sacog.org/gisppa/rest/directories/arcgisjobs] 
+    svc_root_url: [https://services.sacog.org/gisppa/rest/directories/arcgisjobs]
   dir_commd: CommunityDesign
   dir_regpgm: RegionalProgram
   dir_csv: CSV
   dir_json_template: JSON
 
+# Monitoring and Reporting 2026
+access_data:
+  tifdir: \\data-svr\GIS\Projects\Josh\Conveyal\conveyal_outputs
+  wts:
+    pop: pop_2024acs5.tif
+    workers: jobs_edd_2025q3.tif # 10/1/2024 - not using, but ideally will use instead of pop for job access
+    asian: 'pop_asian_2024acs5.tif'
+    black: 'pop_black_2024acs5.tif'
+    white: 'pop_white_2024acs5.tif'
+    hispanic: 'pop_hispanic_2024acs5.tif'
+  acc_lyrs:
+    emp:
+      transit: MnR_transit_jobs_202610_P50_C30.tif
+      bike: MnR_bike_jobs_202610_mod_P50_C10.tif
+      walk: MnR_walk_jobs_202610_P50_C10.tif
+      drive: MnR_drive_jobs_202609_mod_P50_C11.tif
+    edu:
+      transit: transit_edu_2024.tif
+      bike: bike_edu_2024.tif
+      walk: walk_edu_2024.tif
+      drive: null
+    nonwork:
+      transit: CMP_transit_services_P50_C45_202609.tif
+      bike: CMP_bike_services_P50_C30_202609.tif
+      walk: CMP_walk_services_P50_C30_202609.tif
+      drive: null
 
-# # Monitoring and Reporting
+# # CMP 2026
+# access_data:
+#   tifdir: \\data-svr\GIS\Projects\Josh\Conveyal\conveyal_outputs
+#   wts:
+#     pop: pop_2024acs5.tif
+#     workers: jobs_edd_2025q3.tif # 10/1/2024 - not using, but ideally will use instead of pop for job access
+#     asian: 'pop_asian_2024acs5.tif'
+#     black: 'pop_black_2024acs5.tif'
+#     white: 'pop_white_2024acs5.tif'
+#     hispanic: 'pop_hispanic_2024acs5.tif'
+#   acc_lyrs:
+#     emp:
+#       transit: CMP_transit_jobs_P50_C45_202609.tif
+#       bike: CMP_bike_jobs_TESTNOMOD_P50_C30_202609.tif
+#       walk: CMP_walk_jobs_P50_C30_202609.tif
+#       drive: null # MnR_indicators_drive_jobs_P50_C11_2026.tif
+#     edu:
+#       transit: transit_edu_2024.tif
+#       bike: bike_edu_2024.tif
+#       walk: walk_edu_2024.tif
+#       drive: null
+#     nonwork:
+#       transit: CMP_transit_services_P50_C45_202609.tif
+#       bike: CMP_bike_services_P50_C30_202609.tif
+#       walk: CMP_walk_services_P50_C30_202609.tif
+#       drive: null
+
+# # Monitoring and Reporting 2025
 # access_data:
 #   tifdir: \\data-svr\GIS\Projects\Josh\Regional Monitoring\Accessibility\tif_from_conveyal
 #   wts:
@@ -54,18 +107,18 @@ server_data:
 #       walk: walk_svcs_2024.tif
 #       drive: null
 
-# Valley Vision
-access_data:
-  tifdir: \\data-svr\GIS\Projects\Josh\Regional Monitoring\Accessibility\tif_from_conveyal\ValleyVision
-  wts:
-    pop: pop3_ValleyVision_all.tif
-    asian: pop3_ValleyVision_asian_nh.tif
-    black: pop3_ValleyVision_black_nh.tif
-    white: pop3_ValleyVision_white_nh.tif
-    hispanic: pop3_ValleyVision_hispanic.tif
-  acc_lyrs:
-    emp:
-      transit: transit_jobs_2022_log_30.tif
-      bike: bike_jobs_2022_exp_10.tif
-      walk: walk_jobs_2022_exp_10.tif
-      drive: drive_workers_2022_exp_11.tif
+# # Valley Vision
+# access_data:
+#   tifdir: \\data-svr\GIS\Projects\Josh\Regional Monitoring\Accessibility\tif_from_conveyal\ValleyVision
+#   wts:
+#     pop: pop3_ValleyVision_all.tif
+#     asian: pop3_ValleyVision_asian_nh.tif
+#     black: pop3_ValleyVision_black_nh.tif
+#     white: pop3_ValleyVision_white_nh.tif
+#     hispanic: pop3_ValleyVision_hispanic.tif
+#   acc_lyrs:
+#     emp:
+#       transit: transit_jobs_2022_log_30.tif
+#       bike: bike_jobs_2022_exp_10.tif
+#       walk: walk_jobs_2022_exp_10.tif
+#       drive: drive_workers_2022_exp_11.tif

@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: POPEMP_6
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Employment by Industry'
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

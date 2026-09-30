@@ -1,26 +1,19 @@
 
 
-
-
-
-import getpass
 from pathlib import Path
 import os
 from tqdm import tqdm
 import time
 
 
+LOCAL=True
+IDRIVE=False
+SHAREPOINT=False
 
 
 if __name__ == '__main__':
 
-
-    LOCAL=True
-    IDRIVE=False
-    SHAREPOINT=False
-
-
-
+    
     if LOCAL:
         path_out = Path(r'C:\Users\jfontes\Documents\Projects\Local\RHNA\Final Products')
 
@@ -28,25 +21,21 @@ if __name__ == '__main__':
         path_out = Path('I:\Projects\Josh\RHNA\Final Products')
 
     if SHAREPOINT:
-        user = getpass.getuser()
-        path_users = Path.home()
-        path_sp   = path_users / 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'
-        path_prod = path_sp    / 'Products' / 'RHNA'
-        path_out = path_prod / 'Cycle7' / 'Final Products'
+        path_out = Path.home()/'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents'/'Products'/'RHNA'/'Cycle7'/'Final Products'
 
-
-    ## Clear files out ---
-
+    print('\n'*2)
     counties = os.listdir(path_out)
     for county in counties:
+        print('\n'*2)
         print(county)
+        print()
         path_county = path_out / county
         jurisdictions = os.listdir(path_county)
         for jurisdiction in tqdm(jurisdictions):
-            time.sleep(4)
+            time.sleep(5)
             path_juris = path_county / jurisdiction
             file_to_delete = path_juris / f'RHNA_{jurisdiction}.xlsx'
             try:
                 os.remove(file_to_delete)
-            except:
-                pass
+            except Exception as e:
+                print('How exceptional!', e)

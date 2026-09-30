@@ -1,27 +1,33 @@
 
 
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
-import warnings; warnings.filterwarnings("ignore")
+import warnings
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent/'config'))
 import rhna
-yaml_file = rhna.load_yaml()
+warnings.filterwarnings("ignore")
 
+
+yaml_file = rhna.load_yaml()
 PATH_DATA = Path(yaml_file['Path_Data'])
 INDICATOR = Path(__file__).stem
 params = yaml_file[INDICATOR]
 
 
-FILE_CHAS = PATH_DATA / f'HUD_CHAS_2017thru2021.csv'
+
+ACS_YEAR = 2022
+START_YEAR = ACS_YEAR-4
 
 
 if __name__ == '__main__':
+
+
+    FILE_CHAS = PATH_DATA / f'HUD_CHAS_{START_YEAR}thru{ACS_YEAR}.csv'
 
     df_chas = pd.read_csv(FILE_CHAS, dtype=str)
     df_chas['Households'] = df_chas['Households'].astype(int)
@@ -68,7 +74,8 @@ if __name__ == '__main__':
         
         print('\n'*2)
         print(county)
-        time.sleep(2); print()
+        time.sleep(2)
+        print()
 
         df_counties_sub              = df_counties    [df_counties['Geography'  ] == county]
         df_chas_sub                  = df_chas        [df_chas    ['County Name'] == county]
@@ -83,14 +90,16 @@ if __name__ == '__main__':
 
             df_prod = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
             df_prod = df_prod.pivot_table(index='Income Level', columns='Geography', values='Households').reset_index()
-            df_prod['Sort'] = pd.Categorical(df_prod['Income Level'], ['0%-30% of AMI', '31%-50% of AMI', '51%-80% of AMI', 'Greater than 100% of AMI'])
+            df_prod['Sort'] = pd.Categorical(df_prod['Income Level'], ['0%-30% of AMI', '31%-50% of AMI', '51%-80% of AMI', '81%-100% of AMI', 'Greater than 100% of AMI'])
             df_prod = df_prod.sort_values(['Sort']).drop(['Sort'], axis=1).reset_index(drop=True)
+            df_prod = rhna.cols_geo_rename(df_prod, params['Columns'].split('<>'), county, jurisdiction)
 
             df_pct = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
             df_pct = df_pct.pivot_table(index='Income Level', columns='Geography', values='Percent').reset_index()
-            df_pct['Sort'] = pd.Categorical(df_pct['Income Level'], ['0%-30% of AMI', '31%-50% of AMI', '51%-80% of AMI', 'Greater than 100% of AMI'])
+            df_pct['Sort'] = pd.Categorical(df_pct['Income Level'], ['0%-30% of AMI', '31%-50% of AMI', '51%-80% of AMI', '81%-100% of AMI', 'Greater than 100% of AMI'])
             df_pct = df_pct.sort_values(['Sort']).drop(['Sort'], axis=1).reset_index(drop=True)
-            
+            df_pct = rhna.cols_geo_rename(df_pct, params['Columns'].split('<>'), county, jurisdiction)
+
             df_plot = pd.concat([df_chas_sub[df_chas_sub['Geography'] == jurisdiction], df_counties_sub, df_mpo])
             df_plot['Percent of Households'] = round(df_plot['Percent']*100, 1)
 

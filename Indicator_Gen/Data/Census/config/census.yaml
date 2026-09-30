@@ -7,1114 +7,1248 @@
 
 
 Project:
-  - 'Monitoring and Reporting'
-  - 'StoryMaps'
-  - 'RHNA'
-  - 'Blueprint'
-  - 'SACSIM'
-  - 'Chamber Study Missions'
-  - 'Cap to Cap'
-  - 'CERF'
-  - 'Miscellaneous'
-  - 'Small Data Requests'
+  - Monitoring and Reporting
+  - StoryMaps
+  - RHNA
+  - Blueprint
+  - SACSIM
+  - Chamber Study Missions
+  - CapToCap
+  - Peer Region Studies
+  - CERF
+  - Weights
+  - Small Data Requests
 
 
 Indicators:
+
   Monitoring and Reporting:
+
     Pop_3:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Race'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics\Pop_3 Race'
+      sample: ACS
       number_of_variables: 1
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: False
+      race: True
     Pop_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Age'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics\Pop_4 Age'
+      sample: ACS
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Age Group
+      race: False
     Pop_6:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Birth Rates'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics\Pop_6 Birth Rates'
+      sample: ACS
       number_of_variables: 2
-      percentages: 'No'
+      percentages: False
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    Pop_7:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Marriage Rates'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 2
-      percentages: 'No'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: False
+      race: False
     Pop_8:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Marriage Status'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics\Pop_8 Marriage Status'
+      sample: ACS
       number_of_variables: 4
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Marriage Status
+      race: False
     Pop_9:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics'
-      folder: 'Location 1 Year Ago'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Pop and Demographics\Pop_9 Location 1 Year Ago'
+      sample: ACS
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Location 1 Year Ago
+      race: False
     Health_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places'
-      folder: 'Uninsured'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places\Health_2 Uninsured'
+      sample: ACS
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Coverage Status
+      race: True
     Broadband_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places\Broadband'
-      folder: 'Access'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places\Broadband\Broadband_2 Access'
+      sample: ACS
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    Cost_3:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
-      folder: 'Residential Vacancy'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 3
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    Cost_5:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
-      folder: 'Home Ownership'
-      sample: ['ACS', 'DEC']
-      MOE_threshold: 0.05
-      number_of_variables: 2
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    Income_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
-      folder: 'HH Income'
-      sample: ['ACS', 'DEC']
-      MOE_threshold: 0.05
+      metric: Households
+      variable: 'Broadband Status'
+      race: False
+    Broadband_3:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\People and Community\Healthy Places\Broadband\Broadband_3 Cellular'
+      sample: ACS
       number_of_variables: 1
-      percentages: 'No'
-      weighted_by: 'Households'
+      percentages: Yes
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      variable: 'Cellular Plan'
+      race: False
+    Cost_3:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost\Cost_3 Residential Vacancy'
+      sample: ACS
+      number_of_variables: 3
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      variable: Occupancy Status
+      race: False
+    Cost_5:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost\Cost_5 Home Ownership'
+      sample: ['ACS', 'DEC']
+      number_of_variables: 2
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      variable: Household Type
+      race: True
+    Income_1:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_1 HH Income'
+      sample: ['ACS', 'DEC']
+      number_of_variables: 1
+      percentages: False
+      weighted_by: Households
       adjust_cpi: True
-      metric: 'Median Household Income'
+      metric: Median Household Income
+      variable: False
+      race: True
     Income_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
-      folder: 'Poverty Rate'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_4 Poverty Rate'
+      sample: ACS
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Poverty Status
+      race: True
+    Income_5:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_5 Wealth'
+      sample: ACS
+      number_of_variables: 1
+      percentages: False
+      weighted_by: Households
+      adjust_cpi: True
+      metric: Median Home Value
+      variable: False
+      race: True
+    Income_7:
+      # export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_7 Mortgage Status'
+      # sample: ACS
+      # number_of_variables: 2
+      # percentages: True
+      # weighted_by: False
+      # adjust_cpi: False
+      # metric: Households
+      # variable: Mortgage Status
+      # race: False
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_7 Mortgage Status'
+      sample: PUMS
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      race: True
+      variable:
+        RAC1P: Race/Ethnicity
+        TEN: Mortgage Status
     Labor_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Labor Force'
-      folder: 'Participation Rate'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Labor Force\Labor_1 Participation Rate'
+      sample: ACS
       number_of_variables: 4
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Employment Status
+      race: True
     Edu_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Education'
-      folder: 'Attainment'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Education\Edu_1 Attainment'
+      sample: ACS
       number_of_variables: 4
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: 'Educational Attainment'
+      race: True
     Commute_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Next Gen of Mobility Solutions\Commute mode'
-      folder: 'Modes of Commute'
-      sample: 'ACS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Next Gen of Mobility Solutions\Commute mode\Commute_1 Modes of Commute'
+      sample: ACS
       number_of_variables: 7
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+      variable: Commute Mode
+      race: False
     Cost_6:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost'
-      folder: 'Housing Cost Burden'
-      sample: 'PUMS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost\Cost_6 Housing Cost Burden'
+      sample: PUMS
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+      race: True
+      variable:
+        RAC1P: Race/Ethnicity
     Income_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income'
-      folder: 'Income Categories'
-      sample: 'PUMS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Income\Income_2 Income Categories'
+      sample: PUMS
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+      race: False
+      variable: False
     Accessibility_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
-      folder: 'Travel Mode by Race'
-      sample: 'PUMS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility\Accessibility_1 Travel Mode by Race'
+      sample: PUMS
       number_of_variables: 7
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Population
+      race: True
+      variable:
+        RAC1P: Race/Ethnicity
+        JWTRNS: Commute Mode
     Accessibility_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
-      folder: 'Travel Mode by Household Income'
-      sample: 'PUMS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility\Accessibility_2 Travel Mode by Household Income'
+      sample: PUMS
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+      race: False
+      variable:
+        JWTRNS: Commute Mode
     Accessibility_3:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
-      folder: 'Auto Ownership'
-      sample: 'PUMS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility\Accessibility_3 Auto Ownership'
+      sample: PUMS
       number_of_variables: 4
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+      race: True
+      variable:
+        RAC1P: Race/Ethnicity
+        VEH: 'Number of Vehicles'
     Accessibility_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility'
-      folder: 'Commute Times'
-      sample: 'PUMS'
-      MOE_threshold: 0.05
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Accessibility\Accessibility_4 Commute Times'
+      sample: PUMS
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+      race: True
+      variable:
+        RAC1P: Race/Ethnicity
     Jobs_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs'
-      folder: 'New Firms'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Economy\Jobs\Jobs_4 New Firms'
       sample: 'LEHD'
-      MOE_threshold: 
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
       metric: 'Firms'
   
   StoryMaps:
     Housing_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 10
-      percentages: 'No'
+      percentages: False
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+      variable: Cost Burden
+      race: False
     Housing_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 7
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
     Housing_3:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 7
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
     Housing_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
-      folder: ''
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
       sample: 'SUBJECT'
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
+      metric: Households
+    Housing_5:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 10
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      variable: Cost Burden
+      race: False
+    Housing_6:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\StoryMaps\Housing\original_export'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 10
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      variable: Cost Burden
+      race: False
 
   Chamber Study Missions:
     Chamber_H_1aa:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_1ab:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
       sample: 'SUBJECT'
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 4
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: ['PUMS', 'ACS']
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: [PUMS, ACS]
       MOE_threshold: 0.05
       number_of_variables: 24
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_5:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'No'
-      weighted_by: 'Households'
-      metric: 'Median Household Income'
+      percentages: False
+      weighted_by: Households
+      metric: Median Household Income
     Chamber_H_6:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_7:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: ['ACS', 'SUBJECT', 'PUMS']
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ['ACS', 'SUBJECT', PUMS]
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'No'
-      weighted_by: 'Households'
-      metric: 'Median Household Income'
+      percentages: False
+      weighted_by: Households
+      metric: Median Household Income
     Chamber_H_9:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_11:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     Chamber_H_12:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_13:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_14:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
       sample: 'SUBJECT'
       MOE_threshold: 0.05
       number_of_variables: 3
-      percentages: 'No'
-      weighted_by: 'Population'
+      percentages: False
+      weighted_by: Population
       metric: 'Unemployment Rate'
     Chamber_H_16:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_17:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     Chamber_H_18:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
       sample: 'SUBJECT'
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     Chamber_H_19:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
       sample: 'SUBJECT'
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_20:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
       folder: ''
-      sample: ['ACS', 'SUBJECT', 'PUMS']
+      sample: ['ACS', 'SUBJECT', PUMS]
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Chamber_H_21:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2025\Hispanic Chamber of Commerce\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 3
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Population'
+      metric: Population
 
   SACSIM:
     SACSIM_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     SACSIM_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     SACSIM_3:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     SACSIM_4:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     SACSIM_5:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
     SACSIM_6:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\SACSIM\original_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'No'
+      percentages: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
 
   RHNA:
-    RHNA_POPEMP_2:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Population by Race'
+    RHND_check_1:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      number_of_variables: 3
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+      variable: Overcrowding
+      race: False
+    POPEMP_2:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_3:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Race'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_3:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_4:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Age'
+      metric: Population
+    POPEMP_4:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 3
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_5:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Location 1 Year Ago'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_5:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 6
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_6:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: Employment by Industry'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_6:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8 
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_7:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Resident Employment by Occupation'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_7:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 6
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_8:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Workers by Class by Workers'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_8:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 6
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_9:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Workers by Class of Workers, by Place of Work'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_9:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_10a:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Workers by Earnings, by Jurisdiction as Place of Residence'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_10a:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_10b:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Workers by Earnings, by Jurisdiction as Place of Work'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_10b:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_POPEMP_16:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Owners vs Renters'
-      sample: 'ACS'
+      metric: Population
+    POPEMP_16:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_17:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Housing Tenure'
+      metric: Households
+    POPEMP_17:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_18a:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Owners - Housing Tenure by Age'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_18a:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 9
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_18b:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Renters - Housing Tenure by Age'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_18b:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 9
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_19a:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Owners - Housing Tenure by Year Moved to Current Residence'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_19a:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_19b:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Renters - Housing Tenure by Year Moved to Current Residence'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_19b:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_20:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Housing Tenure by Race of Householder'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_20:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05 
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_22:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Housing Tenure by Housing Type'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_22:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_23:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Household Type'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_23:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 6
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_24:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Households by Presence of Children'
-      sample: 'ACS'
+      metric: Households
+    POPEMP_24:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_POPEMP_26:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Age'
+      metric: Households
+    POPEMP_27:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
       sample: ['SUBJECT', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
-      weighted_by: 'Population'
+      percentages: False
+      weighted_by: Population
       adjust_cpi: False
-      metric: 'Median Age'
-    RHNA_HSG_2:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Occupancy'
-      sample: 'ACS'
+      metric: Median Age
+    HSG_2:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_3:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Vacancies'
-      sample: 'ACS'
+      metric: Households
+    HSG_3:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_4:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Housing Units by Year Structure Built'
-      sample: 'ACS'
+      metric: Households
+    HSG_4:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_5:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Housing Units by Number of Bedrooms'
-      sample: 'ACS'
+      metric: Households
+    HSG_5:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_6a:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Owners - Substandard Housing Issues'
-      sample: 'ACS'
+      metric: Households
+    HSG_6a:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_6b:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Renters - Substandard Housing Issues'
-      sample: 'ACS'
+      metric: Households
+    HSG_6b:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_7:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Homes Values of Owner-Occupied Units'
-      sample: 'ACS'
+      metric: Households
+    HSG_7:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 7
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_9:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Contract Rents for Renter-Occupied Units'
-      sample: 'ACS'
+      metric: Households
+    HSG_9:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 7
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_HSG_10:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Median Contract Rent'
-      sample: 'ACS'
+      metric: Households
+    HSG_10:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
-      weighted_by: 'Households'
+      percentages: False
+      weighted_by: Households
       adjust_cpi: True
       metric: 'Median Contract Rent'
-    RHNA_HSG_12:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Households by Income Bracket'
+    HSG_12:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 5
+      percentages: False
+      weighted_by: Households
+      adjust_cpi: True
+      metric: 'Median Gross Rent'
+    OVER_3:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05 
+      number_of_variables: 2 
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    OVER_6:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    OVER_7:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    LGFEM_1:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 5 
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    LGFEM_2:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    LGFEM_4:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    LGFEM_5:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    SEN_2:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05 
+      number_of_variables: 3
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    SEN_4:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05 
+      number_of_variables: 2
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    DISAB_1:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05 
+      number_of_variables: 2 
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    DISAB_2:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    DISAB_3:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: False
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    ELI_3:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population Below Poverty
+    ELI_4:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
       sample: 'DP'
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Households'
-    RHNA_OVER_3:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Overcrowding by Race'
-      sample: 'ACS'
-      MOE_threshold: 0.05 
-      number_of_variables: 2 
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    RHNA_OVER_6:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Cost Burden by Tenure'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 4
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    RHNA_OVER_7:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Cost Burden Severity'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 4
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    RHNA_LGFEM_1:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Household Size by Tenure'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 5 
-      percentages: 'No'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    RHNA_LGFEM_2:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Households by Household Size'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 4
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    RHNA_LGFEM_4:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Housing Tenure by Household Type'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 4
-      percentages: 'No'
-      weighted_by: False
-      metric: 'Households'
-    RHNA_LGFEM_5:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Female-Headed Households by Poverty Status'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 2
-      percentages: 'No'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Households'
-    RHNA_SEN_2:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Senior and Youth Population by Race'
-      sample: 'ACS'
-      MOE_threshold: 0.05 
-      number_of_variables: 3
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
-    RHNA_SEN_4:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Disability by Type - Senious (65 and Over)'
-      sample: 'ACS'
-      MOE_threshold: 0.05 
-      number_of_variables: 2
-      percentages: 'No'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
-    RHNA_DISAB_1:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Disability by Type'
-      sample: 'ACS'
-      MOE_threshold: 0.05 
-      number_of_variables: 2 
-      percentages: 'No'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
-    RHNA_DISAB_2:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Population by Disability Status'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 2
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
-    RHNA_DISAB_3:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Labor Force Disability Status'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 2
-      percentages: 'No'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
-    RHNA_ELI_3:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Poverty Status by Race'
-      sample: 'ACS'
-      MOE_threshold: 0.05
-      number_of_variables: 2
-      percentages: 'Yes'
-      weighted_by: False
-      adjust_cpi: False
-      metric: 'Population'
-    RHNA_AFFH_2:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Population Living in High Resource Areas by Race'
-      sample: 'ACS'
+      metric: Households
+    AFFH_2:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
+      percentages: False
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
-    RHNA_AFFH_3:
-      sp_location: 'I:\Projects\Josh\RHNA\Data'
-      folder: 'Population with Limited English Proficiency'
-      sample: 'ACS'
+      metric: Population
+    AFFH_3:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
       adjust_cpi: False
-      metric: 'Population'
+      metric: Population
+    AFFH_5:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 40
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    FARM_4:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 8
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    FARM_6:
+      export_loc: 'I:\Projects\Josh\RHNA\Data'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: False
+      weighted_by: Population
+      adjust_cpi: True
+      metric: 'Median Annual Earnings'
 
   Blueprint:
     EJ_Analysis:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\EJ Analysis'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\EJ Analysis'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'No'
+      percentages: False
     Blueprint_84ba:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
+      percentages: False
     Blueprint_84bb:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
+      percentages: False
     Blueprint_84c:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 2
-      percentages: 'Yes'
+      percentages: True
     Blueprint_95d:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
     Blueprint_97:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'Yes'
+      percentages: True
     Blueprint_97b:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Blueprint\extra'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 6
-      percentages: 'Yes'
+      percentages: True
 
-  Cap to Cap:
+  CapToCap:
     Cap_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Cap to Cap\OG'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\CapToCap\2026\MnR_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'Yes'
+      percentages: True
     Cap_2:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Cap to Cap\OG'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\CapToCap\2026\MnR_exports'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
+      percentages: False
 
-  Miscellaneous:
+  Peer Region Studies:
+    Pop_3:
+      # export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\SACOG Peer Regions tours\2026\2026 peer region tour data outputs\2026 update'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    Pop_4:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 3
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    Edu_1:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    Income_1:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ['ACS', 'DEC']
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: False
+      weighted_by: Households
+      adjust_cpi: True
+      metric: Median Household Income
+    Income_4:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    Cost_5:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ['ACS', 'DEC']
+      MOE_threshold: 0.05
+      number_of_variables: 2
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    Cost_6:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: PUMS
+      MOE_threshold: 0.05
+      number_of_variables: 3
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    Commute_1:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 7
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+    POPEMP_27:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ['SUBJECT', 'DEC']
+      MOE_threshold: 0.05
+      number_of_variables: 1
+      percentages: False
+      weighted_by: Population
+      adjust_cpi: False
+      metric: Median Age
+    Labor_1:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Chamber Study Missions\2026\MnR_outputs'
+      sample: ACS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Population
+
+  Weights:
     Total_Population:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Reference\Weights'
-      folder: ''
+      export_loc: 'I:\Projects\Josh\Regional Monitoring\weights'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
+      percentages: False
       adjust_cpi: False
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     Total_Households:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Reference\Weights'
-      folder: ''
+      export_loc: 'I:\Projects\Josh\Regional Monitoring\weights'
       sample: ['ACS', 'DEC']
       MOE_threshold: 0.05
       number_of_variables: 1
-      percentages: 'No'
+      percentages: False
       adjust_cpi: False
       weighted_by: False
-      metric: 'Households'
+      metric: Households
 
   CERF:
     WPT_Commute_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\CERF\We Prosper Together\Transportation Measures'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'CERF\We Prosper Together\Transportation Measures'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
     WPT_Accessibility_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\CERF\We Prosper Together\Transportation Measures'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'CERF\We Prosper Together\Transportation Measures'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
 
   Small Data Requests:
     Telework_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
       requested_by: 'Shengyi'
     HouseholdIncome_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework'
-      folder: ''
-      sample: 'PUMS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Telework'
+      sample: PUMS
       MOE_threshold: 0.05
       number_of_variables: 8
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
       requested_by: 'Shengyi'
     Davis_Pop:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\DavisPop'
-      folder: ''
-      sample: 'DEC'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\DavisPop'
+      sample: DEC
       MOE_threshold: 0.05
       number_of_variables: 18
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Population'
+      metric: Population
       requested_by: 'Pete'
     TheObserver_1:
-      sp_location: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Sac Observer'
-      folder: ''
-      sample: 'ACS'
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2025\Sac Observer'
+      sample: ACS
       MOE_threshold: 0.05
       number_of_variables: 5
-      percentages: 'Yes'
+      percentages: True
       weighted_by: False
-      metric: 'Households'
+      metric: Households
       requested_by: 'TheObserver'
+    Cost_3_sup:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Vibrant and Inclusive Places\Development\Housing Cost\Cost_3 Residential Vacancy'
+      sample: ACS
+      number_of_variables: 3
+      percentages: True
+      weighted_by: False
+      adjust_cpi: False
+      metric: Households
+    Housing_4:
+      export_loc: 'Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Products\Small Data Requests\2026\Miscellaneous - ACS'
+      sample: PUMS
+      MOE_threshold: 0.05
+      number_of_variables: 4
+      percentages: True
+      weighted_by: False
+      metric: Population
+      adjust_cpi: False
+      requested_by: 'Shengyi'
+      race: False
+      variable:
+        BLD: Building Type
 
 
 Samples:
@@ -1155,7 +1289,7 @@ Samples:
       - Congressional Districts
       - States
       - National
-      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024]
   DP:
     ACS5:
       geographies_available:
@@ -1179,16 +1313,16 @@ Samples:
       - Congressional Districts
       - States
       - National
-      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024]
   PUMS:
     ACS5:
       geographies_available:
       - PUMA
-      years_available: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+      years_available: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
     ACS1:
       geographies_available:
       - PUMA
-      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024]
   SUBJECT:
     ACS5:
       geographies_available:
@@ -1212,7 +1346,7 @@ Samples:
       - Congressional Districts
       - States
       - National
-      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+      years_available: [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024]
   LEHD: # Samples should maybe be QWI but gonna do RE, SA, SE
     RE: 
       geographies_available:

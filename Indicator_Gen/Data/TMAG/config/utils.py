@@ -106,7 +106,9 @@ def esri_to_df(esri_obj_path, include_geom, field_list=None, index_field=None,
         out_df = gpd.GeoDataFrame(data_rows, columns=fields_gpd, geometry=f_gpdshape)
 
         # only set if the input file has no CRS--this is not same thing as .to_crs(), which merely projects to a CRS
-        if crs_val: out_df.crs = crs_val
+        if crs_val:
+            if out_df.crs is None:
+                out_df = out_df.set_crs(crs_val)
 
         # dissolve to single zone so that, during spatial join, points don't erroneously tag to 2 overlapping zones.
         if dissolve and out_df.shape[0] > 1: 

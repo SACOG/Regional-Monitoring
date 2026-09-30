@@ -1,61 +1,13 @@
 
 
 
-
-
-'''
-
-Functions:
-
-set_workbook_name()
-clean_fips()
-misc_mappings()
-misc_groups()
-acs_processing_1()
-acs_processing_2()
-acs_processing_3()
-pums_processing_1()
-pums_processing_2()
-pums_processing_3()
-pums_processing_4()
-foodsec_processing_4()
-lehd_processing()
-rename_census()
-write_about_master()
-export_indicator()
-foodsec_processing()
-
-'''
-
-
-
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from IPython.display import display
 import sys
 
-PATH_GIT = Path(__file__).parent.parent.parent.parent
-PATH_CODE    = PATH_GIT / 'Data' / 'Census'
-PATH_CONFIG0 = PATH_GIT / 'config'
-PATH_CONFIG  = PATH_CODE / 'config'
-
-FILE_AREA = PATH_CONFIG0 / 'area_codes.xlsx'
-FILE_CPI = PATH_CONFIG0 / 'CPI_IAF.xlsx'
-FILE_CONFIG = PATH_CONFIG / 'bls.xlsx'
-
-# SharePoint OneDrive and internal server paths
-PATH_SP = Path.home() / 'Sacramento Area Council of Governments' / 'Regional Monitoring and Reporting - Documents'
-PATH_MAIN = PATH_SP / 'Data'
-PATH_WEIGHTS = PATH_MAIN / 'Reference' / 'Weights'
-PATH_PROD = PATH_SP / 'Products'
-PATH_ABOUT = PATH_SP / 'Process Revamp' / 'Task 6. Process Map'
-PATH_SERVER = Path(r"\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data")
-PATH_ORIG = Path(r'I:\Projects\Josh\Regional Monitoring\Task 9. Collect new data\Census')
-
-
-sys.path.append(str(PATH_CONFIG))
+sys.path.append(str(Path(__file__).parent))
 import get
 
 
@@ -68,7 +20,6 @@ def proc_bls(df, dt_params, yaml_bls):
     survey    = dt_params['Survey'   ]
     indicator = dt_params['Indicator']
     list_series_all, df_series_area, dt_series = get.create_series_dictionary(dt_params, yaml_bls)
-
     df = pd.melt(df, id_vars = ['year', 'periodName'], var_name='seriesID', value_name='value')
     df['date_'] = df['year'].astype('str') + '-' + df['periodName'].astype('str')
     df['date_'] = pd.to_datetime(df['date_'])
@@ -76,7 +27,7 @@ def proc_bls(df, dt_params, yaml_bls):
     if survey in ['SM', 'CE']:
         df['value'] = df['value'].astype('float32').apply(lambda x: x*1000)
 
-    if survey in ['SM', 'LA', 'CE']:       
+    if survey in ['SM', 'LA', 'CE']:
         df = df.merge(df_series_area, on='seriesID')
         if survey in ['SM', 'CE']:
             df_industries = get.read_industries(indicator, survey)
@@ -89,7 +40,7 @@ def proc_bls(df, dt_params, yaml_bls):
             df = df.sort_values(['MSA_ID', 'area_text', 'date_'], ascending=[True, True, False])
             df = df[['date_', 'MSA_ID', 'area_text', 'value']]
             df['date_'] = df['date_'].astype('str')
-
+    
     df = df.reset_index(drop=True)
     display(df.head())
 
@@ -99,39 +50,52 @@ def proc_bls(df, dt_params, yaml_bls):
 
 def jobs_1(df, percentages, geography):
 
-    if percentages == 'Yes':
+    def proc_jobs_1(df, percentages, geography):
+
+        df = df.groupby(['date_', 'area_code', 'area_text', 'Variable'], as_index=False)['Value'].agg(sum)
+        
+        if percentages == 'Yes':
+
             df['Percentage'] = df['Value'] / df.groupby(['area_text', 'date_'])['Value'].transform('sum')
-            df_pct = df.pivot_table(index = ['area_text', 'date_']
-                                               , columns='Variable'
-                                               , values='Percentage').reset_index()
+            df_pct = df.pivot_table(index = ['area_text', 'date_'], columns='Variable', values='Percentage').reset_index()
             df_pct = df_pct.sort_values(['area_text', 'date_'], ascending=[True, False])
-    
-    df_all = df.groupby(['date_', 'area_text'], as_index=False)['Value'].agg(sum)
-    df_all['Variable'] = 'All'
-    df_all['Percentage'] = np.nan
-    df_all = df_all.merge(df[['area_text', 'area_code']].drop_duplicates(), on='area_text', how='left')
-    
-    df_all = pd.concat([df, df_all])
-    df_all = df_all.sort_values(['area_code', 'date_', 'Variable'], ascending=[True, False, True])
-    df = df_all.copy()
-    df = df.reset_index(drop=True)
-    df['date_'] = df['date_'].astype('str')
-    df = df.drop(['industry_code'], axis=1)
-    df = df.sort_values(['area_code', 'date_', 'Variable'], ascending=[True, False, True])
+
+        df_all = df.groupby(['date_', 'area_code', 'area_text'], as_index=False)['Value'].agg(sum)
+        df_all['Variable'] = 'All'
+        df_all['Percentage'] = np.nan
+        df = pd.concat([df, df_all])
+
+        df['date_'] = df['date_'].astype('str')
+        df = df.sort_values(['area_code', 'date_', 'Variable'], ascending=[True, False, True]).drop_duplicates().reset_index(drop=True)
+
+        return df
 
     if geography == 'MSA':
-        df = df.rename(columns={'area_text':'MSA', 'Variable':'Sector', 'Value':'Total Jobs', 'area_code':'MSA ID'})
+
+        df_mpo = df[df['area_text'].str.contains('Sacramento|Yuba')]
+        df_mpo['area_text']='SACOG Six-County Region'
+        df_mpo['area_code']='SACOG Six-County Region'
+
+        df = proc_jobs_1(df, percentages, geography)
+        df_mpo = proc_jobs_1(df_mpo, percentages, geography)
+
+        df     = df    .rename(columns={'area_text':'MSA', 'Variable':'Sector', 'Value':'Total Jobs', 'area_code':'MSA ID'})
+        df_mpo = df_mpo.rename(columns={'area_text':'MPO', 'Variable':'Sector', 'Value':'Total Jobs'})
+
     if geography == 'National':
+        df = proc_jobs_1(df, percentages, geography)
         df = df.rename(columns={'area_text':'MSA', 'Variable':'Sector', 'Value':'Total Jobs', 'area_code':'MSA ID'})
 
     display(df.head())
 
-    return df
+    if geography == 'MSA':
+        return df, df_mpo
+    else:
+        return df
 
 
 
 def jobs_2(df, percentages, geography, df_series_area):
-
 
     if geography == 'MSA':
         
@@ -189,14 +153,13 @@ def jobs_2(df, percentages, geography, df_series_area):
         df_nat = df_nat.rename(columns={'area_text':'Geography', 'Variable':'Sector', 'Value':'Total Jobs'})
         display(df_nat.head())
 
-
     if geography == 'MSA':
         return df_msa, df_mpo
     if geography == 'National':
         return df_nat
 
 
-def jobs_3(df):
+def jobs_3(df, geography):
     
     df1 = df[df['Variable'].isin(['Total Private'  , 'Government'       ])]
     df2 = df[df['Variable'].isin(['Goods Producing', 'Service-Providing'])]
@@ -244,6 +207,8 @@ def jobs_3(df):
 
 
 def labor_2(df):
+    df['value'] = df['value'].replace('-', None)
+    df['value'] = df['value'].astype(float)
     df['value'] = df['value']/100
     df = df.rename(columns={'area_text':'Geography', 'value':'Unemployment Rate'})
     return df

@@ -1,0 +1,163 @@
+
+
+
+
+Homepage:
+        Pop_1: ['Homepage_People_1', 'People and Communities', 'Population'  , 'By County'                          ]
+        Pop_2: ['Homepage_People_1', 'People and Communities', 'Population'  , 'Change within Sacramento Region'    ]
+        Pop_3: ['Homepage_People_1', 'People and Communities', 'Demographics', 'Population Growth by Race/Ethnicity']
+        Pop_4: ['Homepage_People_1', 'People and Communities', 'Demographics', 'Population Age Distribution'        ]
+
+        Broadband_1: ['Homepage_People_2', 'People and Communities', 'Healthy Places', 'Internet Access'           ]
+        Health_2:    ['Homepage_People_2', 'People and Communities', 'Healthy Places', 'Access to Health Insurance']
+        Health_4:    ['Homepage_People_2', 'People and Communities', 'Healthy Places', 'Life Expectancy'           ]
+
+        Jobs_1:   [['Homepage_Economy_1', 'Economy', 'Jobs'       , 'Job Growth'                                               ], ['Homepage_Economy_1', 'Economy', 'Jobs', 'SACOG and Peer Regions']]
+        Jobs_2:   [ 'Homepage_Economy_1', 'Economy', 'Jobs'       , 'By Industry'                                              ]
+        Jobs_6:   [ 'Homepage_Economy_1', 'Economy', 'Jobs'       , 'Population Growth by Race/Ethnicity'                      ]
+        Jobs_3:   [ 'Homepage_Economy_1', 'Economy', 'Jobs'       , 'Private/Public Sectors and Goods/Services'                ]
+        Jobs_4:   [ 'Homepage_Economy_1', 'Economy', 'Jobs'       , 'Young Firms'                                              ]
+        Output_1: [ 'Homepage_Economy_1', 'Economy', 'Jobs'       , 'Gross Regional Product'                                   ]
+        Labor_1:  [ 'Homepage_Economy_1', 'Economy', 'Labor Force', 'Participation Rate by Race/Ethnicity'                     ]
+        Labor_2:  [ 'Homepage_Economy_1', 'Economy', 'Labor Force', 'Unemployment'                                             ]
+
+        Income_1: [['Homepage_Economy_2', 'Economy', 'Income'     , 'Peer Region Median Household Comparison'                  ], ['Homepage_Economy_2', 'Economy', 'Income', 'Inflation-Adjusted Median Household Income']]
+        Income_2: [ 'Homepage_Economy_2', 'Economy', 'Income'     , 'Household Income Distribution'                            ]
+        Income_3: [ 'Homepage_Economy_2', 'Economy', 'Income'     , 'Median Household Income by Race/Ethnicity'                ]
+        Income_4: [ 'Homepage_Economy_2', 'Economy', 'Income'     , 'Poverty by Race/Ethnicity'                                ]
+        Income_5: [ 'Homepage_Economy_2', 'Economy', 'Income'     , 'Wealth Measures'                                          ]
+        Edu_1:    [ 'Homepage_Economy_2', 'Economy', 'Education'  , 'Educational Attainment by Race/Ethnicity'                 ]
+        Edu_2:    [ 'Homepage_Economy_2', 'Economy', 'Education'  , 'Degrees by Field'                                         ]
+        Edu_3:    [ 'Homepage_Economy_2', 'Economy', 'Education'  , 'A-G Completion by Race/Ethnicity and Socioeconomic Status']
+
+        Production_1: ['Homepage_Housing_1', 'Housing', 'Housing Production', 'New Units'                                             ]
+        Production_3: ['Homepage_Housing_1', 'Housing', 'Housing Production', 'Growth Rate by Region'                                 ]
+        Production_4: ['Homepage_Housing_1', 'Housing', 'Housing Production', 'Population Growth Compared to Housing Growth'          ]
+        Production_6: ['Homepage_Housing_1', 'Housing', 'Housing Production', 'Housing Product Type'                                  ]
+        Production_7: ['Homepage_Housing_1', 'Housing', 'Housing Production', 'Accessory Dwelling Units'                              ]
+        Production_2: ['Homepage_Housing_1', 'Housing', 'Housing Production', 'Single Family/Multi Family Production Across the State']
+        Location_1:   ['Homepage_Housing_1', 'Housing', 'Housing Location'  , 'New Units by Community Type'                           ]
+        Location_2a:  ['Homepage_Housing_1', 'Housing', 'Housing Location'  , 'Growth in Green Zones'                                 ]
+
+        Location_2b: ['Homepage_Housing_2', 'Housing', 'Housing Location'  , 'Housing Type in Green Zones'                  ]
+        Location_3:  ['Homepage_Housing_2', 'Housing', 'Housing Location'  , 'Growth on Agriculture Lands'                  ]
+        Location_4:  ['Homepage_Housing_2', 'Housing', 'Housing Location'  , 'Growth in Flood Plain and Fire Severity Zones']
+        Cost_1:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'Home Values'                                  ]
+        Cost_2:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'Rents'                                        ]
+        Cost_6:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'Housing Cost Burden'                          ]
+        Cost_4:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'New Housing by Income Category Served'        ]
+        Cost_5:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'Home Ownership'                               ]
+        Cost_3:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'Unoccupied Housing Units'                     ]
+        Cost_8:      ['Homepage_Housing_2', 'Housing', 'Housing Cost'      , 'Homelessness'                                 ]
+
+        Commute_1:      [['Homepage_Transportation_1', 'Transportation Modes', 'Commute Mode'            , 'Peer Region Comparison'          ], ['Homepage_Transportation_1', 'Transportation Modes', 'Commute Mode', 'Change in Sacramento Region'], ['Homepage_Transportation_1', 'Transportation Modes', 'Commute Mode', 'Non-Drive Commute Modes']]
+        Accessibility_1: ['Homepage_Transportation_1', 'Transportation Modes', 'Travel Characteristics'  , 'Commute by Race/Ethnicity'       ]
+        Accessibility_2: ['Homepage_Transportation_1', 'Transportation Modes', 'Travel Characteristics'  , 'Commute by Income'               ]
+        Accessibility_3: ['Homepage_Transportation_1', 'Transportation Modes', 'Travel Characteristics'  , 'Auto Ownership by Race/Ethnicity']
+        Accessibility_4: ['Homepage_Transportation_1', 'Transportation Modes', 'Travel Characteristics'  , 'Commute Time by Race/Ethnicity'  ]
+
+        Road_3:    ['Homepage_Transportation_2', 'Transportation Modes', 'Road Measures'        , 'Local Street and Road Pavement Conditions']
+        Road_1:    ['Homepage_Transportation_2', 'Transportation Modes', 'Road Measures'        , 'Average Prices of Gasoline'               ]
+        Road_4:    ['Homepage_Transportation_2', 'Transportation Modes', 'Road Measures'        , 'Zero Emission Vehicle Sales'              ]
+        Transit_1: ['Homepage_Transportation_2', 'Transportation Modes', 'Transit'              , 'Transit Service Hours per Capita'         ]
+        Transit_2: ['Homepage_Transportation_2', 'Transportation Modes', 'Transit'              , 'Transit Ridership per Capita'             ]
+        BikePed_1: ['Homepage_Transportation_2', 'Transportation Modes', 'Active Transportation', 'Bicycle and Pedestrian Trips'             ]
+
+        VMT_1:         ['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Vehicle Miles Traveled', 'Passenger VMT per Capita in California Regions']
+        VMT_2:         ['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Vehicle Miles Traveled', 'Average Passenger VMT per Capita Estimates'    ]
+        VMT_3:         ['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Vehicle Miles Traveled', 'Total VMT'                                     ]
+        Congestion_1:  ['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Congestion'            , 'Person Hours of Delay'                         ]
+        Congestion_2:  ['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Congestion'            , 'Change in Congestion'                          ]
+        Congestion_3: [['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Congestion'            , 'System Reliablity'                             ], ['Homepage_Travel_1', 'Travel, Congestion, and Safety', 'Congestion', 'Truck Time Reliablity']]
+
+        TravelAccess_1: ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Access to Destinations', 'Access to Jobs'                                 ]
+        TravelAccess_2: ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Access to Destinations', 'Access to Educational Facilities'               ]
+        TravelAccess_3: ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Access to Destinations', 'Access to Neighborhood Services'                ]
+        Safety_1:      [['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Safety'                , 'Traffic Fatality Rate'                          ], ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Safety', 'Traffic Serious Injury Rate']]
+        Safety_2:       ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Safety'                , 'Non-Motorized Fatalities and Injuries'          ]
+        Safety_4:       ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Safety'                , 'Non-Motorized Fatalities and Injuries'          ]
+        Safety_3:       ['Homepage_Travel_2', 'Travel, Congestion, and Safety', 'Safety'                , 'Collisions in Environmental Justice Communities']
+
+        MTIP_1: ['Homepage_Funding_1', 'Transportation Funding', 'Regional Funding', 'Funding for Upcoming Transportation Projects']
+        MTIP_2: ['Homepage_Funding_1', 'Transportation Funding', 'Regional Funding', 'Tracking Changes to Short-Term Program'      ]
+        MTIP_3: ['Homepage_Funding_1', 'Transportation Funding', 'Regional Funding', 'Recently Completed Transportation Projects'  ]
+
+
+
+
+# Income:
+#     Income_1:
+#         widget_1721:
+#             label:
+#             text: >
+#                 <p><strong style="font-family: &quot;Microsoft YaHei&quot;; color: var(--primary); font-size: 18px;">Median Household Income: Peer Region Comparison</strong></p><p><br></p>
+#                 <p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 15px;">Median household income estimates the midpoint of income distribution in the studied geography, 
+#                 where half of households earn more and half earn less.&nbsp;&nbsp;</span></p><p><br></p>
+#                 <p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 15px;">The Sacramento region\'s economy remains relatively prosperous. 
+#                 Only {{rank_sacramento_minus_1}} of the 19 studied mid-sized national regions had higher median household incomes than 
+#                 greater Sacramento, though incomes in Yuba and Sutter trail the rest of the region (this indicator uses Metropolitan Statistical Area geography 
+#                 to compare to other regions).&nbsp;</span></p>
+#                 <p><br></p><p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 15px;">When looking at regions within California, however, 
+#                 incomes in the Sacramento region lag those of the coastal areas. However, those coastal areas also have much 
+#                 higher housing costs. Data in the housing cost section of this dashboard gives comparisons for those markets.</span></p>
+
+
+
+# Homepage1:
+#     People and Communities:
+#         Population:
+#             By County: Pop_1
+#             Change within Sacramento Region: Pop_2
+#         Demographics:
+#             Population Growth by Race/Ethnicity: Pop_3
+#             Population Age Distribution: Pop_4
+#         Healthy Places:
+#             Internet Access: Broadband_1
+#             Access to Health Insurance: Health_2
+#             Life Expectancy: Health_4
+#     Economy:
+#         Jobs:
+#             Job Growth: Jobs_1
+#             SACOG and Peer Regions: Jobs_1
+#             By Industry: Jobs_2
+#             By Tradable Sectors: Jobs_6
+#             Private/Public Sectors and Goods/Services: Jobs_3
+#             Young Firms: Jobs_4
+#             Gross Regional Product: Output_1
+#         Labor Force:
+#             Participation Rate by Race/Ethnicity: Labor_1
+#             Unemployment: Labor_2
+#         Income:
+#             Peer Region Median Household Comparison: Income_1
+#             Inflation-Adjusted Median Household Income: Income_1
+#             Household Income Distribution: Income_2
+#             Median Household Income by Race/Ethnicity: Income_3
+#             Poverty by Race/Ethnicity: Income_4
+#             Wealth Measures: Income_5
+#         Education:
+#             Educational Attainment by Race/Ethnicity: Edu_1
+#             Degrees by Field: Edu_2
+#             A-G Completion by Race/Ethnicity and Socioeconomic Status: Edu_3
+
+
+# Housing Production:
+#     Production_1:
+#         Text:
+#         Source:
+#     Production_2:
+#         Text:
+#         Source:
+#     Production_3:
+#         Text:
+#         Source:
+#     Production_4:
+#         Text:
+#         Source:
+#     Production_6:
+#         Text:
+#         Source:
+#     Production_7:
+#         Text: 
+#         Source:
+
+

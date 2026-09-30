@@ -1,0 +1,10 @@
+Project: RHNA
+Indicator Name: SEN_4
+Export Location: I:\Projects\Josh\RHNA\Data
+Folder: Disability by Type - Senious (65 and Over)
+Sample: ACS
+Estimate: ACS5
+Geography: Places
+Years Imported: 2024
+Import Tab: States
+Margin of Error: Yes

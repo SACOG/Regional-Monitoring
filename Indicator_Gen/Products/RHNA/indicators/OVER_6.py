@@ -1,7 +1,5 @@
 
 
-
-
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
@@ -32,7 +30,7 @@ warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
 
-    df_places = pd.read_excel(PATH_DATA / f'RHNA_{INDICATOR} Places ACS5.xlsx')
+    df_places = pd.read_excel(PATH_DATA / f'{INDICATOR} Places ACS5.xlsx')
 
     df_places['NAME'] = df_places['NAME'].str.replace(' CDP, California' , '', regex=True)
     df_places['NAME'] = df_places['NAME'].str.replace(' city, California', '', regex=True)
