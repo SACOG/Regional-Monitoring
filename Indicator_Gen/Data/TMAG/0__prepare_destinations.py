@@ -125,6 +125,10 @@ def convert_fc_to_shp(dest, file_to_convert, file_shp, add_date=True):
         if dest=='jobs':
             gdf_data = gdf_data[['empmonth1', 'geometry']]
         if dest=='schools':
+            gdf_data = gdf_data[
+                (gdf_data['category'].isin(['public_school', 'elementary_school', 'middle_school', 'high_school', 'Public School'])) |
+                (gdf_data['source']=='Schools')
+                ]
             gdf_data['count']=1
             gdf_data = gdf_data[['count', 'geometry']]
     if dest=='services':
@@ -158,7 +162,8 @@ if __name__ == '__main__':
     file_shp_jobs = r'I:\Projects\Josh\Conveyal\conveyal_inputs\shp\jobs'
 
     # Schools
-    file_to_convert_schools = r'I:\Projects\Josh\Handoffs\Warren\schools\GIS\Schools_2026.gdb\SACOG_Schools_2526'
+    # file_to_convert_schools = r'I:\Projects\Josh\Handoffs\Warren\schools\GIS\Schools_2026.gdb\SACOG_Schools_2526'
+    file_to_convert_schools = r'I:\Projects\Darren\PPA3_GIS\PPA3_GIS.gdb\POI_overture_2025'
     file_shp_schools = r'I:\Projects\Josh\Conveyal\conveyal_inputs\shp\schools'
     
     # Neighborhood Services (POI)

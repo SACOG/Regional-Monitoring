@@ -90,7 +90,7 @@ def get_widget(exp_draft, block_name):
     widgets = exp_draft['widgets'].keys()
 
     for wid in widgets:
-        if exp_draft['widgets'][wid]['label'] == block_name:
+        if block_name in exp_draft['widgets'][wid]['label']:
             widget = wid
     
     return widget

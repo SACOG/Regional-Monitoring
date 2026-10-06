@@ -116,7 +116,7 @@ def rollup_pop_and_trips(df_epc):
 
 def rollup_collisions(gdf_col, groupby_cols):
     df_grouped = (
-        gdf_col[gdf_col['Freeway']=='No']
+        gdf_col#[gdf_col['Freeway']=='No']
             .groupby(groupby_cols, as_index=False) \
             .agg(Collisions=('CASE_ID', 'count')) \
     )
@@ -136,7 +136,7 @@ def calc_normalized_collisions(df_col):
 # Main --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-EXPORT=False
+EXPORT=True
 
 PATH_OUT = r'C:\Users\jfontes\Sacramento Area Council of Governments\Regional Monitoring and Reporting - Documents\Data\Safe Equitable Resilient Infrastructure\Safety\Safety_3 EJarea'
 PATH_SERVER = r'\\webmapping-svr\c$\inetpub\wwwroot\monitoring\Data'
@@ -190,6 +190,10 @@ if __name__ == '__main__':
     df_total['ColSeverity'] = 'All Collisions'
     df_sev = pd.concat([df_sev, df_total])
 
+    df_total  = df_total [df_total ['ACCIDENT_YEAR']<=2025]
+    df_sev    = df_sev   [df_sev   ['ACCIDENT_YEAR']<=2025]
+    df_county = df_county[df_county['ACCIDENT_YEAR']<=2025]
+
     if EXPORT:
         for path_ in [PATH_OUT, PATH_SERVER]:
             print(f'\n\nExported to {path_}')
@@ -197,8 +201,6 @@ if __name__ == '__main__':
                 df_sev   .to_excel(writer, index=False, sheet_name='Region')
                 df_county.to_excel(writer, index=False, sheet_name='County')
             print('\n'*3)
-
-
 
 
 

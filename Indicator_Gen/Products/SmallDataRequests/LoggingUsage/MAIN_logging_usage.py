@@ -56,8 +56,7 @@ if __name__ == '__main__':
 
     ## 2__count_site_usage.py ---
 
-    print('Tallying downloaded files for site usage tracking...')
-    print()
+    print('Tallying downloaded files for site usage tracking...\n')
     time.sleep(5)
 
     themes_file = PATH_MAIN / 'Indicator_Theme_Mapping.csv'
@@ -78,8 +77,6 @@ if __name__ == '__main__':
         df_indicator.to_excel(writer, index=False, sheet_name='Indicator')
         df_geo      .to_excel(writer, index=False, sheet_name='Geography')
 
-    print()
-    print(f'Successfully exported results to {file_out}')
-    print()
+    print(f'\nSuccessfully exported results to {file_out}\n')
 
     

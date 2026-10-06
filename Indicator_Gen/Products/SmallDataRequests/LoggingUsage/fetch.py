@@ -4,6 +4,7 @@ import shutil
 from datetime import datetime
 import chardet
 
+
 def get_prev_month():
 
     year = datetime.now().year
@@ -11,20 +12,19 @@ def get_prev_month():
     if month == 1:
         month = str(12)
         year = year-1
-    elif month >= 10:
+    elif month > 10:
         month = str(month-1)
     else:
         month = f'0{month-1}'
     year = str(year)[2:]
 
-    return f'{year}{month}'    
+    return f'{year}{month}'
 
 
 def fetch_log_files(path_to_logs):
 
-    print()
     prev_month = get_prev_month()
-    print('Fetching all log files from the previous month...')
+    print('\nFetching all log files from the previous month...')
     log_files = [log for log in path_to_logs.iterdir() if log.is_file() and prev_month in str(log.stem)]
     if len(log_files) >= 28:
         print(f'Number of log files: {len(log_files)}')
@@ -43,11 +43,9 @@ def detect_encoding(txt_file):
     return encoding
 
 
-
 def write_downloaded_files_to_txt(log_files):
 
-    print()
-    print('Writing downloaded file names to txt file...')
+    print('\nWriting downloaded file names to txt file...')
     dt_errors={}
     encodings={}
     with open("I:\Projects\Josh\Regional Monitoring\LoggingUsage\download_log_files\_DownloadedFiles.txt", "w") as file:
@@ -75,11 +73,8 @@ def write_downloaded_files_to_txt(log_files):
 
 def archive_downloads_list(path_to_downloads_list):
 
-    print()
-    print('Archiving downloads list...')
+    print('\nArchiving downloads list...')
     file_to_be_archived = path_to_downloads_list/'_DownloadedFiles.txt'
     archived_file_name  = path_to_downloads_list/f'_DownloadedFiles_20{get_prev_month()}.txt'
     shutil.copy(file_to_be_archived, archived_file_name)
-    print('Done')
-    print()
-
+    print('Done\n')

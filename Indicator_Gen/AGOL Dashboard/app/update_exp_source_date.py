@@ -5,11 +5,11 @@ Python script used to update the "Last updated: " and "Recently Updated" tags th
 https://experience.arcgis.com/experience/37547feca64546dbbd0a4030dd84bb42?draft=true
 
 
-THEME -> User to input which page needs to be updated
 INDICATOR -> User to input which indicator needs to be updated
 UPDATE -> True/False -> When user is testing, use False, when user is ready to save draft changes, use True
 
 NOTE: User can access all themes and indicators in the exp.yaml file
+Any indicator update will also update the homepage
 
 
 TODO:
@@ -39,7 +39,6 @@ def update_last_updated_date(exp_draft, indicator):
 
     Inputs:
         exp_draft = fetched json object of the draft version of the regional indicators experience builder app
-        theme = Which page on the dashboard do you want to update?
         indicator = Which indicator on the selected theme page do you want to update?
 
     returns a python dictionary that represents the updated experience builder app
@@ -87,7 +86,7 @@ UPDATE = False
 
 
 # indicator = 'Production_1'
-indicator = ['VMT_1']
+indicator = ['Safety_1']
 
 if __name__ == '__main__':
 
@@ -104,7 +103,6 @@ if __name__ == '__main__':
             exp_draft = tag_recently_updated(exp_draft, ind, yaml_exp)
 
     if UPDATE:
-        breakpoint()
         exp.save_draft_exp_builder_app(exp_builder_app, exp_draft)
 
 

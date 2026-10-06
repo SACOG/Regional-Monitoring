@@ -132,18 +132,31 @@ colors_sac_yuba = {
 
 colors_ca = {
     'Sacramento': '#E57149'
+    , 'SACOG': '#E57149'
     , 'Yuba City': '#7EB460'
+    , 'MTC': '#A24F82'
     , 'Bay Area': '#A24F82'
     , 'San Francisco': '#A24F82'
     , 'San Francisco Bay Area': '#A24F82'
     , 'San Jose': '#55C8E8'
     , 'Greater LA': "#6764A6"
     , 'Los Angeles': '#6764A6'
+    , 'SCAG': '#6764A6'
     , 'Riverside': '#149ABF'
     , 'San Joaquin Valley':"#149ABF"
     , 'San Diego': "#808285"
+    , 'SANDAG': "#808285"
     , 'California': "#00A97D"
     , 'Rest of State':"#55C8E8"
+}
+
+colors_tims_peers = {
+    'Sacramento Region': '#27AAE1'
+    , 'SACOG': '#27AAE1'
+    , 'MTC': '#A24F82'
+    , 'SCAG': '#6764A6'
+    , 'SANDAG': "#7EB460"
+    , 'California': '#E57149'
 }
 
 colors_ca_tims = {

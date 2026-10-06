@@ -188,7 +188,7 @@ if __name__ == '__main__':
     fc_name = 'GISOWNER_PlanningArea' # GISOWNER_PlanningArea, GISOWNER_CityCounty, Community_Type_2024_dissolve
     fc_main = FILE_GDB + '\\' + fc_name
     str_project_type = 'AreaAvg'
-    destination = 'emp'
+    destination = 'nonwork'
     wgt = 'pop' # pop, asian, black, hispanic, white, workers
 
     tif_main = Path(acc_cfg['tifdir']).joinpath(acc_cfg['wts'][wgt]) # r"I:\Projects\Darren\PPA3_GIS\AccessibilityAnalyses\tif\workers2020.tif"
